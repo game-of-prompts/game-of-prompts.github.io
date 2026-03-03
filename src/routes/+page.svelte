@@ -25,8 +25,10 @@
 	<div class="hero-glow"></div>
 	<div class="hero-content container">
 		<div class="hero-logo">
-			<img src="/gop-logo.png" alt="Game of Prompts" class="hero-logo-img" />
-			<span class="hero-logo-name">Game of Prompts</span>
+			<div class="hero-logo-mark">
+				<img src="/gop-logo.png" alt="Game of Prompts" class="hero-logo-img" />
+			</div>
+			<span class="hero-logo-name">GAME OF PROMPTS</span>
 		</div>
 		<div class="hero-badge">
 			<span class="badge-dot"></span>
@@ -586,28 +588,39 @@
 
 	.hero-logo {
 		display: flex;
+		flex-direction: column;
 		align-items: center;
-		gap: 16px;
+		gap: 12px;
 		justify-content: center;
 		margin-bottom: 2rem;
 	}
 
+	.hero-logo-mark {
+		width: 64px;
+		height: 64px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		border-radius: 16px;
+		background: rgba(34, 197, 94, 0.08);
+		border: 1px solid rgba(34, 197, 94, 0.2);
+		box-shadow: 0 0 24px rgba(34, 197, 94, 0.12);
+	}
+
 	.hero-logo-img {
-		width: 72px;
-		height: 72px;
+		width: 40px;
+		height: 40px;
 		object-fit: contain;
-		filter: drop-shadow(0 0 20px rgba(74, 222, 128, 0.25));
+		filter: drop-shadow(0 0 8px rgba(74, 222, 128, 0.4));
 	}
 
 	.hero-logo-name {
 		font-family: var(--font-mono);
-		font-size: 1.1rem;
+		font-size: 0.75rem;
 		font-weight: 600;
-		color: var(--text-secondary);
-		letter-spacing: 0.1em;
+		color: rgba(74, 222, 128, 0.6);
+		letter-spacing: 0.25em;
 		text-transform: uppercase;
-		padding-left: 16px;
-		border-left: 1px solid rgba(255,255,255,0.1);
 	}
 
 	.hero-badge {
