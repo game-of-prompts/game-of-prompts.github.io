@@ -1,12 +1,25 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 
+	interface Step {
+		title: string;
+		description?: string;
+		desc?: string;
+		icon?: string;
+	}
+
+	interface Props {
+		title?: string;
+		steps?: Step[];
+	}
+
+	let { title = 'How It All Comes Together', steps: propSteps }: Props = $props();
+
 	let section: HTMLElement;
 	let progress = $state(0);
-	let currentStep = $derived(Math.min(Math.floor(progress * 4), 3));
 	let prefersReducedMotion = $state(false);
 
-	const steps = [
+	const defaultSteps: Step[] = [
 		{
 			title: 'A creator builds a game',
 			desc: 'Design a challenge with measurable scoring. Package it as an immutable Celaut service.',
@@ -28,6 +41,9 @@
 			icon: 'trophy'
 		}
 	];
+
+	const steps = $derived(propSteps ?? defaultSteps);
+	const currentStep = $derived(Math.min(Math.floor(progress * steps.length), steps.length - 1));
 
 	onMount(() => {
 		prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -52,8 +68,7 @@
 <section bind:this={section} class="scrollytelling" class:reduced={prefersReducedMotion}>
 	<div class="sticky-container">
 		<div class="journey-header">
-			<span class="section-label">The Journey</span>
-			<h2 class="section-title">How It All Comes Together</h2>
+			<h2 class="section-title">{title}</h2>
 		</div>
 
 		<!-- Progress bar -->
@@ -66,7 +81,7 @@
 					<div class="progress-line">
 						<div
 							class="progress-fill"
-							style="transform: scaleX({i < currentStep ? 1 : i === currentStep ? Math.max(0, (progress * 4 - i) % 1) : 0})"
+							style="transform: scaleX({i < currentStep ? 1 : i === currentStep ? Math.max(0, (progress * steps.length - i) % 1) : 0})"
 						></div>
 					</div>
 				{/if}
@@ -132,9 +147,9 @@
 						{/if}
 					</div>
 					<div class="step-text">
-						<span class="step-counter">Step {i + 1} of 4</span>
+						<span class="step-counter">Step {i + 1} of {steps.length}</span>
 						<h3>{step.title}</h3>
-						<p>{step.desc}</p>
+						<p>{step.desc ?? step.description}</p>
 					</div>
 				</div>
 			{/each}

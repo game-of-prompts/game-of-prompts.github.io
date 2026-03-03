@@ -93,103 +93,16 @@
 <!-- ============================================ -->
 <!-- HOW IT WORKS                                 -->
 <!-- ============================================ -->
-<section id="how-it-works" class="section" style="scroll-margin-top: 80px;">
+<section id="how-it-works" class="section narrative-section">
 	<div class="container">
-		<ScrollAnimation>
-			<span class="section-label">Foundations</span>
-			<h2 class="section-title">Technological Foundations</h2>
-			<p class="section-subtitle">Built on two powerful technologies that combine to create a trustless environment for decentralized competition.</p>
-		</ScrollAnimation>
-
-		<div class="foundations-grid">
-			<ScrollAnimation delay={100}>
-				<div class="card foundation-card">
-					<div class="foundation-icon celaut-icon">
-						<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-							<rect x="2" y="2" width="8" height="8" rx="1" />
-							<rect x="14" y="2" width="8" height="8" rx="1" />
-							<rect x="2" y="14" width="8" height="8" rx="1" />
-							<rect x="14" y="14" width="8" height="8" rx="1" />
-							<line x1="10" y1="6" x2="14" y2="6" />
-							<line x1="6" y1="10" x2="6" y2="14" />
-							<line x1="18" y1="10" x2="18" y2="14" />
-							<line x1="10" y1="18" x2="14" y2="18" />
-						</svg>
-					</div>
-					<h3>Celaut Paradigm</h3>
-					<p>A system for decentralized execution of computational services — immutable and uniquely identified services, isolated execution in containers, and deterministic reproducibility. Critical for fair competition.</p>
-					<div class="foundation-features">
-						<span class="feature-tag">Immutable Services</span>
-						<span class="feature-tag">Isolated Execution</span>
-						<span class="feature-tag">Deterministic</span>
-					</div>
-					<a href="https://github.com/celaut-project" target="_blank" rel="noopener" class="foundation-link">
-						Learn about Celaut →
-					</a>
-				</div>
-			</ScrollAnimation>
-
-			<ScrollAnimation delay={250}>
-				<div class="card foundation-card">
-					<div class="foundation-icon ergo-icon">
-						<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-							<path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
-						</svg>
-					</div>
-					<h3>Ergo Blockchain</h3>
-					<p>A Proof-of-Work blockchain with extended UTXO model and Sigma Protocol-based smart contracts — securing gameplay, transparently recording results, and enabling fair prize distribution.</p>
-					<div class="foundation-features">
-						<span class="feature-tag">eUTXO Model</span>
-						<span class="feature-tag">ErgoScript</span>
-						<span class="feature-tag">Smart Contracts</span>
-					</div>
-					<a href="https://ergoplatform.org" target="_blank" rel="noopener" class="foundation-link ergo-link">
-						Learn about Ergo →
-					</a>
-				</div>
-			</ScrollAnimation>
-		</div>
-
-		<ScrollAnimation delay={100}>
-			<div class="foundations-summary">
-				<p>These technologies combine to create a <strong>trustless environment</strong> where games and solutions can be verified and evaluated without centralized authority, maintaining the platform's <strong>P2P philosophy</strong>.</p>
-			</div>
-		</ScrollAnimation>
-
-		<!-- Why Use GoP -->
-		<div class="why-gop">
-			<ScrollAnimation>
-				<h2 class="section-title" style="margin-top: 4rem;">Why use GoP?</h2>
-				<p class="section-subtitle">A clear incentive framework for both creators and players, fostering a dynamic and rewarding competitive environment.</p>
-			</ScrollAnimation>
-
-			<div class="why-grid">
-				<ScrollAnimation delay={100}>
-					<div class="card why-card">
-						<div class="why-icon creator-accent">
-							<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-								<path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
-							</svg>
-						</div>
-						<h3>For Game Developers</h3>
-						<p>Earn commissions from prize pools and gain valuable insights from diverse AI solver-services designed to tackle your games. A rich dataset for optimizing your creations.</p>
-					</div>
-				</ScrollAnimation>
-				<ScrollAnimation delay={250}>
-					<div class="card why-card">
-						<div class="why-icon player-accent">
-							<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-								<circle cx="12" cy="12" r="10" />
-								<path d="M8 14s1.5 2 4 2 4-2 4-2" />
-								<line x1="9" y1="9" x2="9.01" y2="9" />
-								<line x1="15" y1="9" x2="15.01" y2="9" />
-							</svg>
-						</div>
-						<h3>For Players</h3>
-						<p>Pay a small participation fee to enter the competition. The player with the highest-scoring solution claims the entire prize pool, rewarding skill and innovation.</p>
-					</div>
-				</ScrollAnimation>
-			</div>
+		<div class="narrative-content">
+			<h2 class="narrative-title">A New Era of Trustless Competition</h2>
+			<p class="narrative-text">
+				Game of Prompts is built on a foundation of two powerful technologies: the <a href="https://github.com/celaut-project" target="_blank" rel="noopener">Celaut paradigm</a> for decentralized, reproducible computation, and the <a href="https://ergoblockchain.org/" target="_blank" rel="noopener">Ergo blockchain</a> for on-chain verification and prize distribution.
+			</p>
+			<p class="narrative-text">
+				This unique combination creates a truly trustless environment. No central authority is needed to verify results. Every move, every solution, every outcome is recorded and validated on the blockchain, ensuring absolute fairness and transparency.
+			</p>
 		</div>
 	</div>
 </section>
@@ -275,98 +188,50 @@
 <!-- ============================================ -->
 <!-- CREATOR FLOW                                 -->
 <!-- ============================================ -->
-<section class="section">
-	<div class="container">
-		<ScrollAnimation>
-			<span class="section-label">For Creators</span>
-			<h2 class="section-title">Game Creator Flow</h2>
-		</ScrollAnimation>
-
-		<div class="flow-steps">
-			<ScrollAnimation delay={0} animation="slide-left">
-				<div class="flow-step">
-					<div class="step-number">1</div>
-					<div class="step-content">
-						<h3>Design a Game</h3>
-						<p>Create a challenge with measurable scoring and high scenario variability (CDE) to discourage hardcoded solutions.</p>
-					</div>
-				</div>
-			</ScrollAnimation>
-			<ScrollAnimation delay={150} animation="slide-left">
-				<div class="flow-step">
-					<div class="step-number">2</div>
-					<div class="step-content">
-						<h3>Generate a Secret</h3>
-						<p>Create a unique 256-bit secret for cryptographic commitments and score validation.</p>
-					</div>
-				</div>
-			</ScrollAnimation>
-			<ScrollAnimation delay={300} animation="slide-left">
-				<div class="flow-step">
-					<div class="step-number">3</div>
-					<div class="step-content">
-						<h3>Package &amp; Publish</h3>
-						<p>Package your game as a Celaut service and publish it using GoP Web by sharing game parameters, fee, deadline, and commission.</p>
-						<span class="step-note">The game is distributed peer-to-peer. GoP Web is just the interface, not a central host.</span>
-					</div>
-				</div>
-			</ScrollAnimation>
-		</div>
-	</div>
-</section>
+<Scrollytelling
+	title="Game Creator Flow"
+	steps={[
+		{
+			title: 'Design a Game',
+			description: 'Create a challenge with measurable scoring and high scenario variability (CDE) to discourage hardcoded solutions.'
+		},
+		{
+			title: 'Generate a Secret',
+			description: 'Create a unique 256-bit secret for cryptographic commitments and score validation.'
+		},
+		{
+			title: 'Package & Publish',
+			description: 'Package your game as a Celaut service and publish it using GoP Web by sharing game parameters, fee, deadline, and commission.'
+		}
+	]}
+/>
 
 <div class="section-divider"></div>
 
 <!-- ============================================ -->
 <!-- PLAYER JOURNEY                               -->
 <!-- ============================================ -->
-<section class="section">
-	<div class="container">
-		<ScrollAnimation>
-			<span class="section-label">For Players</span>
-			<h2 class="section-title">Player's Journey</h2>
-		</ScrollAnimation>
-
-		<div class="flow-steps player-steps">
-			<ScrollAnimation delay={0} animation="slide-right">
-				<div class="flow-step player-step">
-					<div class="step-number player-number">1</div>
-					<div class="step-content">
-						<h3>Browse GoP Web</h3>
-						<p>Find interesting games based on description, rules, participation fees, and creator reputation. Download the Game Service to explore mechanics.</p>
-					</div>
-				</div>
-			</ScrollAnimation>
-			<ScrollAnimation delay={150} animation="slide-right">
-				<div class="flow-step player-step">
-					<div class="step-number player-number">2</div>
-					<div class="step-content">
-						<h3>Design a Solver Service</h3>
-						<p>Implement strategies to maximize your score in the game.</p>
-					</div>
-				</div>
-			</ScrollAnimation>
-			<ScrollAnimation delay={300} animation="slide-right">
-				<div class="flow-step player-step">
-					<div class="step-number player-number">3</div>
-					<div class="step-content">
-						<h3>Run the Game Service</h3>
-						<p>Package and send your solver to generate the solver ID, score list, log hash, and cryptographic commitment.</p>
-					</div>
-				</div>
-			</ScrollAnimation>
-			<ScrollAnimation delay={450} animation="slide-right">
-				<div class="flow-step player-step">
-					<div class="step-number player-number">4</div>
-					<div class="step-content">
-						<h3>Publish Your Results</h3>
-						<p>Submit your results on the Ergo blockchain containing the game data and participation fee before the deadline.</p>
-					</div>
-				</div>
-			</ScrollAnimation>
-		</div>
-	</div>
-</section>
+<Scrollytelling
+	title="The Player's Journey"
+	steps={[
+		{
+			title: 'Browse GoP Web',
+			description: 'Find interesting games based on description, rules, participation fees, and creator reputation. Download the Game Service to explore mechanics.'
+		},
+		{
+			title: 'Design a Solver Service',
+			description: 'Implement strategies to maximize your score in the game.'
+		},
+		{
+			title: 'Run the Game Service',
+			description: 'Package and send your solver to generate the solver ID, score list, log hash, and cryptographic commitment.'
+		},
+		{
+			title: 'Publish Your Results',
+			description: 'Submit your results on the Ergo blockchain containing the game data and participation fee before the deadline.'
+		}
+	]}
+/>
 
 <div class="section-divider"></div>
 
@@ -488,37 +353,53 @@
 <!-- ============================================ -->
 <!-- GAME TYPES                                   -->
 <!-- ============================================ -->
-<section id="games" class="section" style="scroll-margin-top: 80px;">
+<section id="games" class="section narrative-section">
 	<div class="container">
-		<ScrollAnimation>
-			<span class="section-label">Games</span>
-			<h2 class="section-title">What Can Be a Game?</h2>
-			<p class="section-subtitle">Types of games you can create or compete in.</p>
-		</ScrollAnimation>
+		<div class="narrative-content">
+			<h2 class="narrative-title">What Can Be a Game?</h2>
+			<p class="narrative-text">
+				Game of Prompts is a versatile platform that can host a wide variety of competitions. Here are just a few examples of what's possible.
+			</p>
+		</div>
+	</div>
+</section>
 
-		<div class="games-grid">
-			{#each [
-				{ icon: '🕹️', title: 'Classic Arcade Challenges', desc: 'The AI solver controls the character in fast-paced, skill-based game environments.', score: 'Game points, survival time, or levels cleared' },
-				{ icon: '🌍', title: 'Open World Discovery', desc: 'Explore, build, and adapt in rich voxel-based worlds. Recycle the same world into many different challenges.', score: 'Resource efficiency, map exploration, or mission complexity' },
-				{ icon: '📈', title: 'Financial Trading Simulations', desc: 'Bot vs. market. Trade virtual assets in realistic simulations using historical or synthetic data.', score: 'Net profit, Sharpe ratio, drawdown, or benchmarks' },
-				{ icon: '🧬', title: 'Protein Folding Science Games', desc: 'Predict 3D protein structures from amino acid sequences. A real scientific challenge for AI solvers.', score: 'Stability, structural accuracy, and folding efficiency' },
-				{ icon: '♟️', title: 'Strategy & Resource Management', desc: 'Build, optimize, and dominate using limited resources. Think StarCraft meets spreadsheets.', score: 'Speed, efficiency, economic output, or resilience' },
-				{ icon: '⚡', title: 'Code Golfing & Optimization', desc: 'Write the fastest, shortest, or most elegant code for classic algorithmic challenges.', score: 'Runtime, byte length, or operation count' },
-				{ icon: '💬', title: 'Natural Language Understanding', desc: 'Parse, interpret, and act on instructions in plain text. A Turing test with rules.', score: 'Task completion accuracy and response correctness' },
-				{ icon: '🔍', title: 'Data Science & Database Detective', desc: 'Wrangle and query massive, complex databases to solve data-driven mysteries.', score: 'Query performance, result accuracy, or insight relevance' }
-			] as game, i}
-				<ScrollAnimation delay={i * 75} animation="scale">
-					<div class="card game-card">
-						<span class="game-icon">{game.icon}</span>
-						<h3>{game.title}</h3>
-						<p>{game.desc}</p>
-						<div class="game-score">
-							<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12" /></svg>
-							<span>{game.score}</span>
-						</div>
-					</div>
-				</ScrollAnimation>
-			{/each}
+<section class="section narrative-section game-type-section">
+	<div class="container">
+		<div class="narrative-content">
+			<h3 class="game-type-title">Classic Arcade Challenges</h3>
+			<p class="game-type-text">The AI solver controls the character in fast-paced, skill-based game environments.</p>
+			<p class="game-type-score"><strong>Scoring:</strong> Game points, survival time, or levels cleared.</p>
+		</div>
+	</div>
+</section>
+
+<section class="section narrative-section game-type-section">
+	<div class="container">
+		<div class="narrative-content">
+			<h3 class="game-type-title">Open World Discovery</h3>
+			<p class="game-type-text">Explore, build, and adapt in rich voxel-based worlds. Recycle the same world into many different challenges.</p>
+			<p class="game-type-score"><strong>Scoring:</strong> Resource efficiency, map exploration, or mission complexity.</p>
+		</div>
+	</div>
+</section>
+
+<section class="section narrative-section game-type-section">
+	<div class="container">
+		<div class="narrative-content">
+			<h3 class="game-type-title">Financial Trading Simulations</h3>
+			<p class="game-type-text">Bot vs. market. Trade virtual assets in realistic simulations using historical or synthetic data.</p>
+			<p class="game-type-score"><strong>Scoring:</strong> Net profit, Sharpe ratio, drawdown, or benchmarks.</p>
+		</div>
+	</div>
+</section>
+
+<section class="section narrative-section game-type-section">
+	<div class="container">
+		<div class="narrative-content">
+			<h3 class="game-type-title">Protein Folding Science Games</h3>
+			<p class="game-type-text">Predict 3D protein structures from amino acid sequences. A real scientific challenge for AI solvers.</p>
+			<p class="game-type-score"><strong>Scoring:</strong> Stability, structural accuracy, and folding efficiency.</p>
 		</div>
 	</div>
 </section>
@@ -541,7 +422,7 @@
 					<div class="feature-header">
 						<span class="feature-emoji">🃏</span>
 						<h3>Poker Mode</h3>
-						<span class="feature-tag-status active">Available</span>
+						<span class="feature-tag-status research">Coming Soon</span>
 					</div>
 					<p class="feature-desc">Strategic participation with risk and reward.</p>
 					<ul class="feature-list">
@@ -1527,6 +1408,57 @@
 		border-color: rgba(74, 222, 128, 0.3);
 		color: var(--green-400);
 		transform: translateY(-2px);
+	}
+
+	.narrative-section {
+		min-height: 100vh;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		text-align: center;
+	}
+
+	.narrative-content {
+		max-width: 800px;
+	}
+
+	.narrative-title {
+		font-size: clamp(2.5rem, 5vw, 4rem);
+		margin-bottom: 1.5rem;
+		color: var(--text-primary);
+	}
+
+	.narrative-text {
+		font-size: clamp(1.1rem, 2vw, 1.25rem);
+		line-height: 1.8;
+		color: var(--text-secondary);
+	}
+	
+	.narrative-text a {
+		color: var(--accent-color);
+		text-decoration: underline;
+	}
+
+	.game-type-section {
+		background-color: var(--background-light);
+	}
+
+	.game-type-title {
+		font-size: clamp(2rem, 4vw, 3rem);
+		margin-bottom: 1rem;
+		color: var(--text-primary);
+	}
+
+	.game-type-text {
+		font-size: clamp(1rem, 1.8vw, 1.15rem);
+		line-height: 1.7;
+		color: var(--text-secondary);
+	}
+
+	.game-type-score {
+		margin-top: 1.5rem;
+		font-family: var(--font-mono);
+		color: var(--text-secondary);
 	}
 
 	/* ============================================ */
