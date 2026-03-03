@@ -362,44 +362,56 @@
 	</div>
 </section>
 
-<section class="section narrative-section game-type-section">
-	<div class="container">
-		<div class="narrative-content">
-			<h3 class="game-type-title">Classic Arcade Challenges</h3>
-			<p class="game-type-text">The AI solver controls the character in fast-paced, skill-based game environments.</p>
-			<p class="game-type-score"><strong>Scoring:</strong> Game points, survival time, or levels cleared.</p>
-		</div>
+<!-- ============================================ -->
+<!-- GAME TYPES — full-screen, unique per type   -->
+<!-- ============================================ -->
+
+<section class="game-type-fullscreen game-type-arcade">
+	<div class="gt-bg-glow"></div>
+	<div class="gt-content">
+		<span class="gt-icon" aria-hidden="true">🎮</span>
+		<span class="gt-label">Game Type 01</span>
+		<h2 class="gt-title">Classic Arcade</h2>
+		<p class="gt-desc">The AI solver controls the character in fast-paced, skill-based game environments. Reflexes, pattern recognition, timing.</p>
+		<p class="gt-score"><span class="gt-score-label">SCORING</span> Game points · Survival time · Levels cleared</p>
 	</div>
+	<div class="gt-grid-lines" aria-hidden="true"></div>
 </section>
 
-<section class="section narrative-section game-type-section">
-	<div class="container">
-		<div class="narrative-content">
-			<h3 class="game-type-title">Open World Discovery</h3>
-			<p class="game-type-text">Explore, build, and adapt in rich voxel-based worlds. Recycle the same world into many different challenges.</p>
-			<p class="game-type-score"><strong>Scoring:</strong> Resource efficiency, map exploration, or mission complexity.</p>
-		</div>
+<section class="game-type-fullscreen game-type-world">
+	<div class="gt-bg-glow"></div>
+	<div class="gt-content">
+		<span class="gt-icon" aria-hidden="true">🌍</span>
+		<span class="gt-label">Game Type 02</span>
+		<h2 class="gt-title">Open World</h2>
+		<p class="gt-desc">Explore, build, and adapt in rich voxel-based worlds. Reuse the same world seed into thousands of unique challenges.</p>
+		<p class="gt-score"><span class="gt-score-label">SCORING</span> Resource efficiency · Map exploration · Mission complexity</p>
 	</div>
+	<div class="gt-grid-lines" aria-hidden="true"></div>
 </section>
 
-<section class="section narrative-section game-type-section">
-	<div class="container">
-		<div class="narrative-content">
-			<h3 class="game-type-title">Financial Trading Simulations</h3>
-			<p class="game-type-text">Bot vs. market. Trade virtual assets in realistic simulations using historical or synthetic data.</p>
-			<p class="game-type-score"><strong>Scoring:</strong> Net profit, Sharpe ratio, drawdown, or benchmarks.</p>
-		</div>
+<section class="game-type-fullscreen game-type-trading">
+	<div class="gt-bg-glow"></div>
+	<div class="gt-content">
+		<span class="gt-icon" aria-hidden="true">📈</span>
+		<span class="gt-label">Game Type 03</span>
+		<h2 class="gt-title">Financial Trading</h2>
+		<p class="gt-desc">Bot vs. market. Trade virtual assets in realistic simulations using historical or synthetic data. Pure strategy, zero luck.</p>
+		<p class="gt-score"><span class="gt-score-label">SCORING</span> Net profit · Sharpe ratio · Drawdown · Benchmarks</p>
 	</div>
+	<div class="gt-grid-lines" aria-hidden="true"></div>
 </section>
 
-<section class="section narrative-section game-type-section">
-	<div class="container">
-		<div class="narrative-content">
-			<h3 class="game-type-title">Protein Folding Science Games</h3>
-			<p class="game-type-text">Predict 3D protein structures from amino acid sequences. A real scientific challenge for AI solvers.</p>
-			<p class="game-type-score"><strong>Scoring:</strong> Stability, structural accuracy, and folding efficiency.</p>
-		</div>
+<section class="game-type-fullscreen game-type-science">
+	<div class="gt-bg-glow"></div>
+	<div class="gt-content">
+		<span class="gt-icon" aria-hidden="true">🧬</span>
+		<span class="gt-label">Game Type 04</span>
+		<h2 class="gt-title">Protein Folding</h2>
+		<p class="gt-desc">Predict 3D protein structures from amino acid sequences. A real scientific challenge — AI solvers advancing biology.</p>
+		<p class="gt-score"><span class="gt-score-label">SCORING</span> Structural stability · Folding accuracy · Efficiency</p>
 	</div>
+	<div class="gt-grid-lines" aria-hidden="true"></div>
 </section>
 
 <div class="section-divider"></div>
@@ -1437,27 +1449,160 @@
 		text-decoration: underline;
 	}
 
-	.game-type-section {
-		background-color: var(--background-light);
+	/* ============================================ */
+	/* GAME TYPE FULL-SCREEN SECTIONS               */
+	/* ============================================ */
+	.game-type-fullscreen {
+		position: relative;
+		min-height: 100vh;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		overflow: hidden;
+		padding: 80px 24px;
 	}
 
-	.game-type-title {
-		font-size: clamp(2rem, 4vw, 3rem);
-		margin-bottom: 1rem;
-		color: var(--text-primary);
+	.gt-bg-glow {
+		position: absolute;
+		inset: 0;
+		pointer-events: none;
+		z-index: 0;
 	}
 
-	.game-type-text {
-		font-size: clamp(1rem, 1.8vw, 1.15rem);
-		line-height: 1.7;
-		color: var(--text-secondary);
+	.gt-grid-lines {
+		position: absolute;
+		inset: 0;
+		background-image:
+			linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+			linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+		background-size: 60px 60px;
+		pointer-events: none;
+		z-index: 0;
 	}
 
-	.game-type-score {
-		margin-top: 1.5rem;
+	.gt-content {
+		position: relative;
+		z-index: 1;
+		max-width: 800px;
+		text-align: center;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 1.25rem;
+	}
+
+	.gt-icon {
+		font-size: clamp(5rem, 12vw, 9rem);
+		line-height: 1;
+		filter: drop-shadow(0 0 30px currentColor);
+		animation: gt-float 4s ease-in-out infinite;
+	}
+
+	@keyframes gt-float {
+		0%, 100% { transform: translateY(0); }
+		50% { transform: translateY(-12px); }
+	}
+
+	.gt-label {
 		font-family: var(--font-mono);
-		color: var(--text-secondary);
+		font-size: 0.75rem;
+		letter-spacing: 0.2em;
+		text-transform: uppercase;
+		opacity: 0.5;
 	}
+
+	.gt-title {
+		font-size: clamp(3rem, 9vw, 7rem);
+		font-weight: 700;
+		letter-spacing: -0.02em;
+		line-height: 1;
+		margin: 0;
+	}
+
+	.gt-desc {
+		font-size: clamp(1rem, 1.8vw, 1.2rem);
+		line-height: 1.7;
+		max-width: 560px;
+		opacity: 0.75;
+	}
+
+	.gt-score {
+		font-family: var(--font-mono);
+		font-size: 0.8rem;
+		letter-spacing: 0.08em;
+		opacity: 0.6;
+		margin-top: 0.5rem;
+	}
+
+	.gt-score-label {
+		letter-spacing: 0.15em;
+		margin-right: 0.75rem;
+		opacity: 0.5;
+	}
+
+	/* ARCADE — blue/indigo */
+	.game-type-arcade {
+		background: #080818;
+		color: #a5b4fc;
+	}
+	.game-type-arcade .gt-bg-glow {
+		background: radial-gradient(ellipse 70% 60% at 50% 80%, rgba(99,102,241,0.15) 0%, transparent 70%);
+	}
+	.game-type-arcade .gt-title {
+		background: linear-gradient(135deg, #a5b4fc, #6366f1);
+		-webkit-background-clip: text;
+		-webkit-text-fill-color: transparent;
+		background-clip: text;
+	}
+	.game-type-arcade .gt-score-label { color: #6366f1; }
+
+	/* OPEN WORLD — green/emerald */
+	.game-type-world {
+		background: #060f09;
+		color: #86efac;
+	}
+	.game-type-world .gt-bg-glow {
+		background: radial-gradient(ellipse 70% 60% at 30% 70%, rgba(34,197,94,0.12) 0%, transparent 70%);
+	}
+	.game-type-world .gt-title {
+		background: linear-gradient(135deg, #86efac, #22c55e);
+		-webkit-background-clip: text;
+		-webkit-text-fill-color: transparent;
+		background-clip: text;
+	}
+	.game-type-world .gt-score-label { color: #22c55e; }
+
+	/* TRADING — amber/gold */
+	.game-type-trading {
+		background: #0f0a00;
+		color: #fcd34d;
+	}
+	.game-type-trading .gt-bg-glow {
+		background: radial-gradient(ellipse 70% 60% at 70% 40%, rgba(234,179,8,0.12) 0%, transparent 70%);
+	}
+	.game-type-trading .gt-title {
+		background: linear-gradient(135deg, #fde68a, #f59e0b);
+		-webkit-background-clip: text;
+		-webkit-text-fill-color: transparent;
+		background-clip: text;
+	}
+	.game-type-trading .gt-score-label { color: #f59e0b; }
+
+	/* PROTEIN FOLDING — cyan/teal */
+	.game-type-science {
+		background: #010f10;
+		color: #67e8f9;
+	}
+	.game-type-science .gt-bg-glow {
+		background: radial-gradient(ellipse 70% 60% at 50% 30%, rgba(6,182,212,0.12) 0%, transparent 70%);
+	}
+	.game-type-science .gt-title {
+		background: linear-gradient(135deg, #a5f3fc, #06b6d4);
+		-webkit-background-clip: text;
+		-webkit-text-fill-color: transparent;
+		background-clip: text;
+	}
+	.game-type-science .gt-score-label { color: #06b6d4; }
 
 	/* ============================================ */
 	/* RESPONSIVE                                   */
