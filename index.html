@@ -1,12 +1,19 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 	<head>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
-		<link href="./_app/immutable/entry/start.BKz8Fe42.js" rel="modulepreload">
-		<link href="./_app/immutable/chunks/BqqWcO-V.js" rel="modulepreload">
+		<script>
+			(function() {
+				var t = localStorage.getItem('theme');
+				if (!t) t = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+				document.documentElement.setAttribute('data-theme', t);
+			})();
+		</script>
+		<link href="./_app/immutable/entry/start.mgtZVayy.js" rel="modulepreload">
+		<link href="./_app/immutable/chunks/lUVpE_ej.js" rel="modulepreload">
 		<link href="./_app/immutable/chunks/CpGejCaS.js" rel="modulepreload">
-		<link href="./_app/immutable/entry/app.CKFgjnoG.js" rel="modulepreload">
+		<link href="./_app/immutable/entry/app.VNilu4g7.js" rel="modulepreload">
 		<link href="./_app/immutable/chunks/CSowSVdj.js" rel="modulepreload">
 		<link href="./_app/immutable/chunks/CpHfL4PK.js" rel="modulepreload">
 		<link href="./_app/immutable/chunks/Clly37Ij.js" rel="modulepreload">
@@ -26,15 +33,15 @@
 			
 			<script>
 				{
-					__sveltekit_c50q3f = {
+					__sveltekit_gozkho = {
 						base: new URL(".", location).pathname.slice(0, -1)
 					};
 
 					const element = document.currentScript.parentElement;
 
 					Promise.all([
-						import("./_app/immutable/entry/start.BKz8Fe42.js"),
-						import("./_app/immutable/entry/app.CKFgjnoG.js")
+						import("./_app/immutable/entry/start.mgtZVayy.js"),
+						import("./_app/immutable/entry/app.VNilu4g7.js")
 					]).then(([kit, app]) => {
 						kit.start(app, element, {
 							node_ids: [0, 2],
