@@ -219,7 +219,7 @@
 <style>
 	.scrollytelling {
 		position: relative;
-		height: 400vh;
+		height: 300vh;
 		background: #050505;
 	}
 

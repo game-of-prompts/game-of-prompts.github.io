@@ -15,7 +15,7 @@
 	--amber-glow: rgba(251, 191, 36, 0.15);
 
 	--text-primary: #f5f5f5;
-	--text-secondary: #a3a3a3;
+	--text-secondary: #c0c0c0;
 	--text-muted: #6b6b6b;
 
 	--border-subtle: rgba(255, 255, 255, 0.06);
@@ -25,7 +25,7 @@
 	--font-mono: 'JetBrains Mono', 'Fira Code', 'SF Mono', Consolas, monospace;
 
 	--max-width: 1200px;
-	--section-padding: 120px 24px;
+	--section-padding: 80px 24px;
 	--radius: 12px;
 	--radius-lg: 16px;
 }
@@ -37,11 +37,12 @@
 	--bg-card: #ffffff;
 	--bg-card-hover: #f8fafc;
 	--text-primary: #0f172a;
-	--text-secondary: #475569;
+	--text-secondary: #374151;
 	--text-muted: #94a3b8;
 	--border-subtle: rgba(0,0,0,0.06);
 	--border-card: rgba(0,0,0,0.08);
 	--background-light: #f1f5f9;
+	--green-glow: rgba(34, 197, 94, 0.1);
 }
 
 @media (prefers-color-scheme: light) {
@@ -51,11 +52,12 @@
 		--bg-card: #ffffff;
 		--bg-card-hover: #f8fafc;
 		--text-primary: #0f172a;
-		--text-secondary: #475569;
+		--text-secondary: #374151;
 		--text-muted: #94a3b8;
 		--border-subtle: rgba(0,0,0,0.06);
 		--border-card: rgba(0,0,0,0.08);
 		--background-light: #f1f5f9;
+		--green-glow: rgba(34, 197, 94, 0.1);
 	}
 }
 
@@ -278,22 +280,7 @@ p {
 	box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4), inset 0 0 30px rgba(74, 222, 128, 0.03);
 }
 
-/* ===== Dividers (Smooth Gradient) ===== */
-.section-divider {
-	height: 80px;
-	background: linear-gradient(180deg, transparent 0%, rgba(74, 222, 128, 0.02) 40%, rgba(251, 191, 36, 0.015) 60%, transparent 100%);
-	position: relative;
-}
-
-.section-divider::after {
-	content: '';
-	position: absolute;
-	left: 10%;
-	right: 10%;
-	top: 50%;
-	height: 1px;
-	background: linear-gradient(90deg, transparent, rgba(74, 222, 128, 0.08) 20%, rgba(251, 191, 36, 0.06) 50%, rgba(74, 222, 128, 0.08) 80%, transparent);
-}
+/* Section dividers removed — spacing handled by section padding */
 
 /* ===== Noise Texture Overlay ===== */
 body::after {
@@ -400,6 +387,6 @@ body::after {
 /* ===== Responsive ===== */
 @media (max-width: 768px) {
 	:root {
-		--section-padding: 80px 16px;
+		--section-padding: 60px 16px;
 	}
 }

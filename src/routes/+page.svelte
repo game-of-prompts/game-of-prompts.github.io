@@ -62,7 +62,6 @@
 	</div>
 </section>
 
-<div class="section-divider"></div>
 
 <!-- ============================================ -->
 <!-- VIDEO OVERVIEW                               -->
@@ -88,7 +87,6 @@
 	</div>
 </section>
 
-<div class="section-divider"></div>
 
 <!-- ============================================ -->
 <!-- HOW IT WORKS                                 -->
@@ -107,7 +105,6 @@
 	</div>
 </section>
 
-<div class="section-divider"></div>
 
 <!-- ============================================ -->
 <!-- CORE COMPONENTS                              -->
@@ -183,7 +180,6 @@
 	</div>
 </section>
 
-<div class="section-divider"></div>
 
 <!-- ============================================ -->
 <!-- CREATOR FLOW                                 -->
@@ -206,7 +202,6 @@
 	]}
 />
 
-<div class="section-divider"></div>
 
 <!-- ============================================ -->
 <!-- PLAYER JOURNEY                               -->
@@ -233,14 +228,12 @@
 	]}
 />
 
-<div class="section-divider"></div>
 
 <!-- ============================================ -->
 <!-- SCROLLYTELLING - THE JOURNEY                 -->
 <!-- ============================================ -->
 <Scrollytelling />
 
-<div class="section-divider"></div>
 
 <!-- ============================================ -->
 <!-- SECURITY                                     -->
@@ -348,7 +341,6 @@
 	</div>
 </section>
 
-<div class="section-divider"></div>
 
 <!-- ============================================ -->
 <!-- GAME TYPES                                   -->
@@ -416,7 +408,6 @@
 	<div class="gt-grid-lines" aria-hidden="true"></div>
 </section>
 
-<div class="section-divider"></div>
 
 <!-- ============================================ -->
 <!-- OPTIONAL FEATURES                            -->
@@ -489,7 +480,6 @@
 	</div>
 </section>
 
-<div class="section-divider"></div>
 
 <!-- ============================================ -->
 <!-- GET STARTED                                  -->
@@ -707,7 +697,7 @@
 	.video-wrapper {
 		width: 100%;
 		aspect-ratio: 16 / 9;
-		min-height: 350px;
+		min-height: 400px;
 		border-radius: 13px;
 		overflow: hidden;
 		background: #000;
@@ -719,7 +709,6 @@
 		width: 100%;
 		height: 100%;
 		border: none;
-		border-radius: 13px;
 	}
 
 	/* ============================================ */
@@ -1449,7 +1438,6 @@
 	}
 
 	.narrative-section {
-		min-height: 100vh;
 		display: flex;
 		align-items: center;
 		justify-content: center;
@@ -1482,7 +1470,7 @@
 	/* ============================================ */
 	.game-type-fullscreen {
 		position: relative;
-		min-height: 100vh;
+		min-height: 80vh;
 		display: flex;
 		align-items: center;
 		justify-content: center;
