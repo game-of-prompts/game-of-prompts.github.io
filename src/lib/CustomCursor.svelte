@@ -1,88 +1,113 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 
-	let cursorX = $state(0);
-	let cursorY = $state(0);
-	let scale = $state(1);
-	let visible = $state(false);
 	let isMobile = $state(true);
 
 	onMount(() => {
-		const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 		const isTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
-		if (prefersReducedMotion || isTouch) return;
-		isMobile = false;
+		const isSmall = window.matchMedia('(max-width: 768px)').matches;
+		if (isTouch || isSmall) return;
 
-		let targetX = 0, targetY = 0;
+		isMobile = false;
+		document.body.classList.add('has-custom-cursor');
+
+		const wrapper = document.getElementById('target-cursor-wrapper');
+		if (!wrapper) return;
+
+		let raf: number;
 
 		const onMouseMove = (e: MouseEvent) => {
-			targetX = e.clientX;
-			targetY = e.clientY;
-			if (!visible) visible = true;
+			cancelAnimationFrame(raf);
+			raf = requestAnimationFrame(() => {
+				wrapper.style.left = e.clientX + 'px';
+				wrapper.style.top = e.clientY + 'px';
+			});
 		};
 
-		const handleMouseEnter = () => { scale = 1.5; };
-		const handleMouseLeave = () => { scale = 1; };
+		const onMouseEnter = () => wrapper.classList.add('hovering');
+		const onMouseLeave = () => wrapper.classList.remove('hovering');
 
 		document.addEventListener('mousemove', onMouseMove, { passive: true });
-		document.body.addEventListener('mouseleave', handleMouseLeave);
 
-		const interactiveElements = document.querySelectorAll('a, button, input, [onclick]');
-		interactiveElements.forEach(el => {
-			el.addEventListener('mouseenter', handleMouseEnter);
-			el.addEventListener('mouseleave', handleMouseLeave);
-		});
-
-		let animId: number;
-		const lerp = () => {
-			cursorX += (targetX - cursorX) * 0.15;
-			cursorY += (targetY - cursorY) * 0.15;
-			animId = requestAnimationFrame(lerp);
+		const addListeners = () => {
+			document.querySelectorAll('a, button, input, select, [role=button]').forEach(el => {
+				el.addEventListener('mouseenter', onMouseEnter);
+				el.addEventListener('mouseleave', onMouseLeave);
+			});
 		};
-		lerp();
+		addListeners();
 
 		return () => {
-			cancelAnimationFrame(animId);
+			cancelAnimationFrame(raf);
+			document.body.classList.remove('has-custom-cursor');
 			document.removeEventListener('mousemove', onMouseMove);
-			document.body.removeEventListener('mouseleave', handleMouseLeave);
-			interactiveElements.forEach(el => {
-				el.removeEventListener('mouseenter', handleMouseEnter);
-				el.removeEventListener('mouseleave', handleMouseLeave);
-			});
 		};
 	});
 </script>
 
 {#if !isMobile}
-	<div
-		class="custom-cursor"
-		class:visible
-		style="transform: translate({cursorX}px, {cursorY}px) scale({scale})"
-	></div>
+	<div id="target-cursor-wrapper" class="target-cursor-wrapper" aria-hidden="true">
+		<div class="target-cursor-dot"></div>
+		<div class="target-cursor-corner corner-tl"></div>
+		<div class="target-cursor-corner corner-tr"></div>
+		<div class="target-cursor-corner corner-br"></div>
+		<div class="target-cursor-corner corner-bl"></div>
+	</div>
 {/if}
 
 <style>
-	:global(body) {
-		cursor: none;
+	:global(body.has-custom-cursor),
+	:global(body.has-custom-cursor *) {
+		cursor: none !important;
 	}
 
-	.custom-cursor {
+	.target-cursor-wrapper {
 		position: fixed;
-		top: -10px;
-		left: -10px;
-		width: 20px;
-		height: 20px;
-		border-radius: 50%;
-		background: radial-gradient(circle, var(--accent-color-trans) 0%, var(--accent-color-trans-2) 50%, transparent 70%);
+		top: 0;
+		left: 0;
+		width: 0;
+		height: 0;
 		pointer-events: none;
-		z-index: 9999;
-		opacity: 0;
-		transition: opacity 0.3s, transform 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-		mix-blend-mode: screen;
-		will-change: transform;
+		z-index: 99999;
+		transform: translate(-50%, -50%);
+		transition: none;
 	}
 
-	.custom-cursor.visible {
-		opacity: 1;
+	.target-cursor-wrapper.hovering .target-cursor-corner {
+		width: 18px;
+		height: 18px;
 	}
+
+	.target-cursor-wrapper.hovering .corner-tl { transform: translate(-180%, -180%); }
+	.target-cursor-wrapper.hovering .corner-tr { transform: translate(80%, -180%); }
+	.target-cursor-wrapper.hovering .corner-br { transform: translate(80%, 80%); }
+	.target-cursor-wrapper.hovering .corner-bl { transform: translate(-180%, 80%); }
+
+	.target-cursor-dot {
+		position: absolute;
+		left: 50%;
+		top: 50%;
+		width: 5px;
+		height: 5px;
+		background: #22c55e;
+		border-radius: 50%;
+		transform: translate(-50%, -50%);
+		box-shadow: 0 0 10px #22c55ecc, 0 0 20px #22c55e66;
+	}
+
+	.target-cursor-corner {
+		position: absolute;
+		left: 50%;
+		top: 50%;
+		width: 13px;
+		height: 13px;
+		border: 2px solid #22c55e;
+		filter: drop-shadow(0 0 3px rgba(34, 197, 94, 0.6));
+		transition: all 0.15s ease;
+	}
+
+	.corner-tl { transform: translate(-150%, -150%); border-right: none; border-bottom: none; }
+	.corner-tr { transform: translate(50%, -150%); border-left: none; border-bottom: none; }
+	.corner-br { transform: translate(50%, 50%); border-left: none; border-top: none; }
+	.corner-bl { transform: translate(-150%, 50%); border-right: none; border-top: none; }
 </style>

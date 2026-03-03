@@ -72,19 +72,17 @@
 			<h2 class="section-title">Watch the Breakdown</h2>
 			<p class="section-subtitle">Get up to speed in minutes — see how Game of Prompts brings blockchain and AI competitions together.</p>
 		</ScrollAnimation>
-		<ScrollAnimation delay={150}>
-			<div class="video-card">
-				<div class="video-wrapper">
-					<iframe
-						src="https://www.youtube.com/embed/UCjDwDj2gGs"
-						title="Game of Prompts - Brief Breakdown"
-						frameborder="0"
-						allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-						allowfullscreen
-					></iframe>
-				</div>
+		<div class="video-card" style="margin-top: 2.5rem;">
+			<div class="video-wrapper">
+				<iframe
+					src="https://www.youtube.com/embed/UCjDwDj2gGs"
+					title="Game of Prompts - Brief Breakdown"
+					frameborder="0"
+					allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+					allowfullscreen
+				></iframe>
 			</div>
-		</ScrollAnimation>
+		</div>
 	</div>
 </section>
 

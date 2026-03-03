@@ -144,6 +144,11 @@
 									</div>
 								{/if}
 							</div>
+						{:else}
+							<!-- Numbered step indicator for prop-driven steps without icons -->
+							<div class="icon-container step-number-visual">
+								<span class="step-number-display">{String(i + 1).padStart(2, '0')}</span>
+							</div>
 						{/if}
 					</div>
 					<div class="step-text">
@@ -310,6 +315,23 @@
 
 	.icon-container {
 		position: relative;
+	}
+
+	/* Numbered indicator for prop-passed steps */
+	.step-number-visual {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.step-number-display {
+		font-family: 'JetBrains Mono', 'Courier New', monospace;
+		font-size: 5rem;
+		font-weight: 700;
+		color: var(--green-400);
+		line-height: 1;
+		text-shadow: 0 0 30px rgba(74, 222, 128, 0.5), 0 0 60px rgba(74, 222, 128, 0.2);
+		letter-spacing: -0.02em;
 	}
 
 	/* Game icon */
