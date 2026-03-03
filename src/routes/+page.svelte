@@ -705,19 +705,17 @@
 	}
 
 	.video-wrapper {
-		position: relative;
 		width: 100%;
-		padding-bottom: 56.25%; /* 16:9 */
-		min-height: 400px;
+		aspect-ratio: 16 / 9;
+		min-height: 350px;
 		border-radius: 13px;
 		overflow: hidden;
-		background: var(--bg-card);
+		background: #000;
+		display: block;
 	}
 
 	.video-wrapper iframe {
-		position: absolute;
-		top: 0;
-		left: 0;
+		display: block;
 		width: 100%;
 		height: 100%;
 		border: none;
