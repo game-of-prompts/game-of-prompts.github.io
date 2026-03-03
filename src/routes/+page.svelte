@@ -1062,10 +1062,18 @@
 		grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
 		gap: 24px;
 		margin-top: 3rem;
+		align-items: stretch;
 	}
 
 	.security-card {
 		text-align: center;
+		height: 100%;
+		display: flex;
+		flex-direction: column;
+	}
+
+	.security-card p {
+		flex: 1;
 	}
 
 	.security-icon {
@@ -1197,10 +1205,18 @@
 		grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
 		gap: 24px;
 		margin-top: 3rem;
+		align-items: stretch;
 	}
 
 	.feature-card {
 		padding: 32px;
+		height: 100%;
+		display: flex;
+		flex-direction: column;
+	}
+
+	.feature-desc {
+		flex: 1;
 	}
 
 	.feature-header {

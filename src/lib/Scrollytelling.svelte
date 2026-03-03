@@ -348,20 +348,21 @@
 		text-align: center;
 		gap: 1.5rem;
 		opacity: 0;
-		transform: translateY(30px) scale(0.95);
-		transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+		transform: translateY(20px);
+		transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
 		pointer-events: none;
 	}
 
 	.step-panel.active {
 		opacity: 1;
-		transform: translateY(0) scale(1);
+		transform: translateY(0);
 		pointer-events: auto;
 	}
 
 	.step-panel.past {
 		opacity: 0;
-		transform: translateY(-30px) scale(0.95);
+		transform: translateY(-20px);
+		transition: opacity 0.6s ease, transform 0.6s ease;
 	}
 
 	.step-visual {

@@ -1,34 +1,40 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	let isMobile = $state(true);
-	let initialized = $state(false);
+
+	let wrapper: HTMLDivElement | null = null;
+	let show = $state(false);
 
 	onMount(() => {
 		const isTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
 		const isSmall = window.matchMedia('(max-width: 768px)').matches;
 		if (isTouch || isSmall) return;
-		isMobile = false;
-		document.body.classList.add('has-custom-cursor');
-		const wrapper = document.getElementById('target-cursor-wrapper');
-		if (!wrapper) return;
 
-		// Start hidden, only show after first real mouse position
-		wrapper.style.opacity = '0';
+		show = true;
+		document.body.classList.add('has-custom-cursor');
+
 		let raf: number;
+		let ready = false;
+
+		// Wait one tick for the DOM element to render after show=true
+		requestAnimationFrame(() => {
+			if (!wrapper) return;
+			wrapper.style.opacity = '0';
+			ready = true;
+		});
 
 		const onMouseMove = (e: MouseEvent) => {
-			if (!initialized) {
-				initialized = true;
-				wrapper.style.opacity = '1';
-			}
+			if (!ready || !wrapper) return;
 			cancelAnimationFrame(raf);
 			raf = requestAnimationFrame(() => {
+				if (!wrapper) return;
+				wrapper.style.opacity = '1';
 				wrapper.style.left = e.clientX + 'px';
 				wrapper.style.top = e.clientY + 'px';
 			});
 		};
 
 		const setHovering = (h: boolean) => {
+			if (!wrapper) return;
 			if (h) wrapper.classList.add('hovering');
 			else wrapper.classList.remove('hovering');
 		};
@@ -47,8 +53,8 @@
 	});
 </script>
 
-{#if !isMobile}
-	<div id="target-cursor-wrapper" class="target-cursor-wrapper" aria-hidden="true">
+{#if show}
+	<div bind:this={wrapper} class="target-cursor-wrapper" aria-hidden="true">
 		<div class="target-cursor-dot"></div>
 		<div class="target-cursor-corner corner-tl"></div>
 		<div class="target-cursor-corner corner-tr"></div>
@@ -68,7 +74,6 @@
 		pointer-events: none;
 		z-index: 99999;
 		transform: translate(-50%, -50%);
-		transition: opacity 0.2s;
 	}
 	.target-cursor-dot {
 		position: absolute;
