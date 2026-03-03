@@ -695,6 +695,7 @@
 		position: relative;
 		width: 100%;
 		padding-bottom: 56.25%; /* 16:9 */
+		min-height: 400px;
 		border-radius: 13px;
 		overflow: hidden;
 		background: var(--bg-card);

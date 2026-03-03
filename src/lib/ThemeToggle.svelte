@@ -36,8 +36,8 @@
 		bottom: 20px;
 		right: 20px;
 		z-index: 1000;
-		background: var(--background-light);
-		border: 1px solid var(--border-color);
+		background: var(--bg-card);
+		border: 1px solid var(--border-card);
 		border-radius: 50%;
 		width: 48px;
 		height: 48px;
@@ -47,11 +47,12 @@
 		cursor: pointer;
 		color: var(--text-primary);
 		transition: all 0.2s ease-in-out;
+		box-shadow: 0 2px 8px rgba(0,0,0,0.15);
 	}
 
 	.theme-toggle:hover {
-		background: var(--background-lighter);
-		border-color: var(--border-color-hover);
+		background: var(--bg-card-hover);
+		border-color: var(--green-400, #22c55e);
 		transform: translateY(-2px);
 	}
 </style>

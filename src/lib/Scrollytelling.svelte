@@ -144,6 +144,60 @@
 									</div>
 								{/if}
 							</div>
+						{:else if step.title?.toLowerCase().includes('design') || step.title?.toLowerCase().includes('create')}
+							<div class="icon-container dynamic-icon-visual">
+								<svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+									<path d="M12 20h9" />
+									<path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z" />
+								</svg>
+							</div>
+						{:else if step.title?.toLowerCase().includes('secret') || step.title?.toLowerCase().includes('rules') || step.title?.toLowerCase().includes('generate')}
+							<div class="icon-container dynamic-icon-visual">
+								<svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+									<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+									<path d="M9.5 12l1.5 1.5L15 10" />
+								</svg>
+							</div>
+						{:else if step.title?.toLowerCase().includes('publish') || step.title?.toLowerCase().includes('package')}
+							<div class="icon-container dynamic-icon-visual">
+								<svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+									<path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 00-2.91-.09z" />
+									<path d="M12 15l-3-3a22 22 0 012-3.95A12.88 12.88 0 0122 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 01-4 2z" />
+									<path d="M9 12H4s.55-3.03 2-4c1.62-1.08 3 0 3 0" />
+									<path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-3 0-3" />
+								</svg>
+							</div>
+						{:else if step.title?.toLowerCase().includes('browse') || step.title?.toLowerCase().includes('discover') || step.title?.toLowerCase().includes('find')}
+							<div class="icon-container dynamic-icon-visual">
+								<svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+									<circle cx="12" cy="12" r="10" />
+									<polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76" />
+								</svg>
+							</div>
+						{:else if step.title?.toLowerCase().includes('solver') || step.title?.toLowerCase().includes('connect') || step.title?.toLowerCase().includes('wallet')}
+							<div class="icon-container dynamic-icon-visual">
+								<svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+									<path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71" />
+									<path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71" />
+								</svg>
+							</div>
+						{:else if step.title?.toLowerCase().includes('run') || step.title?.toLowerCase().includes('compete') || step.title?.toLowerCase().includes('game service')}
+							<div class="icon-container dynamic-icon-visual">
+								<svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+									<polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+								</svg>
+							</div>
+						{:else if step.title?.toLowerCase().includes('result') || step.title?.toLowerCase().includes('earn') || step.title?.toLowerCase().includes('submit')}
+							<div class="icon-container dynamic-icon-visual">
+								<svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+									<path d="M6 9H4.5a2.5 2.5 0 010-5H6" />
+									<path d="M18 9h1.5a2.5 2.5 0 000-5H18" />
+									<path d="M4 22h16" />
+									<path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22" />
+									<path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22" />
+									<path d="M18 2H6v7a6 6 0 1012 0V2z" />
+								</svg>
+							</div>
 						{:else}
 							<!-- Numbered step indicator for prop-driven steps without icons -->
 							<div class="icon-container step-number-visual">
@@ -167,6 +221,10 @@
 		position: relative;
 		height: 400vh;
 		background: #050505;
+	}
+
+	:global([data-theme="light"]) .scrollytelling {
+		background: #f1f5f9;
 	}
 
 	.scrollytelling.reduced {
@@ -332,6 +390,21 @@
 		line-height: 1;
 		text-shadow: 0 0 30px rgba(74, 222, 128, 0.5), 0 0 60px rgba(74, 222, 128, 0.2);
 		letter-spacing: -0.02em;
+	}
+
+	/* Dynamic icon for prop-driven steps */
+	.dynamic-icon-visual {
+		color: var(--green-400);
+		animation: floatIcon 3s ease-in-out infinite;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 96px;
+		height: 96px;
+		border-radius: 24px;
+		background: rgba(74, 222, 128, 0.08);
+		border: 1px solid rgba(74, 222, 128, 0.15);
+		box-shadow: 0 0 30px rgba(74, 222, 128, 0.15), 0 0 60px rgba(74, 222, 128, 0.05);
 	}
 
 	/* Game icon */
