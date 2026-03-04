@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
 	import ScrollAnimation from '$lib/ScrollAnimation.svelte';
 	import ParticleNetwork from '$lib/ParticleNetwork.svelte';
 	import Scrollytelling from '$lib/Scrollytelling.svelte';
@@ -10,6 +11,27 @@
 	const VIDEO_ID = 'UCjDwDj2gGs';
 	let videoStarted = $state(false);
 	function startVideo() { videoStarted = true; }
+
+	onMount(() => {
+		// IntersectionObserver for validation pipeline steps
+		const pipelineSteps = document.querySelectorAll('.vp-step');
+		if (pipelineSteps.length === 0) return;
+
+		const observer = new IntersectionObserver(
+			(entries) => {
+				entries.forEach((entry) => {
+					if (entry.isIntersecting) {
+						entry.target.classList.add('vp-active');
+					}
+				});
+			},
+			{ threshold: 0.4, rootMargin: '0px 0px -10% 0px' }
+		);
+
+		pipelineSteps.forEach((step) => observer.observe(step));
+
+		return () => observer.disconnect();
+	});
 </script>
 
 <svelte:head>
@@ -314,57 +336,50 @@
 			</ScrollAnimation>
 		</div>
 
-		<!-- Score Validation Mechanism -->
+		<!-- Score Validation Mechanism — Visual Pipeline -->
 		<ScrollAnimation>
 			<h3 class="validation-title">Score Validation Mechanism</h3>
 		</ScrollAnimation>
 
-		<div class="validation-steps">
-			<ScrollAnimation delay={0}>
-				<div class="validation-step">
-					<div class="validation-number">1</div>
-					<div class="validation-content">
-						<h4>Player Participation</h4>
-						<p>Player publishes their participation on the Ergo blockchain.</p>
+		<div class="validation-pipeline" id="validation-pipeline">
+			{#each [
+				{ num: 1, title: 'Player Participation', desc: 'Player publishes their participation on the Ergo blockchain.', icon: 'chain' },
+				{ num: 2, title: 'Creator Reveals Secret', desc: 'After the deadline, the creator reveals the game secret in the resolution transaction.', icon: 'key' },
+				{ num: 3, title: 'Smart Contract Validation', desc: 'The game contract computes a commitment for each score using the solver ID, score value, hashed logs, and revealed secret.', icon: 'contract' },
+				{ num: 4, title: 'Score Verification', desc: 'When the score commitment matches the participation commitment, that score is validated as authentic. The highest validated score wins.', icon: 'shield' },
+				{ num: 5, title: 'Winner Revealed', desc: 'The highest validated score wins. This deterministic on-chain process ensures transparency while preventing manipulation.', icon: 'trophy' }
+			] as step, idx}
+				<div class="vp-step" data-vp-step={idx}>
+					<div class="vp-node-col">
+						<div class="vp-node" data-vp-node={idx}>
+							<span class="vp-node-num">{step.num}</span>
+							<div class="vp-icon">
+								{#if step.icon === 'chain'}
+									<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71" /><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71" /></svg>
+								{:else if step.icon === 'key'}
+									<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 11-7.778 7.778 5.5 5.5 0 017.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4" /></svg>
+								{:else if step.icon === 'contract'}
+									<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="16 18 22 12 16 6" /><polyline points="8 6 2 12 8 18" /><line x1="14" y1="4" x2="10" y2="20" /></svg>
+								{:else if step.icon === 'shield'}
+									<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" /><polyline points="9 12 11 14 15 10" /></svg>
+								{:else if step.icon === 'trophy'}
+									<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 9H4.5a2.5 2.5 0 010-5H6" /><path d="M18 9h1.5a2.5 2.5 0 000-5H18" /><path d="M4 22h16" /><path d="M10 22V17" /><path d="M14 22V17" /><path d="M6 2h12v7a6 6 0 01-12 0V2z" /></svg>
+								{/if}
+							</div>
+						</div>
+						{#if idx < 4}
+							<div class="vp-connector">
+								<div class="vp-line"></div>
+								<div class="vp-pulse"></div>
+							</div>
+						{/if}
+					</div>
+					<div class="vp-content">
+						<h4>{step.title}</h4>
+						<p>{step.desc}</p>
 					</div>
 				</div>
-			</ScrollAnimation>
-			<ScrollAnimation delay={100}>
-				<div class="validation-step">
-					<div class="validation-number">2</div>
-					<div class="validation-content">
-						<h4>Creator Reveals Secret</h4>
-						<p>After the deadline, the creator reveals the game secret in the resolution transaction.</p>
-					</div>
-				</div>
-			</ScrollAnimation>
-			<ScrollAnimation delay={200}>
-				<div class="validation-step">
-					<div class="validation-number">3</div>
-					<div class="validation-content">
-						<h4>Smart Contract Validation</h4>
-						<p>The game contract computes a commitment for each score using the solver ID, score value, hashed logs, and revealed secret.</p>
-					</div>
-				</div>
-			</ScrollAnimation>
-			<ScrollAnimation delay={300}>
-				<div class="validation-step">
-					<div class="validation-number">4</div>
-					<div class="validation-content">
-						<h4>Score Verification</h4>
-						<p>When the score commitment matches the participation commitment, that score is validated as authentic. The highest validated score wins.</p>
-					</div>
-				</div>
-			</ScrollAnimation>
-			<ScrollAnimation delay={400}>
-				<div class="validation-step">
-					<div class="validation-number">5</div>
-					<div class="validation-content">
-						<h4>Winner Revealed</h4>
-						<p>The highest validated score wins. This deterministic on-chain process ensures transparency while preventing manipulation.</p>
-					</div>
-				</div>
-			</ScrollAnimation>
+			{/each}
 		</div>
 	</div>
 </section>
@@ -452,74 +467,99 @@
 <SectionTransition height={100} />
 
 <!-- ============================================ -->
-<!-- OPTIONAL FEATURES                            -->
+<!-- OPTIONAL FEATURES — Full-screen cinematic    -->
 <!-- ============================================ -->
-<section class="section">
+
+<section class="section narrative-section">
 	<div class="container">
-		<ScrollAnimation>
-			<span class="section-label">Features</span>
-			<h2 class="section-title">Optional Game Features</h2>
-		</ScrollAnimation>
-
-		<div class="features-grid">
-			<ScrollAnimation delay={0}>
-				<div class="card feature-card feature-poker" use:hoverCorners>
-					<div class="feature-header">
-						<span class="feature-emoji">🃏</span>
-						<h3>Poker Mode</h3>
-						<span class="feature-tag-status research">Coming Soon</span>
-					</div>
-					<p class="feature-desc">Strategic participation with risk and reward.</p>
-					<ul class="feature-list">
-						<li>Participants choose how much to pay (above a set minimum)</li>
-						<li>Higher payment = higher final score multiplier (e.g. ×2, ×5)</li>
-						<li>Players can submit multiple decoy scores</li>
-						<li>Bluff strategy: pay high fee + submit fake high scores to intimidate</li>
-						<li>Game creator sets score multiplier based on fee paid</li>
-					</ul>
-				</div>
-			</ScrollAnimation>
-
-			<ScrollAnimation delay={150}>
-				<div class="card feature-card feature-resource" use:hoverCorners>
-					<div class="feature-header">
-						<span class="feature-emoji">⚙️</span>
-						<h3>Resource Limitation</h3>
-						<span class="feature-tag-status active">Available</span>
-					</div>
-					<p class="feature-desc">Technical challenge by constraining resources.</p>
-					<ul class="feature-list">
-						<li>Game creator sets specific limits on computational resources</li>
-						<li>Constraints: maximum RAM, CPU time, or service dependencies</li>
-						<li>Forces players to develop highly efficient, optimized solutions</li>
-						<li>Adds a significant engineering challenge to the game</li>
-					</ul>
-				</div>
-			</ScrollAnimation>
-
-			<ScrollAnimation delay={300}>
-				<div class="card feature-card feature-research" use:hoverCorners>
-					<div class="feature-header">
-						<span class="feature-emoji">🔬</span>
-						<h3>Pay-per-attempt</h3>
-						<span class="feature-tag-status research">Under Research</span>
-					</div>
-					<p class="feature-desc">Upcoming payment model for game attempts.</p>
-				</div>
-			</ScrollAnimation>
-
-			<ScrollAnimation delay={450}>
-				<div class="card feature-card feature-research" use:hoverCorners>
-					<div class="feature-header">
-						<span class="feature-emoji">🔗</span>
-						<h3>Multi-chain, Ergo-centric</h3>
-						<span class="feature-tag-status research">Under Research</span>
-					</div>
-					<p class="feature-desc">Cross-chain capabilities with Ergo as the foundation.</p>
-				</div>
-			</ScrollAnimation>
+		<div class="narrative-content">
+			<h2 class="narrative-title">Optional Game Features</h2>
+			<p class="narrative-text">
+				Creators can enhance their games with powerful optional mechanics — from poker-style bluffing to resource constraints and multi-chain support.
+			</p>
 		</div>
 	</div>
+</section>
+
+<section class="game-type-fullscreen game-type-poker">
+	<div class="gt-bg-glow"></div>
+	<div class="gt-animation-canvas">
+		<GameAnimation type="poker" />
+	</div>
+	<div class="gt-content">
+		<span class="gt-icon" aria-hidden="true">🃏</span>
+		<span class="gt-label">Feature 01 · Coming Soon</span>
+		<h2 class="gt-title">Poker Mode</h2>
+		<p class="gt-desc">Strategic participation with risk and reward. Bluff, bet, and multiply your score.</p>
+		<ul class="gt-bullets">
+			<li>Participants choose how much to pay (above a set minimum)</li>
+			<li>Higher payment = higher final score multiplier (e.g. ×2, ×5)</li>
+			<li>Players can submit multiple decoy scores</li>
+			<li>Bluff strategy: pay high fee + submit fake high scores to intimidate</li>
+			<li>Game creator sets score multiplier based on fee paid</li>
+		</ul>
+	</div>
+	<div class="gt-grid-lines" aria-hidden="true"></div>
+</section>
+
+<section class="game-type-fullscreen game-type-resource">
+	<div class="gt-bg-glow"></div>
+	<div class="gt-animation-canvas">
+		<GameAnimation type="resource" />
+	</div>
+	<div class="gt-content">
+		<span class="gt-icon" aria-hidden="true">⚙️</span>
+		<span class="gt-label">Feature 02 · Available</span>
+		<h2 class="gt-title">Resource Limitation</h2>
+		<p class="gt-desc">Technical challenge by constraining computational resources. Efficiency is king.</p>
+		<ul class="gt-bullets">
+			<li>Game creator sets specific limits on computational resources</li>
+			<li>Constraints: maximum RAM, CPU time, or service dependencies</li>
+			<li>Forces players to develop highly efficient, optimized solutions</li>
+			<li>Adds a significant engineering challenge to the game</li>
+		</ul>
+	</div>
+	<div class="gt-grid-lines" aria-hidden="true"></div>
+</section>
+
+<section class="game-type-fullscreen game-type-payattempt">
+	<div class="gt-bg-glow"></div>
+	<div class="gt-animation-canvas">
+		<GameAnimation type="payattempt" />
+	</div>
+	<div class="gt-content">
+		<span class="gt-icon" aria-hidden="true">🔬</span>
+		<span class="gt-label">Feature 03 · Under Research</span>
+		<h2 class="gt-title">Pay-per-attempt</h2>
+		<p class="gt-desc">Upcoming payment model where each game attempt costs tokens. Strategic resource allocation meets skill.</p>
+		<ul class="gt-bullets">
+			<li>Each attempt requires a token deposit</li>
+			<li>Encourages thoughtful, high-quality submissions</li>
+			<li>Prevents brute-force spam of solutions</li>
+			<li>Token costs configurable by game creator</li>
+		</ul>
+	</div>
+	<div class="gt-grid-lines" aria-hidden="true"></div>
+</section>
+
+<section class="game-type-fullscreen game-type-multichain">
+	<div class="gt-bg-glow"></div>
+	<div class="gt-animation-canvas">
+		<GameAnimation type="multichain" />
+	</div>
+	<div class="gt-content">
+		<span class="gt-icon" aria-hidden="true">🔗</span>
+		<span class="gt-label">Feature 04 · Under Research</span>
+		<h2 class="gt-title">Multi-chain</h2>
+		<p class="gt-desc">Cross-chain capabilities with Ergo as the foundation. Bridge games and prizes across blockchains.</p>
+		<ul class="gt-bullets">
+			<li>Ergo-centric architecture with cross-chain bridges</li>
+			<li>Accept participation fees from multiple chains</li>
+			<li>Distribute prizes across different blockchain networks</li>
+			<li>Unified scoring and validation on Ergo</li>
+		</ul>
+	</div>
+	<div class="gt-grid-lines" aria-hidden="true"></div>
 </section>
 
 <SectionTransition height={100} />
@@ -1166,53 +1206,146 @@
 		color: var(--text-primary);
 	}
 
-	.validation-steps {
+	/* ============================================ */
+	/* VALIDATION PIPELINE (Visual)                 */
+	/* ============================================ */
+	.validation-pipeline {
 		margin-top: 2rem;
 		display: flex;
 		flex-direction: column;
-		gap: 16px;
+		gap: 0;
 		max-width: 700px;
+		width: 100%;
 	}
 
-	.validation-step {
+	.vp-step {
 		display: flex;
-		gap: 20px;
+		gap: 24px;
 		align-items: flex-start;
-		padding: 20px 24px;
-		background: var(--bg-card);
-		border: 1px solid rgba(74, 222, 128, 0.08);
-		border-radius: var(--radius);
-		transition: border-color 0.3s;
+		opacity: 0.4;
+		transition: opacity 0.6s ease;
 	}
 
-	.validation-step:hover {
-		border-color: rgba(74, 222, 128, 0.2);
+	.vp-step.vp-active {
+		opacity: 1;
 	}
 
-	.validation-number {
+	.vp-node-col {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
 		flex-shrink: 0;
-		width: 32px;
-		height: 32px;
-		border-radius: 8px;
+		width: 52px;
+	}
+
+	.vp-node {
+		width: 48px;
+		height: 48px;
+		border-radius: 50%;
+		background: rgba(74, 222, 128, 0.06);
+		border: 2px solid rgba(74, 222, 128, 0.15);
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		position: relative;
+		transition: all 0.6s ease;
+	}
+
+	.vp-active .vp-node {
+		background: rgba(74, 222, 128, 0.15);
+		border-color: rgba(74, 222, 128, 0.5);
+		box-shadow: 0 0 20px rgba(74, 222, 128, 0.3), 0 0 40px rgba(74, 222, 128, 0.1);
+		animation: vpNodePulse 2s ease-in-out infinite;
+	}
+
+	@keyframes vpNodePulse {
+		0%, 100% { box-shadow: 0 0 20px rgba(74, 222, 128, 0.3), 0 0 40px rgba(74, 222, 128, 0.1); }
+		50% { box-shadow: 0 0 30px rgba(74, 222, 128, 0.5), 0 0 60px rgba(74, 222, 128, 0.2); }
+	}
+
+	.vp-node-num {
+		font-family: var(--font-mono);
+		font-weight: 700;
+		font-size: 0.7rem;
+		color: var(--green-400);
+		line-height: 1;
+	}
+
+	.vp-icon {
+		color: var(--green-400);
+		line-height: 0;
+		margin-top: 2px;
+	}
+
+	.vp-icon svg {
+		width: 14px;
+		height: 14px;
+	}
+
+	.vp-connector {
+		position: relative;
+		width: 2px;
+		height: 60px;
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		font-family: var(--font-mono);
-		font-weight: 700;
-		font-size: 0.85rem;
-		background: rgba(74, 222, 128, 0.08);
-		color: var(--green-400);
-		border: 1px solid rgba(74, 222, 128, 0.15);
 	}
 
-	.validation-content h4 {
+	.vp-line {
+		width: 2px;
+		height: 100%;
+		background: rgba(74, 222, 128, 0.12);
+	}
+
+	.vp-active .vp-line {
+		background: rgba(74, 222, 128, 0.3);
+	}
+
+	.vp-pulse {
+		position: absolute;
+		width: 6px;
+		height: 6px;
+		border-radius: 50%;
+		background: rgba(134, 239, 172, 0.8);
+		box-shadow: 0 0 8px rgba(134, 239, 172, 0.6);
+		opacity: 0;
+	}
+
+	.vp-active .vp-pulse {
+		opacity: 1;
+		animation: vpTravelDown 1.8s ease-in-out infinite;
+	}
+
+	@keyframes vpTravelDown {
+		0% { top: 0; opacity: 0; }
+		10% { opacity: 1; }
+		90% { opacity: 1; }
+		100% { top: 100%; opacity: 0; }
+	}
+
+	.vp-content {
+		padding: 12px 20px;
+		background: var(--bg-card);
+		border: 1px solid rgba(74, 222, 128, 0.08);
+		border-radius: var(--radius);
+		flex: 1;
+		transition: border-color 0.6s, background 0.6s;
+	}
+
+	.vp-active .vp-content {
+		border-color: rgba(74, 222, 128, 0.2);
+		background: var(--bg-card-hover);
+	}
+
+	.vp-content h4 {
 		font-size: 1rem;
 		font-weight: 600;
 		color: var(--text-primary);
 		margin-bottom: 0.25rem;
 	}
 
-	.validation-content p {
+	.vp-content p {
 		font-size: 0.9rem;
 	}
 
@@ -1714,6 +1847,88 @@
 	}
 	.game-type-science .gt-score-label { color: #10b981; }
 
+	/* Feature game-type sections */
+	.game-type-poker {
+		color: #bbf7d0;
+	}
+	.game-type-poker .gt-bg-glow {
+		background: radial-gradient(ellipse 70% 60% at 40% 70%, rgba(74, 222, 128, 0.1) 0%, transparent 70%);
+	}
+	.game-type-poker .gt-title {
+		background: linear-gradient(135deg, #bbf7d0, #4ade80);
+		-webkit-background-clip: text;
+		-webkit-text-fill-color: transparent;
+		background-clip: text;
+	}
+
+	.game-type-resource {
+		color: #86efac;
+	}
+	.game-type-resource .gt-bg-glow {
+		background: radial-gradient(ellipse 70% 60% at 60% 50%, rgba(34, 197, 94, 0.1) 0%, transparent 70%);
+	}
+	.game-type-resource .gt-title {
+		background: linear-gradient(135deg, #86efac, #22c55e);
+		-webkit-background-clip: text;
+		-webkit-text-fill-color: transparent;
+		background-clip: text;
+	}
+
+	.game-type-payattempt {
+		color: #a7f3d0;
+	}
+	.game-type-payattempt .gt-bg-glow {
+		background: radial-gradient(ellipse 70% 60% at 50% 60%, rgba(16, 185, 129, 0.1) 0%, transparent 70%);
+	}
+	.game-type-payattempt .gt-title {
+		background: linear-gradient(135deg, #a7f3d0, #10b981);
+		-webkit-background-clip: text;
+		-webkit-text-fill-color: transparent;
+		background-clip: text;
+	}
+
+	.game-type-multichain {
+		color: #86efac;
+	}
+	.game-type-multichain .gt-bg-glow {
+		background: radial-gradient(ellipse 70% 60% at 50% 40%, rgba(74, 222, 128, 0.12) 0%, transparent 70%);
+	}
+	.game-type-multichain .gt-title {
+		background: linear-gradient(135deg, #86efac, #4ade80);
+		-webkit-background-clip: text;
+		-webkit-text-fill-color: transparent;
+		background-clip: text;
+	}
+
+	/* Bullet list for full-screen feature sections */
+	.gt-bullets {
+		list-style: none;
+		padding: 0;
+		display: flex;
+		flex-direction: column;
+		gap: 8px;
+		text-align: left;
+		max-width: 560px;
+	}
+
+	.gt-bullets li {
+		font-size: 0.9rem;
+		color: var(--text-secondary);
+		padding-left: 20px;
+		position: relative;
+		opacity: 0.8;
+	}
+
+	.gt-bullets li::before {
+		content: '›';
+		position: absolute;
+		left: 0;
+		color: var(--green-400);
+		font-weight: 700;
+		font-size: 1.1rem;
+		line-height: 1.4;
+	}
+
 	/* Light mode overrides for game sections */
 	:global([data-theme="light"]) .game-type-arcade,
 	:global([data-theme="light"]) .game-type-world,
@@ -1826,9 +2041,12 @@
 			gap: 16px;
 		}
 
-		.validation-step {
-			flex-direction: column;
+		.vp-step {
 			gap: 12px;
+		}
+
+		.vp-connector {
+			height: 40px;
 		}
 
 		.games-grid {

@@ -2,7 +2,7 @@
 	import { onMount } from 'svelte';
 
 	interface Props {
-		type: 'trading' | 'protein' | 'openworld' | 'arcade';
+		type: 'trading' | 'protein' | 'openworld' | 'arcade' | 'poker' | 'resource' | 'payattempt' | 'multichain';
 	}
 
 	let { type }: Props = $props();
@@ -41,6 +41,14 @@
 			initOpenWorld(ctx, w, h, isMobile, () => destroyed, (id: number) => { animationId = id; });
 		} else if (type === 'arcade') {
 			initArcade(ctx, w, h, isMobile, () => destroyed, (id: number) => { animationId = id; });
+		} else if (type === 'poker') {
+			initPoker(ctx, w, h, isMobile, () => destroyed, (id: number) => { animationId = id; });
+		} else if (type === 'resource') {
+			initResource(ctx, w, h, isMobile, () => destroyed, (id: number) => { animationId = id; });
+		} else if (type === 'payattempt') {
+			initPayAttempt(ctx, w, h, isMobile, () => destroyed, (id: number) => { animationId = id; });
+		} else if (type === 'multichain') {
+			initMultichain(ctx, w, h, isMobile, () => destroyed, (id: number) => { animationId = id; });
 		}
 
 		return () => {
@@ -65,7 +73,7 @@
 		// Seed initial data with bigger swings
 		let val = 0.5;
 		for (let i = 0; i < maxPoints; i++) {
-			val += (Math.random() - 0.48) * 0.08;
+			val += (Math.random() - 0.48) * 0.12;
 			val = Math.max(0.05, Math.min(0.95, val));
 			dataPoints.push(val);
 		}
@@ -75,13 +83,16 @@
 			setId(requestAnimationFrame(animate));
 			time++;
 
+			// Frame skip: only update every 2 frames for slower, dramatic swings
+			if (time % 2 !== 0) return;
+
 			const cw = w();
 			const ch = h();
 			ctx.clearRect(0, 0, cw, ch);
 
-			// Update price — much bigger amplitude swings
+			// Update price — slow dramatic market swings
 			const prevVal = dataPoints[dataPoints.length - 1];
-			let newVal = prevVal + (Math.random() - 0.48) * 0.08;
+			let newVal = prevVal + (Math.random() - 0.48) * 0.12;
 			newVal = Math.max(0.05, Math.min(0.95, newVal));
 			dataPoints.push(newVal);
 			if (dataPoints.length > maxPoints) dataPoints.shift();
@@ -445,6 +456,480 @@
 				ctx.moveTo(0, y);
 				ctx.lineTo(cw, y);
 				ctx.stroke();
+			}
+		}
+
+		animate();
+	}
+
+	function initPoker(
+		ctx: CanvasRenderingContext2D,
+		w: () => number, h: () => number,
+		isMobile: boolean,
+		isDestroyed: () => boolean,
+		setId: (id: number) => void
+	) {
+		let time = 0;
+		const cardCount = isMobile ? 4 : 7;
+		interface Card { x: number; targetX: number; y: number; targetY: number; rotation: number; targetRotation: number; width: number; height: number; delay: number; flipped: boolean; flipProgress: number; suit: string; value: string; }
+		const suits = ['♠', '♥', '♦', '♣'];
+		const values = ['A', 'K', 'Q', 'J', '10', '9'];
+		const cards: Card[] = [];
+		interface Chip { x: number; y: number; r: number; color: string; offsetY: number; speed: number; }
+		const chips: Chip[] = [];
+
+		for (let i = 0; i < cardCount; i++) {
+			cards.push({
+				x: 400, targetX: 80 + i * (isMobile ? 55 : 80), y: -60, targetY: 50 + Math.sin(i * 0.8) * 20,
+				rotation: (Math.random() - 0.5) * 0.3, targetRotation: (Math.random() - 0.5) * 0.2,
+				width: isMobile ? 42 : 55, height: isMobile ? 62 : 80,
+				delay: i * 30, flipped: false, flipProgress: 0,
+				suit: suits[Math.floor(Math.random() * suits.length)],
+				value: values[Math.floor(Math.random() * values.length)]
+			});
+		}
+
+		const chipColors = ['rgba(74, 222, 128, 0.6)', 'rgba(34, 197, 94, 0.5)', 'rgba(134, 239, 172, 0.4)'];
+		for (let i = 0; i < (isMobile ? 6 : 12); i++) {
+			chips.push({ x: Math.random() * 600 + 50, y: Math.random() * 40 + 150, r: Math.random() * 6 + 4, color: chipColors[i % 3], offsetY: 0, speed: Math.random() * 0.02 + 0.01 });
+		}
+
+		function animate() {
+			if (isDestroyed()) return;
+			setId(requestAnimationFrame(animate));
+			time++;
+
+			const cw = w();
+			const ch = h();
+			ctx.clearRect(0, 0, cw, ch);
+
+			// Green felt background gradient
+			const feltGrad = ctx.createRadialGradient(cw / 2, ch / 2, 0, cw / 2, ch / 2, cw * 0.6);
+			feltGrad.addColorStop(0, 'rgba(22, 101, 52, 0.15)');
+			feltGrad.addColorStop(1, 'rgba(5, 46, 22, 0.08)');
+			ctx.fillStyle = feltGrad;
+			ctx.fillRect(0, 0, cw, ch);
+
+			// Felt border
+			ctx.strokeStyle = 'rgba(74, 222, 128, 0.1)';
+			ctx.lineWidth = 2;
+			ctx.beginPath();
+			ctx.roundRect(20, 10, cw - 40, ch - 20, 20);
+			ctx.stroke();
+
+			// Animate and draw cards
+			for (const card of cards) {
+				if (time < card.delay) continue;
+				const t = Math.min(1, (time - card.delay) / 40);
+				const ease = 1 - Math.pow(1 - t, 3);
+				card.x += (card.targetX - card.x) * 0.08;
+				card.y += (card.targetY - card.y) * 0.08;
+				card.rotation += (card.targetRotation - card.rotation) * 0.05;
+
+				if (t > 0.8 && !card.flipped) card.flipped = true;
+				if (card.flipped && card.flipProgress < 1) card.flipProgress = Math.min(1, card.flipProgress + 0.03);
+
+				ctx.save();
+				ctx.translate(card.x + card.width / 2, card.y + card.height / 2);
+				ctx.rotate(card.rotation);
+				const scaleX = Math.abs(Math.cos(card.flipProgress * Math.PI));
+
+				ctx.scale(Math.max(0.01, scaleX), 1);
+
+				// Card body
+				ctx.fillStyle = card.flipProgress > 0.5 ? 'rgba(20, 20, 20, 0.9)' : 'rgba(74, 222, 128, 0.15)';
+				ctx.strokeStyle = 'rgba(74, 222, 128, 0.3)';
+				ctx.lineWidth = 1;
+				ctx.beginPath();
+				ctx.roundRect(-card.width / 2, -card.height / 2, card.width, card.height, 4);
+				ctx.fill();
+				ctx.stroke();
+
+				if (card.flipProgress > 0.5) {
+					ctx.fillStyle = card.suit === '♥' || card.suit === '♦' ? 'rgba(74, 222, 128, 0.9)' : 'rgba(134, 239, 172, 0.8)';
+					ctx.font = `bold ${isMobile ? 10 : 13}px var(--font-mono), monospace`;
+					ctx.textAlign = 'center';
+					ctx.fillText(card.value, 0, -8);
+					ctx.font = `${isMobile ? 14 : 18}px serif`;
+					ctx.fillText(card.suit, 0, 14);
+				}
+				ctx.restore();
+			}
+
+			// Chips
+			for (const chip of chips) {
+				chip.offsetY = Math.sin(time * chip.speed) * 3;
+				ctx.beginPath();
+				ctx.arc(chip.x % cw, chip.y + chip.offsetY, chip.r, 0, Math.PI * 2);
+				ctx.fillStyle = chip.color;
+				ctx.fill();
+				ctx.strokeStyle = 'rgba(74, 222, 128, 0.3)';
+				ctx.lineWidth = 1;
+				ctx.stroke();
+			}
+		}
+
+		animate();
+	}
+
+	function initResource(
+		ctx: CanvasRenderingContext2D,
+		w: () => number, h: () => number,
+		isMobile: boolean,
+		isDestroyed: () => boolean,
+		setId: (id: number) => void
+	) {
+		let time = 0;
+		const gaugeCount = isMobile ? 3 : 5;
+		const labels = ['CPU', 'RAM', 'GPU', 'NET', 'DISK'];
+		const gaugeValues: number[] = Array(gaugeCount).fill(0);
+		const gaugeTargets: number[] = Array(gaugeCount).fill(0);
+		let throttled = false;
+		let throttleTimer = 0;
+
+		function animate() {
+			if (isDestroyed()) return;
+			setId(requestAnimationFrame(animate));
+			time++;
+
+			const cw = w();
+			const ch = h();
+			ctx.clearRect(0, 0, cw, ch);
+
+			// Update targets periodically
+			if (time % 60 === 0) {
+				for (let i = 0; i < gaugeCount; i++) {
+					gaugeTargets[i] = Math.random() * 0.9 + 0.1;
+				}
+				// Occasionally throttle (value > 0.85)
+				const maxVal = Math.max(...gaugeTargets);
+				if (maxVal > 0.8) { throttled = true; throttleTimer = 90; }
+			}
+			if (throttled) {
+				throttleTimer--;
+				if (throttleTimer <= 0) { throttled = false; for (let i = 0; i < gaugeCount; i++) gaugeTargets[i] *= 0.5; }
+			}
+
+			// Lerp gauge values
+			for (let i = 0; i < gaugeCount; i++) {
+				gaugeValues[i] += (gaugeTargets[i] - gaugeValues[i]) * 0.04;
+			}
+
+			const gaugeWidth = (cw - 60) / gaugeCount;
+			const gaugeH = ch * 0.55;
+			const baseY = ch * 0.85;
+
+			for (let i = 0; i < gaugeCount; i++) {
+				const x = 30 + i * gaugeWidth + gaugeWidth * 0.15;
+				const bw = gaugeWidth * 0.7;
+				const fillH = gaugeH * gaugeValues[i];
+				const isHot = gaugeValues[i] > 0.75;
+
+				// Background bar
+				ctx.fillStyle = 'rgba(74, 222, 128, 0.05)';
+				ctx.fillRect(x, baseY - gaugeH, bw, gaugeH);
+
+				// Fill bar
+				const grad = ctx.createLinearGradient(0, baseY, 0, baseY - fillH);
+				if (isHot) {
+					const pulse = Math.sin(time * 0.1) * 0.15 + 0.85;
+					grad.addColorStop(0, `rgba(74, 222, 128, ${0.6 * pulse})`);
+					grad.addColorStop(1, `rgba(134, 239, 172, ${0.9 * pulse})`);
+				} else {
+					grad.addColorStop(0, 'rgba(74, 222, 128, 0.3)');
+					grad.addColorStop(1, 'rgba(74, 222, 128, 0.6)');
+				}
+				ctx.fillStyle = grad;
+				ctx.fillRect(x, baseY - fillH, bw, fillH);
+
+				// Border
+				ctx.strokeStyle = 'rgba(74, 222, 128, 0.15)';
+				ctx.lineWidth = 1;
+				ctx.strokeRect(x, baseY - gaugeH, bw, gaugeH);
+
+				// Label
+				ctx.fillStyle = 'rgba(74, 222, 128, 0.6)';
+				ctx.font = `${isMobile ? 9 : 11}px monospace`;
+				ctx.textAlign = 'center';
+				ctx.fillText(labels[i], x + bw / 2, baseY + 14);
+
+				// Percentage
+				ctx.fillStyle = isHot ? 'rgba(134, 239, 172, 0.9)' : 'rgba(74, 222, 128, 0.7)';
+				ctx.font = `bold ${isMobile ? 10 : 12}px monospace`;
+				ctx.fillText(`${Math.round(gaugeValues[i] * 100)}%`, x + bw / 2, baseY - gaugeH - 8);
+
+				// Threshold line at 80%
+				const threshY = baseY - gaugeH * 0.8;
+				ctx.strokeStyle = 'rgba(134, 239, 172, 0.2)';
+				ctx.setLineDash([3, 3]);
+				ctx.beginPath();
+				ctx.moveTo(x, threshY);
+				ctx.lineTo(x + bw, threshY);
+				ctx.stroke();
+				ctx.setLineDash([]);
+			}
+
+			// Throttle warning
+			if (throttled) {
+				const flash = Math.sin(time * 0.15) > 0;
+				if (flash) {
+					ctx.fillStyle = 'rgba(134, 239, 172, 0.8)';
+					ctx.font = `bold ${isMobile ? 11 : 14}px monospace`;
+					ctx.textAlign = 'center';
+					ctx.fillText('⚠ THROTTLING', cw / 2, 20);
+				}
+			}
+		}
+
+		animate();
+	}
+
+	function initPayAttempt(
+		ctx: CanvasRenderingContext2D,
+		w: () => number, h: () => number,
+		isMobile: boolean,
+		isDestroyed: () => boolean,
+		setId: (id: number) => void
+	) {
+		let time = 0;
+		interface Coin { x: number; y: number; vy: number; vx: number; r: number; alpha: number; rotation: number; rotSpeed: number; }
+		const coins: Coin[] = [];
+		let spawnTimer = 0;
+		let attemptCount = 0;
+		const slotX = 0.5; // center of screen ratio
+		const slotWidth = isMobile ? 60 : 80;
+
+		function spawnCoin(cw: number) {
+			const startX = cw * 0.2 + Math.random() * cw * 0.6;
+			coins.push({
+				x: startX, y: -10,
+				vy: 1.5 + Math.random(), vx: (cw * slotX - startX) * 0.01,
+				r: isMobile ? 6 : 9,
+				alpha: 1, rotation: 0,
+				rotSpeed: (Math.random() - 0.5) * 0.1
+			});
+			attemptCount++;
+		}
+
+		function animate() {
+			if (isDestroyed()) return;
+			setId(requestAnimationFrame(animate));
+			time++;
+
+			const cw = w();
+			const ch = h();
+			ctx.clearRect(0, 0, cw, ch);
+
+			// Spawn coins periodically
+			spawnTimer++;
+			if (spawnTimer > 45) { spawnCoin(cw); spawnTimer = 0; }
+
+			// Slot machine / deposit area
+			const sx = cw * slotX - slotWidth / 2;
+			const sy = ch * 0.6;
+			ctx.strokeStyle = 'rgba(74, 222, 128, 0.3)';
+			ctx.lineWidth = 2;
+			ctx.beginPath();
+			ctx.roundRect(sx, sy, slotWidth, 30, 6);
+			ctx.stroke();
+			ctx.fillStyle = 'rgba(74, 222, 128, 0.05)';
+			ctx.fill();
+
+			// Label
+			ctx.fillStyle = 'rgba(74, 222, 128, 0.5)';
+			ctx.font = `${isMobile ? 8 : 10}px monospace`;
+			ctx.textAlign = 'center';
+			ctx.fillText('DEPOSIT', cw * slotX, sy + 20);
+
+			// Attempt counter
+			ctx.fillStyle = 'rgba(134, 239, 172, 0.7)';
+			ctx.font = `bold ${isMobile ? 12 : 15}px monospace`;
+			ctx.fillText(`Attempts: ${attemptCount}`, cw * slotX, ch * 0.9);
+
+			// Token cost display
+			ctx.fillStyle = 'rgba(74, 222, 128, 0.4)';
+			ctx.font = `${isMobile ? 9 : 11}px monospace`;
+			ctx.fillText('1 ERG / attempt', cw * slotX, ch * 0.9 + 18);
+
+			// Update & draw coins
+			for (let i = coins.length - 1; i >= 0; i--) {
+				const c = coins[i];
+				c.vy += 0.05;
+				c.y += c.vy;
+				c.x += c.vx;
+				c.rotation += c.rotSpeed;
+
+				// Check if coin reached deposit
+				if (c.y > sy && Math.abs(c.x - cw * slotX) < slotWidth / 2) {
+					c.alpha -= 0.05;
+					c.vy *= 0.8;
+				}
+
+				if (c.alpha <= 0 || c.y > ch + 20) { coins.splice(i, 1); continue; }
+
+				ctx.save();
+				ctx.translate(c.x, c.y);
+				ctx.rotate(c.rotation);
+				const scaleX = Math.abs(Math.cos(time * 0.05 + i));
+
+				// Coin body (ellipse for 3D effect)
+				ctx.beginPath();
+				ctx.ellipse(0, 0, c.r * Math.max(0.3, scaleX), c.r, 0, 0, Math.PI * 2);
+				ctx.fillStyle = `rgba(74, 222, 128, ${c.alpha * 0.7})`;
+				ctx.fill();
+				ctx.strokeStyle = `rgba(134, 239, 172, ${c.alpha * 0.5})`;
+				ctx.lineWidth = 1;
+				ctx.stroke();
+
+				// Coin symbol
+				if (scaleX > 0.5) {
+					ctx.fillStyle = `rgba(5, 5, 5, ${c.alpha * 0.8})`;
+					ctx.font = `bold ${isMobile ? 7 : 9}px monospace`;
+					ctx.textAlign = 'center';
+					ctx.textBaseline = 'middle';
+					ctx.fillText('Σ', 0, 0);
+				}
+				ctx.restore();
+			}
+		}
+
+		animate();
+	}
+
+	function initMultichain(
+		ctx: CanvasRenderingContext2D,
+		w: () => number, h: () => number,
+		isMobile: boolean,
+		isDestroyed: () => boolean,
+		setId: (id: number) => void
+	) {
+		let time = 0;
+		const nodeCount = isMobile ? 5 : 8;
+		interface ChainNode { x: number; y: number; r: number; label: string; pulseOffset: number; connections: number[]; }
+		const chainLabels = ['ERGO', 'ETH', 'ADA', 'BTC', 'DOT', 'SOL', 'AVAX', 'MATIC'];
+		const nodes: ChainNode[] = [];
+
+		// Position nodes in a rough circle
+		for (let i = 0; i < nodeCount; i++) {
+			const angle = (i / nodeCount) * Math.PI * 2 - Math.PI / 2;
+			const rx = isMobile ? 100 : 160;
+			const ry = isMobile ? 55 : 70;
+			nodes.push({
+				x: 0.5 + Math.cos(angle) * rx / 400, // ratio of width
+				y: 0.5 + Math.sin(angle) * ry / 200, // ratio of height
+				r: i === 0 ? (isMobile ? 16 : 22) : (isMobile ? 10 : 14), // Ergo is bigger
+				label: chainLabels[i],
+				pulseOffset: Math.random() * Math.PI * 2,
+				connections: []
+			});
+		}
+
+		// Connect all nodes to Ergo (index 0) and some random peer connections
+		for (let i = 1; i < nodeCount; i++) {
+			nodes[0].connections.push(i);
+			nodes[i].connections.push(0);
+		}
+		// A few peer connections
+		for (let i = 1; i < nodeCount; i++) {
+			const peer = 1 + Math.floor(Math.random() * (nodeCount - 1));
+			if (peer !== i && !nodes[i].connections.includes(peer)) {
+				nodes[i].connections.push(peer);
+			}
+		}
+
+		interface Packet { fromIdx: number; toIdx: number; progress: number; speed: number; }
+		const packets: Packet[] = [];
+
+		function animate() {
+			if (isDestroyed()) return;
+			setId(requestAnimationFrame(animate));
+			time++;
+
+			const cw = w();
+			const ch = h();
+			ctx.clearRect(0, 0, cw, ch);
+
+			// Spawn packets occasionally
+			if (time % 30 === 0) {
+				const fromIdx = Math.floor(Math.random() * nodeCount);
+				const conns = nodes[fromIdx].connections;
+				if (conns.length > 0) {
+					const toIdx = conns[Math.floor(Math.random() * conns.length)];
+					packets.push({ fromIdx, toIdx, progress: 0, speed: 0.015 + Math.random() * 0.01 });
+				}
+			}
+
+			// Draw connections
+			const drawnEdges = new Set<string>();
+			for (let i = 0; i < nodeCount; i++) {
+				const n = nodes[i];
+				for (const j of n.connections) {
+					const key = `${Math.min(i, j)}-${Math.max(i, j)}`;
+					if (drawnEdges.has(key)) continue;
+					drawnEdges.add(key);
+					const m = nodes[j];
+					ctx.beginPath();
+					ctx.moveTo(n.x * cw, n.y * ch);
+					ctx.lineTo(m.x * cw, m.y * ch);
+					ctx.strokeStyle = 'rgba(74, 222, 128, 0.1)';
+					ctx.lineWidth = 1;
+					ctx.stroke();
+				}
+			}
+
+			// Draw packets
+			for (let i = packets.length - 1; i >= 0; i--) {
+				const p = packets[i];
+				p.progress += p.speed;
+				if (p.progress >= 1) { packets.splice(i, 1); continue; }
+				const from = nodes[p.fromIdx];
+				const to = nodes[p.toIdx];
+				const px = (from.x + (to.x - from.x) * p.progress) * cw;
+				const py = (from.y + (to.y - from.y) * p.progress) * ch;
+				ctx.beginPath();
+				ctx.arc(px, py, 3, 0, Math.PI * 2);
+				ctx.fillStyle = 'rgba(134, 239, 172, 0.9)';
+				ctx.shadowColor = 'rgba(134, 239, 172, 0.6)';
+				ctx.shadowBlur = 8;
+				ctx.fill();
+				ctx.shadowBlur = 0;
+			}
+
+			// Draw nodes
+			for (let i = 0; i < nodeCount; i++) {
+				const n = nodes[i];
+				const pulse = Math.sin(time * 0.04 + n.pulseOffset) * 0.2 + 0.8;
+				const nx = n.x * cw;
+				const ny = n.y * ch;
+				const isErgo = i === 0;
+
+				// Glow
+				if (isErgo) {
+					ctx.beginPath();
+					ctx.arc(nx, ny, n.r * 2, 0, Math.PI * 2);
+					ctx.fillStyle = `rgba(74, 222, 128, ${0.06 * pulse})`;
+					ctx.fill();
+				}
+
+				// Node circle
+				ctx.beginPath();
+				ctx.arc(nx, ny, n.r, 0, Math.PI * 2);
+				ctx.fillStyle = isErgo
+					? `rgba(74, 222, 128, ${0.3 * pulse})`
+					: `rgba(74, 222, 128, ${0.15 * pulse})`;
+				ctx.fill();
+				ctx.strokeStyle = isErgo
+					? `rgba(134, 239, 172, ${0.6 * pulse})`
+					: `rgba(74, 222, 128, ${0.3 * pulse})`;
+				ctx.lineWidth = isErgo ? 2 : 1;
+				ctx.stroke();
+
+				// Label
+				ctx.fillStyle = `rgba(134, 239, 172, ${isErgo ? 0.9 : 0.6})`;
+				ctx.font = `bold ${isErgo ? (isMobile ? 8 : 10) : (isMobile ? 6 : 8)}px monospace`;
+				ctx.textAlign = 'center';
+				ctx.textBaseline = 'middle';
+				ctx.fillText(n.label, nx, ny);
 			}
 		}
 
