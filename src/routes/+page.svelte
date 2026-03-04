@@ -95,7 +95,7 @@
 					<!-- svelte-ignore a11y_click_events_have_key_events -->
 					<!-- svelte-ignore a11y_no_static_element_interactions -->
 					<div class="video-thumbnail" onclick={startVideo}>
-						<img src="https://img.youtube.com/vi/{VIDEO_ID}/maxresdefault.jpg" alt="Game of Prompts video thumbnail" class="video-thumb-img" />
+						<img src="https://img.youtube.com/vi/{VIDEO_ID}/hqdefault.jpg" alt="Game of Prompts video thumbnail" class="video-thumb-img" />
 						<div class="play-btn-overlay">
 							<svg class="play-btn-svg" width="80" height="80" viewBox="0 0 80 80" fill="none">
 								<circle cx="40" cy="40" r="38" stroke="#22c55e" stroke-width="3" fill="rgba(34, 197, 94, 0.15)" />
@@ -752,6 +752,45 @@
 		width: 100%;
 		height: 100%;
 		border: none;
+	}
+
+	.video-thumbnail {
+		position: relative;
+		width: 100%;
+		height: 100%;
+		cursor: pointer;
+		overflow: hidden;
+	}
+
+	.video-thumb-img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		display: block;
+	}
+
+	.play-btn-overlay {
+		position: absolute;
+		inset: 0;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		background: rgba(0, 0, 0, 0.35);
+		transition: background 0.3s;
+	}
+
+	.video-thumbnail:hover .play-btn-overlay {
+		background: rgba(0, 0, 0, 0.15);
+	}
+
+	.play-btn-svg {
+		filter: drop-shadow(0 0 20px rgba(34, 197, 94, 0.6)) drop-shadow(0 0 40px rgba(34, 197, 94, 0.3));
+		transition: transform 0.3s, filter 0.3s;
+	}
+
+	.video-thumbnail:hover .play-btn-svg {
+		transform: scale(1.1);
+		filter: drop-shadow(0 0 30px rgba(34, 197, 94, 0.8)) drop-shadow(0 0 60px rgba(34, 197, 94, 0.4));
 	}
 
 	/* ============================================ */
