@@ -1614,10 +1614,9 @@
 		opacity: 0.5;
 	}
 
-	/* Game type colors — cinematic sections stay dark even in light mode */
+	/* Game type colors — follow theme */
 	.game-type-fullscreen {
-		background: #0a0a0a !important;
-		color-scheme: dark;
+		background: var(--bg-primary);
 	}
 
 	.game-type-arcade {
@@ -1675,6 +1674,81 @@
 		background-clip: text;
 	}
 	.game-type-science .gt-score-label { color: #10b981; }
+
+	/* Light mode overrides for game sections */
+	:global([data-theme="light"]) .game-type-arcade,
+	:global([data-theme="light"]) .game-type-world,
+	:global([data-theme="light"]) .game-type-trading,
+	:global([data-theme="light"]) .game-type-science {
+		color: var(--text-primary);
+	}
+
+	:global([data-theme="light"]) .game-type-arcade .gt-title {
+		background: linear-gradient(135deg, #16a34a, #15803d);
+		-webkit-background-clip: text;
+		-webkit-text-fill-color: transparent;
+		background-clip: text;
+	}
+	:global([data-theme="light"]) .game-type-world .gt-title {
+		background: linear-gradient(135deg, #16a34a, #166534);
+		-webkit-background-clip: text;
+		-webkit-text-fill-color: transparent;
+		background-clip: text;
+	}
+	:global([data-theme="light"]) .game-type-trading .gt-title {
+		background: linear-gradient(135deg, #15803d, #14532d);
+		-webkit-background-clip: text;
+		-webkit-text-fill-color: transparent;
+		background-clip: text;
+	}
+	:global([data-theme="light"]) .game-type-science .gt-title {
+		background: linear-gradient(135deg, #059669, #065f46);
+		-webkit-background-clip: text;
+		-webkit-text-fill-color: transparent;
+		background-clip: text;
+	}
+
+	:global([data-theme="light"]) .game-type-arcade .gt-score-label,
+	:global([data-theme="light"]) .game-type-world .gt-score-label,
+	:global([data-theme="light"]) .game-type-trading .gt-score-label,
+	:global([data-theme="light"]) .game-type-science .gt-score-label {
+		color: #16a34a;
+	}
+
+	:global([data-theme="light"]) .gt-label {
+		color: #16a34a;
+	}
+
+	/* Also handle prefers-color-scheme: light for users without manual toggle */
+	@media (prefers-color-scheme: light) {
+		:root:not([data-theme="dark"]) .game-type-arcade,
+		:root:not([data-theme="dark"]) .game-type-world,
+		:root:not([data-theme="dark"]) .game-type-trading,
+		:root:not([data-theme="dark"]) .game-type-science {
+			color: #0f172a;
+		}
+		:root:not([data-theme="dark"]) .game-type-arcade .gt-title,
+		:root:not([data-theme="dark"]) .game-type-world .gt-title,
+		:root:not([data-theme="dark"]) .game-type-trading .gt-title {
+			background: linear-gradient(135deg, #16a34a, #15803d);
+			-webkit-background-clip: text;
+			-webkit-text-fill-color: transparent;
+			background-clip: text;
+		}
+		:root:not([data-theme="dark"]) .game-type-science .gt-title {
+			background: linear-gradient(135deg, #059669, #065f46);
+			-webkit-background-clip: text;
+			-webkit-text-fill-color: transparent;
+			background-clip: text;
+		}
+		:root:not([data-theme="dark"]) .game-type-arcade .gt-score-label,
+		:root:not([data-theme="dark"]) .game-type-world .gt-score-label,
+		:root:not([data-theme="dark"]) .game-type-trading .gt-score-label,
+		:root:not([data-theme="dark"]) .game-type-science .gt-score-label,
+		:root:not([data-theme="dark"]) .gt-label {
+			color: #16a34a;
+		}
+	}
 
 	/* ============================================ */
 	/* RESPONSIVE                                   */
