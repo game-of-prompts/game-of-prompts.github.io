@@ -868,19 +868,31 @@
 		const chainLabels = ['ERGO', 'ETH', 'ADA', 'BTC', 'DOT', 'SOL', 'AVAX', 'MATIC'];
 		const nodes: ChainNode[] = [];
 
-		// Position nodes in a rough circle
+		// Position nodes in a rough circle — ERGO at center, others orbiting
 		for (let i = 0; i < nodeCount; i++) {
-			const angle = (i / nodeCount) * Math.PI * 2 - Math.PI / 2;
-			const rx = isMobile ? 100 : 160;
-			const ry = isMobile ? 55 : 70;
-			nodes.push({
-				x: 0.5 + Math.cos(angle) * rx / 400, // ratio of width
-				y: 0.5 + Math.sin(angle) * ry / 200, // ratio of height
-				r: i === 0 ? (isMobile ? 16 : 22) : (isMobile ? 10 : 14), // Ergo is bigger
-				label: chainLabels[i],
-				pulseOffset: Math.random() * Math.PI * 2,
-				connections: []
-			});
+			if (i === 0) {
+				// ERGO hub at center — noticeably larger
+				nodes.push({
+					x: 0.5,
+					y: 0.5,
+					r: isMobile ? 22 : 30,
+					label: chainLabels[i],
+					pulseOffset: 0,
+					connections: []
+				});
+			} else {
+				const angle = ((i - 1) / (nodeCount - 1)) * Math.PI * 2 - Math.PI / 2;
+				const rx = isMobile ? 100 : 160;
+				const ry = isMobile ? 55 : 70;
+				nodes.push({
+					x: 0.5 + Math.cos(angle) * rx / 400,
+					y: 0.5 + Math.sin(angle) * ry / 200,
+					r: isMobile ? 10 : 14,
+					label: chainLabels[i],
+					pulseOffset: Math.random() * Math.PI * 2,
+					connections: []
+				});
+			}
 		}
 
 		// Connect all nodes to Ergo (index 0) and some random peer connections
@@ -936,7 +948,7 @@
 				}
 			}
 
-			// Draw packets
+			// Draw packets with ghost trail
 			for (let i = packets.length - 1; i >= 0; i--) {
 				const p = packets[i];
 				p.progress += p.speed;
@@ -945,6 +957,22 @@
 				const to = nodes[p.toIdx];
 				const px = (from.x + (to.x - from.x) * p.progress) * cw;
 				const py = (from.y + (to.y - from.y) * p.progress) * ch;
+
+				// Ghost trail — 4 trailing dots with decreasing alpha
+				const trailCount = 4;
+				for (let t = trailCount; t >= 1; t--) {
+					const trailProgress = p.progress - t * p.speed * 2;
+					if (trailProgress < 0) continue;
+					const tx = (from.x + (to.x - from.x) * trailProgress) * cw;
+					const ty = (from.y + (to.y - from.y) * trailProgress) * ch;
+					const trailAlpha = 0.3 * (1 - t / (trailCount + 1));
+					ctx.beginPath();
+					ctx.arc(tx, ty, 2, 0, Math.PI * 2);
+					ctx.fillStyle = `rgba(134, 239, 172, ${trailAlpha})`;
+					ctx.fill();
+				}
+
+				// Main dot
 				ctx.beginPath();
 				ctx.arc(px, py, 3, 0, Math.PI * 2);
 				ctx.fillStyle = 'rgba(134, 239, 172, 0.9)';
@@ -962,30 +990,36 @@
 				const ny = n.y * ch;
 				const isErgo = i === 0;
 
-				// Glow
+				// Glow — brighter for ERGO
 				if (isErgo) {
+					// Outer glow ring
 					ctx.beginPath();
-					ctx.arc(nx, ny, n.r * 2, 0, Math.PI * 2);
-					ctx.fillStyle = `rgba(74, 222, 128, ${0.06 * pulse})`;
+					ctx.arc(nx, ny, n.r * 2.5, 0, Math.PI * 2);
+					ctx.fillStyle = `rgba(74, 222, 128, ${0.04 * pulse})`;
+					ctx.fill();
+					// Inner glow ring
+					ctx.beginPath();
+					ctx.arc(nx, ny, n.r * 1.6, 0, Math.PI * 2);
+					ctx.fillStyle = `rgba(74, 222, 128, ${0.1 * pulse})`;
 					ctx.fill();
 				}
 
-				// Node circle
+				// Node circle — ERGO is brighter green
 				ctx.beginPath();
 				ctx.arc(nx, ny, n.r, 0, Math.PI * 2);
 				ctx.fillStyle = isErgo
-					? `rgba(74, 222, 128, ${0.3 * pulse})`
+					? `rgba(74, 222, 128, ${0.45 * pulse})`
 					: `rgba(74, 222, 128, ${0.15 * pulse})`;
 				ctx.fill();
 				ctx.strokeStyle = isErgo
-					? `rgba(134, 239, 172, ${0.6 * pulse})`
+					? `rgba(134, 239, 172, ${0.8 * pulse})`
 					: `rgba(74, 222, 128, ${0.3 * pulse})`;
-				ctx.lineWidth = isErgo ? 2 : 1;
+				ctx.lineWidth = isErgo ? 2.5 : 1;
 				ctx.stroke();
 
-				// Label
-				ctx.fillStyle = `rgba(134, 239, 172, ${isErgo ? 0.9 : 0.6})`;
-				ctx.font = `bold ${isErgo ? (isMobile ? 8 : 10) : (isMobile ? 6 : 8)}px monospace`;
+				// Label — ERGO is larger and full brightness
+				ctx.fillStyle = isErgo ? `rgba(255, 255, 255, 0.95)` : `rgba(134, 239, 172, ${0.6})`;
+				ctx.font = `bold ${isErgo ? (isMobile ? 9 : 12) : (isMobile ? 6 : 8)}px monospace`;
 				ctx.textAlign = 'center';
 				ctx.textBaseline = 'middle';
 				ctx.fillText(n.label, nx, ny);
