@@ -2,19 +2,21 @@
 	import { onMount } from 'svelte';
 
 	let visible = $state(true);
-	let phase = $state<'show' | 'fadeout'>('show');
+	let fadeout = $state(false);
 
 	onMount(() => {
-		const timer = setTimeout(() => {
-			phase = 'fadeout';
-			setTimeout(() => { visible = false; }, 700);
-		}, 3000);
-		return () => clearTimeout(timer);
+		const t1 = setTimeout(() => {
+			fadeout = true;
+		}, 2800);
+		const t2 = setTimeout(() => {
+			visible = false;
+		}, 3600);
+		return () => { clearTimeout(t1); clearTimeout(t2); };
 	});
 </script>
 
 {#if visible}
-	<div class="splash" class:fadeout={phase === 'fadeout'} aria-hidden="true">
+	<div class="splash" class:fadeout={fadeout} aria-hidden="true">
 		<div class="scanline"></div>
 		<div class="content">
 			<div class="logo-wrap">
