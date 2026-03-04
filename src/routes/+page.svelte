@@ -754,60 +754,6 @@
 		border: none;
 	}
 
-	/* Video placeholder */
-	.video-placeholder {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		background: #0a0a0a;
-		position: relative;
-		overflow: hidden;
-	}
-
-	.video-placeholder::before {
-		content: '';
-		position: absolute;
-		inset: -2px;
-		border-radius: 15px;
-		background: conic-gradient(from 0deg, #4ade80, #22c55e, #16a34a, #4ade80);
-		animation: video-border-spin 4s linear infinite;
-		opacity: 0.5;
-		z-index: -1;
-	}
-
-	@keyframes video-border-spin {
-		to { transform: rotate(360deg); }
-	}
-
-	.video-placeholder-content {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		gap: 1.5rem;
-	}
-
-	.video-placeholder-logo {
-		width: 80px;
-		height: 80px;
-		object-fit: contain;
-		filter: drop-shadow(0 0 20px rgba(74, 222, 128, 0.5));
-		animation: placeholder-pulse 3s ease-in-out infinite;
-	}
-
-	@keyframes placeholder-pulse {
-		0%, 100% { filter: drop-shadow(0 0 20px rgba(74, 222, 128, 0.5)); transform: scale(1); }
-		50% { filter: drop-shadow(0 0 40px rgba(74, 222, 128, 0.8)); transform: scale(1.05); }
-	}
-
-	.video-placeholder-text {
-		font-family: var(--font-mono);
-		font-size: 1rem;
-		font-weight: 500;
-		color: #86efac;
-		letter-spacing: 0.1em;
-		text-transform: uppercase;
-	}
-
 	/* ============================================ */
 	/* FOUNDATIONS / HOW IT WORKS                    */
 	/* ============================================ */
