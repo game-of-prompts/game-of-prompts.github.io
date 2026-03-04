@@ -1590,6 +1590,7 @@
 		z-index: 1;
 		width: 100%;
 		max-width: 800px;
+		min-height: 200px;
 		margin-bottom: 1rem;
 		border-radius: 12px;
 		overflow: hidden;
