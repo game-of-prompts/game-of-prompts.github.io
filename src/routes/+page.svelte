@@ -349,7 +349,7 @@
 				{ num: 4, title: 'Score Verification', desc: 'When the score commitment matches the participation commitment, that score is validated as authentic. The highest validated score wins.', icon: 'shield' },
 				{ num: 5, title: 'Winner Revealed', desc: 'The highest validated score wins. This deterministic on-chain process ensures transparency while preventing manipulation.', icon: 'trophy' }
 			] as step, idx}
-				<div class="vp-step" data-vp-step={idx}>
+				<div class="vp-step" data-vp-step={idx} style="--vp-delay: {idx * 150}ms">
 					<div class="vp-node-col">
 						<div class="vp-node" data-vp-node={idx}>
 							<span class="vp-node-num">{step.num}</span>
@@ -481,14 +481,14 @@
 	</div>
 </section>
 
-<section class="game-type-fullscreen game-type-poker">
+<section class="game-type-fullscreen game-type-poker" id="feature-poker">
 	<div class="gt-bg-glow"></div>
 	<div class="gt-animation-canvas">
 		<GameAnimation type="poker" />
 	</div>
 	<div class="gt-content">
 		<span class="gt-icon" aria-hidden="true">🃏</span>
-		<span class="gt-label">Feature 01 · Coming Soon</span>
+		<span class="gt-label">Feature 01 · <span class="feature-tag-status coming-soon">Coming Soon</span></span>
 		<h2 class="gt-title">Poker Mode</h2>
 		<p class="gt-desc">Strategic participation with risk and reward. Bluff, bet, and multiply your score.</p>
 		<ul class="gt-bullets">
@@ -502,14 +502,14 @@
 	<div class="gt-grid-lines" aria-hidden="true"></div>
 </section>
 
-<section class="game-type-fullscreen game-type-resource">
+<section class="game-type-fullscreen game-type-resource" id="feature-resource">
 	<div class="gt-bg-glow"></div>
 	<div class="gt-animation-canvas">
 		<GameAnimation type="resource" />
 	</div>
 	<div class="gt-content">
 		<span class="gt-icon" aria-hidden="true">⚙️</span>
-		<span class="gt-label">Feature 02 · Available</span>
+		<span class="gt-label">Feature 02 · <span class="feature-tag-status active">Available</span></span>
 		<h2 class="gt-title">Resource Limitation</h2>
 		<p class="gt-desc">Technical challenge by constraining computational resources. Efficiency is king.</p>
 		<ul class="gt-bullets">
@@ -522,14 +522,14 @@
 	<div class="gt-grid-lines" aria-hidden="true"></div>
 </section>
 
-<section class="game-type-fullscreen game-type-payattempt">
+<section class="game-type-fullscreen game-type-payattempt" id="feature-payattempt">
 	<div class="gt-bg-glow"></div>
 	<div class="gt-animation-canvas">
 		<GameAnimation type="payattempt" />
 	</div>
 	<div class="gt-content">
 		<span class="gt-icon" aria-hidden="true">🔬</span>
-		<span class="gt-label">Feature 03 · Under Research</span>
+		<span class="gt-label">Feature 03 · <span class="feature-tag-status research">Under Research</span></span>
 		<h2 class="gt-title">Pay-per-attempt</h2>
 		<p class="gt-desc">Upcoming payment model where each game attempt costs tokens. Strategic resource allocation meets skill.</p>
 		<ul class="gt-bullets">
@@ -542,14 +542,14 @@
 	<div class="gt-grid-lines" aria-hidden="true"></div>
 </section>
 
-<section class="game-type-fullscreen game-type-multichain">
+<section class="game-type-fullscreen game-type-multichain" id="feature-multichain">
 	<div class="gt-bg-glow"></div>
 	<div class="gt-animation-canvas">
 		<GameAnimation type="multichain" />
 	</div>
 	<div class="gt-content">
 		<span class="gt-icon" aria-hidden="true">🔗</span>
-		<span class="gt-label">Feature 04 · Under Research</span>
+		<span class="gt-label">Feature 04 · <span class="feature-tag-status research">Under Research</span></span>
 		<h2 class="gt-title">Multi-chain</h2>
 		<p class="gt-desc">Cross-chain capabilities with Ergo as the foundation. Bridge games and prizes across blockchains.</p>
 		<ul class="gt-bullets">
@@ -1210,12 +1210,13 @@
 	/* VALIDATION PIPELINE (Visual)                 */
 	/* ============================================ */
 	.validation-pipeline {
-		margin-top: 2rem;
+		margin: 3rem auto 0;
 		display: flex;
 		flex-direction: column;
 		gap: 0;
-		max-width: 700px;
+		max-width: 680px;
 		width: 100%;
+		padding: 0 16px;
 	}
 
 	.vp-step {
@@ -1223,7 +1224,8 @@
 		gap: 24px;
 		align-items: flex-start;
 		opacity: 0.4;
-		transition: opacity 0.6s ease;
+		transform: translateY(0);
+		transition: opacity 0.6s ease var(--vp-delay, 0ms), transform 0.6s ease var(--vp-delay, 0ms);
 	}
 
 	.vp-step.vp-active {
@@ -1287,15 +1289,14 @@
 		position: relative;
 		width: 2px;
 		height: 60px;
-		display: flex;
-		align-items: center;
-		justify-content: center;
+		overflow: hidden;
 	}
 
 	.vp-line {
 		width: 2px;
 		height: 100%;
 		background: rgba(74, 222, 128, 0.12);
+		transition: background 0.6s ease var(--vp-delay, 0ms);
 	}
 
 	.vp-active .vp-line {
@@ -1304,6 +1305,8 @@
 
 	.vp-pulse {
 		position: absolute;
+		left: 50%;
+		transform: translateX(-50%);
 		width: 6px;
 		height: 6px;
 		border-radius: 50%;
@@ -1325,17 +1328,21 @@
 	}
 
 	.vp-content {
-		padding: 12px 20px;
+		padding: 16px 24px;
 		background: var(--bg-card);
 		border: 1px solid rgba(74, 222, 128, 0.08);
+		border-left: 2px solid transparent;
 		border-radius: var(--radius);
 		flex: 1;
-		transition: border-color 0.6s, background 0.6s;
+		transform: translateX(-20px);
+		transition: border-color 0.6s ease var(--vp-delay, 0ms), background 0.6s ease var(--vp-delay, 0ms), transform 0.6s ease var(--vp-delay, 0ms), border-left-color 0.6s ease var(--vp-delay, 0ms);
 	}
 
 	.vp-active .vp-content {
 		border-color: rgba(74, 222, 128, 0.2);
+		border-left-color: rgba(74, 222, 128, 0.3);
 		background: var(--bg-card-hover);
+		transform: translateX(0);
 	}
 
 	.vp-content h4 {
@@ -1448,6 +1455,9 @@
 		letter-spacing: 0.1em;
 		padding: 3px 10px;
 		border-radius: 100px;
+		display: inline-block;
+		font-variant: all-small-caps;
+		vertical-align: middle;
 	}
 
 	.feature-tag-status.active {
@@ -1460,6 +1470,12 @@
 		background: rgba(34, 197, 94, 0.08);
 		color: #86efac;
 		border: 1px solid rgba(34, 197, 94, 0.15);
+	}
+
+	.feature-tag-status.coming-soon {
+		background: rgba(74, 222, 128, 0.06);
+		color: #bbf7d0;
+		border: 1px solid rgba(74, 222, 128, 0.15);
 	}
 
 	.feature-desc {
@@ -1912,21 +1928,24 @@
 	}
 
 	.gt-bullets li {
-		font-size: 0.9rem;
+		font-family: var(--font-mono);
+		font-size: 0.85rem;
 		color: var(--text-secondary);
-		padding-left: 20px;
+		padding-left: 24px;
 		position: relative;
-		opacity: 0.8;
+		opacity: 0.7;
+		line-height: 1.6;
 	}
 
 	.gt-bullets li::before {
-		content: '›';
+		content: '>';
 		position: absolute;
 		left: 0;
 		color: var(--green-400);
+		font-family: var(--font-mono);
 		font-weight: 700;
-		font-size: 1.1rem;
-		line-height: 1.4;
+		font-size: 0.85rem;
+		line-height: 1.6;
 	}
 
 	/* Light mode overrides for game sections */
@@ -1973,6 +1992,46 @@
 		color: #16a34a;
 	}
 
+	/* Light mode — Feature game-type sections */
+	:global([data-theme="light"]) .game-type-poker,
+	:global([data-theme="light"]) .game-type-resource,
+	:global([data-theme="light"]) .game-type-payattempt,
+	:global([data-theme="light"]) .game-type-multichain {
+		color: var(--text-primary);
+	}
+
+	:global([data-theme="light"]) .game-type-poker .gt-title {
+		background: linear-gradient(135deg, #15803d, #14532d);
+		-webkit-background-clip: text;
+		-webkit-text-fill-color: transparent;
+		background-clip: text;
+	}
+	:global([data-theme="light"]) .game-type-resource .gt-title {
+		background: linear-gradient(135deg, #16a34a, #166534);
+		-webkit-background-clip: text;
+		-webkit-text-fill-color: transparent;
+		background-clip: text;
+	}
+	:global([data-theme="light"]) .game-type-payattempt .gt-title {
+		background: linear-gradient(135deg, #059669, #065f46);
+		-webkit-background-clip: text;
+		-webkit-text-fill-color: transparent;
+		background-clip: text;
+	}
+	:global([data-theme="light"]) .game-type-multichain .gt-title {
+		background: linear-gradient(135deg, #16a34a, #15803d);
+		-webkit-background-clip: text;
+		-webkit-text-fill-color: transparent;
+		background-clip: text;
+	}
+
+	:global([data-theme="light"]) .game-type-poker .gt-score-label,
+	:global([data-theme="light"]) .game-type-resource .gt-score-label,
+	:global([data-theme="light"]) .game-type-payattempt .gt-score-label,
+	:global([data-theme="light"]) .game-type-multichain .gt-score-label {
+		color: #16a34a;
+	}
+
 	/* Also handle prefers-color-scheme: light for users without manual toggle */
 	@media (prefers-color-scheme: light) {
 		:root:not([data-theme="dark"]) .game-type-arcade,
@@ -2000,6 +2059,37 @@
 		:root:not([data-theme="dark"]) .game-type-trading .gt-score-label,
 		:root:not([data-theme="dark"]) .game-type-science .gt-score-label,
 		:root:not([data-theme="dark"]) .gt-label {
+			color: #16a34a;
+		}
+		:root:not([data-theme="dark"]) .game-type-poker,
+		:root:not([data-theme="dark"]) .game-type-resource,
+		:root:not([data-theme="dark"]) .game-type-payattempt,
+		:root:not([data-theme="dark"]) .game-type-multichain {
+			color: #0f172a;
+		}
+		:root:not([data-theme="dark"]) .game-type-poker .gt-title,
+		:root:not([data-theme="dark"]) .game-type-resource .gt-title {
+			background: linear-gradient(135deg, #16a34a, #15803d);
+			-webkit-background-clip: text;
+			-webkit-text-fill-color: transparent;
+			background-clip: text;
+		}
+		:root:not([data-theme="dark"]) .game-type-payattempt .gt-title {
+			background: linear-gradient(135deg, #059669, #065f46);
+			-webkit-background-clip: text;
+			-webkit-text-fill-color: transparent;
+			background-clip: text;
+		}
+		:root:not([data-theme="dark"]) .game-type-multichain .gt-title {
+			background: linear-gradient(135deg, #16a34a, #15803d);
+			-webkit-background-clip: text;
+			-webkit-text-fill-color: transparent;
+			background-clip: text;
+		}
+		:root:not([data-theme="dark"]) .game-type-poker .gt-score-label,
+		:root:not([data-theme="dark"]) .game-type-resource .gt-score-label,
+		:root:not([data-theme="dark"]) .game-type-payattempt .gt-score-label,
+		:root:not([data-theme="dark"]) .game-type-multichain .gt-score-label {
 			color: #16a34a;
 		}
 	}

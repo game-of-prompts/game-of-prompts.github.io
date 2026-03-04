@@ -68,6 +68,8 @@
 		const dataPoints: number[] = [];
 		const maxPoints = isMobile ? 60 : 120;
 		let time = 0;
+		let lastUpdate = 0;
+		const TARGET_INTERVAL = 33; // ~30fps cap for consistent speed
 		const particles: { x: number; y: number; vy: number; alpha: number; }[] = [];
 
 		// Seed initial data with bigger swings
@@ -78,13 +80,15 @@
 			dataPoints.push(val);
 		}
 
-		function animate() {
+		function animate(timestamp?: number) {
 			if (isDestroyed()) return;
 			setId(requestAnimationFrame(animate));
-			time++;
 
-			// Frame skip: only update every 2 frames for slower, dramatic swings
-			if (time % 2 !== 0) return;
+			// Time accumulator: only update when 33ms have passed (consistent 30fps)
+			const now = timestamp || performance.now();
+			if (now - lastUpdate < TARGET_INTERVAL) return;
+			lastUpdate = now;
+			time++;
 
 			const cw = w();
 			const ch = h();
@@ -478,21 +482,15 @@
 		interface Chip { x: number; y: number; r: number; color: string; offsetY: number; speed: number; }
 		const chips: Chip[] = [];
 
-		for (let i = 0; i < cardCount; i++) {
-			cards.push({
-				x: 400, targetX: 80 + i * (isMobile ? 55 : 80), y: -60, targetY: 50 + Math.sin(i * 0.8) * 20,
-				rotation: (Math.random() - 0.5) * 0.3, targetRotation: (Math.random() - 0.5) * 0.2,
-				width: isMobile ? 42 : 55, height: isMobile ? 62 : 80,
-				delay: i * 30, flipped: false, flipProgress: 0,
-				suit: suits[Math.floor(Math.random() * suits.length)],
-				value: values[Math.floor(Math.random() * values.length)]
-			});
-		}
+		// Cards will be positioned relative to canvas width on first frame
+		let cardsInitialized = false;
 
 		const chipColors = ['rgba(74, 222, 128, 0.6)', 'rgba(34, 197, 94, 0.5)', 'rgba(134, 239, 172, 0.4)'];
 		for (let i = 0; i < (isMobile ? 6 : 12); i++) {
-			chips.push({ x: Math.random() * 600 + 50, y: Math.random() * 40 + 150, r: Math.random() * 6 + 4, color: chipColors[i % 3], offsetY: 0, speed: Math.random() * 0.02 + 0.01 });
+			chips.push({ x: Math.random() * 0.85 + 0.05, y: Math.random() * 0.2 + 0.7, r: Math.random() * 6 + 4, color: chipColors[i % 3], offsetY: 0, speed: Math.random() * 0.02 + 0.01 });
 		}
+
+		let allFlipped = false;
 
 		function animate() {
 			if (isDestroyed()) return;
@@ -502,6 +500,23 @@
 			const cw = w();
 			const ch = h();
 			ctx.clearRect(0, 0, cw, ch);
+
+			// Initialize cards on first frame when we know canvas size
+			if (!cardsInitialized) {
+				cardsInitialized = true;
+				for (let i = 0; i < cardCount; i++) {
+					const spread = cw * 0.8 / cardCount;
+					cards.push({
+						x: cw * 0.75, targetX: cw * 0.1 + i * spread,
+						y: -60, targetY: ch * 0.25 + Math.sin(i * 0.8) * 20,
+						rotation: (Math.random() - 0.5) * 0.3, targetRotation: (Math.random() - 0.5) * 0.2,
+						width: isMobile ? 42 : 55, height: isMobile ? 62 : 80,
+						delay: i * 30, flipped: false, flipProgress: 0,
+						suit: suits[Math.floor(Math.random() * suits.length)],
+						value: values[Math.floor(Math.random() * values.length)]
+					});
+				}
+			}
 
 			// Green felt background gradient
 			const feltGrad = ctx.createRadialGradient(cw / 2, ch / 2, 0, cw / 2, ch / 2, cw * 0.6);
@@ -517,17 +532,36 @@
 			ctx.roundRect(20, 10, cw - 40, ch - 20, 20);
 			ctx.stroke();
 
+			// Check if all cards are flipped
+			if (!allFlipped && cards.length > 0 && cards.every(c => c.flipProgress >= 1)) {
+				allFlipped = true;
+			}
+
 			// Animate and draw cards
-			for (const card of cards) {
+			for (let ci = 0; ci < cards.length; ci++) {
+				const card = cards[ci];
 				if (time < card.delay) continue;
 				const t = Math.min(1, (time - card.delay) / 40);
-				const ease = 1 - Math.pow(1 - t, 3);
 				card.x += (card.targetX - card.x) * 0.08;
 				card.y += (card.targetY - card.y) * 0.08;
 				card.rotation += (card.targetRotation - card.rotation) * 0.05;
 
 				if (t > 0.8 && !card.flipped) card.flipped = true;
 				if (card.flipped && card.flipProgress < 1) card.flipProgress = Math.min(1, card.flipProgress + 0.03);
+
+				// Pulse glow on last card (best card) after all flipped
+				const isLastCard = ci === cards.length - 1;
+				if (allFlipped && isLastCard) {
+					const glowPulse = Math.sin(time * 0.06) * 0.3 + 0.5;
+					ctx.save();
+					ctx.shadowColor = `rgba(74, 222, 128, ${glowPulse})`;
+					ctx.shadowBlur = 20 + glowPulse * 15;
+					ctx.fillStyle = 'rgba(74, 222, 128, 0.02)';
+					ctx.beginPath();
+					ctx.roundRect(card.x - 2, card.y - 2, card.width + 4, card.height + 4, 6);
+					ctx.fill();
+					ctx.restore();
+				}
 
 				ctx.save();
 				ctx.translate(card.x + card.width / 2, card.y + card.height / 2);
@@ -556,11 +590,11 @@
 				ctx.restore();
 			}
 
-			// Chips
+			// Chips — positioned relative to canvas
 			for (const chip of chips) {
 				chip.offsetY = Math.sin(time * chip.speed) * 3;
 				ctx.beginPath();
-				ctx.arc(chip.x % cw, chip.y + chip.offsetY, chip.r, 0, Math.PI * 2);
+				ctx.arc(chip.x * cw, chip.y * ch + chip.offsetY, chip.r, 0, Math.PI * 2);
 				ctx.fillStyle = chip.color;
 				ctx.fill();
 				ctx.strokeStyle = 'rgba(74, 222, 128, 0.3)';
@@ -669,14 +703,20 @@
 				ctx.setLineDash([]);
 			}
 
+			// Horizontal scan lines (terminal/monitor feel)
+			for (let sy = 0; sy < ch; sy += 4) {
+				ctx.fillStyle = 'rgba(74, 222, 128, 0.03)';
+				ctx.fillRect(0, sy, cw, 1);
+			}
+
 			// Throttle warning
 			if (throttled) {
 				const flash = Math.sin(time * 0.15) > 0;
 				if (flash) {
-					ctx.fillStyle = 'rgba(134, 239, 172, 0.8)';
-					ctx.font = `bold ${isMobile ? 11 : 14}px monospace`;
+					ctx.fillStyle = 'rgba(134, 239, 172, 0.9)';
+					ctx.font = `bold ${isMobile ? 14 : 18}px monospace`;
 					ctx.textAlign = 'center';
-					ctx.fillText('⚠ THROTTLING', cw / 2, 20);
+					ctx.fillText('! THROTTLING !', cw / 2, 22);
 				}
 			}
 		}
@@ -694,6 +734,8 @@
 		let time = 0;
 		interface Coin { x: number; y: number; vy: number; vx: number; r: number; alpha: number; rotation: number; rotSpeed: number; }
 		const coins: Coin[] = [];
+		interface Ripple { x: number; y: number; radius: number; maxRadius: number; alpha: number; }
+		const ripples: Ripple[] = [];
 		let spawnTimer = 0;
 		let attemptCount = 0;
 		const slotX = 0.5; // center of screen ratio
@@ -751,6 +793,19 @@
 			ctx.font = `${isMobile ? 9 : 11}px monospace`;
 			ctx.fillText('1 ERG / attempt', cw * slotX, ch * 0.9 + 18);
 
+			// Draw ripples
+			for (let i = ripples.length - 1; i >= 0; i--) {
+				const r = ripples[i];
+				r.radius += 1.5;
+				r.alpha -= 0.02;
+				if (r.alpha <= 0 || r.radius > r.maxRadius) { ripples.splice(i, 1); continue; }
+				ctx.beginPath();
+				ctx.arc(r.x, r.y, r.radius, 0, Math.PI * 2);
+				ctx.strokeStyle = `rgba(74, 222, 128, ${r.alpha})`;
+				ctx.lineWidth = 1.5;
+				ctx.stroke();
+			}
+
 			// Update & draw coins
 			for (let i = coins.length - 1; i >= 0; i--) {
 				const c = coins[i];
@@ -761,6 +816,10 @@
 
 				// Check if coin reached deposit
 				if (c.y > sy && Math.abs(c.x - cw * slotX) < slotWidth / 2) {
+					// Spawn ripple on first contact
+					if (c.alpha >= 0.95) {
+						ripples.push({ x: c.x, y: sy + 15, radius: 4, maxRadius: 35, alpha: 0.6 });
+					}
 					c.alpha -= 0.05;
 					c.vy *= 0.8;
 				}
@@ -781,13 +840,13 @@
 				ctx.lineWidth = 1;
 				ctx.stroke();
 
-				// Coin symbol
+				// Coin symbol — E for Ergo
 				if (scaleX > 0.5) {
 					ctx.fillStyle = `rgba(5, 5, 5, ${c.alpha * 0.8})`;
 					ctx.font = `bold ${isMobile ? 7 : 9}px monospace`;
 					ctx.textAlign = 'center';
 					ctx.textBaseline = 'middle';
-					ctx.fillText('Σ', 0, 0);
+					ctx.fillText('E', 0, 0);
 				}
 				ctx.restore();
 			}

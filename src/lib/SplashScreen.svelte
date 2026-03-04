@@ -4,18 +4,23 @@
 	let el: HTMLDivElement;
 
 	onMount(() => {
-		// Force timers via direct DOM manipulation — works even in static builds
-		const t1 = window.setTimeout(() => {
-			if (el) el.style.opacity = '0';
-		}, 2800);
-		const t2 = window.setTimeout(() => {
-			if (el) el.style.display = 'none';
-		}, 3600);
-		return () => { window.clearTimeout(t1); window.clearTimeout(t2); };
+		// Belt-and-suspenders: use both bind:this ref AND getElementById fallback
+		const dismiss = () => {
+			const target = el ?? document.getElementById('gop-splash');
+			if (!target) return;
+			target.style.transition = 'opacity 0.75s ease';
+			target.style.opacity = '0';
+			window.setTimeout(() => {
+				if (target) target.style.display = 'none';
+			}, 800);
+		};
+
+		const t1 = window.setTimeout(dismiss, 2800);
+		return () => window.clearTimeout(t1);
 	});
 </script>
 
-<div bind:this={el} class="splash" aria-hidden="true">
+<div bind:this={el} id="gop-splash" class="splash" aria-hidden="true">
 		<div class="scanline"></div>
 		<div class="content">
 			<div class="logo-wrap">
