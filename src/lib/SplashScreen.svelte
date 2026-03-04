@@ -1,22 +1,21 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 
-	let visible = $state(true);
-	let fadeout = $state(false);
+	let el: HTMLDivElement;
 
 	onMount(() => {
-		const t1 = setTimeout(() => {
-			fadeout = true;
+		// Force timers via direct DOM manipulation — works even in static builds
+		const t1 = window.setTimeout(() => {
+			if (el) el.style.opacity = '0';
 		}, 2800);
-		const t2 = setTimeout(() => {
-			visible = false;
+		const t2 = window.setTimeout(() => {
+			if (el) el.style.display = 'none';
 		}, 3600);
-		return () => { clearTimeout(t1); clearTimeout(t2); };
+		return () => { window.clearTimeout(t1); window.clearTimeout(t2); };
 	});
 </script>
 
-{#if visible}
-	<div class="splash" class:fadeout={fadeout} aria-hidden="true">
+<div bind:this={el} class="splash" aria-hidden="true">
 		<div class="scanline"></div>
 		<div class="content">
 			<div class="logo-wrap">
@@ -36,7 +35,6 @@
 		<div class="corner-bl"></div>
 		<div class="corner-br"></div>
 	</div>
-{/if}
 
 <style>
 	.splash {
@@ -49,11 +47,7 @@
 		justify-content: center;
 		overflow: hidden;
 		opacity: 1;
-		transition: opacity 0.7s ease;
-	}
-
-	.splash.fadeout {
-		opacity: 0;
+		transition: opacity 0.75s ease;
 	}
 
 	/* Scan line sweep */
