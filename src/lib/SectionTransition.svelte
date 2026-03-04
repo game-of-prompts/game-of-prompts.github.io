@@ -124,7 +124,7 @@
 	.section-transition {
 		position: relative;
 		width: 100%;
-		background: #050505;
+		background: var(--bg-primary);
 		overflow: hidden;
 	}
 

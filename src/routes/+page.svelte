@@ -7,12 +7,8 @@
 	import GameAnimation from '$lib/GameAnimation.svelte';
 	import { hoverCorners } from '$lib/hoverCorners';
 
-	const VIDEO_ID = 'UCjDwDj2gGs';
-	let videoStarted = $state(false);
-
-	function startVideo() {
-		videoStarted = true;
-	}
+	// Video ID was invalid (UCjDwDj2gGs is a channel ID, not a video ID)
+	// Replaced with polished placeholder until correct video is provided
 </script>
 
 <svelte:head>
@@ -85,28 +81,11 @@
 			<p class="section-subtitle">Get up to speed in minutes — see how Game of Prompts brings blockchain and AI competitions together.</p>
 		</ScrollAnimation>
 		<div class="video-card" style="margin-top: 2.5rem;">
-			<div class="video-wrapper">
-				{#if videoStarted}
-					<iframe
-						src="https://www.youtube.com/embed/{VIDEO_ID}?autoplay=1&rel=0&modestbranding=1"
-						title="Game of Prompts - Brief Breakdown"
-						frameborder="0"
-						allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-						allowfullscreen
-					></iframe>
-				{:else}
-					<!-- svelte-ignore a11y_click_events_have_key_events -->
-					<!-- svelte-ignore a11y_no_static_element_interactions -->
-					<div class="video-thumbnail" onclick={startVideo}>
-						<img src="https://img.youtube.com/vi/{VIDEO_ID}/maxresdefault.jpg" alt="Video thumbnail" class="video-thumb-img" />
-						<div class="play-btn-overlay">
-							<svg class="play-btn-svg" width="80" height="80" viewBox="0 0 80 80" fill="none">
-								<circle cx="40" cy="40" r="38" stroke="#22c55e" stroke-width="3" fill="rgba(34, 197, 94, 0.15)" />
-								<polygon points="32,24 60,40 32,56" fill="#22c55e" />
-							</svg>
-						</div>
-					</div>
-				{/if}
+			<div class="video-wrapper video-placeholder">
+				<div class="video-placeholder-content">
+					<img src="/gop-logo.png" alt="Game of Prompts" class="video-placeholder-logo" />
+					<span class="video-placeholder-text">Video coming soon</span>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -757,44 +736,58 @@
 		border: none;
 	}
 
-	/* Video thumbnail click-to-play */
-	.video-thumbnail {
-		position: relative;
-		width: 100%;
-		height: 100%;
-		cursor: pointer;
-		overflow: hidden;
-	}
-
-	.video-thumb-img {
-		width: 100%;
-		height: 100%;
-		object-fit: cover;
-		display: block;
-	}
-
-	.play-btn-overlay {
-		position: absolute;
-		inset: 0;
+	/* Video placeholder */
+	.video-placeholder {
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		background: rgba(0, 0, 0, 0.3);
-		transition: background 0.3s;
+		background: #0a0a0a;
+		position: relative;
+		overflow: hidden;
 	}
 
-	.video-thumbnail:hover .play-btn-overlay {
-		background: rgba(0, 0, 0, 0.15);
+	.video-placeholder::before {
+		content: '';
+		position: absolute;
+		inset: -2px;
+		border-radius: 15px;
+		background: conic-gradient(from 0deg, #4ade80, #22c55e, #16a34a, #4ade80);
+		animation: video-border-spin 4s linear infinite;
+		opacity: 0.5;
+		z-index: -1;
 	}
 
-	.play-btn-svg {
-		filter: drop-shadow(0 0 20px rgba(34, 197, 94, 0.6)) drop-shadow(0 0 40px rgba(34, 197, 94, 0.3));
-		transition: transform 0.3s, filter 0.3s;
+	@keyframes video-border-spin {
+		to { transform: rotate(360deg); }
 	}
 
-	.video-thumbnail:hover .play-btn-svg {
-		transform: scale(1.1);
-		filter: drop-shadow(0 0 30px rgba(34, 197, 94, 0.8)) drop-shadow(0 0 60px rgba(34, 197, 94, 0.4));
+	.video-placeholder-content {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 1.5rem;
+	}
+
+	.video-placeholder-logo {
+		width: 80px;
+		height: 80px;
+		object-fit: contain;
+		filter: drop-shadow(0 0 20px rgba(74, 222, 128, 0.5));
+		animation: placeholder-pulse 3s ease-in-out infinite;
+	}
+
+	@keyframes placeholder-pulse {
+		0%, 100% { filter: drop-shadow(0 0 20px rgba(74, 222, 128, 0.5)); transform: scale(1); }
+		50% { filter: drop-shadow(0 0 40px rgba(74, 222, 128, 0.8)); transform: scale(1.05); }
+	}
+
+	.video-placeholder-text {
+		font-family: var(--font-mono);
+		font-size: 1rem;
+		font-weight: 500;
+		color: #86efac;
+		letter-spacing: 0.1em;
+		text-transform: uppercase;
 	}
 
 	/* ============================================ */
@@ -1129,7 +1122,7 @@
 	/* SECURITY                                     */
 	/* ============================================ */
 	.section-security {
-		background: #050505;
+		background: var(--bg-primary);
 	}
 
 	.security-grid {
@@ -1657,9 +1650,13 @@
 		opacity: 0.5;
 	}
 
-	/* Game type colors — all green monochromatic variations */
+	/* Game type colors — cinematic sections stay dark even in light mode */
+	.game-type-fullscreen {
+		background: #0a0a0a !important;
+		color-scheme: dark;
+	}
+
 	.game-type-arcade {
-		background: #050505;
 		color: #86efac;
 	}
 	.game-type-arcade .gt-bg-glow {
@@ -1674,7 +1671,6 @@
 	.game-type-arcade .gt-score-label { color: #4ade80; }
 
 	.game-type-world {
-		background: #050505;
 		color: #86efac;
 	}
 	.game-type-world .gt-bg-glow {
@@ -1689,7 +1685,6 @@
 	.game-type-world .gt-score-label { color: #22c55e; }
 
 	.game-type-trading {
-		background: #050505;
 		color: #bbf7d0;
 	}
 	.game-type-trading .gt-bg-glow {
@@ -1704,7 +1699,6 @@
 	.game-type-trading .gt-score-label { color: #4ade80; }
 
 	.game-type-science {
-		background: #050505;
 		color: #a7f3d0;
 	}
 	.game-type-science .gt-bg-glow {

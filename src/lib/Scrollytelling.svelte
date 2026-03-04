@@ -220,11 +220,11 @@
 	.scrollytelling {
 		position: relative;
 		height: 600vh;
-		background: #050505;
+		background: var(--bg-primary);
 	}
 
 	:global([data-theme="light"]) .scrollytelling {
-		background: #f1f5f9;
+		background: var(--bg-primary);
 	}
 
 	.scrollytelling.reduced {

@@ -62,11 +62,11 @@
 		let time = 0;
 		const particles: { x: number; y: number; vy: number; alpha: number; }[] = [];
 
-		// Seed initial data
+		// Seed initial data with bigger swings
 		let val = 0.5;
 		for (let i = 0; i < maxPoints; i++) {
-			val += (Math.random() - 0.48) * 0.04;
-			val = Math.max(0.1, Math.min(0.9, val));
+			val += (Math.random() - 0.48) * 0.08;
+			val = Math.max(0.05, Math.min(0.95, val));
 			dataPoints.push(val);
 		}
 
@@ -79,15 +79,15 @@
 			const ch = h();
 			ctx.clearRect(0, 0, cw, ch);
 
-			// Update price
+			// Update price — much bigger amplitude swings
 			const prevVal = dataPoints[dataPoints.length - 1];
-			let newVal = prevVal + (Math.random() - 0.48) * 0.03;
+			let newVal = prevVal + (Math.random() - 0.48) * 0.08;
 			newVal = Math.max(0.05, Math.min(0.95, newVal));
 			dataPoints.push(newVal);
 			if (dataPoints.length > maxPoints) dataPoints.shift();
 
 			// Spawn particles on peaks
-			if (newVal > prevVal + 0.015) {
+			if (newVal > prevVal + 0.02) {
 				const pCount = isMobile ? 2 : 4;
 				for (let j = 0; j < pCount; j++) {
 					particles.push({
@@ -158,13 +158,13 @@
 		isDestroyed: () => boolean,
 		setId: (id: number) => void
 	) {
-		const nodeCount = isMobile ? 8 : 14;
+		const nodeCount = isMobile ? 16 : 24;
 		let angle = 0;
 
 		function animate() {
 			if (isDestroyed()) return;
 			setId(requestAnimationFrame(animate));
-			angle += 0.008;
+			angle += 0.012;
 
 			const cw = w();
 			const ch = h();
@@ -172,53 +172,90 @@
 			const cy = ch / 2;
 			ctx.clearRect(0, 0, cw, ch);
 
-			const nodes: { x: number; y: number; z: number; r: number }[] = [];
+			const helixRadius = Math.min(cw, ch) * 0.18;
+			const helixLength = cw * 0.7;
+			const startX = (cw - helixLength) / 2;
+			const baseR = isMobile ? 4 : 6;
 
+			interface HelixNode { x: number; y: number; z: number; r: number; strand: number; index: number; }
+			const allNodes: HelixNode[] = [];
+
+			// Generate two strands offset by π
+			for (let strand = 0; strand < 2; strand++) {
+				const phaseOffset = strand * Math.PI;
+				for (let i = 0; i < nodeCount; i++) {
+					const t = (i / nodeCount) * Math.PI * 4 + angle + phaseOffset;
+					const xPos = startX + (i / nodeCount) * helixLength;
+					const yOffset = Math.cos(t) * helixRadius;
+					const zVal = Math.sin(t) * helixRadius;
+
+					const perspective = 1 + zVal / (helixRadius * 3);
+					const screenY = cy + yOffset * perspective;
+
+					allNodes.push({
+						x: xPos,
+						y: screenY,
+						z: zVal,
+						r: baseR * perspective,
+						strand,
+						index: i
+					});
+				}
+			}
+
+			// Draw rungs (base pairs) connecting the two strands
 			for (let i = 0; i < nodeCount; i++) {
-				const t = (i / nodeCount) * Math.PI * 2;
-				const radiusX = Math.min(cw, ch) * 0.3;
-				const radiusY = Math.min(cw, ch) * 0.15;
-				const x3d = Math.cos(t + angle) * radiusX;
-				const y3d = Math.sin(t * 2 + angle * 0.7) * radiusY;
-				const z3d = Math.sin(t + angle) * radiusX * 0.5;
-
-				// Perspective
-				const scale = 1 + z3d / (radiusX * 3);
-				const screenX = cx + x3d * scale;
-				const screenY = cy + y3d * scale;
-
-				const pulse = 1 + Math.sin(angle * 3 + i) * 0.3;
-				const baseR = isMobile ? 5 : 8;
-				nodes.push({ x: screenX, y: screenY, z: z3d, r: baseR * pulse * scale });
-			}
-
-			// Sort by z for depth ordering
-			const sortedIndices = nodes.map((_, i) => i).sort((a, b) => nodes[a].z - nodes[b].z);
-
-			// Draw connections
-			for (let i = 0; i < nodes.length - 1; i++) {
-				const a = nodes[i];
-				const b = nodes[i + 1];
-				const alpha = 0.2 + ((a.z + b.z) / (w() * 0.6) + 0.5) * 0.3;
+				const n1 = allNodes[i]; // strand 0
+				const n2 = allNodes[nodeCount + i]; // strand 1
+				const avgZ = (n1.z + n2.z) / 2;
+				const alpha = 0.15 + (avgZ / helixRadius + 1) * 0.15;
 				ctx.beginPath();
-				ctx.moveTo(a.x, a.y);
-				ctx.lineTo(b.x, b.y);
-				ctx.strokeStyle = `rgba(74, 222, 128, ${Math.max(0.1, alpha)})`;
-				ctx.lineWidth = 1.5;
-				ctx.stroke();
-			}
-
-			// Draw nodes
-			for (const idx of sortedIndices) {
-				const node = nodes[idx];
-				const alpha = 0.4 + ((node.z / (w() * 0.3)) + 0.5) * 0.6;
-				ctx.beginPath();
-				ctx.arc(node.x, node.y, node.r, 0, Math.PI * 2);
-				ctx.fillStyle = `rgba(74, 222, 128, ${Math.max(0.2, Math.min(1, alpha))})`;
-				ctx.fill();
-				ctx.strokeStyle = `rgba(74, 222, 128, ${Math.max(0.1, alpha * 0.5)})`;
+				ctx.moveTo(n1.x, n1.y);
+				ctx.lineTo(n2.x, n2.y);
+				ctx.strokeStyle = `rgba(74, 222, 128, ${Math.max(0.05, alpha)})`;
 				ctx.lineWidth = 1;
 				ctx.stroke();
+			}
+
+			// Draw strand connections and nodes, sorted by z for depth
+			for (let strand = 0; strand < 2; strand++) {
+				const offset = strand * nodeCount;
+				const strandColor = strand === 0 ? [74, 222, 128] : [134, 239, 172]; // #4ade80 vs #86efac
+
+				// Draw connections between consecutive nodes on this strand
+				for (let i = 0; i < nodeCount - 1; i++) {
+					const a = allNodes[offset + i];
+					const b = allNodes[offset + i + 1];
+					const avgZ = (a.z + b.z) / 2;
+					const alpha = 0.3 + (avgZ / helixRadius + 1) * 0.25;
+					ctx.beginPath();
+					ctx.moveTo(a.x, a.y);
+					ctx.lineTo(b.x, b.y);
+					ctx.strokeStyle = `rgba(${strandColor[0]}, ${strandColor[1]}, ${strandColor[2]}, ${Math.max(0.1, alpha)})`;
+					ctx.lineWidth = 2;
+					ctx.stroke();
+				}
+			}
+
+			// Sort all nodes by z for proper depth rendering
+			const sortedNodes = [...allNodes].sort((a, b) => a.z - b.z);
+
+			// Draw nodes
+			for (const node of sortedNodes) {
+				const strandColor = node.strand === 0 ? [74, 222, 128] : [134, 239, 172];
+				const alpha = 0.4 + (node.z / helixRadius + 1) * 0.3;
+				ctx.beginPath();
+				ctx.arc(node.x, node.y, node.r, 0, Math.PI * 2);
+				ctx.fillStyle = `rgba(${strandColor[0]}, ${strandColor[1]}, ${strandColor[2]}, ${Math.max(0.2, Math.min(1, alpha))})`;
+				ctx.fill();
+
+				// Glow on foreground nodes
+				if (node.z > 0) {
+					ctx.shadowColor = `rgba(${strandColor[0]}, ${strandColor[1]}, ${strandColor[2]}, 0.5)`;
+					ctx.shadowBlur = 6;
+					ctx.fill();
+					ctx.shadowBlur = 0;
+				}
 			}
 		}
 
@@ -233,61 +270,100 @@
 		setId: (id: number) => void
 	) {
 		let time = 0;
-		const cols = isMobile ? 8 : 12;
-		const rows = isMobile ? 6 : 8;
+		const cols = isMobile ? 10 : 16;
+		const rows = isMobile ? 10 : 14;
+
+		// Pre-generate terrain heights for a larger map
+		const mapSize = 64;
+		const terrainMap: number[][] = [];
+		for (let r = 0; r < mapSize; r++) {
+			terrainMap[r] = [];
+			for (let c = 0; c < mapSize; c++) {
+				const base = Math.sin(r * 0.3 + c * 0.5) * 0.4 +
+							 Math.sin(c * 0.7 + r * 0.2) * 0.3 +
+							 Math.sin(r * 0.1 + c * 0.1) * 0.3;
+				// Some tall structures (trees/buildings)
+				const isTall = Math.sin(r * 2.7 + c * 3.1) > 0.7;
+				terrainMap[r][c] = base + (isTall ? 2.5 : 0);
+			}
+		}
 
 		function animate() {
 			if (isDestroyed()) return;
 			setId(requestAnimationFrame(animate));
-			time += 0.02;
+			time += 0.015;
 
 			const cw = w();
 			const ch = h();
 			ctx.clearRect(0, 0, cw, ch);
 
-			const cellW = cw / cols;
-			const cellH = ch / rows;
+			// Sky gradient at top
+			const skyH = ch * 0.25;
+			const skyGrad = ctx.createLinearGradient(0, 0, 0, skyH);
+			skyGrad.addColorStop(0, 'rgba(22, 163, 74, 0.12)');
+			skyGrad.addColorStop(0.5, 'rgba(74, 222, 128, 0.06)');
+			skyGrad.addColorStop(1, 'transparent');
+			ctx.fillStyle = skyGrad;
+			ctx.fillRect(0, 0, cw, skyH);
 
-			// Perspective grid — first person looking down at voxel ground
+			// Horizon line
+			const horizonY = ch * 0.3;
+			ctx.strokeStyle = 'rgba(74, 222, 128, 0.15)';
+			ctx.lineWidth = 1;
+			ctx.beginPath();
+			ctx.moveTo(0, horizonY);
+			ctx.lineTo(cw, horizonY);
+			ctx.stroke();
+
+			// Perspective ground plane — blocks scroll toward viewer
+			const vanishX = cw / 2;
+			const vanishY = horizonY;
+			const scrollOffset = time * 2;
+
+			// Draw from far to near (back to front)
 			for (let r = 0; r < rows; r++) {
+				const depth = r / rows; // 0 = far, 1 = near
+				const perspFactor = 0.05 + depth * 0.95; // Far rows are tiny, near rows are large
+
+				// Y position: interpolate from horizon to bottom
+				const rowY = vanishY + (ch - vanishY) * depth;
+				const rowH = ((ch - vanishY) / rows) * perspFactor * 1.2;
+
+				// Width narrows toward vanishing point
+				const rowWidth = cw * perspFactor;
+				const rowStartX = vanishX - rowWidth / 2;
+				const cellW = rowWidth / cols;
+
 				for (let c = 0; c < cols; c++) {
-					// Walking illusion: offset based on time
-					const offsetR = r + time * 0.5;
-					const offsetC = c + Math.sin(time * 0.3) * 0.3;
+					// Scrolling: offset the map lookup
+					const mapR = Math.floor((r + scrollOffset) % mapSize);
+					const mapC = (c + Math.floor(Math.sin(time * 0.2) * 2) + mapSize) % mapSize;
+					const terrainH = terrainMap[Math.abs(mapR) % mapSize][Math.abs(mapC) % mapSize];
 
-					// Noise-like height variation
-					const noise = Math.sin(offsetR * 1.7 + offsetC * 2.3) * 0.5 +
-								  Math.sin(offsetC * 3.1 + offsetR * 0.7) * 0.3 +
-								  Math.sin(time + r * 0.5 + c * 0.3) * 0.2;
+					const blockH = terrainH * rowH * 0.5;
+					const brightness = 0.15 + depth * 0.35;
+					const noise = (terrainH + 1) * 0.3;
+					const alpha = brightness * noise;
 
-					const brightness = 0.1 + (noise + 1) * 0.15;
-					const depth = r / rows; // Closer rows = brighter, further = dimmer
-					const alpha = (0.3 + depth * 0.5) * brightness;
+					const x = rowStartX + c * cellW;
+					const y = rowY - blockH;
 
-					const x = c * cellW;
-					const y = r * cellH;
+					// Draw voxel top face
+					ctx.fillStyle = `rgba(74, 222, 128, ${Math.max(0.04, Math.min(0.55, alpha))})`;
+					ctx.fillRect(x + 1, y, cellW - 2, rowH + blockH);
 
-					// Perspective scaling
-					const perspScale = 0.7 + depth * 0.3;
-					const pW = cellW * perspScale - 1;
-					const pH = cellH * perspScale - 1;
-					const pX = x + (cellW - pW) / 2;
-					const pY = y + (cellH - pH) / 2;
-
-					ctx.fillStyle = `rgba(74, 222, 128, ${Math.max(0.03, Math.min(0.5, alpha))})`;
-					ctx.fillRect(pX, pY, pW, pH);
-
-					// Add slight border
-					ctx.strokeStyle = `rgba(74, 222, 128, ${Math.max(0.02, alpha * 0.3)})`;
+					// Border
+					ctx.strokeStyle = `rgba(74, 222, 128, ${Math.max(0.03, alpha * 0.3)})`;
 					ctx.lineWidth = 0.5;
-					ctx.strokeRect(pX, pY, pW, pH);
+					ctx.strokeRect(x + 1, y, cellW - 2, rowH + blockH);
+
+					// Highlight tall structures
+					if (terrainH > 2) {
+						ctx.fillStyle = `rgba(134, 239, 172, ${alpha * 0.3})`;
+						ctx.fillRect(x + cellW * 0.2, y, cellW * 0.6, blockH * 0.4);
+					}
 				}
 			}
-
-			// Horizontal scan line for walking effect
-			const scanY = (time * 30) % ch;
-			ctx.fillStyle = 'rgba(74, 222, 128, 0.03)';
-			ctx.fillRect(0, scanY, cw, 2);
 		}
 
 		animate();
@@ -394,6 +470,6 @@
 		inset: 0;
 		width: 100%;
 		height: 100%;
-		background: #050505;
+		background: transparent;
 	}
 </style>

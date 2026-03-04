@@ -316,11 +316,11 @@ body::after {
 
 /* ===== Unified Section Backgrounds ===== */
 .section:nth-of-type(even) {
-	background: #050505;
+	background: var(--bg-primary);
 }
 
 .section:nth-of-type(odd) {
-	background: #050505;
+	background: var(--bg-primary);
 }
 
 /* ===== Light Mode Overrides ===== */
