@@ -1,7 +1,7 @@
 /* ===== CSS Variables ===== */
 :root {
-	--bg-primary: #0a0a0a;
-	--bg-secondary: #111111;
+	--bg-primary: #050505;
+	--bg-secondary: #050505;
 	--bg-card: #161616;
 	--bg-card-hover: #1a1a1a;
 
@@ -38,7 +38,7 @@
 /* ===== Light Mode ===== */
 [data-theme="light"] {
 	--bg-primary: #f8fafc;
-	--bg-secondary: #f1f5f9;
+	--bg-secondary: #f8fafc;
 	--bg-card: #ffffff;
 	--bg-card-hover: #f8fafc;
 	--text-primary: #0f172a;
@@ -53,7 +53,7 @@
 @media (prefers-color-scheme: light) {
 	:root:not([data-theme="dark"]) {
 		--bg-primary: #f8fafc;
-		--bg-secondary: #f1f5f9;
+		--bg-secondary: #f8fafc;
 		--bg-card: #ffffff;
 		--bg-card-hover: #f8fafc;
 		--text-primary: #0f172a;
@@ -314,13 +314,13 @@ body::after {
 	opacity: 0.4;
 }
 
-/* ===== Alternating Section Backgrounds ===== */
+/* ===== Unified Section Backgrounds ===== */
 .section:nth-of-type(even) {
-	background: #0d0d0d;
+	background: #050505;
 }
 
 .section:nth-of-type(odd) {
-	background: #0a0a0a;
+	background: #050505;
 }
 
 /* ===== Light Mode Overrides ===== */
@@ -353,7 +353,7 @@ body::after {
 
 [data-theme="light"] .section:nth-of-type(even),
 :root:not([data-theme="dark"]) .section:nth-of-type(even) {
-	background: #f1f5f9;
+	background: #f8fafc;
 }
 
 [data-theme="light"] .section:nth-of-type(odd),

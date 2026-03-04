@@ -4,37 +4,14 @@
 	import Scrollytelling from '$lib/Scrollytelling.svelte';
 	import AnimatedCounter from '$lib/AnimatedCounter.svelte';
 	import SectionTransition from '$lib/SectionTransition.svelte';
+	import GameAnimation from '$lib/GameAnimation.svelte';
 	import { hoverCorners } from '$lib/hoverCorners';
 
-	let videoIframe: HTMLIFrameElement;
-	let isPlaying = $state(false);
-	let isMuted = $state(false);
+	const VIDEO_ID = 'UCjDwDj2gGs';
+	let videoStarted = $state(false);
 
-	function postVideoMessage(action: string) {
-		if (!videoIframe?.contentWindow) return;
-		videoIframe.contentWindow.postMessage(JSON.stringify({
-			event: 'command',
-			func: action,
-			args: []
-		}), '*');
-	}
-
-	function togglePlay() {
-		if (isPlaying) {
-			postVideoMessage('pauseVideo');
-		} else {
-			postVideoMessage('playVideo');
-		}
-		isPlaying = !isPlaying;
-	}
-
-	function toggleMute() {
-		if (isMuted) {
-			postVideoMessage('unMute');
-		} else {
-			postVideoMessage('mute');
-		}
-		isMuted = !isMuted;
+	function startVideo() {
+		videoStarted = true;
 	}
 </script>
 
@@ -109,34 +86,27 @@
 		</ScrollAnimation>
 		<div class="video-card" style="margin-top: 2.5rem;">
 			<div class="video-wrapper">
-				<iframe
-					bind:this={videoIframe}
-					src="https://www.youtube.com/embed/UCjDwDj2gGs?enablejsapi=1&controls=1&rel=0&modestbranding=1"
-					title="Game of Prompts - Brief Breakdown"
-					frameborder="0"
-					allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-					allowfullscreen
-				></iframe>
-			</div>
-			<div class="video-controls">
-				<button class="video-btn" onclick={togglePlay} use:hoverCorners>
-					{#if isPlaying}
-						<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16" /><rect x="14" y="4" width="4" height="16" /></svg>
-						<span>Pause</span>
-					{:else}
-						<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3" /></svg>
-						<span>Play</span>
-					{/if}
-				</button>
-				<button class="video-btn" onclick={toggleMute} use:hoverCorners>
-					{#if isMuted}
-						<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" /><line x1="23" y1="9" x2="17" y2="15" /><line x1="17" y1="9" x2="23" y2="15" /></svg>
-						<span>Unmute</span>
-					{:else}
-						<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" /><path d="M19.07 4.93a10 10 0 010 14.14M15.54 8.46a5 5 0 010 7.07" /></svg>
-						<span>Sound</span>
-					{/if}
-				</button>
+				{#if videoStarted}
+					<iframe
+						src="https://www.youtube.com/embed/{VIDEO_ID}?autoplay=1&rel=0&modestbranding=1"
+						title="Game of Prompts - Brief Breakdown"
+						frameborder="0"
+						allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+						allowfullscreen
+					></iframe>
+				{:else}
+					<!-- svelte-ignore a11y_click_events_have_key_events -->
+					<!-- svelte-ignore a11y_no_static_element_interactions -->
+					<div class="video-thumbnail" onclick={startVideo}>
+						<img src="https://img.youtube.com/vi/{VIDEO_ID}/maxresdefault.jpg" alt="Video thumbnail" class="video-thumb-img" />
+						<div class="play-btn-overlay">
+							<svg class="play-btn-svg" width="80" height="80" viewBox="0 0 80 80" fill="none">
+								<circle cx="40" cy="40" r="38" stroke="#22c55e" stroke-width="3" fill="rgba(34, 197, 94, 0.15)" />
+								<polygon points="32,24 60,40 32,56" fill="#22c55e" />
+							</svg>
+						</div>
+					</div>
+				{/if}
 			</div>
 		</div>
 	</div>
@@ -424,6 +394,9 @@
 
 <section class="game-type-fullscreen game-type-arcade">
 	<div class="gt-bg-glow"></div>
+	<div class="gt-animation-canvas">
+		<GameAnimation type="arcade" />
+	</div>
 	<div class="gt-content">
 		<span class="gt-icon" aria-hidden="true">🎮</span>
 		<span class="gt-label">Game Type 01</span>
@@ -436,6 +409,9 @@
 
 <section class="game-type-fullscreen game-type-world">
 	<div class="gt-bg-glow"></div>
+	<div class="gt-animation-canvas">
+		<GameAnimation type="openworld" />
+	</div>
 	<div class="gt-content">
 		<span class="gt-icon" aria-hidden="true">🌍</span>
 		<span class="gt-label">Game Type 02</span>
@@ -448,6 +424,9 @@
 
 <section class="game-type-fullscreen game-type-trading">
 	<div class="gt-bg-glow"></div>
+	<div class="gt-animation-canvas">
+		<GameAnimation type="trading" />
+	</div>
 	<div class="gt-content">
 		<span class="gt-icon" aria-hidden="true">📈</span>
 		<span class="gt-label">Game Type 03</span>
@@ -460,6 +439,9 @@
 
 <section class="game-type-fullscreen game-type-science">
 	<div class="gt-bg-glow"></div>
+	<div class="gt-animation-canvas">
+		<GameAnimation type="protein" />
+	</div>
 	<div class="gt-content">
 		<span class="gt-icon" aria-hidden="true">🧬</span>
 		<span class="gt-label">Game Type 04</span>
@@ -775,41 +757,44 @@
 		border: none;
 	}
 
-	/* Video controls */
-	.video-controls {
-		display: flex;
-		gap: 8px;
-		justify-content: center;
-		padding: 12px 16px;
-	}
-
-	.video-btn {
-		display: inline-flex;
-		align-items: center;
-		gap: 6px;
-		padding: 8px 18px;
-		background: rgba(74, 222, 128, 0.08);
-		border: 1px solid rgba(74, 222, 128, 0.2);
-		border-radius: 8px;
-		color: var(--green-400);
-		font-family: var(--font-mono);
-		font-size: 0.8rem;
-		font-weight: 500;
-		cursor: pointer;
-		transition: all 0.2s;
+	/* Video thumbnail click-to-play */
+	.video-thumbnail {
 		position: relative;
-		overflow: visible;
+		width: 100%;
+		height: 100%;
+		cursor: pointer;
+		overflow: hidden;
 	}
 
-	.video-btn:hover {
-		background: rgba(74, 222, 128, 0.15);
-		border-color: rgba(74, 222, 128, 0.4);
-		box-shadow: 0 0 12px rgba(74, 222, 128, 0.15);
+	.video-thumb-img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		display: block;
 	}
 
-	.video-btn span {
-		letter-spacing: 0.05em;
-		text-transform: uppercase;
+	.play-btn-overlay {
+		position: absolute;
+		inset: 0;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		background: rgba(0, 0, 0, 0.3);
+		transition: background 0.3s;
+	}
+
+	.video-thumbnail:hover .play-btn-overlay {
+		background: rgba(0, 0, 0, 0.15);
+	}
+
+	.play-btn-svg {
+		filter: drop-shadow(0 0 20px rgba(34, 197, 94, 0.6)) drop-shadow(0 0 40px rgba(34, 197, 94, 0.3));
+		transition: transform 0.3s, filter 0.3s;
+	}
+
+	.video-thumbnail:hover .play-btn-svg {
+		transform: scale(1.1);
+		filter: drop-shadow(0 0 30px rgba(34, 197, 94, 0.8)) drop-shadow(0 0 60px rgba(34, 197, 94, 0.4));
 	}
 
 	/* ============================================ */
@@ -1144,7 +1129,7 @@
 	/* SECURITY                                     */
 	/* ============================================ */
 	.section-security {
-		background: var(--bg-secondary);
+		background: #050505;
 	}
 
 	.security-grid {
@@ -1575,6 +1560,7 @@
 		position: relative;
 		min-height: 80vh;
 		display: flex;
+		flex-direction: column;
 		align-items: center;
 		justify-content: center;
 		overflow: hidden;
@@ -1597,6 +1583,17 @@
 		background-size: 60px 60px;
 		pointer-events: none;
 		z-index: 0;
+	}
+
+	.gt-animation-canvas {
+		position: relative;
+		z-index: 1;
+		width: 100%;
+		max-width: 800px;
+		margin-bottom: 1rem;
+		border-radius: 12px;
+		overflow: hidden;
+		border: 1px solid rgba(74, 222, 128, 0.1);
 	}
 
 	.gt-content {
@@ -1661,7 +1658,7 @@
 
 	/* Game type colors — all green monochromatic variations */
 	.game-type-arcade {
-		background: #060a08;
+		background: #050505;
 		color: #86efac;
 	}
 	.game-type-arcade .gt-bg-glow {
@@ -1676,7 +1673,7 @@
 	.game-type-arcade .gt-score-label { color: #4ade80; }
 
 	.game-type-world {
-		background: #060f09;
+		background: #050505;
 		color: #86efac;
 	}
 	.game-type-world .gt-bg-glow {
@@ -1691,7 +1688,7 @@
 	.game-type-world .gt-score-label { color: #22c55e; }
 
 	.game-type-trading {
-		background: #080a06;
+		background: #050505;
 		color: #bbf7d0;
 	}
 	.game-type-trading .gt-bg-glow {
@@ -1706,7 +1703,7 @@
 	.game-type-trading .gt-score-label { color: #4ade80; }
 
 	.game-type-science {
-		background: #050a08;
+		background: #050505;
 		color: #a7f3d0;
 	}
 	.game-type-science .gt-bg-glow {
