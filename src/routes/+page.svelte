@@ -7,8 +7,9 @@
 	import GameAnimation from '$lib/GameAnimation.svelte';
 	import { hoverCorners } from '$lib/hoverCorners';
 
-	// Video ID was invalid (UCjDwDj2gGs is a channel ID, not a video ID)
-	// Replaced with polished placeholder until correct video is provided
+	const VIDEO_ID = 'UCjDwDj2gGs';
+	let videoStarted = $state(false);
+	function startVideo() { videoStarted = true; }
 </script>
 
 <svelte:head>
@@ -81,11 +82,28 @@
 			<p class="section-subtitle">Get up to speed in minutes — see how Game of Prompts brings blockchain and AI competitions together.</p>
 		</ScrollAnimation>
 		<div class="video-card" style="margin-top: 2.5rem;">
-			<div class="video-wrapper video-placeholder">
-				<div class="video-placeholder-content">
-					<img src="/gop-logo.png" alt="Game of Prompts" class="video-placeholder-logo" />
-					<span class="video-placeholder-text">Video coming soon</span>
-				</div>
+			<div class="video-wrapper">
+				{#if videoStarted}
+					<iframe
+						src="https://www.youtube.com/embed/{VIDEO_ID}?autoplay=1&rel=0&modestbranding=1"
+						title="Game of Prompts - Brief Breakdown"
+						frameborder="0"
+						allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+						allowfullscreen
+					></iframe>
+				{:else}
+					<!-- svelte-ignore a11y_click_events_have_key_events -->
+					<!-- svelte-ignore a11y_no_static_element_interactions -->
+					<div class="video-thumbnail" onclick={startVideo}>
+						<img src="https://img.youtube.com/vi/{VIDEO_ID}/maxresdefault.jpg" alt="Game of Prompts video thumbnail" class="video-thumb-img" />
+						<div class="play-btn-overlay">
+							<svg class="play-btn-svg" width="80" height="80" viewBox="0 0 80 80" fill="none">
+								<circle cx="40" cy="40" r="38" stroke="#22c55e" stroke-width="3" fill="rgba(34, 197, 94, 0.15)" />
+								<polygon points="32,24 60,40 32,56" fill="#22c55e" />
+							</svg>
+						</div>
+					</div>
+				{/if}
 			</div>
 		</div>
 	</div>
