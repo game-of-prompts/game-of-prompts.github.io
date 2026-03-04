@@ -50,8 +50,9 @@
 			const velocities = new Float32Array(particleCount * 3);
 			const spread = 80;
 
-			const green = { r: 74 / 255, g: 222 / 255, b: 128 / 255 };
-			const amber = { r: 251 / 255, g: 191 / 255, b: 36 / 255 };
+			// Green monochromatic palette
+			const greenLight = { r: 134 / 255, g: 239 / 255, b: 172 / 255 }; // #86efac
+			const greenDark = { r: 34 / 255, g: 197 / 255, b: 94 / 255 };   // #22c55e
 
 			for (let i = 0; i < particleCount; i++) {
 				const i3 = i * 3;
@@ -63,11 +64,11 @@
 				velocities[i3 + 1] = (Math.random() - 0.5) * 0.015;
 				velocities[i3 + 2] = (Math.random() - 0.5) * 0.008;
 
-				// Mix green and amber
+				// Mix between green shades
 				const t = Math.random();
-				colors[i3] = green.r + (amber.r - green.r) * t;
-				colors[i3 + 1] = green.g + (amber.g - green.g) * t;
-				colors[i3 + 2] = green.b + (amber.b - green.b) * t;
+				colors[i3] = greenDark.r + (greenLight.r - greenDark.r) * t;
+				colors[i3 + 1] = greenDark.g + (greenLight.g - greenDark.g) * t;
+				colors[i3 + 2] = greenDark.b + (greenLight.b - greenDark.b) * t;
 			}
 
 			const particleGeometry = new BufferGeometry();

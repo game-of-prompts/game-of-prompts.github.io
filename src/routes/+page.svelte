@@ -3,6 +3,39 @@
 	import ParticleNetwork from '$lib/ParticleNetwork.svelte';
 	import Scrollytelling from '$lib/Scrollytelling.svelte';
 	import AnimatedCounter from '$lib/AnimatedCounter.svelte';
+	import SectionTransition from '$lib/SectionTransition.svelte';
+	import { hoverCorners } from '$lib/hoverCorners';
+
+	let videoIframe: HTMLIFrameElement;
+	let isPlaying = $state(false);
+	let isMuted = $state(false);
+
+	function postVideoMessage(action: string) {
+		if (!videoIframe?.contentWindow) return;
+		videoIframe.contentWindow.postMessage(JSON.stringify({
+			event: 'command',
+			func: action,
+			args: []
+		}), '*');
+	}
+
+	function togglePlay() {
+		if (isPlaying) {
+			postVideoMessage('pauseVideo');
+		} else {
+			postVideoMessage('playVideo');
+		}
+		isPlaying = !isPlaying;
+	}
+
+	function toggleMute() {
+		if (isMuted) {
+			postVideoMessage('unMute');
+		} else {
+			postVideoMessage('mute');
+		}
+		isMuted = !isMuted;
+	}
 </script>
 
 <svelte:head>
@@ -43,11 +76,11 @@
 			and Celaut paradigm for transparent, decentralized competition.
 		</p>
 		<div class="hero-actions">
-			<a href="https://github.com/game-of-prompts" class="btn btn-primary" target="_blank" rel="noopener">
+			<a href="https://github.com/game-of-prompts" class="btn btn-primary" target="_blank" rel="noopener" use:hoverCorners>
 				<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" /></svg>
 				View on GitHub
 			</a>
-			<a href="#how-it-works" class="btn btn-secondary">
+			<a href="#how-it-works" class="btn btn-secondary" use:hoverCorners>
 				Learn More
 				<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 13l5 5 5-5M7 6l5 5 5-5" /></svg>
 			</a>
@@ -62,6 +95,7 @@
 	</div>
 </section>
 
+<SectionTransition height={100} />
 
 <!-- ============================================ -->
 <!-- VIDEO OVERVIEW                               -->
@@ -76,17 +110,39 @@
 		<div class="video-card" style="margin-top: 2.5rem;">
 			<div class="video-wrapper">
 				<iframe
-					src="https://www.youtube.com/embed/UCjDwDj2gGs"
+					bind:this={videoIframe}
+					src="https://www.youtube.com/embed/UCjDwDj2gGs?enablejsapi=1&controls=1&rel=0&modestbranding=1"
 					title="Game of Prompts - Brief Breakdown"
 					frameborder="0"
-					allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+					allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
 					allowfullscreen
 				></iframe>
+			</div>
+			<div class="video-controls">
+				<button class="video-btn" onclick={togglePlay} use:hoverCorners>
+					{#if isPlaying}
+						<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16" /><rect x="14" y="4" width="4" height="16" /></svg>
+						<span>Pause</span>
+					{:else}
+						<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3" /></svg>
+						<span>Play</span>
+					{/if}
+				</button>
+				<button class="video-btn" onclick={toggleMute} use:hoverCorners>
+					{#if isMuted}
+						<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" /><line x1="23" y1="9" x2="17" y2="15" /><line x1="17" y1="9" x2="23" y2="15" /></svg>
+						<span>Unmute</span>
+					{:else}
+						<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" /><path d="M19.07 4.93a10 10 0 010 14.14M15.54 8.46a5 5 0 010 7.07" /></svg>
+						<span>Sound</span>
+					{/if}
+				</button>
 			</div>
 		</div>
 	</div>
 </section>
 
+<SectionTransition height={100} />
 
 <!-- ============================================ -->
 <!-- HOW IT WORKS                                 -->
@@ -105,6 +161,7 @@
 	</div>
 </section>
 
+<SectionTransition height={100} />
 
 <!-- ============================================ -->
 <!-- CORE COMPONENTS                              -->
@@ -119,7 +176,7 @@
 
 		<div class="components-grid">
 			<ScrollAnimation delay={0}>
-				<div class="card component-card">
+				<div class="card component-card" use:hoverCorners>
 					<div class="component-icon">
 						<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
 							<path d="M4 4h16a2 2 0 012 2v12a2 2 0 01-2 2H4a2 2 0 01-2-2V6a2 2 0 012-2z" />
@@ -133,7 +190,7 @@
 			</ScrollAnimation>
 
 			<ScrollAnimation delay={150}>
-				<div class="card component-card">
+				<div class="card component-card" use:hoverCorners>
 					<div class="component-icon solver-accent">
 						<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
 							<path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z" />
@@ -146,7 +203,7 @@
 			</ScrollAnimation>
 
 			<ScrollAnimation delay={300}>
-				<div class="card component-card">
+				<div class="card component-card" use:hoverCorners>
 					<div class="component-icon web-accent">
 						<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
 							<circle cx="12" cy="12" r="10" />
@@ -180,6 +237,7 @@
 	</div>
 </section>
 
+<SectionTransition height={100} />
 
 <!-- ============================================ -->
 <!-- CREATOR FLOW                                 -->
@@ -202,6 +260,7 @@
 	]}
 />
 
+<SectionTransition height={100} />
 
 <!-- ============================================ -->
 <!-- PLAYER JOURNEY                               -->
@@ -228,12 +287,14 @@
 	]}
 />
 
+<SectionTransition height={100} />
 
 <!-- ============================================ -->
 <!-- SCROLLYTELLING - THE JOURNEY                 -->
 <!-- ============================================ -->
 <Scrollytelling />
 
+<SectionTransition height={100} />
 
 <!-- ============================================ -->
 <!-- SECURITY                                     -->
@@ -248,7 +309,7 @@
 
 		<div class="security-grid">
 			<ScrollAnimation delay={0} animation="scale">
-				<div class="card security-card">
+				<div class="card security-card" use:hoverCorners>
 					<div class="security-icon">
 						<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
 							<rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
@@ -260,7 +321,7 @@
 				</div>
 			</ScrollAnimation>
 			<ScrollAnimation delay={150} animation="scale">
-				<div class="card security-card">
+				<div class="card security-card" use:hoverCorners>
 					<div class="security-icon">
 						<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
 							<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
@@ -273,7 +334,7 @@
 				</div>
 			</ScrollAnimation>
 			<ScrollAnimation delay={300} animation="scale">
-				<div class="card security-card">
+				<div class="card security-card" use:hoverCorners>
 					<div class="security-icon">
 						<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
 							<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
@@ -341,6 +402,7 @@
 	</div>
 </section>
 
+<SectionTransition height={100} />
 
 <!-- ============================================ -->
 <!-- GAME TYPES                                   -->
@@ -408,6 +470,7 @@
 	<div class="gt-grid-lines" aria-hidden="true"></div>
 </section>
 
+<SectionTransition height={100} />
 
 <!-- ============================================ -->
 <!-- OPTIONAL FEATURES                            -->
@@ -421,7 +484,7 @@
 
 		<div class="features-grid">
 			<ScrollAnimation delay={0}>
-				<div class="card feature-card feature-poker">
+				<div class="card feature-card feature-poker" use:hoverCorners>
 					<div class="feature-header">
 						<span class="feature-emoji">🃏</span>
 						<h3>Poker Mode</h3>
@@ -439,7 +502,7 @@
 			</ScrollAnimation>
 
 			<ScrollAnimation delay={150}>
-				<div class="card feature-card feature-resource">
+				<div class="card feature-card feature-resource" use:hoverCorners>
 					<div class="feature-header">
 						<span class="feature-emoji">⚙️</span>
 						<h3>Resource Limitation</h3>
@@ -456,7 +519,7 @@
 			</ScrollAnimation>
 
 			<ScrollAnimation delay={300}>
-				<div class="card feature-card feature-research">
+				<div class="card feature-card feature-research" use:hoverCorners>
 					<div class="feature-header">
 						<span class="feature-emoji">🔬</span>
 						<h3>Pay-per-attempt</h3>
@@ -467,7 +530,7 @@
 			</ScrollAnimation>
 
 			<ScrollAnimation delay={450}>
-				<div class="card feature-card feature-research">
+				<div class="card feature-card feature-research" use:hoverCorners>
 					<div class="feature-header">
 						<span class="feature-emoji">🔗</span>
 						<h3>Multi-chain, Ergo-centric</h3>
@@ -480,6 +543,7 @@
 	</div>
 </section>
 
+<SectionTransition height={100} />
 
 <!-- ============================================ -->
 <!-- GET STARTED                                  -->
@@ -506,14 +570,14 @@
 					</div>
 				</div>
 				<div class="cta-actions">
-					<a href="https://github.com/game-of-prompts" class="btn btn-primary" target="_blank" rel="noopener">
+					<a href="https://github.com/game-of-prompts" class="btn btn-primary" target="_blank" rel="noopener" use:hoverCorners>
 						<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" /></svg>
 						GitHub Repository
 					</a>
-					<a href="https://github.com/celaut-project" class="btn btn-secondary" target="_blank" rel="noopener">
+					<a href="https://github.com/celaut-project" class="btn btn-secondary" target="_blank" rel="noopener" use:hoverCorners>
 						Celaut Project
 					</a>
-					<a href="https://ergoplatform.org" class="btn btn-secondary" target="_blank" rel="noopener">
+					<a href="https://ergoplatform.org" class="btn btn-secondary" target="_blank" rel="noopener" use:hoverCorners>
 						Ergo Platform
 					</a>
 				</div>
@@ -535,7 +599,7 @@
 				· <a href="https://github.com/game-of-prompts" target="_blank" rel="noopener">GitHub</a>
 			</p>
 		</div>
-		<a href="#" class="back-to-top" aria-label="Back to top">↑</a>
+		<a href="#" class="back-to-top" aria-label="Back to top" use:hoverCorners>↑</a>
 	</div>
 </footer>
 
@@ -557,7 +621,7 @@
 		position: absolute;
 		width: 800px;
 		height: 800px;
-		background: radial-gradient(circle, rgba(74, 222, 128, 0.12) 0%, rgba(251, 191, 36, 0.06) 40%, transparent 70%);
+		background: radial-gradient(circle, rgba(74, 222, 128, 0.15) 0%, rgba(34, 197, 94, 0.06) 40%, transparent 70%);
 		top: 50%;
 		left: 50%;
 		transform: translate(-50%, -50%);
@@ -667,14 +731,14 @@
 		gap: 2rem;
 		flex-wrap: wrap;
 		padding-top: 2rem;
-		border-top: 1px solid rgba(255,255,255,0.06);
+		border-top: 1px solid rgba(74, 222, 128, 0.06);
 		margin-top: 0.5rem;
 	}
 
 	.hero-stat-divider {
 		width: 1px;
 		height: 32px;
-		background: var(--border-card);
+		background: rgba(74, 222, 128, 0.1);
 	}
 
 	/* ============================================ */
@@ -690,8 +754,8 @@
 		margin: 2.5rem auto 0;
 		border-radius: 16px;
 		padding: 4px;
-		background: linear-gradient(135deg, rgba(74, 222, 128, 0.4), rgba(251, 191, 36, 0.4), rgba(74, 222, 128, 0.2));
-		box-shadow: 0 0 40px rgba(74, 222, 128, 0.08), 0 0 80px rgba(251, 191, 36, 0.04);
+		background: linear-gradient(135deg, rgba(74, 222, 128, 0.4), rgba(34, 197, 94, 0.3), rgba(74, 222, 128, 0.2));
+		box-shadow: 0 0 40px rgba(74, 222, 128, 0.08), 0 0 80px rgba(34, 197, 94, 0.04);
 	}
 
 	.video-wrapper {
@@ -709,6 +773,43 @@
 		width: 100%;
 		height: 100%;
 		border: none;
+	}
+
+	/* Video controls */
+	.video-controls {
+		display: flex;
+		gap: 8px;
+		justify-content: center;
+		padding: 12px 16px;
+	}
+
+	.video-btn {
+		display: inline-flex;
+		align-items: center;
+		gap: 6px;
+		padding: 8px 18px;
+		background: rgba(74, 222, 128, 0.08);
+		border: 1px solid rgba(74, 222, 128, 0.2);
+		border-radius: 8px;
+		color: var(--green-400);
+		font-family: var(--font-mono);
+		font-size: 0.8rem;
+		font-weight: 500;
+		cursor: pointer;
+		transition: all 0.2s;
+		position: relative;
+		overflow: visible;
+	}
+
+	.video-btn:hover {
+		background: rgba(74, 222, 128, 0.15);
+		border-color: rgba(74, 222, 128, 0.4);
+		box-shadow: 0 0 12px rgba(74, 222, 128, 0.15);
+	}
+
+	.video-btn span {
+		letter-spacing: 0.05em;
+		text-transform: uppercase;
 	}
 
 	/* ============================================ */
@@ -733,7 +834,7 @@
 		left: 0;
 		right: 0;
 		height: 2px;
-		background: linear-gradient(90deg, var(--green-400), var(--amber-400));
+		background: linear-gradient(90deg, var(--green-400), var(--green-500));
 		opacity: 0;
 		transition: opacity 0.3s;
 	}
@@ -758,8 +859,8 @@
 	}
 
 	.ergo-icon {
-		background: var(--amber-glow);
-		color: var(--amber-400);
+		background: var(--green-glow);
+		color: var(--green-400);
 	}
 
 	.foundation-features {
@@ -775,8 +876,8 @@
 		font-weight: 500;
 		padding: 4px 10px;
 		border-radius: 100px;
-		background: rgba(255, 255, 255, 0.04);
-		border: 1px solid var(--border-subtle);
+		background: rgba(74, 222, 128, 0.04);
+		border: 1px solid rgba(74, 222, 128, 0.08);
 		color: var(--text-muted);
 	}
 
@@ -798,11 +899,11 @@
 	}
 
 	.ergo-link {
-		color: var(--amber-400) !important;
+		color: var(--green-400) !important;
 	}
 
 	.ergo-link:hover {
-		color: var(--amber-500) !important;
+		color: var(--green-500) !important;
 	}
 
 	.foundations-summary {
@@ -841,8 +942,8 @@
 	}
 
 	.creator-accent {
-		background: var(--amber-glow);
-		color: var(--amber-400);
+		background: var(--green-glow);
+		color: var(--green-400);
 	}
 
 	.player-accent {
@@ -889,13 +990,13 @@
 	}
 
 	.solver-accent {
-		background: var(--amber-glow) !important;
-		color: var(--amber-400) !important;
+		background: rgba(74, 222, 128, 0.1) !important;
+		color: #86efac !important;
 	}
 
 	.web-accent {
-		background: rgba(96, 165, 250, 0.15) !important;
-		color: #60a5fa !important;
+		background: rgba(74, 222, 128, 0.08) !important;
+		color: #4ade80 !important;
 	}
 
 	.component-badge {
@@ -917,22 +1018,22 @@
 	}
 
 	.player-badge {
-		background: rgba(251, 191, 36, 0.1);
-		color: var(--amber-400);
-		border: 1px solid rgba(251, 191, 36, 0.2);
+		background: rgba(34, 197, 94, 0.1);
+		color: #86efac;
+		border: 1px solid rgba(34, 197, 94, 0.2);
 	}
 
 	.web-badge {
-		background: rgba(96, 165, 250, 0.1);
-		color: #60a5fa;
-		border: 1px solid rgba(96, 165, 250, 0.2);
+		background: rgba(74, 222, 128, 0.08);
+		color: #4ade80;
+		border: 1px solid rgba(74, 222, 128, 0.15);
 	}
 
 	.components-note {
 		margin-top: 2.5rem;
 		padding: 20px 28px;
 		background: var(--bg-card);
-		border: 1px solid var(--border-card);
+		border: 1px solid rgba(74, 222, 128, 0.08);
 		border-radius: var(--radius);
 		display: flex;
 		flex-direction: column;
@@ -952,7 +1053,7 @@
 	}
 
 	.note-icon.web-note {
-		color: #60a5fa;
+		color: #4ade80;
 	}
 
 	.note-row p {
@@ -981,7 +1082,7 @@
 		align-items: flex-start;
 		padding: 28px;
 		background: var(--bg-card);
-		border: 1px solid var(--border-card);
+		border: 1px solid rgba(74, 222, 128, 0.08);
 		border-radius: var(--radius-lg);
 		transition: all 0.3s;
 	}
@@ -1024,19 +1125,19 @@
 		color: var(--text-muted);
 	}
 
-	/* Player Steps Variation */
+	/* Player Steps Variation — now green */
 	.player-steps {
 		margin-left: 0;
 	}
 
 	.player-step:hover {
-		border-color: rgba(251, 191, 36, 0.2) !important;
+		border-color: rgba(74, 222, 128, 0.2) !important;
 	}
 
 	.player-number {
-		background: var(--amber-glow) !important;
-		color: var(--amber-400) !important;
-		border-color: rgba(251, 191, 36, 0.2) !important;
+		background: rgba(34, 197, 94, 0.12) !important;
+		color: #86efac !important;
+		border-color: rgba(34, 197, 94, 0.2) !important;
 	}
 
 	/* ============================================ */
@@ -1098,13 +1199,13 @@
 		align-items: flex-start;
 		padding: 20px 24px;
 		background: var(--bg-card);
-		border: 1px solid var(--border-card);
+		border: 1px solid rgba(74, 222, 128, 0.08);
 		border-radius: var(--radius);
 		transition: border-color 0.3s;
 	}
 
 	.validation-step:hover {
-		border-color: rgba(74, 222, 128, 0.15);
+		border-color: rgba(74, 222, 128, 0.2);
 	}
 
 	.validation-number {
@@ -1175,7 +1276,7 @@
 		gap: 6px;
 		margin-top: 1rem;
 		padding-top: 0.75rem;
-		border-top: 1px solid var(--border-subtle);
+		border-top: 1px solid rgba(74, 222, 128, 0.06);
 		font-size: 0.8rem;
 		color: var(--text-muted);
 		font-family: var(--font-mono);
@@ -1242,9 +1343,9 @@
 	}
 
 	.feature-tag-status.research {
-		background: rgba(251, 191, 36, 0.1);
-		color: var(--amber-400);
-		border: 1px solid rgba(251, 191, 36, 0.2);
+		background: rgba(34, 197, 94, 0.08);
+		color: #86efac;
+		border: 1px solid rgba(34, 197, 94, 0.15);
 	}
 
 	.feature-desc {
@@ -1288,7 +1389,7 @@
 		text-align: center;
 		padding: 64px 48px;
 		background: var(--bg-card);
-		border: 1px solid var(--border-card);
+		border: 1px solid rgba(74, 222, 128, 0.08);
 		border-radius: 24px;
 		overflow: hidden;
 	}
@@ -1362,7 +1463,7 @@
 	/* ============================================ */
 	.footer {
 		padding: 40px 24px;
-		border-top: 1px solid var(--border-subtle);
+		border-top: 1px solid rgba(74, 222, 128, 0.06);
 	}
 
 	.footer .container {
@@ -1422,12 +1523,14 @@
 		width: 40px;
 		height: 40px;
 		border-radius: 10px;
-		background: rgba(255,255,255,0.04);
-		border: 1px solid var(--border-card);
+		background: rgba(74, 222, 128, 0.04);
+		border: 1px solid rgba(74, 222, 128, 0.08);
 		color: var(--text-secondary);
 		font-size: 1.1rem;
 		text-decoration: none;
 		transition: all 0.2s;
+		position: relative;
+		overflow: visible;
 	}
 
 	.back-to-top:hover {
@@ -1461,7 +1564,7 @@
 	}
 	
 	.narrative-text a {
-		color: var(--accent-color);
+		color: var(--green-400);
 		text-decoration: underline;
 	}
 
@@ -1489,8 +1592,8 @@
 		position: absolute;
 		inset: 0;
 		background-image:
-			linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
-			linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+			linear-gradient(rgba(74, 222, 128, 0.03) 1px, transparent 1px),
+			linear-gradient(90deg, rgba(74, 222, 128, 0.03) 1px, transparent 1px);
 		background-size: 60px 60px;
 		pointer-events: none;
 		z-index: 0;
@@ -1556,23 +1659,22 @@
 		opacity: 0.5;
 	}
 
-	/* ARCADE — blue/indigo */
+	/* Game type colors — all green monochromatic variations */
 	.game-type-arcade {
-		background: #080818;
-		color: #a5b4fc;
+		background: #060a08;
+		color: #86efac;
 	}
 	.game-type-arcade .gt-bg-glow {
-		background: radial-gradient(ellipse 70% 60% at 50% 80%, rgba(99,102,241,0.15) 0%, transparent 70%);
+		background: radial-gradient(ellipse 70% 60% at 50% 80%, rgba(74,222,128,0.12) 0%, transparent 70%);
 	}
 	.game-type-arcade .gt-title {
-		background: linear-gradient(135deg, #a5b4fc, #6366f1);
+		background: linear-gradient(135deg, #86efac, #4ade80);
 		-webkit-background-clip: text;
 		-webkit-text-fill-color: transparent;
 		background-clip: text;
 	}
-	.game-type-arcade .gt-score-label { color: #6366f1; }
+	.game-type-arcade .gt-score-label { color: #4ade80; }
 
-	/* OPEN WORLD — green/emerald */
 	.game-type-world {
 		background: #060f09;
 		color: #86efac;
@@ -1588,37 +1690,35 @@
 	}
 	.game-type-world .gt-score-label { color: #22c55e; }
 
-	/* TRADING — amber/gold */
 	.game-type-trading {
-		background: #0f0a00;
-		color: #fcd34d;
+		background: #080a06;
+		color: #bbf7d0;
 	}
 	.game-type-trading .gt-bg-glow {
-		background: radial-gradient(ellipse 70% 60% at 70% 40%, rgba(234,179,8,0.12) 0%, transparent 70%);
+		background: radial-gradient(ellipse 70% 60% at 70% 40%, rgba(74,222,128,0.1) 0%, transparent 70%);
 	}
 	.game-type-trading .gt-title {
-		background: linear-gradient(135deg, #fde68a, #f59e0b);
+		background: linear-gradient(135deg, #bbf7d0, #4ade80);
 		-webkit-background-clip: text;
 		-webkit-text-fill-color: transparent;
 		background-clip: text;
 	}
-	.game-type-trading .gt-score-label { color: #f59e0b; }
+	.game-type-trading .gt-score-label { color: #4ade80; }
 
-	/* PROTEIN FOLDING — cyan/teal */
 	.game-type-science {
-		background: #010f10;
-		color: #67e8f9;
+		background: #050a08;
+		color: #a7f3d0;
 	}
 	.game-type-science .gt-bg-glow {
-		background: radial-gradient(ellipse 70% 60% at 50% 30%, rgba(6,182,212,0.12) 0%, transparent 70%);
+		background: radial-gradient(ellipse 70% 60% at 50% 30%, rgba(16,185,129,0.1) 0%, transparent 70%);
 	}
 	.game-type-science .gt-title {
-		background: linear-gradient(135deg, #a5f3fc, #06b6d4);
+		background: linear-gradient(135deg, #a7f3d0, #10b981);
 		-webkit-background-clip: text;
 		-webkit-text-fill-color: transparent;
 		background-clip: text;
 	}
-	.game-type-science .gt-score-label { color: #06b6d4; }
+	.game-type-science .gt-score-label { color: #10b981; }
 
 	/* ============================================ */
 	/* RESPONSIVE                                   */

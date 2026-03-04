@@ -416,7 +416,7 @@
 
 	/* Solvers */
 	.solvers-icon-visual {
-		color: var(--amber-400);
+		color: var(--green-400);
 	}
 
 	.solver-group {
@@ -429,9 +429,9 @@
 		animation: racein 0.6s ease-out both;
 	}
 
-	.solver.s1 { animation-delay: 0s; color: var(--amber-400); }
+	.solver.s1 { animation-delay: 0s; color: #86efac; }
 	.solver.s2 { animation-delay: 0.15s; color: var(--green-400); }
-	.solver.s3 { animation-delay: 0.3s; color: #60a5fa; }
+	.solver.s3 { animation-delay: 0.3s; color: #22c55e; }
 
 	@keyframes racein {
 		from { opacity: 0; transform: translateX(30px); }
@@ -472,7 +472,7 @@
 
 	/* Trophy */
 	.trophy-icon-visual {
-		color: var(--amber-400);
+		color: var(--green-400);
 		animation: floatIcon 2.5s ease-in-out infinite;
 	}
 
@@ -493,9 +493,9 @@
 		animation-delay: calc(var(--ci) * 0.08s);
 	}
 
-	.confetti-particle:nth-child(odd) { background: var(--green-400); }
-	.confetti-particle:nth-child(even) { background: var(--amber-400); }
-	.confetti-particle:nth-child(3n) { background: #60a5fa; }
+	.confetti-particle:nth-child(odd) { background: #4ade80; }
+	.confetti-particle:nth-child(even) { background: #22c55e; }
+	.confetti-particle:nth-child(3n) { background: #86efac; }
 
 	@keyframes confettiBurst {
 		0% { transform: translate(0, 0) rotate(0deg); opacity: 1; }
