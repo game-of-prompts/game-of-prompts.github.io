@@ -6,38 +6,44 @@
 	import AnimatedCounter from '$lib/AnimatedCounter.svelte';
 	import SectionTransition from '$lib/SectionTransition.svelte';
 	import GameAnimation from '$lib/GameAnimation.svelte';
+	import ValidationAnimation from '$lib/ValidationAnimation.svelte';
 	import { hoverCorners } from '$lib/hoverCorners';
 
 	const VIDEO_ID = 'UCjDwDj2gGs';
 	let videoStarted = $state(false);
 	function startVideo() { videoStarted = true; }
 
+	function triggerExplosion(e: MouseEvent) {
+		const btn = e.currentTarget as HTMLElement;
+		btn.classList.add('sv-exploded');
+		for (let i = 0; i < 60; i++) {
+			const p = document.createElement('div');
+			p.className = 'sv-particle';
+			const angle = (Math.PI * 2 * i) / 60;
+			const dist = 80 + Math.random() * 120;
+			p.style.setProperty('--px', Math.cos(angle) * dist + 'px');
+			p.style.setProperty('--py', Math.sin(angle) * dist + 'px');
+			p.style.setProperty('--delay', (Math.random() * 0.2) + 's');
+			btn.appendChild(p);
+		}
+		window.setTimeout(() => {
+			const particles = btn.querySelectorAll('.sv-particle');
+			particles.forEach((el) => el.remove());
+			btn.classList.remove('sv-exploded');
+		}, 1200);
+	}
+
 	onMount(() => {
-		// IntersectionObserver for validation pipeline — staggered cascade
-		const pipeline = document.getElementById('validation-pipeline');
-		if (!pipeline) return;
-
-		const pipelineSteps = pipeline.querySelectorAll('.vp-step');
-		let activated = false;
-
-		const observer = new IntersectionObserver(
-			(entries) => {
-				entries.forEach((entry) => {
-					if (entry.isIntersecting && !activated) {
-						activated = true;
-						// Cascade activation with delays
-						pipelineSteps.forEach((step, idx) => {
-							window.setTimeout(() => {
-								step.classList.add('vp-active');
-							}, idx * 400);
-						});
-					}
-				});
-			},
-			{ threshold: 0.2, rootMargin: '0px 0px -5% 0px' }
-		);
-
-		observer.observe(pipeline);
+		// IntersectionObserver for validation cards — staggered cascade
+		const cards = document.querySelectorAll('.validation-card');
+		const cardObserver = new IntersectionObserver((entries) => {
+			entries.forEach(e => {
+				if (e.isIntersecting) {
+					e.target.classList.add('active');
+				}
+			});
+		}, { threshold: 0.3 });
+		cards.forEach(c => cardObserver.observe(c));
 
 		// Copy button handlers for AI links
 		const copyBtns = document.querySelectorAll('.copy-btn[data-copy-url]');
@@ -57,7 +63,7 @@
 			});
 		});
 
-		return () => observer.disconnect();
+		return () => cardObserver.disconnect();
 	});
 </script>
 
@@ -368,60 +374,51 @@
 			</ScrollAnimation>
 		</div>
 
-		<!-- Score Validation Mechanism — Cinematic Pipeline -->
+	</div>
+</section>
+
+<!-- ============================================ -->
+<!-- SCORE VALIDATION — CYBERPUNK REDESIGN        -->
+<!-- ============================================ -->
+<section id="score-validation" class="section section-validation">
+	<div class="sv-glow-top"></div>
+	<div class="container sv-container">
 		<ScrollAnimation>
-			<h3 class="validation-title">Score Validation Mechanism</h3>
+			<h3 class="sv-title">Score Validation Mechanism</h3>
+			<p class="sv-subtitle">Every score cryptographically proven on the Ergo blockchain</p>
 		</ScrollAnimation>
 
-		<div class="validation-pipeline" id="validation-pipeline">
+		<div class="sv-steps">
 			{#each [
-				{ num: 1, title: 'Player Participation', desc: 'Player publishes their participation on the Ergo blockchain.', icon: 'chain' },
-				{ num: 2, title: 'Creator Reveals Secret', desc: 'After the deadline, the creator reveals the game secret in the resolution transaction.', icon: 'key' },
-				{ num: 3, title: 'Smart Contract Validation', desc: 'The game contract computes a commitment for each score using the solver ID, score value, hashed logs, and revealed secret.', icon: 'contract' },
-				{ num: 4, title: 'Score Verification', desc: 'When the score commitment matches the participation commitment, that score is validated as authentic.', icon: 'shield' },
-				{ num: 5, title: 'Winner Takes the Pot', desc: 'The highest validated score wins. All participation fees are distributed automatically — winner takes all, minus creator commission and judge fees.', icon: 'trophy' }
+				{ num: '01', title: 'Player Participation', desc: 'Player publishes their participation on the Ergo blockchain, staking ERG to enter the competition.', type: 'participation' as const, badge: 'SUBMITTED' },
+				{ num: '02', title: 'Creator Reveals Secret', desc: 'After the deadline, the creator reveals the game secret in the resolution transaction — unlocking verification.', type: 'reveal' as const, badge: 'REVEALED' },
+				{ num: '03', title: 'Smart Contract Validation', desc: 'The game contract computes a commitment for each score using the solver ID, score value, hashed logs, and revealed secret.', type: 'validation' as const, badge: 'COMPUTED' },
+				{ num: '04', title: 'Score Verification', desc: 'When the score commitment matches the participation commitment, that score is validated as authentic and tamper-proof.', type: 'verification' as const, badge: 'VERIFIED' },
+				{ num: '05', title: 'Winner Takes the Pot', desc: 'The highest validated score wins. All participation fees are distributed automatically — winner takes all, minus creator commission and judge fees.', type: 'winner' as const, badge: 'DISTRIBUTED' }
 			] as step, idx}
-				<div class="vp-step" data-vp-step={idx} style="--vp-delay: {idx * 200}ms; --vp-idx: {idx}">
-					<div class="vp-node-col">
-						<div class="vp-node" data-vp-node={idx}>
-							<div class="vp-node-ring"></div>
-							<div class="vp-node-inner">
-								<div class="vp-icon">
-									{#if step.icon === 'chain'}
-										<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71" /><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71" /></svg>
-									{:else if step.icon === 'key'}
-										<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 11-7.778 7.778 5.5 5.5 0 017.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4" /></svg>
-									{:else if step.icon === 'contract'}
-										<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="16 18 22 12 16 6" /><polyline points="8 6 2 12 8 18" /><line x1="14" y1="4" x2="10" y2="20" /></svg>
-									{:else if step.icon === 'shield'}
-										<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" /><polyline points="9 12 11 14 15 10" /></svg>
-									{:else if step.icon === 'trophy'}
-										<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 9H4.5a2.5 2.5 0 010-5H6" /><path d="M18 9h1.5a2.5 2.5 0 000-5H18" /><path d="M4 22h16" /><path d="M10 22V17" /><path d="M14 22V17" /><path d="M6 2h12v7a6 6 0 01-12 0V2z" /></svg>
-									{/if}
-								</div>
-							</div>
-							<div class="vp-node-glow"></div>
-						</div>
-						{#if idx < 4}
-							<div class="vp-connector">
-								<div class="vp-line"></div>
-								<div class="vp-line-fill"></div>
-								<div class="vp-pulse"></div>
-							</div>
-						{/if}
+				<div class="validation-card" data-step={idx}>
+					<div class="vc-animation">
+						<ValidationAnimation type={step.type} active={false} />
 					</div>
-					<div class="vp-content">
-						<h4>{step.title}</h4>
-						<p>{step.desc}</p>
-						{#if idx === 4}
-							<div class="vp-success-badge">
-								<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12" /></svg>
-								<span>Validated On-Chain</span>
-							</div>
-						{/if}
+					<div class="vc-content">
+						<div class="vc-header">
+							<span class="vc-num">{step.num}</span>
+							<span class="vc-badge">{step.badge}</span>
+						</div>
+						<h4 class="vc-title">{step.title}</h4>
+						<p class="vc-desc">{step.desc}</p>
 					</div>
 				</div>
 			{/each}
+		</div>
+
+		<div class="sv-cta-wrap">
+			<!-- svelte-ignore a11y_click_events_have_key_events -->
+			<!-- svelte-ignore a11y_no_static_element_interactions -->
+			<div class="sv-cta-btn" onclick={triggerExplosion}>
+				<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12" /></svg>
+				<span>Validated On-Chain</span>
+			</div>
 		</div>
 	</div>
 </section>
@@ -1413,152 +1410,230 @@
 		color: var(--green-400);
 	}
 
-	.validation-title {
-		margin-top: 4rem;
-		margin-bottom: 0.5rem;
-		font-size: 1.4rem;
-		color: var(--text-primary);
-	}
-
 	/* ============================================ */
-	/* VALIDATION PIPELINE (Visual)                 */
+	/* SCORE VALIDATION — CYBERPUNK SECTION         */
 	/* ============================================ */
-	.validation-pipeline {
-		margin: 3rem auto 0;
-		display: flex;
-		flex-direction: column;
-		gap: 0;
-		max-width: 680px;
-		width: 100%;
-		padding: 0 16px;
-	}
-
-	.vp-step {
-		display: flex;
-		gap: 24px;
-		align-items: flex-start;
-		opacity: 0.4;
-		transform: translateY(0);
-		transition: opacity 0.6s ease var(--vp-delay, 0ms), transform 0.6s ease var(--vp-delay, 0ms);
-	}
-
-	.vp-step.vp-active {
-		opacity: 1;
-	}
-
-	.vp-node-col {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		flex-shrink: 0;
-		width: 52px;
-	}
-
-	.vp-node {
-		width: 48px;
-		height: 48px;
-		border-radius: 50%;
-		background: rgba(74, 222, 128, 0.06);
-		border: 2px solid rgba(74, 222, 128, 0.15);
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		justify-content: center;
+	.section-validation {
+		background: #000000;
 		position: relative;
-		transition: all 0.6s ease;
+		overflow: hidden;
+		padding: 6rem 0 4rem;
 	}
 
-	.vp-active .vp-node {
-		background: rgba(74, 222, 128, 0.15);
-		border-color: rgba(74, 222, 128, 0.5);
-		box-shadow: 0 0 20px rgba(74, 222, 128, 0.3), 0 0 40px rgba(74, 222, 128, 0.1);
-		animation: vpNodePulse 2s ease-in-out infinite;
-	}
-
-	@keyframes vpNodePulse {
-		0%, 100% { box-shadow: 0 0 20px rgba(74, 222, 128, 0.3), 0 0 40px rgba(74, 222, 128, 0.1); }
-		50% { box-shadow: 0 0 30px rgba(74, 222, 128, 0.5), 0 0 60px rgba(74, 222, 128, 0.2); }
-	}
-
-	.vp-icon {
-		color: var(--green-400);
-		line-height: 0;
-	}
-
-	.vp-icon svg {
-		width: 20px;
-		height: 20px;
-	}
-
-	.vp-connector {
-		position: relative;
-		width: 2px;
-		height: 60px;
-		overflow: visible;
-	}
-
-	.vp-line {
-		width: 2px;
-		height: 100%;
-		background: rgba(74, 222, 128, 0.1);
-		transition: background 0.6s ease var(--vp-delay, 0ms);
-	}
-
-	.vp-active .vp-line {
-		background: rgba(74, 222, 128, 0.2);
-	}
-
-	.vp-pulse {
+	.sv-glow-top {
 		position: absolute;
+		top: -200px;
 		left: 50%;
 		transform: translateX(-50%);
-		width: 8px;
-		height: 8px;
-		border-radius: 50%;
-		background: rgba(134, 239, 172, 0.9);
-		box-shadow: 0 0 12px rgba(134, 239, 172, 0.8), 0 0 24px rgba(74, 222, 128, 0.4);
+		width: 800px;
+		height: 500px;
+		background: radial-gradient(ellipse, rgba(124, 58, 237, 0.12) 0%, transparent 70%);
+		pointer-events: none;
+	}
+
+	.sv-container {
+		position: relative;
+		z-index: 1;
+	}
+
+	.sv-title {
+		font-family: var(--font-mono), 'JetBrains Mono', monospace;
+		font-size: clamp(1.8rem, 4vw, 2.8rem);
+		font-weight: 700;
+		text-align: center;
+		background: linear-gradient(135deg, #00ff88 0%, #00cc6e 50%, #00ff88 100%);
+		-webkit-background-clip: text;
+		-webkit-text-fill-color: transparent;
+		background-clip: text;
+		margin-bottom: 0.75rem;
+		letter-spacing: -0.02em;
+	}
+
+	.sv-subtitle {
+		text-align: center;
+		color: rgba(255, 255, 255, 0.5);
+		font-size: 1.05rem;
+		margin-bottom: 3.5rem;
+		font-family: var(--font-mono), monospace;
+	}
+
+	.sv-steps {
+		display: flex;
+		flex-direction: column;
+		gap: 24px;
+		max-width: 900px;
+		margin: 0 auto;
+	}
+
+	/* Glassmorphism card */
+	.validation-card {
+		background: rgba(0, 255, 136, 0.03);
+		border: 1px solid rgba(0, 255, 136, 0.15);
+		backdrop-filter: blur(12px);
+		-webkit-backdrop-filter: blur(12px);
+		border-radius: 16px;
+		padding: 24px 32px;
+		display: flex;
+		gap: 32px;
+		align-items: center;
+		transition: all 0.4s ease;
+		position: relative;
+		overflow: hidden;
 		opacity: 0;
+		transform: translateY(20px);
 	}
 
-	.vp-active .vp-pulse {
+	.validation-card::before {
+		content: '';
+		position: absolute;
+		left: 0;
+		top: 0;
+		bottom: 0;
+		width: 3px;
+		background: #00ff88;
+		transform: scaleY(0);
+		transform-origin: top;
+		transition: transform 0.6s ease;
+	}
+
+	.validation-card.active {
 		opacity: 1;
-		animation: vpTravelDown 2s ease-in-out infinite;
+		transform: translateY(0);
 	}
 
-	@keyframes vpTravelDown {
-		0% { top: -4px; opacity: 0; }
-		10% { opacity: 1; }
-		90% { opacity: 1; }
-		100% { top: calc(100% - 4px); opacity: 0; }
+	.validation-card.active::before {
+		transform: scaleY(1);
 	}
 
-	.vp-content {
-		padding: 16px 24px;
-		background: var(--bg-card);
-		border: 1px solid rgba(74, 222, 128, 0.08);
-		border-left: 2px solid transparent;
-		border-radius: var(--radius);
+	.validation-card:hover {
+		box-shadow: 0 0 40px rgba(0, 255, 136, 0.12), 0 0 80px rgba(0, 255, 136, 0.05);
+		transform: translateY(-2px);
+		border-color: rgba(0, 255, 136, 0.3);
+	}
+
+	.vc-animation {
+		flex: 0 0 40%;
+		min-width: 0;
+	}
+
+	.vc-content {
 		flex: 1;
-		transform: translateX(-20px);
-		transition: border-color 0.6s ease var(--vp-delay, 0ms), background 0.6s ease var(--vp-delay, 0ms), transform 0.6s ease var(--vp-delay, 0ms), border-left-color 0.6s ease var(--vp-delay, 0ms);
+		min-width: 0;
 	}
 
-	.vp-active .vp-content {
-		border-color: rgba(74, 222, 128, 0.2);
-		border-left-color: rgba(74, 222, 128, 0.3);
-		background: var(--bg-card-hover);
-		transform: translateX(0);
+	.vc-header {
+		display: flex;
+		align-items: center;
+		gap: 12px;
+		margin-bottom: 12px;
 	}
 
-	.vp-content h4 {
-		font-size: 1rem;
+	.vc-num {
+		font-family: var(--font-mono), 'JetBrains Mono', monospace;
+		font-size: 0.8rem;
+		font-weight: 700;
+		color: #00ff88;
+		opacity: 0.6;
+		letter-spacing: 0.1em;
+	}
+
+	.vc-badge {
+		font-family: var(--font-mono), monospace;
+		font-size: 0.65rem;
 		font-weight: 600;
-		color: var(--text-primary);
-		margin-bottom: 0.25rem;
+		color: #00ff88;
+		background: rgba(0, 255, 136, 0.08);
+		border: 1px solid rgba(0, 255, 136, 0.2);
+		padding: 2px 10px;
+		border-radius: 100px;
+		letter-spacing: 0.1em;
+		text-transform: uppercase;
 	}
 
-	.vp-content p {
+	.vc-title {
+		font-size: 1.15rem;
+		font-weight: 600;
+		color: #ffffff;
+		margin-bottom: 8px;
+	}
+
+	.vc-desc {
 		font-size: 0.9rem;
+		color: rgba(255, 255, 255, 0.55);
+		line-height: 1.6;
+	}
+
+	/* CTA Button */
+	.sv-cta-wrap {
+		display: flex;
+		justify-content: center;
+		margin-top: 3rem;
+	}
+
+	.sv-cta-btn {
+		display: inline-flex;
+		align-items: center;
+		gap: 10px;
+		padding: 16px 40px;
+		background: rgba(0, 255, 136, 0.05);
+		border: 2px solid rgba(0, 255, 136, 0.4);
+		border-radius: 12px;
+		color: #00ff88;
+		font-family: var(--font-mono), monospace;
+		font-size: 1.05rem;
+		font-weight: 600;
+		cursor: pointer;
+		transition: all 0.3s ease;
+		position: relative;
+		overflow: visible;
+		letter-spacing: 0.02em;
+		backdrop-filter: blur(8px);
+		-webkit-backdrop-filter: blur(8px);
+	}
+
+	.sv-cta-btn:hover {
+		background: rgba(0, 255, 136, 0.1);
+		border-color: rgba(0, 255, 136, 0.7);
+		box-shadow: 0 0 30px rgba(0, 255, 136, 0.2), 0 0 60px rgba(0, 255, 136, 0.08);
+		transform: scale(1.03);
+	}
+
+	.sv-cta-btn:active {
+		transform: scale(0.98);
+	}
+
+	/* Particle explosion from button */
+	:global(.sv-particle) {
+		position: absolute;
+		width: 6px;
+		height: 6px;
+		border-radius: 50%;
+		background: #00ff88;
+		pointer-events: none;
+		top: 50%;
+		left: 50%;
+		animation: svParticleExplode 0.8s ease-out var(--delay, 0s) forwards;
+	}
+
+	:global(.sv-particle:nth-child(odd)) {
+		background: #7c3aed;
+	}
+
+	:global(.sv-particle:nth-child(3n)) {
+		background: #ffd700;
+		width: 4px;
+		height: 4px;
+	}
+
+	@keyframes svParticleExplode {
+		0% {
+			transform: translate(0, 0) scale(1);
+			opacity: 1;
+		}
+		100% {
+			transform: translate(var(--px, 100px), var(--py, -100px)) scale(0);
+			opacity: 0;
+		}
 	}
 
 	/* ============================================ */
@@ -2344,107 +2419,7 @@
 		letter-spacing: 0.02em;
 	}
 
-	/* ============================================ */
-	/* ENHANCED VALIDATION PIPELINE                 */
-	/* ============================================ */
-	.vp-node-ring {
-		position: absolute;
-		inset: -4px;
-		border-radius: 50%;
-		border: 2px solid transparent;
-		transition: border-color 0.8s ease var(--vp-delay, 0ms);
-	}
-
-	.vp-active .vp-node-ring {
-		border-color: rgba(74, 222, 128, 0.3);
-		animation: vpRingSpin 3s linear infinite;
-	}
-
-	@keyframes vpRingSpin {
-		0% { transform: rotate(0deg); border-color: rgba(74, 222, 128, 0.3); }
-		50% { border-color: rgba(74, 222, 128, 0.6); }
-		100% { transform: rotate(360deg); border-color: rgba(74, 222, 128, 0.3); }
-	}
-
-	.vp-node-inner {
-		position: relative;
-		z-index: 1;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-	}
-
-	.vp-node-glow {
-		position: absolute;
-		inset: -12px;
-		border-radius: 50%;
-		background: radial-gradient(circle, rgba(74, 222, 128, 0.2) 0%, transparent 70%);
-		opacity: 0;
-		transition: opacity 0.8s ease var(--vp-delay, 0ms);
-	}
-
-	.vp-active .vp-node-glow {
-		opacity: 1;
-		animation: vpGlowPulse 2.5s ease-in-out infinite;
-	}
-
-	@keyframes vpGlowPulse {
-		0%, 100% { opacity: 0.6; transform: scale(1); }
-		50% { opacity: 1; transform: scale(1.3); }
-	}
-
-	.vp-line-fill {
-		position: absolute;
-		top: 0;
-		left: 0;
-		width: 2px;
-		height: 0%;
-		background: linear-gradient(180deg, rgba(74, 222, 128, 0.6), rgba(34, 197, 94, 0.8));
-		box-shadow: 0 0 8px rgba(74, 222, 128, 0.4);
-		transition: height 1s ease var(--vp-delay, 0ms);
-	}
-
-	.vp-active .vp-line-fill {
-		height: 100%;
-	}
-
-	.vp-connector {
-		position: relative;
-	}
-
-	.vp-success-badge {
-		display: inline-flex;
-		align-items: center;
-		gap: 6px;
-		margin-top: 0.75rem;
-		padding: 4px 12px;
-		background: rgba(74, 222, 128, 0.1);
-		border: 1px solid rgba(74, 222, 128, 0.3);
-		border-radius: 100px;
-		font-family: var(--font-mono);
-		font-size: 0.75rem;
-		font-weight: 600;
-		color: var(--green-400);
-		letter-spacing: 0.05em;
-	}
-
-	.vp-active[data-vp-step="4"] .vp-success-badge {
-		animation: vpSuccessAppear 0.6s ease 1s both;
-	}
-
-	@keyframes vpSuccessAppear {
-		from { opacity: 0; transform: scale(0.8); }
-		to { opacity: 1; transform: scale(1); }
-	}
-
-	/* Enhanced step slide-in */
-	.vp-step {
-		transform: translateX(-30px);
-	}
-
-	.vp-step.vp-active {
-		transform: translateX(0);
-	}
+	/* (old validation pipeline styles removed — replaced by .section-validation) */
 
 	/* ============================================ */
 	/* JUDGES                                       */
@@ -2696,12 +2671,16 @@
 			gap: 16px;
 		}
 
-		.vp-step {
-			gap: 12px;
+		/* Validation cards — mobile stack */
+		.validation-card {
+			flex-direction: column;
+			padding: 20px;
+			gap: 16px;
 		}
 
-		.vp-connector {
-			height: 40px;
+		.vc-animation {
+			flex: none;
+			width: 100%;
 		}
 
 		.games-grid {
