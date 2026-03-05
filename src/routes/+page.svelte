@@ -735,32 +735,36 @@
 		<!-- Still have questions? -->
 		<div class="faq-footer">
 			<h3 class="faq-footer-title">Still have questions?</h3>
-			<p class="faq-footer-desc">Ask an AI that has read our full documentation, or join the community.</p>
+			<p class="faq-footer-desc">Copy the prompt below and paste it into any AI assistant — it includes a link to our full documentation.</p>
 
-			<div class="ai-links" id="ai-links">
-				<div class="ai-link-row">
-					<a href="https://chat.openai.com/?prompt=Please%20read%20this%20Markdown%20document%20and%20answer%20questions%20about%20it:%20https://raw.githubusercontent.com/game-of-prompts/.github/refs/heads/main/profile/README.md" class="btn btn-ai" target="_blank" rel="noopener">
-						<span class="ai-link-label">Ask ChatGPT</span>
-					</a>
-					<!-- svelte-ignore a11y_click_events_have_key_events -->
-					<!-- svelte-ignore a11y_no_static_element_interactions -->
-					<span class="copy-btn" data-copy-url="https://chat.openai.com/?prompt=Please%20read%20this%20Markdown%20document%20and%20answer%20questions%20about%20it:%20https://raw.githubusercontent.com/game-of-prompts/.github/refs/heads/main/profile/README.md">
-						<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" /><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1" /></svg>
-						<span class="copy-label">Copy</span>
-					</span>
-				</div>
-				<div class="ai-link-row">
-					<a href="https://claude.ai/new?q=Please%20read%20this%20Markdown%20document%20and%20answer%20questions%20about%20it:%20https://raw.githubusercontent.com/game-of-prompts/.github/refs/heads/main/profile/README.md" class="btn btn-ai" target="_blank" rel="noopener">
-						<span class="ai-link-label">Ask Claude</span>
-					</a>
-					<!-- svelte-ignore a11y_click_events_have_key_events -->
-					<!-- svelte-ignore a11y_no_static_element_interactions -->
-					<span class="copy-btn" data-copy-url="https://claude.ai/new?q=Please%20read%20this%20Markdown%20document%20and%20answer%20questions%20about%20it:%20https://raw.githubusercontent.com/game-of-prompts/.github/refs/heads/main/profile/README.md">
-						<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" /><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1" /></svg>
-						<span class="copy-label">Copy</span>
+			<!-- Primary: copy prompt -->
+			<div class="faq-copy-prompt">
+				<!-- svelte-ignore a11y_click_events_have_key_events -->
+				<!-- svelte-ignore a11y_no_static_element_interactions -->
+				<div class="prompt-box copy-btn" data-copy-url="Please read this Markdown document and answer questions about it: https://raw.githubusercontent.com/game-of-prompts/.github/refs/heads/main/profile/README.md">
+					<span class="prompt-text">Please read this Markdown document and answer questions about it: https://raw.githubusercontent.com/game-of-prompts/.github/refs/heads/main/profile/README.md</span>
+					<span class="prompt-copy-icon">
+						<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" /><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1" /></svg>
+						<span class="copy-label">Copy prompt</span>
 					</span>
 				</div>
 			</div>
+
+			<!-- Secondary: open directly -->
+			<p class="faq-or-label">or open directly in:</p>
+			<div class="ai-links-secondary">
+				<a href="https://chat.openai.com/?prompt=Please%20read%20this%20Markdown%20document%20and%20answer%20questions%20about%20it:%20https://raw.githubusercontent.com/game-of-prompts/.github/refs/heads/main/profile/README.md" class="btn-ai-secondary" target="_blank" rel="noopener">
+					ChatGPT ↗
+				</a>
+				<a href="https://claude.ai/new?q=Please%20read%20this%20Markdown%20document%20and%20answer%20questions%20about%20it:%20https://raw.githubusercontent.com/game-of-prompts/.github/refs/heads/main/profile/README.md" class="btn-ai-secondary" target="_blank" rel="noopener">
+					Claude ↗
+				</a>
+			</div>
+
+			<!-- Disclaimer -->
+			<p class="faq-disclaimer">
+				⚠️ AI responses may not be fully accurate. Always refer to the <a href="https://github.com/game-of-prompts/.github/blob/main/profile/README.md" target="_blank" rel="noopener">official documentation</a> for authoritative information.
+			</p>
 
 			<div class="telegram-link">
 				<a href="https://t.me/unstop_bots" class="btn btn-secondary" target="_blank" rel="noopener" use:hoverCorners>
@@ -2632,6 +2636,109 @@
 	.telegram-link {
 		padding-top: 1rem;
 		border-top: 1px solid rgba(74, 222, 128, 0.08);
+	}
+
+	/* ===== FAQ FOOTER — PROMPT COPY ===== */
+	.faq-copy-prompt {
+		margin: 1.5rem 0 0.75rem;
+		width: 100%;
+		max-width: 680px;
+	}
+
+	.prompt-box {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 16px;
+		padding: 14px 18px;
+		background: rgba(74, 222, 128, 0.04);
+		border: 1px solid rgba(74, 222, 128, 0.2);
+		border-radius: 12px;
+		cursor: pointer;
+		transition: all 0.25s;
+		width: 100%;
+		text-align: left;
+	}
+
+	.prompt-box:hover {
+		background: rgba(74, 222, 128, 0.08);
+		border-color: rgba(74, 222, 128, 0.4);
+		box-shadow: 0 0 20px rgba(74, 222, 128, 0.08);
+	}
+
+	.prompt-box.copied {
+		border-color: var(--green-400);
+		background: rgba(74, 222, 128, 0.1);
+	}
+
+	.prompt-text {
+		font-family: var(--font-mono);
+		font-size: 0.75rem;
+		color: var(--text-secondary);
+		line-height: 1.5;
+		flex: 1;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+
+	.prompt-copy-icon {
+		display: inline-flex;
+		align-items: center;
+		gap: 6px;
+		font-family: var(--font-mono);
+		font-size: 0.75rem;
+		font-weight: 600;
+		color: var(--green-400);
+		white-space: nowrap;
+		flex-shrink: 0;
+	}
+
+	.faq-or-label {
+		font-size: 0.8rem;
+		color: var(--text-muted);
+		margin: 0.5rem 0;
+	}
+
+	.ai-links-secondary {
+		display: flex;
+		gap: 12px;
+		margin-bottom: 1rem;
+		flex-wrap: wrap;
+	}
+
+	.btn-ai-secondary {
+		font-family: var(--font-mono);
+		font-size: 0.8rem;
+		font-weight: 500;
+		color: var(--text-secondary);
+		text-decoration: none;
+		padding: 6px 14px;
+		border: 1px solid rgba(255,255,255,0.1);
+		border-radius: 8px;
+		transition: all 0.2s;
+	}
+
+	.btn-ai-secondary:hover {
+		color: var(--green-400);
+		border-color: rgba(74, 222, 128, 0.3);
+		background: rgba(74, 222, 128, 0.05);
+	}
+
+	.faq-disclaimer {
+		font-size: 0.78rem;
+		color: var(--text-muted);
+		margin-bottom: 1.25rem;
+		opacity: 0.7;
+	}
+
+	.faq-disclaimer a {
+		color: var(--green-400);
+		text-decoration: none;
+	}
+
+	.faq-disclaimer a:hover {
+		text-decoration: underline;
 	}
 
 	/* ============================================ */
