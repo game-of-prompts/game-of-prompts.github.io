@@ -1418,7 +1418,7 @@
 	/* SCORE VALIDATION — CYBERPUNK SECTION         */
 	/* ============================================ */
 	.section-validation {
-		background: #000000;
+		background: #000000 !important;
 		position: relative;
 		overflow: hidden;
 		padding: 6rem 0 4rem;
@@ -1445,6 +1445,7 @@
 		font-size: clamp(1.8rem, 4vw, 2.8rem);
 		font-weight: 700;
 		text-align: center;
+		color: #00ff88;
 		background: linear-gradient(135deg, #00ff88 0%, #00cc6e 50%, #00ff88 100%);
 		-webkit-background-clip: text;
 		-webkit-text-fill-color: transparent;
@@ -1455,7 +1456,7 @@
 
 	.sv-subtitle {
 		text-align: center;
-		color: rgba(255, 255, 255, 0.5);
+		color: rgba(255, 255, 255, 0.6) !important;
 		font-size: 1.05rem;
 		margin-bottom: 3.5rem;
 		font-family: var(--font-mono), monospace;
@@ -1557,13 +1558,13 @@
 	.vc-title {
 		font-size: 1.15rem;
 		font-weight: 600;
-		color: #ffffff;
+		color: #ffffff !important;
 		margin-bottom: 8px;
 	}
 
 	.vc-desc {
 		font-size: 0.9rem;
-		color: rgba(255, 255, 255, 0.55);
+		color: rgba(255, 255, 255, 0.55) !important;
 		line-height: 1.6;
 	}
 
