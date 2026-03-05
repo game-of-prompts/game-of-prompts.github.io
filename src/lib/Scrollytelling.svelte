@@ -36,8 +36,8 @@
 			icon: 'blockchain'
 		},
 		{
-			title: 'Winner claims the prize',
-			desc: 'The game secret is revealed. Smart contracts verify scores and distribute prizes automatically.',
+			title: 'Winner takes the pot',
+			desc: 'The game secret is revealed. Smart contracts verify scores and the winner receives all participation fees, minus creator commission and judge fees.',
 			icon: 'trophy'
 		}
 	];

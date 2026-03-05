@@ -13,22 +13,49 @@
 	function startVideo() { videoStarted = true; }
 
 	onMount(() => {
-		// IntersectionObserver for validation pipeline steps
-		const pipelineSteps = document.querySelectorAll('.vp-step');
-		if (pipelineSteps.length === 0) return;
+		// IntersectionObserver for validation pipeline — staggered cascade
+		const pipeline = document.getElementById('validation-pipeline');
+		if (!pipeline) return;
+
+		const pipelineSteps = pipeline.querySelectorAll('.vp-step');
+		let activated = false;
 
 		const observer = new IntersectionObserver(
 			(entries) => {
 				entries.forEach((entry) => {
-					if (entry.isIntersecting) {
-						entry.target.classList.add('vp-active');
+					if (entry.isIntersecting && !activated) {
+						activated = true;
+						// Cascade activation with delays
+						pipelineSteps.forEach((step, idx) => {
+							window.setTimeout(() => {
+								step.classList.add('vp-active');
+							}, idx * 400);
+						});
 					}
 				});
 			},
-			{ threshold: 0.4, rootMargin: '0px 0px -10% 0px' }
+			{ threshold: 0.2, rootMargin: '0px 0px -5% 0px' }
 		);
 
-		pipelineSteps.forEach((step) => observer.observe(step));
+		observer.observe(pipeline);
+
+		// Copy button handlers for AI links
+		const copyBtns = document.querySelectorAll('.copy-btn[data-copy-url]');
+		copyBtns.forEach((btn) => {
+			btn.addEventListener('click', () => {
+				const url = btn.getAttribute('data-copy-url');
+				if (url) {
+					navigator.clipboard.writeText(url);
+					btn.classList.add('copied');
+					const label = btn.querySelector('.copy-label');
+					if (label) label.textContent = 'Copied!';
+					window.setTimeout(() => {
+						btn.classList.remove('copied');
+						if (label) label.textContent = 'Copy';
+					}, 2000);
+				}
+			});
+		});
 
 		return () => observer.disconnect();
 	});
@@ -53,19 +80,13 @@
 	<ParticleNetwork />
 	<div class="hero-glow"></div>
 	<div class="hero-content container">
-		<div class="hero-logo">
-			<div class="hero-logo-mark">
-				<img src="/gop-logo.png" alt="Game of Prompts" class="hero-logo-img" />
-			</div>
-			<span class="hero-logo-name">GAME OF PROMPTS</span>
+		<div class="hero-title-block">
+			<h1 class="hero-main-title" data-text="GAME OF PROMPTS">
+				<span class="hero-title-line">GAME OF</span>
+				<span class="hero-title-line hero-title-accent">PROMPTS</span>
+			</h1>
+			<p class="hero-tagline">Where <span class="gradient-text">Blockchain</span> Meets <span class="gradient-text">AI Competitions</span></p>
 		</div>
-		<div class="hero-badge">
-			<span class="badge-dot"></span>
-			Powered by Ergo & Celaut
-		</div>
-		<h1>
-			Where <span class="gradient-text">Blockchain</span> Meets<br /><span class="gradient-text">AI Competitions</span>
-		</h1>
 		<p class="hero-description">
 			A revolutionary competitive platform where creators design game-services to evaluate AI solvers,
 			while players build solver-services to maximize their scores—all powered by the Ergo blockchain
@@ -141,7 +162,7 @@
 		<div class="narrative-content">
 			<h2 class="narrative-title">A New Era of Trustless Competition</h2>
 			<p class="narrative-text">
-				Game of Prompts is built on a foundation of two powerful technologies: the <a href="https://github.com/celaut-project" target="_blank" rel="noopener">Celaut paradigm</a> for decentralized, reproducible computation, and the <a href="https://ergoblockchain.org/" target="_blank" rel="noopener">Ergo blockchain</a> for on-chain verification and prize distribution.
+				Game of Prompts is built on a foundation of two powerful technologies: the <a href="https://github.com/celaut-project" target="_blank" rel="noopener">Celaut paradigm</a> for decentralized, reproducible computation, and the <a href="https://ergoblockchain.org/" target="_blank" rel="noopener">Ergo blockchain</a> for on-chain verification and trustless fund distribution.
 			</p>
 			<p class="narrative-text">
 				This unique combination creates a truly trustless environment. No central authority is needed to verify results. Every move, every solution, every outcome is recorded and validated on the blockchain, ensuring absolute fairness and transparency.
@@ -239,12 +260,20 @@
 			description: 'Create a challenge with measurable scoring and high scenario variability (CDE) to discourage hardcoded solutions.'
 		},
 		{
+			title: 'Write the Paper',
+			description: 'Publish a document with all game instructions, rules, and evaluation criteria. Players must be able to understand the challenge BEFORE they participate.'
+		},
+		{
 			title: 'Generate a Secret',
 			description: 'Create a unique 256-bit secret for cryptographic commitments and score validation.'
 		},
 		{
 			title: 'Package & Publish',
 			description: 'Package your game as a Celaut service and publish it using GoP Web by sharing game parameters, fee, deadline, and commission.'
+		},
+		{
+			title: 'Reveal the Secret',
+			description: 'After the deadline ends, reveal the secret S on-chain to resolve the game. This triggers score validation and allows the smart contract to determine the winner.'
 		}
 	]}
 />
@@ -258,20 +287,24 @@
 	title="The Player's Journey"
 	steps={[
 		{
-			title: 'Browse GoP Web',
-			description: 'Find interesting games based on description, rules, participation fees, and creator reputation. Download the Game Service to explore mechanics.'
+			title: 'Browse & Read the Paper',
+			description: 'Find interesting games on GoP Web. Read the creator\'s Paper to understand the challenge, rules, and evaluation criteria before committing.'
 		},
 		{
-			title: 'Design a Solver Service',
-			description: 'Implement strategies to maximize your score in the game.'
+			title: 'Register Solver ID (Free)',
+			description: 'Submit your Solver ID on-chain during the ceremony phase. This is a free pre-commitment — no cost, no risk. It must happen BEFORE the game seed is revealed to prevent cheating.'
+		},
+		{
+			title: 'Seed is Revealed',
+			description: 'After the ceremony phase ends, the game seed is revealed. Now you know the specific challenge parameters you\'ll be evaluated against.'
 		},
 		{
 			title: 'Run the Game Service',
-			description: 'Package and send your solver to generate the solver ID, score list, log hash, and cryptographic commitment.'
+			description: 'Run the game service with the revealed seed. Design and optimize your solver to maximize your score against the actual challenge.'
 		},
 		{
-			title: 'Publish Your Results',
-			description: 'Submit your results on the Ergo blockchain containing the game data and participation fee before the deadline.'
+			title: 'Submit Commitment & Pay Fee',
+			description: 'If you want to compete, submit your cryptographic commitment on-chain and pay the participation fee. All fees go into the pot — the winner takes all (minus creator commission and judge fees).'
 		}
 	]}
 />
@@ -336,7 +369,7 @@
 			</ScrollAnimation>
 		</div>
 
-		<!-- Score Validation Mechanism — Visual Pipeline -->
+		<!-- Score Validation Mechanism — Cinematic Pipeline -->
 		<ScrollAnimation>
 			<h3 class="validation-title">Score Validation Mechanism</h3>
 		</ScrollAnimation>
@@ -346,30 +379,34 @@
 				{ num: 1, title: 'Player Participation', desc: 'Player publishes their participation on the Ergo blockchain.', icon: 'chain' },
 				{ num: 2, title: 'Creator Reveals Secret', desc: 'After the deadline, the creator reveals the game secret in the resolution transaction.', icon: 'key' },
 				{ num: 3, title: 'Smart Contract Validation', desc: 'The game contract computes a commitment for each score using the solver ID, score value, hashed logs, and revealed secret.', icon: 'contract' },
-				{ num: 4, title: 'Score Verification', desc: 'When the score commitment matches the participation commitment, that score is validated as authentic. The highest validated score wins.', icon: 'shield' },
-				{ num: 5, title: 'Winner Revealed', desc: 'The highest validated score wins. This deterministic on-chain process ensures transparency while preventing manipulation.', icon: 'trophy' }
+				{ num: 4, title: 'Score Verification', desc: 'When the score commitment matches the participation commitment, that score is validated as authentic.', icon: 'shield' },
+				{ num: 5, title: 'Winner Takes the Pot', desc: 'The highest validated score wins. All participation fees are distributed automatically — winner takes all, minus creator commission and judge fees.', icon: 'trophy' }
 			] as step, idx}
-				<div class="vp-step" data-vp-step={idx} style="--vp-delay: {idx * 150}ms">
+				<div class="vp-step" data-vp-step={idx} style="--vp-delay: {idx * 200}ms; --vp-idx: {idx}">
 					<div class="vp-node-col">
 						<div class="vp-node" data-vp-node={idx}>
-							<span class="vp-node-num">{step.num}</span>
-							<div class="vp-icon">
-								{#if step.icon === 'chain'}
-									<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71" /><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71" /></svg>
-								{:else if step.icon === 'key'}
-									<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 11-7.778 7.778 5.5 5.5 0 017.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4" /></svg>
-								{:else if step.icon === 'contract'}
-									<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="16 18 22 12 16 6" /><polyline points="8 6 2 12 8 18" /><line x1="14" y1="4" x2="10" y2="20" /></svg>
-								{:else if step.icon === 'shield'}
-									<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" /><polyline points="9 12 11 14 15 10" /></svg>
-								{:else if step.icon === 'trophy'}
-									<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 9H4.5a2.5 2.5 0 010-5H6" /><path d="M18 9h1.5a2.5 2.5 0 000-5H18" /><path d="M4 22h16" /><path d="M10 22V17" /><path d="M14 22V17" /><path d="M6 2h12v7a6 6 0 01-12 0V2z" /></svg>
-								{/if}
+							<div class="vp-node-ring"></div>
+							<div class="vp-node-inner">
+								<div class="vp-icon">
+									{#if step.icon === 'chain'}
+										<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71" /><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71" /></svg>
+									{:else if step.icon === 'key'}
+										<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 11-7.778 7.778 5.5 5.5 0 017.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4" /></svg>
+									{:else if step.icon === 'contract'}
+										<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="16 18 22 12 16 6" /><polyline points="8 6 2 12 8 18" /><line x1="14" y1="4" x2="10" y2="20" /></svg>
+									{:else if step.icon === 'shield'}
+										<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" /><polyline points="9 12 11 14 15 10" /></svg>
+									{:else if step.icon === 'trophy'}
+										<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 9H4.5a2.5 2.5 0 010-5H6" /><path d="M18 9h1.5a2.5 2.5 0 000-5H18" /><path d="M4 22h16" /><path d="M10 22V17" /><path d="M14 22V17" /><path d="M6 2h12v7a6 6 0 01-12 0V2z" /></svg>
+									{/if}
+								</div>
 							</div>
+							<div class="vp-node-glow"></div>
 						</div>
 						{#if idx < 4}
 							<div class="vp-connector">
 								<div class="vp-line"></div>
+								<div class="vp-line-fill"></div>
 								<div class="vp-pulse"></div>
 							</div>
 						{/if}
@@ -377,6 +414,12 @@
 					<div class="vp-content">
 						<h4>{step.title}</h4>
 						<p>{step.desc}</p>
+						{#if idx === 4}
+							<div class="vp-success-badge">
+								<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12" /></svg>
+								<span>Validated On-Chain</span>
+							</div>
+						{/if}
 					</div>
 				</div>
 			{/each}
@@ -481,6 +524,26 @@
 	</div>
 </section>
 
+<section class="game-type-fullscreen game-type-resource" id="feature-resource">
+	<div class="gt-bg-glow"></div>
+	<div class="gt-animation-canvas">
+		<GameAnimation type="resource" />
+	</div>
+	<div class="gt-content">
+		<span class="gt-icon" aria-hidden="true">⚙️</span>
+		<span class="gt-label">Feature 01 · <span class="feature-tag-status active">Available</span></span>
+		<h2 class="gt-title">Resource Limitation</h2>
+		<p class="gt-desc">Technical challenge by constraining computational resources. Efficiency is king.</p>
+		<ul class="gt-bullets">
+			<li>Game creator sets specific limits on computational resources</li>
+			<li>Constraints: maximum RAM, CPU time, or service dependencies</li>
+			<li>Forces players to develop highly efficient, optimized solutions</li>
+			<li>Adds a significant engineering challenge to the game</li>
+		</ul>
+	</div>
+	<div class="gt-grid-lines" aria-hidden="true"></div>
+</section>
+
 <section class="game-type-fullscreen game-type-poker" id="feature-poker">
 	<div class="gt-bg-glow"></div>
 	<div class="gt-animation-canvas">
@@ -488,7 +551,7 @@
 	</div>
 	<div class="gt-content">
 		<span class="gt-icon" aria-hidden="true">🃏</span>
-		<span class="gt-label">Feature 01 · <span class="feature-tag-status coming-soon">Coming Soon</span></span>
+		<span class="gt-label">Feature 02 · <span class="feature-tag-status coming-soon">Coming Soon</span></span>
 		<h2 class="gt-title">Poker Mode</h2>
 		<p class="gt-desc">Strategic participation with risk and reward. Bluff, bet, and multiply your score.</p>
 		<ul class="gt-bullets">
@@ -502,26 +565,6 @@
 	<div class="gt-grid-lines" aria-hidden="true"></div>
 </section>
 
-<section class="game-type-fullscreen game-type-resource" id="feature-resource">
-	<div class="gt-bg-glow"></div>
-	<div class="gt-animation-canvas">
-		<GameAnimation type="resource" />
-	</div>
-	<div class="gt-content">
-		<span class="gt-icon" aria-hidden="true">⚙️</span>
-		<span class="gt-label">Feature 02 · <span class="feature-tag-status active">Available</span></span>
-		<h2 class="gt-title">Resource Limitation</h2>
-		<p class="gt-desc">Technical challenge by constraining computational resources. Efficiency is king.</p>
-		<ul class="gt-bullets">
-			<li>Game creator sets specific limits on computational resources</li>
-			<li>Constraints: maximum RAM, CPU time, or service dependencies</li>
-			<li>Forces players to develop highly efficient, optimized solutions</li>
-			<li>Adds a significant engineering challenge to the game</li>
-		</ul>
-	</div>
-	<div class="gt-grid-lines" aria-hidden="true"></div>
-</section>
-
 <section class="game-type-fullscreen game-type-payattempt" id="feature-payattempt">
 	<div class="gt-bg-glow"></div>
 	<div class="gt-animation-canvas">
@@ -530,7 +573,7 @@
 	<div class="gt-content">
 		<span class="gt-icon" aria-hidden="true">🔬</span>
 		<span class="gt-label">Feature 03 · <span class="feature-tag-status research">Under Research</span></span>
-		<h2 class="gt-title">Pay-per-attempt</h2>
+		<h2 class="gt-title">Pay-per-Attempt</h2>
 		<p class="gt-desc">Upcoming payment model where each game attempt costs tokens. Strategic resource allocation meets skill.</p>
 		<ul class="gt-bullets">
 			<li>Each attempt requires a token deposit</li>
@@ -551,15 +594,186 @@
 		<span class="gt-icon" aria-hidden="true">🔗</span>
 		<span class="gt-label">Feature 04 · <span class="feature-tag-status research">Under Research</span></span>
 		<h2 class="gt-title">Multi-chain</h2>
-		<p class="gt-desc">Cross-chain capabilities with Ergo as the foundation. Bridge games and prizes across blockchains.</p>
+		<p class="gt-desc">Cross-chain capabilities with Ergo as the foundation. Bridge games and funds across blockchains.</p>
 		<ul class="gt-bullets">
 			<li>Ergo-centric architecture with cross-chain bridges</li>
 			<li>Accept participation fees from multiple chains</li>
-			<li>Distribute prizes across different blockchain networks</li>
+			<li>Distribute winnings across different blockchain networks</li>
 			<li>Unified scoring and validation on Ergo</li>
 		</ul>
 	</div>
 	<div class="gt-grid-lines" aria-hidden="true"></div>
+</section>
+
+<SectionTransition height={100} />
+
+<!-- ============================================ -->
+<!-- JUDGES                                       -->
+<!-- ============================================ -->
+<section id="judges" class="section" style="scroll-margin-top: 80px;">
+	<div class="container">
+		<ScrollAnimation>
+			<span class="section-label">Trust & Accountability</span>
+			<h2 class="section-title">Judges</h2>
+			<p class="section-subtitle">Judges audit the Creator — not the players. They keep the system honest.</p>
+		</ScrollAnimation>
+
+		<div class="judges-grid">
+			<ScrollAnimation delay={0}>
+				<div class="card judges-card" use:hoverCorners>
+					<div class="judges-icon">
+						<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+							<circle cx="12" cy="12" r="10" />
+							<path d="M12 16v-4M12 8h.01" />
+						</svg>
+					</div>
+					<h3>Who Are Judges?</h3>
+					<p>Entities nominated by the Creator who audit the resolution phase. They verify the Creator's game service generated valid proofs and scores.</p>
+				</div>
+			</ScrollAnimation>
+
+			<ScrollAnimation delay={150}>
+				<div class="card judges-card" use:hoverCorners>
+					<div class="judges-icon">
+						<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+							<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+							<path d="M9 12l2 2 4-4" />
+						</svg>
+					</div>
+					<h3>Creator Accountability</h3>
+					<p>If a Judge catches fraud — a faulty game service or invalid proof — they receive the Creator's commission as reward. The system penalizes the Creator, not honest players.</p>
+				</div>
+			</ScrollAnimation>
+
+			<ScrollAnimation delay={300}>
+				<div class="card judges-card" use:hoverCorners>
+					<div class="judges-icon">
+						<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+							<path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4-4v2" />
+							<circle cx="9" cy="7" r="4" />
+							<path d="M22 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75" />
+						</svg>
+					</div>
+					<h3>Player Protection</h3>
+					<p>Players cannot be penalized by judges in normal operation. Judges exist to protect players from dishonest creators, not the other way around.</p>
+				</div>
+			</ScrollAnimation>
+		</div>
+	</div>
+</section>
+
+<SectionTransition height={100} />
+
+<!-- ============================================ -->
+<!-- FAQ                                          -->
+<!-- ============================================ -->
+<section id="faq" class="section" style="scroll-margin-top: 80px;">
+	<div class="container">
+		<ScrollAnimation>
+			<span class="section-label">FAQ</span>
+			<h2 class="section-title">Frequently Asked Questions</h2>
+		</ScrollAnimation>
+
+		<div class="faq-container">
+			<div class="faq-group">
+				<h4 class="faq-group-title">General</h4>
+				<details class="faq-item">
+					<summary class="faq-question">What is Game of Prompts?</summary>
+					<div class="faq-answer"><p>A bot competition audited by blockchain. Creators design game-services to evaluate AI solvers, while players build solver-services to maximize their scores — all verified on the Ergo blockchain.</p></div>
+				</details>
+				<details class="faq-item">
+					<summary class="faq-question">What is the "Ceremony Phase"?</summary>
+					<div class="faq-answer"><p>The initial period where players register their Solver IDs to add randomness to the seed. This prevents the Creator from pre-calculating solutions and ensures fair competition.</p></div>
+				</details>
+				<details class="faq-item">
+					<summary class="faq-question">What do I need to play?</summary>
+					<div class="faq-answer"><p>An Ergo Wallet (with some ERG for participation fees) and a Celaut Node to run game and solver services locally.</p></div>
+				</details>
+			</div>
+
+			<div class="faq-group">
+				<h4 class="faq-group-title">Security</h4>
+				<details class="faq-item">
+					<summary class="faq-question">How do I know the game is fair?</summary>
+					<div class="faq-answer"><p>The game rules and hashS are registered on-chain from the start. They are immutable — no one can change them after publication.</p></div>
+				</details>
+				<details class="faq-item">
+					<summary class="faq-question">Can the Creator steal the funds?</summary>
+					<div class="faq-answer"><p>No. Funds are locked in a Smart Contract, not the Creator's wallet. Distribution is handled atomically by the contract when the game resolves.</p></div>
+				</details>
+				<details class="faq-item">
+					<summary class="faq-question">What if the Creator disappears?</summary>
+					<div class="faq-answer"><p>After a Grace Period, players can trigger a Refund Action to recover their participation fees from the smart contract.</p></div>
+				</details>
+			</div>
+
+			<div class="faq-group">
+				<h4 class="faq-group-title">Judges</h4>
+				<details class="faq-item">
+					<summary class="faq-question">Who are the Judges?</summary>
+					<div class="faq-answer"><p>Entities nominated by the Creator who audit the resolution phase. They verify that the game service generated valid proofs.</p></div>
+				</details>
+				<details class="faq-item">
+					<summary class="faq-question">Why do Judges earn money for invalidating a participation?</summary>
+					<div class="faq-answer"><p>They detect Creator fraud — their incentive is to catch faulty game services. When they find issues, they receive the Creator's commission as reward.</p></div>
+				</details>
+				<details class="faq-item">
+					<summary class="faq-question">Can I be penalized as a player?</summary>
+					<div class="faq-answer"><p>The system penalizes the Creator/Game Service, not honest players. Judges audit the Creator, not you.</p></div>
+				</details>
+			</div>
+
+			<div class="faq-group">
+				<h4 class="faq-group-title">Economy</h4>
+				<details class="faq-item">
+					<summary class="faq-question">How is the winner calculated?</summary>
+					<div class="faq-answer"><p>Highest Time-Weighted Score: Score × (TimeWeight + RemainingTime). Submit early and score high for the best result.</p></div>
+				</details>
+				<details class="faq-item">
+					<summary class="faq-question">When do I receive my winnings?</summary>
+					<div class="faq-answer"><p>Immediately upon the End Game action. The Smart Contract atomically distributes all funds — the winner receives all participation fees minus creator commission and judge fees.</p></div>
+				</details>
+			</div>
+		</div>
+
+		<!-- Still have questions? -->
+		<div class="faq-footer">
+			<h3 class="faq-footer-title">Still have questions?</h3>
+			<p class="faq-footer-desc">Ask an AI that has read our full documentation, or join the community.</p>
+
+			<div class="ai-links" id="ai-links">
+				<div class="ai-link-row">
+					<a href="https://chat.openai.com/?prompt=Please%20read%20this%20Markdown%20document%20and%20answer%20questions%20about%20it:%20https://raw.githubusercontent.com/game-of-prompts/.github/refs/heads/main/profile/README.md" class="btn btn-ai" target="_blank" rel="noopener">
+						<span class="ai-link-label">Ask ChatGPT</span>
+					</a>
+					<!-- svelte-ignore a11y_click_events_have_key_events -->
+					<!-- svelte-ignore a11y_no_static_element_interactions -->
+					<span class="copy-btn" data-copy-url="https://chat.openai.com/?prompt=Please%20read%20this%20Markdown%20document%20and%20answer%20questions%20about%20it:%20https://raw.githubusercontent.com/game-of-prompts/.github/refs/heads/main/profile/README.md">
+						<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" /><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1" /></svg>
+						<span class="copy-label">Copy</span>
+					</span>
+				</div>
+				<div class="ai-link-row">
+					<a href="https://claude.ai/new?q=Please%20read%20this%20Markdown%20document%20and%20answer%20questions%20about%20it:%20https://raw.githubusercontent.com/game-of-prompts/.github/refs/heads/main/profile/README.md" class="btn btn-ai" target="_blank" rel="noopener">
+						<span class="ai-link-label">Ask Claude</span>
+					</a>
+					<!-- svelte-ignore a11y_click_events_have_key_events -->
+					<!-- svelte-ignore a11y_no_static_element_interactions -->
+					<span class="copy-btn" data-copy-url="https://claude.ai/new?q=Please%20read%20this%20Markdown%20document%20and%20answer%20questions%20about%20it:%20https://raw.githubusercontent.com/game-of-prompts/.github/refs/heads/main/profile/README.md">
+						<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" /><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1" /></svg>
+						<span class="copy-label">Copy</span>
+					</span>
+				</div>
+			</div>
+
+			<div class="telegram-link">
+				<a href="https://t.me/unstop_bots" class="btn btn-secondary" target="_blank" rel="noopener" use:hoverCorners>
+					<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.479.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+					Join Telegram Community
+				</a>
+			</div>
+		</div>
+	</div>
 </section>
 
 <SectionTransition height={100} />
@@ -581,7 +795,7 @@
 					</div>
 					<div class="cta-step">
 						<div class="cta-step-number">2</div>
-						<p>Set up an <strong>Ergo blockchain wallet</strong> to participate in games and receive prizes.</p>
+						<p>Set up an <strong>Ergo blockchain wallet</strong> to participate in games and receive winnings.</p>
 					</div>
 					<div class="cta-step">
 						<div class="cta-step-number">3</div>
@@ -1266,65 +1480,56 @@
 		50% { box-shadow: 0 0 30px rgba(74, 222, 128, 0.5), 0 0 60px rgba(74, 222, 128, 0.2); }
 	}
 
-	.vp-node-num {
-		font-family: var(--font-mono);
-		font-weight: 700;
-		font-size: 0.7rem;
-		color: var(--green-400);
-		line-height: 1;
-	}
-
 	.vp-icon {
 		color: var(--green-400);
 		line-height: 0;
-		margin-top: 2px;
 	}
 
 	.vp-icon svg {
-		width: 14px;
-		height: 14px;
+		width: 20px;
+		height: 20px;
 	}
 
 	.vp-connector {
 		position: relative;
 		width: 2px;
 		height: 60px;
-		overflow: hidden;
+		overflow: visible;
 	}
 
 	.vp-line {
 		width: 2px;
 		height: 100%;
-		background: rgba(74, 222, 128, 0.12);
+		background: rgba(74, 222, 128, 0.1);
 		transition: background 0.6s ease var(--vp-delay, 0ms);
 	}
 
 	.vp-active .vp-line {
-		background: rgba(74, 222, 128, 0.3);
+		background: rgba(74, 222, 128, 0.2);
 	}
 
 	.vp-pulse {
 		position: absolute;
 		left: 50%;
 		transform: translateX(-50%);
-		width: 6px;
-		height: 6px;
+		width: 8px;
+		height: 8px;
 		border-radius: 50%;
-		background: rgba(134, 239, 172, 0.8);
-		box-shadow: 0 0 8px rgba(134, 239, 172, 0.6);
+		background: rgba(134, 239, 172, 0.9);
+		box-shadow: 0 0 12px rgba(134, 239, 172, 0.8), 0 0 24px rgba(74, 222, 128, 0.4);
 		opacity: 0;
 	}
 
 	.vp-active .vp-pulse {
 		opacity: 1;
-		animation: vpTravelDown 1.8s ease-in-out infinite;
+		animation: vpTravelDown 2s ease-in-out infinite;
 	}
 
 	@keyframes vpTravelDown {
-		0% { top: 0; opacity: 0; }
+		0% { top: -4px; opacity: 0; }
 		10% { opacity: 1; }
 		90% { opacity: 1; }
-		100% { top: 100%; opacity: 0; }
+		100% { top: calc(100% - 4px); opacity: 0; }
 	}
 
 	.vp-content {
@@ -2095,6 +2300,366 @@
 	}
 
 	/* ============================================ */
+	/* HERO TITLE REDESIGN                          */
+	/* ============================================ */
+	.hero-title-block {
+		text-align: center;
+		margin-bottom: 2rem;
+	}
+
+	.hero-main-title {
+		font-family: var(--font-mono);
+		font-size: clamp(3rem, 10vw, 7rem) !important;
+		font-weight: 800;
+		letter-spacing: 0.08em;
+		line-height: 1.05;
+		margin-bottom: 1rem;
+		position: relative;
+	}
+
+	.hero-title-line {
+		display: block;
+		color: var(--text-primary);
+		text-shadow: 0 0 40px rgba(74, 222, 128, 0.2);
+	}
+
+	.hero-title-accent {
+		background: linear-gradient(135deg, #4ade80, #22c55e, #86efac);
+		-webkit-background-clip: text;
+		-webkit-text-fill-color: transparent;
+		background-clip: text;
+		filter: drop-shadow(0 0 30px rgba(74, 222, 128, 0.5));
+		animation: heroTitleGlow 4s ease-in-out infinite;
+	}
+
+	@keyframes heroTitleGlow {
+		0%, 100% { filter: drop-shadow(0 0 30px rgba(74, 222, 128, 0.5)); }
+		50% { filter: drop-shadow(0 0 60px rgba(74, 222, 128, 0.8)); }
+	}
+
+	.hero-tagline {
+		font-size: clamp(1rem, 2.5vw, 1.4rem);
+		font-weight: 500;
+		color: var(--text-secondary);
+		letter-spacing: 0.02em;
+	}
+
+	/* ============================================ */
+	/* ENHANCED VALIDATION PIPELINE                 */
+	/* ============================================ */
+	.vp-node-ring {
+		position: absolute;
+		inset: -4px;
+		border-radius: 50%;
+		border: 2px solid transparent;
+		transition: border-color 0.8s ease var(--vp-delay, 0ms);
+	}
+
+	.vp-active .vp-node-ring {
+		border-color: rgba(74, 222, 128, 0.3);
+		animation: vpRingSpin 3s linear infinite;
+	}
+
+	@keyframes vpRingSpin {
+		0% { transform: rotate(0deg); border-color: rgba(74, 222, 128, 0.3); }
+		50% { border-color: rgba(74, 222, 128, 0.6); }
+		100% { transform: rotate(360deg); border-color: rgba(74, 222, 128, 0.3); }
+	}
+
+	.vp-node-inner {
+		position: relative;
+		z-index: 1;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.vp-node-glow {
+		position: absolute;
+		inset: -12px;
+		border-radius: 50%;
+		background: radial-gradient(circle, rgba(74, 222, 128, 0.2) 0%, transparent 70%);
+		opacity: 0;
+		transition: opacity 0.8s ease var(--vp-delay, 0ms);
+	}
+
+	.vp-active .vp-node-glow {
+		opacity: 1;
+		animation: vpGlowPulse 2.5s ease-in-out infinite;
+	}
+
+	@keyframes vpGlowPulse {
+		0%, 100% { opacity: 0.6; transform: scale(1); }
+		50% { opacity: 1; transform: scale(1.3); }
+	}
+
+	.vp-line-fill {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 2px;
+		height: 0%;
+		background: linear-gradient(180deg, rgba(74, 222, 128, 0.6), rgba(34, 197, 94, 0.8));
+		box-shadow: 0 0 8px rgba(74, 222, 128, 0.4);
+		transition: height 1s ease var(--vp-delay, 0ms);
+	}
+
+	.vp-active .vp-line-fill {
+		height: 100%;
+	}
+
+	.vp-connector {
+		position: relative;
+	}
+
+	.vp-success-badge {
+		display: inline-flex;
+		align-items: center;
+		gap: 6px;
+		margin-top: 0.75rem;
+		padding: 4px 12px;
+		background: rgba(74, 222, 128, 0.1);
+		border: 1px solid rgba(74, 222, 128, 0.3);
+		border-radius: 100px;
+		font-family: var(--font-mono);
+		font-size: 0.75rem;
+		font-weight: 600;
+		color: var(--green-400);
+		letter-spacing: 0.05em;
+	}
+
+	.vp-active[data-vp-step="4"] .vp-success-badge {
+		animation: vpSuccessAppear 0.6s ease 1s both;
+	}
+
+	@keyframes vpSuccessAppear {
+		from { opacity: 0; transform: scale(0.8); }
+		to { opacity: 1; transform: scale(1); }
+	}
+
+	/* Enhanced step slide-in */
+	.vp-step {
+		transform: translateX(-30px);
+	}
+
+	.vp-step.vp-active {
+		transform: translateX(0);
+	}
+
+	/* ============================================ */
+	/* JUDGES                                       */
+	/* ============================================ */
+	.judges-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+		gap: 24px;
+		margin-top: 3rem;
+		align-items: stretch;
+	}
+
+	.judges-card {
+		text-align: center;
+		height: 100%;
+		display: flex;
+		flex-direction: column;
+	}
+
+	.judges-icon {
+		width: 56px;
+		height: 56px;
+		border-radius: 14px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		margin: 0 auto 1rem;
+		background: var(--green-glow);
+		color: var(--green-400);
+	}
+
+	/* ============================================ */
+	/* FAQ                                          */
+	/* ============================================ */
+	.faq-container {
+		margin-top: 3rem;
+		display: flex;
+		flex-direction: column;
+		gap: 2rem;
+		max-width: 800px;
+		width: 100%;
+	}
+
+	.faq-group-title {
+		font-family: var(--font-mono);
+		font-size: 0.8rem;
+		font-weight: 600;
+		text-transform: uppercase;
+		letter-spacing: 0.15em;
+		color: var(--green-400);
+		margin-bottom: 0.75rem;
+		padding-left: 4px;
+	}
+
+	.faq-item {
+		border: 1px solid rgba(74, 222, 128, 0.08);
+		border-radius: var(--radius);
+		background: var(--bg-card);
+		overflow: hidden;
+		transition: border-color 0.3s;
+	}
+
+	.faq-item:hover {
+		border-color: rgba(74, 222, 128, 0.2);
+	}
+
+	.faq-item[open] {
+		border-color: rgba(74, 222, 128, 0.25);
+		background: var(--bg-card-hover);
+	}
+
+	.faq-question {
+		cursor: pointer;
+		padding: 16px 20px;
+		font-size: 0.95rem;
+		font-weight: 600;
+		color: var(--text-primary);
+		list-style: none;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 12px;
+		user-select: none;
+	}
+
+	.faq-question::-webkit-details-marker {
+		display: none;
+	}
+
+	.faq-question::after {
+		content: '+';
+		font-family: var(--font-mono);
+		font-size: 1.2rem;
+		font-weight: 400;
+		color: var(--green-400);
+		flex-shrink: 0;
+		transition: transform 0.3s;
+	}
+
+	.faq-item[open] .faq-question::after {
+		content: '−';
+	}
+
+	.faq-answer {
+		padding: 0 20px 16px;
+	}
+
+	.faq-answer p {
+		font-size: 0.9rem;
+		line-height: 1.7;
+		color: var(--text-secondary);
+	}
+
+	.faq-group {
+		display: flex;
+		flex-direction: column;
+		gap: 8px;
+	}
+
+	/* FAQ Footer — AI Links + Telegram */
+	.faq-footer {
+		margin-top: 3rem;
+		padding: 32px;
+		background: var(--bg-card);
+		border: 1px solid rgba(74, 222, 128, 0.1);
+		border-radius: var(--radius-lg);
+		text-align: center;
+		max-width: 800px;
+		width: 100%;
+	}
+
+	.faq-footer-title {
+		font-size: 1.4rem;
+		color: var(--text-primary);
+		margin-bottom: 0.5rem;
+	}
+
+	.faq-footer-desc {
+		font-size: 0.95rem;
+		color: var(--text-secondary);
+		margin-bottom: 1.5rem;
+	}
+
+	.ai-links {
+		display: flex;
+		flex-direction: column;
+		gap: 10px;
+		margin-bottom: 1.5rem;
+	}
+
+	.ai-link-row {
+		display: flex;
+		align-items: center;
+		gap: 8px;
+		justify-content: center;
+	}
+
+	.btn-ai {
+		display: inline-flex;
+		align-items: center;
+		gap: 8px;
+		padding: 12px 24px;
+		border-radius: 10px;
+		font-size: 0.95rem;
+		font-weight: 600;
+		background: linear-gradient(135deg, var(--green-500), var(--green-600));
+		color: #000;
+		box-shadow: 0 0 20px rgba(34, 197, 94, 0.3);
+		text-decoration: none;
+		transition: all 0.25s;
+		min-width: 180px;
+		justify-content: center;
+	}
+
+	.btn-ai:hover {
+		box-shadow: 0 0 30px rgba(34, 197, 94, 0.5);
+		transform: translateY(-2px);
+		color: #000;
+	}
+
+	.copy-btn {
+		display: inline-flex;
+		align-items: center;
+		gap: 4px;
+		padding: 8px 12px;
+		border-radius: 8px;
+		font-family: var(--font-mono);
+		font-size: 0.75rem;
+		font-weight: 500;
+		color: var(--text-secondary);
+		background: rgba(74, 222, 128, 0.06);
+		border: 1px solid rgba(74, 222, 128, 0.15);
+		cursor: pointer;
+		transition: all 0.2s;
+		user-select: none;
+	}
+
+	.copy-btn:hover {
+		background: rgba(74, 222, 128, 0.12);
+		border-color: rgba(74, 222, 128, 0.3);
+		color: var(--green-400);
+	}
+
+	.copy-btn.copied {
+		background: rgba(74, 222, 128, 0.15);
+		border-color: var(--green-400);
+		color: var(--green-400);
+	}
+
+	.telegram-link {
+		padding-top: 1rem;
+		border-top: 1px solid rgba(74, 222, 128, 0.08);
+	}
+
+	/* ============================================ */
 	/* RESPONSIVE                                   */
 	/* ============================================ */
 	@media (max-width: 768px) {
@@ -2153,6 +2718,23 @@
 
 		.cta-steps {
 			flex-direction: column;
+		}
+
+		.judges-grid {
+			grid-template-columns: 1fr;
+		}
+
+		.faq-footer {
+			padding: 24px 16px;
+		}
+
+		.ai-link-row {
+			flex-direction: column;
+		}
+
+		.btn-ai {
+			min-width: unset;
+			width: 100%;
 		}
 	}
 
