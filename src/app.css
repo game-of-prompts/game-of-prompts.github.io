@@ -361,6 +361,14 @@ body::after {
 	background: #f8fafc;
 }
 
+/* Game sections + Score Validation ALWAYS stay dark — cinematic intent */
+[data-theme="light"] .game-type-fullscreen,
+:root:not([data-theme="dark"]) .game-type-fullscreen,
+[data-theme="light"] .section-validation,
+:root:not([data-theme="dark"]) .section-validation {
+	background: #050505 !important;
+}
+
 [data-theme="light"] body::after {
 	opacity: 0.08;
 }

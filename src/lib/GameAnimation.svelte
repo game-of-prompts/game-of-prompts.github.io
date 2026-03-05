@@ -761,6 +761,8 @@
 			const cw = w();
 			const ch = h();
 			ctx.clearRect(0, 0, cw, ch);
+			ctx.fillStyle = '#050505';
+			ctx.fillRect(0, 0, cw, ch);
 
 			// Spawn coins periodically
 			spawnTimer++;
@@ -919,6 +921,8 @@
 			const cw = w();
 			const ch = h();
 			ctx.clearRect(0, 0, cw, ch);
+			ctx.fillStyle = '#050505';
+			ctx.fillRect(0, 0, cw, ch);
 
 			// Spawn packets occasionally
 			if (time % 30 === 0) {
