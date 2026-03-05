@@ -144,6 +144,47 @@
 									</div>
 								{/if}
 							</div>
+						{:else if step.title?.toLowerCase().includes('paper') || step.title?.toLowerCase().includes('write') || step.title?.toLowerCase().includes('document')}
+							<!-- Writing paper / document icon -->
+							<div class="icon-container dynamic-icon-visual">
+								<svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+									<path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" />
+									<polyline points="14 2 14 8 20 8" />
+									<line x1="16" y1="13" x2="8" y2="13" />
+									<line x1="16" y1="17" x2="8" y2="17" />
+									<polyline points="10 9 9 9 8 9" />
+								</svg>
+							</div>
+						{:else if step.title?.toLowerCase().includes('reveal') || step.title?.toLowerCase().includes('seed')}
+							<!-- Key reveal / unlock icon -->
+							<div class="icon-container dynamic-icon-visual">
+								<svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+									<circle cx="8" cy="15" r="4" />
+									<line x1="10.85" y1="12.15" x2="19" y2="4" />
+									<line x1="18" y1="5" x2="20" y2="7" />
+									<line x1="15" y1="8" x2="17" y2="10" />
+								</svg>
+							</div>
+						{:else if step.title?.toLowerCase().includes('register') || step.title?.toLowerCase().includes('pre-commit') || step.title?.toLowerCase().includes('ceremony')}
+							<!-- Chain/on-chain registration icon -->
+							<div class="icon-container dynamic-icon-visual">
+								<svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+									<rect x="2" y="7" width="6" height="6" rx="1" />
+									<rect x="9" y="7" width="6" height="6" rx="1" />
+									<rect x="16" y="7" width="6" height="6" rx="1" />
+									<path d="M8 10h1M15 10h1" />
+									<path d="M12 4v3M12 13v3M7 19h10" />
+									<circle cx="12" cy="20" r="1" fill="currentColor" />
+								</svg>
+							</div>
+						{:else if step.title?.toLowerCase().includes('run') || step.title?.toLowerCase().includes('game service')}
+							<!-- Play/run terminal icon -->
+							<div class="icon-container dynamic-icon-visual">
+								<svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+									<polyline points="4 17 10 11 4 5" />
+									<line x1="12" y1="19" x2="20" y2="19" />
+								</svg>
+							</div>
 						{:else if step.title?.toLowerCase().includes('design') || step.title?.toLowerCase().includes('create')}
 							<div class="icon-container dynamic-icon-visual">
 								<svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
@@ -151,11 +192,13 @@
 									<path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z" />
 								</svg>
 							</div>
-						{:else if step.title?.toLowerCase().includes('secret') || step.title?.toLowerCase().includes('rules') || step.title?.toLowerCase().includes('generate')}
+						{:else if step.title?.toLowerCase().includes('generate') || step.title?.toLowerCase().includes('secret') || step.title?.toLowerCase().includes('rules')}
+							<!-- Shield with lock — secret/security -->
 							<div class="icon-container dynamic-icon-visual">
 								<svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
 									<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-									<path d="M9.5 12l1.5 1.5L15 10" />
+									<rect x="9" y="10" width="6" height="5" rx="1" />
+									<path d="M12 10V8a2 2 0 10-4 0v2" />
 								</svg>
 							</div>
 						{:else if step.title?.toLowerCase().includes('publish') || step.title?.toLowerCase().includes('package')}
@@ -181,53 +224,19 @@
 									<path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71" />
 								</svg>
 							</div>
-						{:else if step.title?.toLowerCase().includes('run') || step.title?.toLowerCase().includes('compete') || step.title?.toLowerCase().includes('game service')}
+						{:else if step.title?.toLowerCase().includes('compete')}
 							<div class="icon-container dynamic-icon-visual">
 								<svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
 									<polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
 								</svg>
 							</div>
 						{:else if step.title?.toLowerCase().includes('result') || step.title?.toLowerCase().includes('earn') || step.title?.toLowerCase().includes('submit')}
+							<!-- Coin/payment submit icon -->
 							<div class="icon-container dynamic-icon-visual">
 								<svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-									<path d="M6 9H4.5a2.5 2.5 0 010-5H6" />
-									<path d="M18 9h1.5a2.5 2.5 0 000-5H18" />
-									<path d="M4 22h16" />
-									<path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22" />
-									<path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22" />
-									<path d="M18 2H6v7a6 6 0 1012 0V2z" />
-								</svg>
-							</div>
-						{:else if step.title?.toLowerCase().includes('paper') || step.title?.toLowerCase().includes('write') || step.title?.toLowerCase().includes('document')}
-							<!-- Writing paper / document icon -->
-							<div class="icon-container dynamic-icon-visual">
-								<svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-									<path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" />
-									<polyline points="14 2 14 8 20 8" />
-									<line x1="16" y1="13" x2="8" y2="13" />
-									<line x1="16" y1="17" x2="8" y2="17" />
-									<polyline points="10 9 9 9 8 9" />
-								</svg>
-							</div>
-						{:else if step.title?.toLowerCase().includes('reveal') || step.title?.toLowerCase().includes('seed')}
-							<!-- Key reveal / unlock icon -->
-							<div class="icon-container dynamic-icon-visual">
-								<svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-									<circle cx="8" cy="15" r="4" />
-									<line x1="10.85" y1="12.15" x2="19" y2="4" />
-									<line x1="18" y1="5" x2="20" y2="7" />
-									<line x1="15" y1="8" x2="17" y2="10" />
-								</svg>
-							</div>
-						{:else if step.title?.toLowerCase().includes('register') || step.title?.toLowerCase().includes('pre-commit') || step.title?.toLowerCase().includes('ceremony')}
-							<!-- Fingerprint / register icon -->
-							<div class="icon-container dynamic-icon-visual">
-								<svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-									<path d="M2 12C2 6.48 6.48 2 12 2s10 4.48 10 10" />
-									<path d="M5 12a7 7 0 0114 0" />
-									<path d="M8.5 12a3.5 3.5 0 017 0" />
-									<path d="M12 12v6" />
-									<circle cx="12" cy="20" r="1" fill="currentColor" />
+									<circle cx="12" cy="12" r="10" />
+									<path d="M12 6v6l4 2" />
+									<path d="M9 16l2 2 4-4" />
 								</svg>
 							</div>
 						{:else}
