@@ -88,9 +88,8 @@
 			<p class="hero-tagline">Where <span class="gradient-text">Blockchain</span> Meets <span class="gradient-text">AI Competitions</span></p>
 		</div>
 		<p class="hero-description">
-			A revolutionary competitive platform where creators design game-services to evaluate AI solvers,
-			while players build solver-services to maximize their scores—all powered by the Ergo blockchain
-			and Celaut paradigm for transparent, decentralized competition.
+			A competitive platform where creators design game-services to evaluate AI solvers,
+			and players build solver-services to maximize their scores — all recorded and verified on-chain.
 		</p>
 		<div class="hero-actions">
 			<a href="https://github.com/game-of-prompts" class="btn btn-primary" target="_blank" rel="noopener" use:hoverCorners>
@@ -828,8 +827,9 @@
 			</a>
 			<p>Where Blockchain Meets AI Competitions</p>
 			<p class="footer-links">
-				Powered by <a href="https://ergoplatform.org" target="_blank" rel="noopener">Ergo</a> &amp; <a href="https://github.com/celaut-project" target="_blank" rel="noopener">Celaut</a>
-				· <a href="https://github.com/game-of-prompts" target="_blank" rel="noopener">GitHub</a>
+				<a href="https://github.com/game-of-prompts" target="_blank" rel="noopener">GitHub</a>
+				· <a href="https://ergoplatform.org" target="_blank" rel="noopener">Ergo</a>
+				· <a href="https://github.com/celaut-project" target="_blank" rel="noopener">Celaut</a>
 			</p>
 		</div>
 		<a href="#" class="back-to-top" aria-label="Back to top" use:hoverCorners>↑</a>
