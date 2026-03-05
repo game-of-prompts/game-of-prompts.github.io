@@ -100,7 +100,8 @@
 
 			const cw = w();
 			const ch = h();
-			ctx.clearRect(0, 0, cw, ch);
+			ctx.fillStyle = "#050505";
+			ctx.fillRect(0, 0, cw, ch);
 
 			// Update nodes
 			for (const n of nodes) {
@@ -298,7 +299,8 @@
 			const ch = h();
 			const cx = cw / 2;
 			const cy = ch / 2;
-			ctx.clearRect(0, 0, cw, ch);
+			ctx.fillStyle = "#050505";
+			ctx.fillRect(0, 0, cw, ch);
 
 			const cycleTime = time % cycleLength;
 			const keySize = isMobile ? 30 : 45;
@@ -400,7 +402,8 @@
 
 			const cw = w();
 			const ch = h();
-			ctx.clearRect(0, 0, cw, ch);
+			ctx.fillStyle = "#050505";
+			ctx.fillRect(0, 0, cw, ch);
 
 			const cycleTime = time % cycleLength;
 			const fontSize = isMobile ? 10 : 13;
@@ -540,7 +543,8 @@
 			const ch = h();
 			const cx = cw / 2;
 			const cy = ch / 2;
-			ctx.clearRect(0, 0, cw, ch);
+			ctx.fillStyle = "#050505";
+			ctx.fillRect(0, 0, cw, ch);
 
 			const cycleTime = time % cycleLength;
 			const shieldSize = isMobile ? 40 : 60;
@@ -760,7 +764,8 @@
 			const ch = h();
 			const cx = cw / 2;
 			const cy = ch / 2;
-			ctx.clearRect(0, 0, cw, ch);
+			ctx.fillStyle = "#050505";
+			ctx.fillRect(0, 0, cw, ch);
 
 			const cycleTime = time % cycleLength;
 			const trophySize = isMobile ? 35 : 55;
