@@ -198,6 +198,38 @@
 									<path d="M18 2H6v7a6 6 0 1012 0V2z" />
 								</svg>
 							</div>
+						{:else if step.title?.toLowerCase().includes('paper') || step.title?.toLowerCase().includes('write') || step.title?.toLowerCase().includes('document')}
+							<!-- Writing paper / document icon -->
+							<div class="icon-container dynamic-icon-visual">
+								<svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+									<path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" />
+									<polyline points="14 2 14 8 20 8" />
+									<line x1="16" y1="13" x2="8" y2="13" />
+									<line x1="16" y1="17" x2="8" y2="17" />
+									<polyline points="10 9 9 9 8 9" />
+								</svg>
+							</div>
+						{:else if step.title?.toLowerCase().includes('reveal') || step.title?.toLowerCase().includes('seed')}
+							<!-- Key reveal / unlock icon -->
+							<div class="icon-container dynamic-icon-visual">
+								<svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+									<circle cx="8" cy="15" r="4" />
+									<line x1="10.85" y1="12.15" x2="19" y2="4" />
+									<line x1="18" y1="5" x2="20" y2="7" />
+									<line x1="15" y1="8" x2="17" y2="10" />
+								</svg>
+							</div>
+						{:else if step.title?.toLowerCase().includes('register') || step.title?.toLowerCase().includes('pre-commit') || step.title?.toLowerCase().includes('ceremony')}
+							<!-- Fingerprint / register icon -->
+							<div class="icon-container dynamic-icon-visual">
+								<svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+									<path d="M2 12C2 6.48 6.48 2 12 2s10 4.48 10 10" />
+									<path d="M5 12a7 7 0 0114 0" />
+									<path d="M8.5 12a3.5 3.5 0 017 0" />
+									<path d="M12 12v6" />
+									<circle cx="12" cy="20" r="1" fill="currentColor" />
+								</svg>
+							</div>
 						{:else}
 							<!-- Numbered step indicator for prop-driven steps without icons -->
 							<div class="icon-container step-number-visual">
