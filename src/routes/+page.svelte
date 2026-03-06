@@ -8,6 +8,7 @@
 	import GameAnimation from '$lib/GameAnimation.svelte';
 	import ValidationAnimation from '$lib/ValidationAnimation.svelte';
 	import { hoverCorners } from '$lib/hoverCorners';
+	import FaqSection from '$lib/FaqSection.svelte';
 
 	const VIDEO_ID = 'UCjDwDj2gGs';
 	let videoStarted = $state(false);
@@ -670,67 +671,7 @@
 			<h2 class="section-title">Frequently Asked Questions</h2>
 		</ScrollAnimation>
 
-		<div class="faq-container">
-			<div class="faq-group">
-				<h4 class="faq-group-title">General</h4>
-				<details class="faq-item">
-					<summary class="faq-question">What is Game of Prompts?</summary>
-					<div class="faq-answer"><p>A bot competition audited by blockchain. Creators design game-services to evaluate AI solvers, while players build solver-services to maximize their scores — all verified on the Ergo blockchain.</p></div>
-				</details>
-				<details class="faq-item">
-					<summary class="faq-question">What is the "Ceremony Phase"?</summary>
-					<div class="faq-answer"><p>The initial period where players register their Solver IDs to add randomness to the seed. This prevents the Creator from pre-calculating solutions and ensures fair competition.</p></div>
-				</details>
-				<details class="faq-item">
-					<summary class="faq-question">What do I need to play?</summary>
-					<div class="faq-answer"><p>An Ergo Wallet (with some ERG for participation fees) and a Celaut Node to run game and solver services locally.</p></div>
-				</details>
-			</div>
-
-			<div class="faq-group">
-				<h4 class="faq-group-title">Security</h4>
-				<details class="faq-item">
-					<summary class="faq-question">How do I know the game is fair?</summary>
-					<div class="faq-answer"><p>The game rules and hashS are registered on-chain from the start. They are immutable — no one can change them after publication.</p></div>
-				</details>
-				<details class="faq-item">
-					<summary class="faq-question">Can the Creator steal the funds?</summary>
-					<div class="faq-answer"><p>No. Funds are locked in a Smart Contract, not the Creator's wallet. Distribution is handled atomically by the contract when the game resolves.</p></div>
-				</details>
-				<details class="faq-item">
-					<summary class="faq-question">What if the Creator disappears?</summary>
-					<div class="faq-answer"><p>After a Grace Period, players can trigger a Refund Action to recover their participation fees from the smart contract.</p></div>
-				</details>
-			</div>
-
-			<div class="faq-group">
-				<h4 class="faq-group-title">Judges</h4>
-				<details class="faq-item">
-					<summary class="faq-question">Who are the Judges?</summary>
-					<div class="faq-answer"><p>Entities nominated by the Creator who audit the resolution phase. They verify that the game service generated valid proofs.</p></div>
-				</details>
-				<details class="faq-item">
-					<summary class="faq-question">Why do Judges earn money for invalidating a participation?</summary>
-					<div class="faq-answer"><p>They detect Creator fraud — their incentive is to catch faulty game services. When they find issues, they receive the Creator's commission as reward.</p></div>
-				</details>
-				<details class="faq-item">
-					<summary class="faq-question">Can I be penalized as a player?</summary>
-					<div class="faq-answer"><p>The system penalizes the Creator/Game Service, not honest players. Judges audit the Creator, not you.</p></div>
-				</details>
-			</div>
-
-			<div class="faq-group">
-				<h4 class="faq-group-title">Economy</h4>
-				<details class="faq-item">
-					<summary class="faq-question">How is the winner calculated?</summary>
-					<div class="faq-answer"><p>Highest Time-Weighted Score: Score × (TimeWeight + RemainingTime). Submit early and score high for the best result.</p></div>
-				</details>
-				<details class="faq-item">
-					<summary class="faq-question">When do I receive my winnings?</summary>
-					<div class="faq-answer"><p>Immediately upon the End Game action. The Smart Contract atomically distributes all funds — the winner receives all participation fees minus creator commission and judge fees.</p></div>
-				</details>
-			</div>
-		</div>
+		<FaqSection />
 
 		<!-- Still have questions? -->
 		<div class="faq-footer">

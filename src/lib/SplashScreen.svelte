@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
+	import SplashLogo from '$lib/SplashLogo.svelte';
 
 	let el: HTMLDivElement;
 
@@ -24,7 +25,7 @@
 		<div class="scanline"></div>
 		<div class="content">
 			<div class="logo-wrap">
-				<img src="/gop-logo.png" alt="Game of Prompts" class="logo" />
+				<SplashLogo />
 				<div class="logo-glow"></div>
 			</div>
 			<div class="title-wrap">
@@ -103,14 +104,6 @@
 		align-items: center;
 		justify-content: center;
 		animation: logoReveal 0.6s ease forwards;
-	}
-
-	.logo {
-		width: 200px;
-		height: 200px;
-		object-fit: contain;
-		position: relative;
-		z-index: 1;
 	}
 
 	.logo-glow {
