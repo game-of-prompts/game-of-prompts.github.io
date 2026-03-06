@@ -5,9 +5,9 @@
 <div class="cyber-logo">
 	<div class="scanline-overlay"></div>
 	<div class="glitch-wrapper">
-		<img src="/gop-logo-official.png" alt="Game of Prompts" class="logo-img" />
-		<img src="/gop-logo-official.png" alt="" class="logo-img glitch-r" aria-hidden="true" />
-		<img src="/gop-logo-official.png" alt="" class="logo-img glitch-b" aria-hidden="true" />
+		<img src="/gop-logo-throne.png" alt="Game of Prompts" class="logo-img" />
+		<img src="/gop-logo-throne.png" alt="" class="logo-img glitch-r" aria-hidden="true" />
+		<img src="/gop-logo-throne.png" alt="" class="logo-img glitch-b" aria-hidden="true" />
 	</div>
 	<div class="corner tl"></div>
 	<div class="corner tr"></div>

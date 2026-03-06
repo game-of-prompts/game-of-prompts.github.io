@@ -28,6 +28,9 @@
 				<SplashLogo />
 				<div class="logo-glow"></div>
 			</div>
+			<div class="title-wrap">
+				<h1 class="title" data-text="GAME OF PROMPTS">GAME OF PROMPTS</h1>
+			</div>
 			<p class="subtitle">WHERE AI MEETS BLOCKCHAIN COMPETITION</p>
 			<div class="progress-bar">
 				<div class="progress-fill"></div>
