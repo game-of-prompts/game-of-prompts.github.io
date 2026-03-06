@@ -98,8 +98,8 @@
 	/* BIGGER LOGO — 220px container, 200px image */
 	.logo-wrap {
 		position: relative;
-		width: 220px;
-		height: 220px;
+		width: 300px;
+		height: 300px;
 		display: flex;
 		align-items: center;
 		justify-content: center;
