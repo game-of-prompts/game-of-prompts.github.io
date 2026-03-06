@@ -424,7 +424,7 @@
 	</div>
 </section>
 
-<SectionTransition height={100} />
+<SectionTransition height={100} direction="dark-to-light" />
 
 <!-- ============================================ -->
 <!-- GAME TYPES                                   -->
@@ -439,6 +439,8 @@
 		</div>
 	</div>
 </section>
+
+<SectionTransition height={80} direction="light-to-dark" />
 
 <!-- ============================================ -->
 <!-- GAME TYPES — full-screen, unique per type   -->
@@ -504,7 +506,7 @@
 	<div class="gt-grid-lines" aria-hidden="true"></div>
 </section>
 
-<SectionTransition height={100} />
+<SectionTransition height={100} direction="dark-to-light" />
 
 <!-- ============================================ -->
 <!-- OPTIONAL FEATURES — Full-screen cinematic    -->
@@ -520,6 +522,8 @@
 		</div>
 	</div>
 </section>
+
+<SectionTransition height={80} direction="light-to-dark" />
 
 <section class="game-type-fullscreen game-type-resource" id="feature-resource">
 	<div class="gt-bg-glow"></div>
@@ -602,7 +606,7 @@
 	<div class="gt-grid-lines" aria-hidden="true"></div>
 </section>
 
-<SectionTransition height={100} />
+<SectionTransition height={100} direction="dark-to-light" />
 
 <!-- ============================================ -->
 <!-- JUDGES                                       -->

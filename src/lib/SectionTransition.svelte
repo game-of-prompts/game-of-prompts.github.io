@@ -3,9 +3,11 @@
 
 	interface Props {
 		height?: number;
+		/** 'light-to-dark' | 'dark-to-light' | 'auto' (default) */
+		direction?: 'light-to-dark' | 'dark-to-light' | 'auto';
 	}
 
-	let { height = 120 }: Props = $props();
+	let { height = 120, direction = 'auto' }: Props = $props();
 
 	let canvas: HTMLCanvasElement;
 
@@ -116,7 +118,7 @@
 	});
 </script>
 
-<div class="section-transition" style="height: {height}px;">
+<div class="section-transition" style="height: {height}px;" data-dir={direction}>
 	<canvas bind:this={canvas} class="transition-canvas"></canvas>
 </div>
 
@@ -126,6 +128,18 @@
 		width: 100%;
 		background: var(--bg-primary);
 		overflow: hidden;
+	}
+
+	/* Light-to-dark gradient (between a light section and a dark game section) */
+	:global([data-theme="light"]) .section-transition[data-dir="light-to-dark"],
+	:global(:root:not([data-theme="dark"])) .section-transition[data-dir="light-to-dark"] {
+		background: linear-gradient(to bottom, #f8fafc 0%, #050505 100%) !important;
+	}
+
+	/* Dark-to-light gradient (between a dark game section and a light section) */
+	:global([data-theme="light"]) .section-transition[data-dir="dark-to-light"],
+	:global(:root:not([data-theme="dark"])) .section-transition[data-dir="dark-to-light"] {
+		background: linear-gradient(to bottom, #050505 0%, #f8fafc 100%) !important;
 	}
 
 	.transition-canvas {
