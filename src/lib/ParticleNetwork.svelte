@@ -40,11 +40,11 @@
 
 			const renderer = new WebGLRenderer({ canvas, alpha: true, antialias: true });
 			renderer.setSize(window.innerWidth, window.innerHeight);
-			renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+			renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
 			renderer.setClearColor(0x000000, 0);
 
-			// Particles
-			const particleCount = 120;
+			// Particles — reduced count for performance
+			const particleCount = 70;
 			const positions = new Float32Array(particleCount * 3);
 			const colors = new Float32Array(particleCount * 3);
 			const velocities = new Float32Array(particleCount * 3);
@@ -87,7 +87,7 @@
 			scene.add(particles);
 
 			// Lines (connections)
-			const maxConnections = particleCount * 6;
+			const maxConnections = particleCount * 4;
 			const linePositions = new Float32Array(maxConnections * 6);
 			const lineColors = new Float32Array(maxConnections * 6);
 			const lineGeometry = new BufferGeometry();
@@ -120,9 +120,11 @@
 			window.addEventListener('resize', onResize, { passive: true });
 
 			let animationId: number;
+			let frameCount = 0;
 			const animate = () => {
 				if (destroyed) return;
 				animationId = requestAnimationFrame(animate);
+				frameCount++;
 
 				const posArr = particleGeometry.attributes.position.array as Float32Array;
 
@@ -145,7 +147,11 @@
 
 				particleGeometry.attributes.position.needsUpdate = true;
 
-				// Update connections
+				// Update connections — only every 3rd frame (O(n²) is expensive)
+				if (frameCount % 3 !== 0) {
+					renderer.render(scene, camera);
+					return;
+				}
 				let lineIndex = 0;
 				const lp = lineGeometry.attributes.position.array as Float32Array;
 				const lc = lineGeometry.attributes.color.array as Float32Array;
