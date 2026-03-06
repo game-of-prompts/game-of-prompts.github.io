@@ -47,7 +47,12 @@
 	--border-subtle: rgba(0,0,0,0.06);
 	--border-card: rgba(0,0,0,0.08);
 	--background-light: #f1f5f9;
-	--green-glow: rgba(34, 197, 94, 0.1);
+	--green-glow: rgba(22, 163, 74, 0.08);
+	/* Darker greens for legibility on light backgrounds */
+	--green-400: #16a34a;
+	--green-500: #15803d;
+	--green-600: #166534;
+	--accent-color: #16a34a;
 }
 
 @media (prefers-color-scheme: light) {
@@ -62,7 +67,11 @@
 		--border-subtle: rgba(0,0,0,0.06);
 		--border-card: rgba(0,0,0,0.08);
 		--background-light: #f1f5f9;
-		--green-glow: rgba(34, 197, 94, 0.1);
+		--green-glow: rgba(22, 163, 74, 0.08);
+		--green-400: #16a34a;
+		--green-500: #15803d;
+		--green-600: #166534;
+		--accent-color: #16a34a;
 	}
 }
 

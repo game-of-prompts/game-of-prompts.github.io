@@ -2087,9 +2087,9 @@
 		opacity: 0.5;
 	}
 
-	/* Game type colors — follow theme */
+	/* Game type fullscreen sections — always dark (cinematic intent) */
 	.game-type-fullscreen {
-		background: var(--bg-primary);
+		background: #050505;
 	}
 
 	.game-type-arcade {
@@ -2233,150 +2233,17 @@
 		line-height: 1.6;
 	}
 
-	/* Light mode overrides for game sections */
-	:global([data-theme="light"]) .game-type-arcade,
-	:global([data-theme="light"]) .game-type-world,
-	:global([data-theme="light"]) .game-type-trading,
-	:global([data-theme="light"]) .game-type-science {
-		color: var(--text-primary);
+	/* Game sections stay dark in ALL themes — cinematic intent.
+	   Force background via scoped :global to beat Svelte specificity. */
+	:global([data-theme="light"]) .game-type-fullscreen,
+	:global(:root:not([data-theme="dark"])) .game-type-fullscreen {
+		background: #050505 !important;
 	}
 
-	:global([data-theme="light"]) .game-type-arcade .gt-title {
-		background: linear-gradient(135deg, #16a34a, #15803d);
-		-webkit-background-clip: text;
-		-webkit-text-fill-color: transparent;
-		background-clip: text;
-	}
-	:global([data-theme="light"]) .game-type-world .gt-title {
-		background: linear-gradient(135deg, #16a34a, #166534);
-		-webkit-background-clip: text;
-		-webkit-text-fill-color: transparent;
-		background-clip: text;
-	}
-	:global([data-theme="light"]) .game-type-trading .gt-title {
-		background: linear-gradient(135deg, #15803d, #14532d);
-		-webkit-background-clip: text;
-		-webkit-text-fill-color: transparent;
-		background-clip: text;
-	}
-	:global([data-theme="light"]) .game-type-science .gt-title {
-		background: linear-gradient(135deg, #059669, #065f46);
-		-webkit-background-clip: text;
-		-webkit-text-fill-color: transparent;
-		background-clip: text;
-	}
-
-	:global([data-theme="light"]) .game-type-arcade .gt-score-label,
-	:global([data-theme="light"]) .game-type-world .gt-score-label,
-	:global([data-theme="light"]) .game-type-trading .gt-score-label,
-	:global([data-theme="light"]) .game-type-science .gt-score-label {
-		color: #16a34a;
-	}
-
-	:global([data-theme="light"]) .gt-label {
-		color: #16a34a;
-	}
-
-	/* Light mode — Feature game-type sections */
-	:global([data-theme="light"]) .game-type-poker,
-	:global([data-theme="light"]) .game-type-resource,
-	:global([data-theme="light"]) .game-type-payattempt,
-	:global([data-theme="light"]) .game-type-multichain {
-		color: var(--text-primary);
-	}
-
-	:global([data-theme="light"]) .game-type-poker .gt-title {
-		background: linear-gradient(135deg, #15803d, #14532d);
-		-webkit-background-clip: text;
-		-webkit-text-fill-color: transparent;
-		background-clip: text;
-	}
-	:global([data-theme="light"]) .game-type-resource .gt-title {
-		background: linear-gradient(135deg, #16a34a, #166534);
-		-webkit-background-clip: text;
-		-webkit-text-fill-color: transparent;
-		background-clip: text;
-	}
-	:global([data-theme="light"]) .game-type-payattempt .gt-title {
-		background: linear-gradient(135deg, #059669, #065f46);
-		-webkit-background-clip: text;
-		-webkit-text-fill-color: transparent;
-		background-clip: text;
-	}
-	:global([data-theme="light"]) .game-type-multichain .gt-title {
-		background: linear-gradient(135deg, #16a34a, #15803d);
-		-webkit-background-clip: text;
-		-webkit-text-fill-color: transparent;
-		background-clip: text;
-	}
-
-	:global([data-theme="light"]) .game-type-poker .gt-score-label,
-	:global([data-theme="light"]) .game-type-resource .gt-score-label,
-	:global([data-theme="light"]) .game-type-payattempt .gt-score-label,
-	:global([data-theme="light"]) .game-type-multichain .gt-score-label {
-		color: #16a34a;
-	}
-
-	/* Also handle prefers-color-scheme: light for users without manual toggle */
-	@media (prefers-color-scheme: light) {
-		:root:not([data-theme="dark"]) .game-type-arcade,
-		:root:not([data-theme="dark"]) .game-type-world,
-		:root:not([data-theme="dark"]) .game-type-trading,
-		:root:not([data-theme="dark"]) .game-type-science {
-			color: #0f172a;
-		}
-		:root:not([data-theme="dark"]) .game-type-arcade .gt-title,
-		:root:not([data-theme="dark"]) .game-type-world .gt-title,
-		:root:not([data-theme="dark"]) .game-type-trading .gt-title {
-			background: linear-gradient(135deg, #16a34a, #15803d);
-			-webkit-background-clip: text;
-			-webkit-text-fill-color: transparent;
-			background-clip: text;
-		}
-		:root:not([data-theme="dark"]) .game-type-science .gt-title {
-			background: linear-gradient(135deg, #059669, #065f46);
-			-webkit-background-clip: text;
-			-webkit-text-fill-color: transparent;
-			background-clip: text;
-		}
-		:root:not([data-theme="dark"]) .game-type-arcade .gt-score-label,
-		:root:not([data-theme="dark"]) .game-type-world .gt-score-label,
-		:root:not([data-theme="dark"]) .game-type-trading .gt-score-label,
-		:root:not([data-theme="dark"]) .game-type-science .gt-score-label,
-		:root:not([data-theme="dark"]) .gt-label {
-			color: #16a34a;
-		}
-		:root:not([data-theme="dark"]) .game-type-poker,
-		:root:not([data-theme="dark"]) .game-type-resource,
-		:root:not([data-theme="dark"]) .game-type-payattempt,
-		:root:not([data-theme="dark"]) .game-type-multichain {
-			color: #0f172a;
-		}
-		:root:not([data-theme="dark"]) .game-type-poker .gt-title,
-		:root:not([data-theme="dark"]) .game-type-resource .gt-title {
-			background: linear-gradient(135deg, #16a34a, #15803d);
-			-webkit-background-clip: text;
-			-webkit-text-fill-color: transparent;
-			background-clip: text;
-		}
-		:root:not([data-theme="dark"]) .game-type-payattempt .gt-title {
-			background: linear-gradient(135deg, #059669, #065f46);
-			-webkit-background-clip: text;
-			-webkit-text-fill-color: transparent;
-			background-clip: text;
-		}
-		:root:not([data-theme="dark"]) .game-type-multichain .gt-title {
-			background: linear-gradient(135deg, #16a34a, #15803d);
-			-webkit-background-clip: text;
-			-webkit-text-fill-color: transparent;
-			background-clip: text;
-		}
-		:root:not([data-theme="dark"]) .game-type-poker .gt-score-label,
-		:root:not([data-theme="dark"]) .game-type-resource .gt-score-label,
-		:root:not([data-theme="dark"]) .game-type-payattempt .gt-score-label,
-		:root:not([data-theme="dark"]) .game-type-multichain .gt-score-label {
-			color: #16a34a;
-		}
+	/* Score Validation section also stays dark always */
+	:global([data-theme="light"]) .section-validation,
+	:global(:root:not([data-theme="dark"])) .section-validation {
+		background: #050505 !important;
 	}
 
 	/* ============================================ */

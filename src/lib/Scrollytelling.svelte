@@ -329,7 +329,7 @@
 		width: 16px;
 		height: 16px;
 		border-radius: 50%;
-		border: 2px solid rgba(255, 255, 255, 0.15);
+		border: 2px solid rgba(128, 128, 128, 0.3);
 		display: flex;
 		align-items: center;
 		justify-content: center;
@@ -361,7 +361,7 @@
 	.progress-line {
 		flex: 1;
 		height: 2px;
-		background: rgba(255, 255, 255, 0.08);
+		background: rgba(128, 128, 128, 0.2);
 		overflow: hidden;
 	}
 
