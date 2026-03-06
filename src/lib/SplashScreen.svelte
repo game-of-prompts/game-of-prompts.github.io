@@ -16,7 +16,7 @@
 			}, 800);
 		};
 
-		const t1 = window.setTimeout(dismiss, 2800);
+		const t1 = window.setTimeout(dismiss, 5000);
 		return () => window.clearTimeout(t1);
 	});
 </script>
@@ -196,9 +196,9 @@
 	/* BIGGER SUBTITLE */
 	.subtitle {
 		font-family: 'JetBrains Mono', 'Courier New', monospace;
-		font-size: clamp(0.75rem, 2vw, 1rem);
-		letter-spacing: 0.25em;
-		color: rgba(34, 197, 94, 0.6);
+		font-size: clamp(0.9rem, 2vw, 1.2rem);
+		letter-spacing: 0.18em;
+		color: rgba(34, 197, 94, 0.85);
 		text-transform: uppercase;
 		margin: 0;
 		animation: fadeIn 0.6s ease 0.7s both;
