@@ -95,7 +95,7 @@
 		padding: 2rem;
 	}
 
-	/* BIGGER LOGO — 220px container, 200px image */
+	/* BIGGER LOGO — 300px container */
 	.logo-wrap {
 		position: relative;
 		width: 300px;
@@ -103,14 +103,17 @@
 		display: flex;
 		align-items: center;
 		justify-content: center;
+		background: transparent;
+		opacity: 0;
 		animation: logoReveal 0.6s ease forwards;
 	}
 
 	.logo-glow {
 		position: absolute;
-		inset: -40px;
-		background: radial-gradient(circle, rgba(34, 197, 94, 0.3) 0%, transparent 70%);
+		inset: -60px;
+		background: radial-gradient(circle, rgba(34, 197, 94, 0.15) 0%, transparent 65%);
 		animation: pulse 2s ease-in-out infinite;
+		pointer-events: none;
 	}
 
 	@keyframes logoReveal {
