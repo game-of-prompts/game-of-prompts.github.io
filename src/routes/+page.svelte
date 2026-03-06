@@ -424,7 +424,7 @@
 	</div>
 </section>
 
-<SectionTransition height={100} direction="dark-to-light" />
+<SectionTransition height={100} />
 
 <!-- ============================================ -->
 <!-- GAME TYPES                                   -->
@@ -440,7 +440,7 @@
 	</div>
 </section>
 
-<SectionTransition height={80} direction="light-to-dark" />
+<SectionTransition height={80} />
 
 <!-- ============================================ -->
 <!-- GAME TYPES — full-screen, unique per type   -->
@@ -506,7 +506,7 @@
 	<div class="gt-grid-lines" aria-hidden="true"></div>
 </section>
 
-<SectionTransition height={100} direction="dark-to-light" />
+<SectionTransition height={100} />
 
 <!-- ============================================ -->
 <!-- OPTIONAL FEATURES — Full-screen cinematic    -->
@@ -523,7 +523,7 @@
 	</div>
 </section>
 
-<SectionTransition height={80} direction="light-to-dark" />
+<SectionTransition height={80} />
 
 <section class="game-type-fullscreen game-type-resource" id="feature-resource">
 	<div class="gt-bg-glow"></div>
@@ -606,7 +606,7 @@
 	<div class="gt-grid-lines" aria-hidden="true"></div>
 </section>
 
-<SectionTransition height={100} direction="dark-to-light" />
+<SectionTransition height={100} />
 
 <!-- ============================================ -->
 <!-- JUDGES                                       -->
@@ -1363,7 +1363,7 @@
 	/* SCORE VALIDATION — CYBERPUNK SECTION         */
 	/* ============================================ */
 	.section-validation {
-		background: #000000 !important;
+		background: var(--bg-primary);
 		position: relative;
 		overflow: hidden;
 		padding: 6rem 0 4rem;
@@ -2032,9 +2032,9 @@
 		opacity: 0.5;
 	}
 
-	/* Game type fullscreen sections — always dark (cinematic intent) */
+	/* Game type fullscreen sections — follow theme */
 	.game-type-fullscreen {
-		background: #050505;
+		background: var(--bg-primary);
 	}
 
 	.game-type-arcade {
@@ -2178,17 +2178,115 @@
 		line-height: 1.6;
 	}
 
-	/* Game sections stay dark in ALL themes — cinematic intent.
-	   Force background via scoped :global to beat Svelte specificity. */
+	/* Light mode — game sections get light bg, need dark text overrides */
 	:global([data-theme="light"]) .game-type-fullscreen,
 	:global(:root:not([data-theme="dark"])) .game-type-fullscreen {
-		background: #050505 !important;
+		background: var(--bg-primary) !important;
+		color: var(--text-primary) !important;
 	}
 
-	/* Score Validation section also stays dark always */
+	:global([data-theme="light"]) .gt-desc,
+	:global(:root:not([data-theme="dark"])) .gt-desc {
+		color: var(--text-secondary) !important;
+		opacity: 1 !important;
+	}
+
+	:global([data-theme="light"]) .gt-score,
+	:global(:root:not([data-theme="dark"])) .gt-score {
+		color: var(--text-secondary) !important;
+		opacity: 1 !important;
+	}
+
+	:global([data-theme="light"]) .gt-label,
+	:global(:root:not([data-theme="dark"])) .gt-label {
+		color: var(--green-400) !important;
+		opacity: 1 !important;
+	}
+
+	/* All gt-titles: dark green gradient in light mode */
+	:global([data-theme="light"]) .gt-title,
+	:global(:root:not([data-theme="dark"])) .gt-title {
+		background: linear-gradient(135deg, #15803d, #166534) !important;
+		-webkit-background-clip: text !important;
+		-webkit-text-fill-color: transparent !important;
+		background-clip: text !important;
+	}
+
+	:global([data-theme="light"]) .gt-score-label,
+	:global(:root:not([data-theme="dark"])) .gt-score-label {
+		color: var(--green-400) !important;
+	}
+
+	:global([data-theme="light"]) .feature-tag-status,
+	:global(:root:not([data-theme="dark"])) .feature-tag-status {
+		opacity: 0.85 !important;
+	}
+
+	:global([data-theme="light"]) .gt-grid-lines,
+	:global(:root:not([data-theme="dark"])) .gt-grid-lines {
+		opacity: 0.04 !important;
+	}
+
+	:global([data-theme="light"]) .gt-bullets li,
+	:global(:root:not([data-theme="dark"])) .gt-bullets li {
+		color: var(--text-secondary) !important;
+	}
+
+	/* Score Validation — light mode */
 	:global([data-theme="light"]) .section-validation,
 	:global(:root:not([data-theme="dark"])) .section-validation {
-		background: #050505 !important;
+		background: var(--bg-primary);
+	}
+
+	:global([data-theme="light"]) .sv-title,
+	:global(:root:not([data-theme="dark"])) .sv-title {
+		background: linear-gradient(135deg, #15803d 0%, #166534 50%, #15803d 100%);
+		-webkit-background-clip: text;
+		-webkit-text-fill-color: transparent;
+		background-clip: text;
+	}
+
+	:global([data-theme="light"]) .sv-subtitle,
+	:global(:root:not([data-theme="dark"])) .sv-subtitle {
+		color: var(--text-secondary) !important;
+	}
+
+	:global([data-theme="light"]) .validation-card,
+	:global(:root:not([data-theme="dark"])) .validation-card {
+		background: rgba(22, 163, 74, 0.04);
+		border-color: rgba(22, 163, 74, 0.2);
+	}
+
+	:global([data-theme="light"]) .vc-title,
+	:global(:root:not([data-theme="dark"])) .vc-title {
+		color: var(--text-primary) !important;
+		-webkit-text-fill-color: var(--text-primary) !important;
+	}
+
+	:global([data-theme="light"]) .vc-desc,
+	:global(:root:not([data-theme="dark"])) .vc-desc {
+		color: var(--text-secondary) !important;
+	}
+
+	:global([data-theme="light"]) .sv-subtitle,
+	:global(:root:not([data-theme="dark"])) .sv-subtitle {
+		color: var(--text-secondary) !important;
+	}
+
+	:global([data-theme="light"]) .vc-num,
+	:global([data-theme="light"]) .vc-badge,
+	:global(:root:not([data-theme="dark"])) .vc-num,
+	:global(:root:not([data-theme="dark"])) .vc-badge {
+		color: var(--green-400) !important;
+		border-color: rgba(22, 163, 74, 0.25) !important;
+		background: rgba(22, 163, 74, 0.06) !important;
+	}
+
+	:global([data-theme="light"]) .sv-cta-btn,
+	:global(:root:not([data-theme="dark"])) .sv-cta-btn {
+		color: var(--green-400);
+		border-color: rgba(22, 163, 74, 0.4);
+		background: rgba(22, 163, 74, 0.05);
 	}
 
 	/* ============================================ */
