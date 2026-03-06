@@ -5,9 +5,9 @@
 <div class="cyber-logo">
 	<div class="scanline-overlay"></div>
 	<div class="glitch-wrapper">
-		<img src="/gop-throne-ai.png" alt="Game of Prompts" class="logo-img" />
-		<img src="/gop-throne-ai.png" alt="" class="logo-img glitch-r" aria-hidden="true" />
-		<img src="/gop-throne-ai.png" alt="" class="logo-img glitch-b" aria-hidden="true" />
+		<img src="/gop-logo-throne.png" alt="Game of Prompts" class="logo-img" />
+		<img src="/gop-logo-throne.png" alt="" class="logo-img glitch-r" aria-hidden="true" />
+		<img src="/gop-logo-throne.png" alt="" class="logo-img glitch-b" aria-hidden="true" />
 	</div>
 	<div class="corner tl"></div>
 	<div class="corner tr"></div>
@@ -27,28 +27,28 @@
 		border-radius: 8px;
 	}
 
-	/* AI image already dark + green — no invert needed */
+	/* Invert + tint logo green for cyberpunk look */
 	.logo-img {
 		position: absolute;
 		width: 380px;
 		height: 380px;
 		object-fit: contain;
-		filter: brightness(1.05) contrast(1.1) saturate(1.2);
+		filter: invert(1) sepia(1) saturate(3) hue-rotate(95deg) brightness(1.1);
 		mix-blend-mode: screen;
 	}
 
-	/* Glitch layers — RGB chromatic aberration splits */
+	/* Glitch layers — offset RGB splits */
 	.glitch-r {
-		filter: brightness(1.1) saturate(2) hue-rotate(-15deg);
+		filter: invert(1) sepia(1) saturate(3) hue-rotate(95deg) brightness(1.1);
 		mix-blend-mode: screen;
-		opacity: 0;
-		animation: glitch-r 5s infinite;
+		opacity: 0.4;
+		animation: glitch-r 4s infinite;
 	}
 	.glitch-b {
-		filter: brightness(0.9) saturate(1.5) hue-rotate(180deg);
+		filter: invert(1) sepia(1) saturate(2) hue-rotate(200deg) brightness(0.9);
 		mix-blend-mode: screen;
-		opacity: 0;
-		animation: glitch-b 5s infinite;
+		opacity: 0.25;
+		animation: glitch-b 4s infinite;
 	}
 
 	@keyframes glitch-r {
@@ -107,7 +107,7 @@
 		filter: drop-shadow(0 0 12px rgba(34, 197, 94, 0.6));
 	}
 	@keyframes logo-pulse {
-		0%, 100% { filter: drop-shadow(0 0 16px rgba(34, 197, 94, 0.5)) drop-shadow(0 0 40px rgba(34, 197, 94, 0.2)); }
-		50% { filter: drop-shadow(0 0 32px rgba(34, 197, 94, 0.95)) drop-shadow(0 0 80px rgba(34, 197, 94, 0.4)); }
+		0%, 100% { filter: drop-shadow(0 0 10px rgba(34, 197, 94, 0.5)); }
+		50% { filter: drop-shadow(0 0 22px rgba(34, 197, 94, 0.9)); }
 	}
 </style>
