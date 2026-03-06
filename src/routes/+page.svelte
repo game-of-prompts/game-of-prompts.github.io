@@ -69,11 +69,11 @@
 </script>
 
 <svelte:head>
-	<title>Game of Prompts — Where Blockchain Meets AI Competitions</title>
+	<title>Game of Prompts — Write your prompts. Build your bot. Win the throne.</title>
 	<meta name="description" content="A revolutionary competitive platform where creators design game-services to evaluate AI solvers, while players build solver-services to maximize their scores—powered by Ergo blockchain and Celaut." />
 	<meta name="theme-color" content="#0a0a0a" />
 	<meta property="og:title" content="Game of Prompts" />
-	<meta property="og:description" content="Where Blockchain Meets AI Competitions" />
+	<meta property="og:description" content="Write your prompts. Build your bot. Win the throne." />
 	<meta property="og:type" content="website" />
 	<link rel="preconnect" href="https://fonts.googleapis.com" />
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
@@ -92,7 +92,7 @@
 				<span class="hero-title-line">GAME OF</span>
 				<span class="hero-title-line hero-title-accent">PROMPTS</span>
 			</h1>
-			<p class="hero-tagline">Where <span class="gradient-text">Blockchain</span> Meets <span class="gradient-text">AI Competitions</span></p>
+			<p class="hero-tagline">Write your prompts. <span class="gradient-text">Build your bot.</span> Win the throne.</p>
 		</div>
 		<p class="hero-description">
 			A competitive platform where creators design game-services to evaluate AI solvers,
@@ -772,7 +772,7 @@
 			<a href="/" class="footer-logo">
 				<img src="/gop-logo.png" alt="GoP" class="footer-logo-img" />
 			</a>
-			<p>Where Blockchain Meets AI Competitions</p>
+			<p>Write your prompts. Build your bot. Win the throne.</p>
 			<p class="footer-links">
 				<a href="https://github.com/game-of-prompts" target="_blank" rel="noopener">GitHub</a>
 				· <a href="https://ergoplatform.org" target="_blank" rel="noopener">Ergo</a>
