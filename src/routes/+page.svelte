@@ -99,7 +99,10 @@
 			and players build solver-services to maximize their scores — all recorded and verified on-chain.
 		</p>
 		<div class="hero-actions">
-			<a href="https://github.com/game-of-prompts" class="btn btn-primary" target="_blank" rel="noopener" use:hoverCorners>
+			<a href="https://game-of-prompts.github.io/app/" class="btn btn-primary btn-launch" target="_blank" rel="noopener" use:hoverCorners>
+				🚀 Launch App
+			</a>
+			<a href="https://github.com/game-of-prompts" class="btn btn-secondary" target="_blank" rel="noopener" use:hoverCorners>
 				<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" /></svg>
 				View on GitHub
 			</a>
@@ -904,6 +907,23 @@
 		justify-content: center;
 		flex-wrap: wrap;
 		margin-bottom: 3.5rem;
+	}
+
+	.btn-launch {
+		font-size: 1.1rem;
+		padding: 14px 32px;
+		box-shadow: 0 0 24px rgba(34, 197, 94, 0.4), 0 0 48px rgba(34, 197, 94, 0.15);
+		animation: launchPulse 2.5s ease-in-out infinite;
+	}
+
+	.btn-launch:hover {
+		box-shadow: 0 0 36px rgba(34, 197, 94, 0.6), 0 0 72px rgba(34, 197, 94, 0.25);
+		transform: translateY(-2px);
+	}
+
+	@keyframes launchPulse {
+		0%, 100% { box-shadow: 0 0 24px rgba(34, 197, 94, 0.4), 0 0 48px rgba(34, 197, 94, 0.15); }
+		50% { box-shadow: 0 0 32px rgba(34, 197, 94, 0.55), 0 0 64px rgba(34, 197, 94, 0.2); }
 	}
 
 	.hero-stats {
@@ -2243,10 +2263,11 @@
 
 	:global([data-theme="light"]) .sv-title,
 	:global(:root:not([data-theme="dark"])) .sv-title {
-		background: linear-gradient(135deg, #15803d 0%, #166534 50%, #15803d 100%);
-		-webkit-background-clip: text;
-		-webkit-text-fill-color: transparent;
-		background-clip: text;
+		background: linear-gradient(135deg, #15803d 0%, #166534 50%, #15803d 100%) !important;
+		-webkit-background-clip: text !important;
+		-webkit-text-fill-color: transparent !important;
+		background-clip: text !important;
+		color: #15803d !important;
 	}
 
 	:global([data-theme="light"]) .sv-subtitle,
