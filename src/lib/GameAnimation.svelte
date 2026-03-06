@@ -9,6 +9,10 @@
 
 	let canvas: HTMLCanvasElement;
 
+	function isDarkMode(): boolean {
+		return document.documentElement.getAttribute('data-theme') !== 'light';
+	}
+
 	onMount(() => {
 		const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 		if (prefersReduced) return;
@@ -761,7 +765,8 @@
 			const cw = w();
 			const ch = h();
 			ctx.clearRect(0, 0, cw, ch);
-			ctx.fillStyle = '#050505';
+			const dark = isDarkMode();
+			ctx.fillStyle = dark ? '#050505' : '#f8fafc';
 			ctx.fillRect(0, 0, cw, ch);
 
 			// Spawn coins periodically
@@ -780,18 +785,18 @@
 			ctx.fill();
 
 			// Label
-			ctx.fillStyle = 'rgba(74, 222, 128, 0.5)';
+			ctx.fillStyle = dark ? 'rgba(74, 222, 128, 0.5)' : 'rgba(22, 101, 52, 0.6)';
 			ctx.font = `${isMobile ? 8 : 10}px monospace`;
 			ctx.textAlign = 'center';
 			ctx.fillText('DEPOSIT', cw * slotX, sy + 20);
 
 			// Attempt counter
-			ctx.fillStyle = 'rgba(134, 239, 172, 0.7)';
+			ctx.fillStyle = dark ? 'rgba(134, 239, 172, 0.7)' : 'rgba(22, 101, 52, 0.85)';
 			ctx.font = `bold ${isMobile ? 12 : 15}px monospace`;
 			ctx.fillText(`Attempts: ${attemptCount}`, cw * slotX, ch * 0.9);
 
 			// Token cost display
-			ctx.fillStyle = 'rgba(74, 222, 128, 0.4)';
+			ctx.fillStyle = dark ? 'rgba(74, 222, 128, 0.4)' : 'rgba(22, 101, 52, 0.5)';
 			ctx.font = `${isMobile ? 9 : 11}px monospace`;
 			ctx.fillText('1 ERG / attempt', cw * slotX, ch * 0.9 + 18);
 
@@ -921,7 +926,8 @@
 			const cw = w();
 			const ch = h();
 			ctx.clearRect(0, 0, cw, ch);
-			ctx.fillStyle = '#050505';
+			const dark = isDarkMode();
+			ctx.fillStyle = dark ? '#050505' : '#f8fafc';
 			ctx.fillRect(0, 0, cw, ch);
 
 			// Spawn packets occasionally
@@ -1022,7 +1028,9 @@
 				ctx.stroke();
 
 				// Label — ERGO is larger and full brightness
-				ctx.fillStyle = isErgo ? `rgba(255, 255, 255, 0.95)` : `rgba(134, 239, 172, ${0.6})`;
+				ctx.fillStyle = isErgo
+					? (dark ? `rgba(255, 255, 255, 0.95)` : `rgba(15, 23, 42, 0.9)`)
+					: (dark ? `rgba(134, 239, 172, ${0.6})` : `rgba(22, 101, 52, 0.7)`);
 				ctx.font = `bold ${isErgo ? (isMobile ? 9 : 12) : (isMobile ? 6 : 8)}px monospace`;
 				ctx.textAlign = 'center';
 				ctx.textBaseline = 'middle';

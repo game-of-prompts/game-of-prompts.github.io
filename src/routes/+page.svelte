@@ -517,7 +517,7 @@
 		<div class="narrative-content">
 			<h2 class="narrative-title">Optional Game Features</h2>
 			<p class="narrative-text">
-				Creators can enhance their games with powerful optional mechanics — from poker-style bluffing to resource constraints and multi-chain support.
+				Creators can enhance their games with powerful optional mechanics — from poker-style bluffing to resource constraints and pay-per-attempt models.
 			</p>
 		</div>
 	</div>
@@ -586,6 +586,8 @@
 	<div class="gt-grid-lines" aria-hidden="true"></div>
 </section>
 
+<!-- Hidden: multichain section (hidden per Josemi feedback, not deleted) -->
+{#if false}
 <section class="game-type-fullscreen game-type-multichain" id="feature-multichain">
 	<div class="gt-bg-glow"></div>
 	<div class="gt-animation-canvas">
@@ -605,6 +607,7 @@
 	</div>
 	<div class="gt-grid-lines" aria-hidden="true"></div>
 </section>
+{/if}
 
 <SectionTransition height={100} />
 
