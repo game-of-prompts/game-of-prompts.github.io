@@ -187,8 +187,8 @@
 				uniforms: { uTime: { value: 0.0 } },
 				transparent: true, side: THREE.DoubleSide, depthWrite: false
 			});
-			const cone = new THREE.Mesh(new THREE.ConeGeometry(18, 80, 32, 1, true), coneMat);
-			cone.position.set(0, -22, 0);
+			const cone = new THREE.Mesh(new THREE.ConeGeometry(10, 35, 32, 1, true), coneMat);
+			cone.position.set(0, -75, 0);
 			cone.rotateX(Math.PI);
 			scene.add(cone);
 
