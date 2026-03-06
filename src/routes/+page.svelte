@@ -1501,13 +1501,13 @@
 		transition: transform 0.6s ease;
 	}
 
-	.validation-card.active {
-		opacity: 1;
-		transform: translateY(0);
+	:global(.validation-card.active) {
+		opacity: 1 !important;
+		transform: translateY(0) !important;
 	}
 
-	.validation-card.active::before {
-		transform: scaleY(1);
+	:global(.validation-card.active)::before {
+		transform: scaleY(1) !important;
 	}
 
 	.validation-card:hover {
