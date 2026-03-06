@@ -18,8 +18,8 @@
 <style>
 	.cyber-logo {
 		position: relative;
-		width: 300px;
-		height: 300px;
+		width: 420px;
+		height: 420px;
 		display: flex;
 		align-items: center;
 		justify-content: center;
@@ -30,8 +30,8 @@
 	/* Invert + tint logo green for cyberpunk look */
 	.logo-img {
 		position: absolute;
-		width: 260px;
-		height: 260px;
+		width: 380px;
+		height: 380px;
 		object-fit: contain;
 		filter: invert(1) sepia(1) saturate(3) hue-rotate(95deg) brightness(1.1);
 		mix-blend-mode: screen;
@@ -101,8 +101,8 @@
 	/* Subtle pulse glow on the logo */
 	.glitch-wrapper {
 		position: relative;
-		width: 260px;
-		height: 260px;
+		width: 380px;
+		height: 380px;
 		animation: logo-pulse 3s ease-in-out infinite;
 		filter: drop-shadow(0 0 12px rgba(34, 197, 94, 0.6));
 	}
