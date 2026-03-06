@@ -110,8 +110,19 @@
 			const arch = new THREE.CylinderGeometry(11, 11, 6, 20, 1, false, 0, Math.PI);
 			arch.rotateZ(Math.PI / 2); arch.translate(0, 63, -5); add(arch);
 
-			for (const [sx, sh] of [[-16, 15], [-8, 20], [0, 25], [8, 20], [16, 15]] as [number, number][]) {
-				const s = new THREE.ConeGeometry(2.5, sh, 4); s.translate(sx, 63 + sh / 2 + 2, -5); add(s, spikeMat);
+			// Tool-style spikes: pencil body (cylinder) + sharpened tip (cone)
+			for (const [sx, sh] of [[-16, 15], [-8, 20], [0, 30], [8, 20], [16, 15]] as [number, number][]) {
+				const bodyH = sh * 0.7;
+				const tipH = sh * 0.4;
+				const r = sx === 0 ? 2.8 : 2.0; // center spike wider
+				// Body
+				const body = new THREE.CylinderGeometry(r, r, bodyH, 6);
+				body.translate(sx, 63 + bodyH / 2 + 2, -5);
+				add(body, spikeMat);
+				// Sharpened tip
+				const tip = new THREE.ConeGeometry(r, tipH, 6);
+				tip.translate(sx, 63 + bodyH + tipH / 2 + 2, -5);
+				add(tip, spikeMat);
 			}
 			for (const tx of [-13, -4.5, 4.5, 13]) {
 				const tool = new THREE.CylinderGeometry(1.0, 1.0, 20, 6);
@@ -128,6 +139,55 @@
 
 			throne.position.set(0, -22, 0);
 			scene.add(throne);
+
+			// ── CHEVRON ARCH BACKGROUND ───────────────────────────
+			// Nested concentric diamond/chevron frames behind the throne
+			const archGroup = new THREE.Group();
+			archGroup.position.set(0, -22, -20); // behind throne
+
+			const chevronMat = new THREE.LineBasicMaterial({
+				color: 0x4ade80, transparent: true, opacity: 0.65
+			});
+
+			// Build 6 nested chevron frames — each slightly larger than the last
+			for (let ring = 0; ring < 6; ring++) {
+				const s = 28 + ring * 10; // scale: 28, 38, 48, 58, 68, 78
+				const h = s * 1.15;       // height of chevron peak
+
+				// Chevron shape: /\ style diamond arch (top half only)
+				// Points: bottom-left → top-center → bottom-right
+				const pts = [
+					new THREE.Vector3(-s, 8, 0),
+					new THREE.Vector3(0, 8 + h, 0),
+					new THREE.Vector3(s, 8, 0)
+				];
+				const geo = new THREE.BufferGeometry().setFromPoints(pts);
+				archGroup.add(new THREE.Line(geo, chevronMat));
+
+				// Lower horizontal base connecting the two bottom points
+				const basePts = [
+					new THREE.Vector3(-s, 8, 0),
+					new THREE.Vector3(s, 8, 0)
+				];
+				const baseGeo = new THREE.BufferGeometry().setFromPoints(basePts);
+				archGroup.add(new THREE.Line(baseGeo, chevronMat));
+			}
+
+			// Diagonal geometric trail lower-right (from logo)
+			const trailMat = new THREE.LineBasicMaterial({
+				color: 0x22c55e, transparent: true, opacity: 0.20
+			});
+			for (let i = 0; i < 4; i++) {
+				const offset = i * 10;
+				const trailPts = [
+					new THREE.Vector3(30 + offset, -10 - offset, 0),
+					new THREE.Vector3(70 + offset, -40 - offset, 0)
+				];
+				const trailGeo = new THREE.BufferGeometry().setFromPoints(trailPts);
+				archGroup.add(new THREE.Line(trailGeo, trailMat));
+			}
+
+			scene.add(archGroup);
 
 			// ── GLOW SPRITES behind crown spikes ──────────────────
 			// Additive-blended sprite planes that simulate bloom
@@ -158,14 +218,14 @@
 			throne.add(crownGlow);
 
 			// Individual spike tip glows — bright points at each spike tip
-			for (const [sx, sh] of [[-16, 15], [-8, 20], [0, 25], [8, 20], [16, 15]] as [number, number][]) {
+			for (const [sx, sh] of [[-16, 15], [-8, 20], [0, 30], [8, 20], [16, 15]] as [number, number][]) {
 				const tipGlowMat = new THREE.SpriteMaterial({
 					map: glowTex, color: 0xbbf7d0, transparent: true,
 					opacity: 0.9, blending: THREE.AdditiveBlending, depthWrite: false
 				});
 				const tipGlow = new THREE.Sprite(tipGlowMat);
-				tipGlow.position.set(sx, 63 + sh + 2, -5);
-				const tipScale = sx === 0 ? 20 : 14; // center spike biggest
+				tipGlow.position.set(sx, 63 + sh + 4, -5);
+				const tipScale = sx === 0 ? 22 : 15;
 				tipGlow.scale.set(tipScale, tipScale, 1);
 				throne.add(tipGlow);
 			}
@@ -251,6 +311,8 @@
 				throne.rotation.y = Math.sin(t * 0.25) * 0.6;
 				throne.position.y = -22 + Math.sin(t * 0.4) * 4;
 				throne.rotation.x = Math.sin(t * 0.3) * 0.08;
+				archGroup.rotation.y = Math.sin(t * 0.25) * 0.15; // subtle parallax on arch
+				archGroup.position.y = -22 + Math.sin(t * 0.4) * 1.5;
 				pulse.intensity = 5 + Math.sin(t * 1.5) * 2;
 				crownGlowMat.opacity = 0.65 + Math.sin(t * 1.2) * 0.2;
 				coneMat.uniforms.uTime.value = t;
