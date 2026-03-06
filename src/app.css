@@ -20,8 +20,8 @@
 	--accent-glow: rgba(74, 222, 128, 0.15);
 
 	--text-primary: #f5f5f5;
-	--text-secondary: #c0c0c0;
-	--text-muted: #6b6b6b;
+	--text-secondary: #d1d1d1; /* Brighter gray for better contrast */
+	--text-muted: #7a7a7a;
 
 	--border-subtle: rgba(74, 222, 128, 0.06);
 	--border-card: rgba(74, 222, 128, 0.08);
@@ -378,20 +378,20 @@ body::after {
 	background: var(--bg-primary);
 }
 
-/* GitHub / primary button — lighter green in light mode */
+/* GitHub / primary button — solid green in light mode */
 [data-theme="light"] .btn-primary,
 :root:not([data-theme="dark"]) .btn-primary {
-	background: #dcfce7;
-	color: #166534;
-	border: 1px solid #86efac;
-	box-shadow: 0 1px 4px rgba(34, 197, 94, 0.15);
+	background: var(--green-500);
+	color: var(--bg-primary); /* Use background color for text to ensure contrast */
+	border: 1px solid var(--green-600);
+	box-shadow: 0 1px 4px rgba(34, 197, 94, 0.25);
 }
 
 [data-theme="light"] .btn-primary:hover,
 :root:not([data-theme="dark"]) .btn-primary:hover {
-	background: #bbf7d0;
-	color: #14532d;
-	box-shadow: 0 2px 12px rgba(34, 197, 94, 0.25);
+	background: var(--green-600);
+	color: var(--bg-primary);
+	box-shadow: 0 2px 12px rgba(34, 197, 94, 0.35);
 }
 
 [data-theme="light"] body::after {
@@ -452,4 +452,50 @@ body::after {
 	:root {
 		--section-padding: 60px 16px;
 	}
+}
+
+/* ===== Light mode: fix hardcoded white text in sections ===== */
+[data-theme="light"] .sv-subtitle,
+:root:not([data-theme="dark"]) .sv-subtitle {
+  color: var(--text-secondary) !important;
+}
+
+[data-theme="light"] .vc-title,
+:root:not([data-theme="dark"]) .vc-title {
+  color: var(--text-primary) !important;
+}
+
+[data-theme="light"] .vc-desc,
+:root:not([data-theme="dark"]) .vc-desc {
+  color: var(--text-secondary) !important;
+}
+
+/* Fix hero "GAME OF" text-shadow washing out on light bg */
+[data-theme="light"] .hero-title-line,
+:root:not([data-theme="dark"]) .hero-title-line {
+  text-shadow: none;
+  color: var(--text-primary);
+}
+
+/* Fix ghost buttons on light bg */
+[data-theme="light"] .btn-github,
+[data-theme="light"] .btn-learn,
+:root:not([data-theme="dark"]) .btn-github,
+:root:not([data-theme="dark"]) .btn-learn {
+  border-color: rgba(0,0,0,0.2);
+  color: var(--text-primary);
+}
+
+/* Fix stat subtitles on light bg */
+[data-theme="light"] .stat-label,
+[data-theme="light"] .feature-desc,
+:root:not([data-theme="dark"]) .stat-label,
+:root:not([data-theme="dark"]) .feature-desc {
+  color: var(--text-secondary);
+}
+
+/* ===== Light mode: improve text contrast ===== */
+[data-theme="light"] .hero-tagline,
+[data-theme="light"] .hero-description {
+  color: var(--text-secondary);
 }
