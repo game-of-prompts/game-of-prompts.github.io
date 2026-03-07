@@ -480,10 +480,20 @@ body::after {
 /* Fix ghost buttons on light bg */
 [data-theme="light"] .btn-github,
 [data-theme="light"] .btn-learn,
+[data-theme="light"] .btn-secondary,
 :root:not([data-theme="dark"]) .btn-github,
-:root:not([data-theme="dark"]) .btn-learn {
-  border-color: rgba(0,0,0,0.2);
+:root:not([data-theme="dark"]) .btn-learn,
+:root:not([data-theme="dark"]) .btn-secondary {
+  border-color: rgba(0,0,0,0.25);
   color: var(--text-primary);
+  background: rgba(0,0,0,0.04);
+}
+
+[data-theme="light"] .btn-secondary:hover,
+:root:not([data-theme="dark"]) .btn-secondary:hover {
+  border-color: var(--green-500);
+  color: var(--green-500);
+  background: rgba(22,163,74,0.06);
 }
 
 /* Fix stat subtitles on light bg */
