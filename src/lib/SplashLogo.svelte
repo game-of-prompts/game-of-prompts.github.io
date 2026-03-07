@@ -27,25 +27,25 @@
 		border-radius: 8px;
 	}
 
-	/* Invert + tint logo green for cyberpunk look */
+	/* Invert + tint logo to match title green #22c55e */
 	.logo-img {
 		position: absolute;
 		width: 380px;
 		height: 380px;
 		object-fit: contain;
-		filter: invert(1) sepia(1) saturate(3) hue-rotate(95deg) brightness(1.1);
+		filter: invert(1) sepia(1) saturate(4) hue-rotate(100deg) brightness(0.9);
 		mix-blend-mode: screen;
 	}
 
 	/* Glitch layers — offset RGB splits */
 	.glitch-r {
-		filter: invert(1) sepia(1) saturate(3) hue-rotate(95deg) brightness(1.1);
+		filter: invert(1) sepia(1) saturate(4) hue-rotate(100deg) brightness(0.9);
 		mix-blend-mode: screen;
 		opacity: 0.4;
 		animation: glitch-r 4s infinite;
 	}
 	.glitch-b {
-		filter: invert(1) sepia(1) saturate(2) hue-rotate(200deg) brightness(0.9);
+		filter: invert(1) sepia(1) saturate(2) hue-rotate(200deg) brightness(0.8);
 		mix-blend-mode: screen;
 		opacity: 0.25;
 		animation: glitch-b 4s infinite;
@@ -107,7 +107,7 @@
 		filter: drop-shadow(0 0 12px rgba(34, 197, 94, 0.6));
 	}
 	@keyframes logo-pulse {
-		0%, 100% { filter: drop-shadow(0 0 10px rgba(34, 197, 94, 0.5)); }
-		50% { filter: drop-shadow(0 0 22px rgba(34, 197, 94, 0.9)); }
+		0%, 100% { filter: drop-shadow(0 0 14px rgba(34, 197, 94, 0.7)) drop-shadow(0 0 30px rgba(34, 197, 94, 0.3)); }
+		50% { filter: drop-shadow(0 0 28px rgba(34, 197, 94, 1.0)) drop-shadow(0 0 60px rgba(34, 197, 94, 0.5)); }
 	}
 </style>
