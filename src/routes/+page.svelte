@@ -300,8 +300,8 @@
 			description: 'Find interesting games on GoP Web. Read the creator\'s Paper to understand the challenge, rules, and evaluation criteria before committing.'
 		},
 		{
-			title: 'Register Solver ID (Free)',
-			description: 'Submit your Solver ID on-chain during the ceremony phase. This is a free pre-commitment — no cost, no risk. It must happen BEFORE the game seed is revealed to prevent cheating.'
+			title: 'Register Solver ID',
+			description: 'Register Solver ID (Gas-only). Registration is free, you only cover the network gas fee. This pre-commitment ensures fairness before the seed is revealed.'
 		},
 		{
 			title: 'Seed is Revealed',
@@ -309,11 +309,11 @@
 		},
 		{
 			title: 'Run the Game Service',
-			description: 'Run the game service with the revealed seed. Design and optimize your solver to maximize your score against the actual challenge.'
+			description: 'Run the game service locally with the revealed seed. The service will execute your solver in a secure environment, evaluate its performance, and generate the cryptographic commitment needed for on-chain validation.'
 		},
 		{
 			title: 'Submit Commitment & Pay Fee',
-			description: 'If you want to compete, submit your cryptographic commitment on-chain and pay the participation fee. All fees go into the pot — the winner takes all (minus creator commission and judge fees).'
+			description: 'If you want to compete, submit your cryptographic commitment on-chain and pay the participation fee. All fees go into the pot — the winner takes all (minus creator, judges, and platform commission).'
 		}
 	]}
 />
@@ -323,7 +323,31 @@
 <!-- ============================================ -->
 <!-- SCROLLYTELLING - THE JOURNEY                 -->
 <!-- ============================================ -->
-<Scrollytelling />
+<Scrollytelling 
+	title="How It All Comes Together"
+	steps={[
+		{
+			title: 'A creator builds a game',
+			desc: 'Design a challenge with measurable scoring. Package it as an immutable Celaut service.',
+			icon: 'game'
+		},
+		{
+			title: 'Solvers compete',
+			desc: 'Players craft AI solver-services and race to find the highest-scoring strategy.',
+			icon: 'solvers'
+		},
+		{
+			title: 'Results sealed on Ergo',
+			desc: 'Cryptographic commitments are published on the Ergo blockchain. No tampering possible.',
+			icon: 'blockchain'
+		},
+		{
+			title: 'Winner takes the pot',
+			desc: 'The game secret is revealed. Smart contracts verify scores and the winner receives all participation fees, minus commission.',
+			icon: 'trophy'
+		}
+	]}
+/>
 
 <SectionTransition height={100} />
 
@@ -335,7 +359,7 @@
 		<ScrollAnimation>
 			<span class="section-label">Security</span>
 			<h2 class="section-title">Transparent Yet Private Competition</h2>
-			<p class="section-subtitle">Advanced cryptography ensures fair competition while protecting participants' strategies.</p>
+			<p class="section-subtitle">Cryptography ensures fair competition while protecting participants' strategies.</p>
 		</ScrollAnimation>
 
 		<div class="security-grid">
@@ -348,7 +372,7 @@
 						</svg>
 					</div>
 					<h3>Code Protection</h3>
-					<p>The game's intellectual property and solution are protected through obfuscation to prevent reverse engineering.</p>
+					<p>The game's intellectual property and game secret are protected through obfuscation to prevent reverse engineering.</p>
 				</div>
 			</ScrollAnimation>
 			<ScrollAnimation delay={150} animation="scale">
@@ -361,7 +385,7 @@
 						</svg>
 					</div>
 					<h3>Private Results</h3>
-					<p>Results are concealed using cryptographic commitments, ensuring a private and unbiased competition.</p>
+					<p>Strategic decoys and cryptographic commitments conceal your true score, protecting your strategy until the final reveal.</p>
 				</div>
 			</ScrollAnimation>
 			<ScrollAnimation delay={300} animation="scale">
@@ -394,11 +418,11 @@
 
 		<div class="sv-steps">
 			{#each [
-				{ num: '01', title: 'Player Participation', desc: 'Player publishes their participation on the Ergo blockchain, staking ERG to enter the competition.', type: 'participation' as const, badge: 'SUBMITTED' },
+				{ num: '01', title: 'Player Participation', desc: 'Player publishes their participation on the Ergo blockchain.', type: 'participation' as const, badge: 'SUBMITTED' },
 				{ num: '02', title: 'Creator Reveals Secret', desc: 'After the deadline, the creator reveals the game secret in the resolution transaction — unlocking verification.', type: 'reveal' as const, badge: 'REVEALED' },
 				{ num: '03', title: 'Smart Contract Validation', desc: 'The game contract computes a commitment for each score using the solver ID, score value, hashed logs, and revealed secret.', type: 'validation' as const, badge: 'COMPUTED' },
 				{ num: '04', title: 'Score Verification', desc: 'When the score commitment matches the participation commitment, that score is validated as authentic and tamper-proof.', type: 'verification' as const, badge: 'VERIFIED' },
-				{ num: '05', title: 'Winner Takes the Pot', desc: 'The highest validated score wins. All participation fees are distributed automatically — winner takes all, minus creator commission and judge fees.', type: 'winner' as const, badge: 'DISTRIBUTED' }
+				{ num: '05', title: 'Winner Takes the Pot', desc: 'Highest score wins. Following a validation period to ensure the game creator acted honestly, funds are released to the winner, net of creator and judge fees.', type: 'winner' as const, badge: 'DISTRIBUTED' }
 			] as step, idx}
 				<div class="validation-card" data-step={idx}>
 					<div class="vc-animation">
@@ -414,10 +438,6 @@
 					</div>
 				</div>
 			{/each}
-		</div>
-
-		<div class="sv-cta-wrap">
-			<!-- Validated On-Chain button removed per Josemi feedback -->
 		</div>
 	</div>
 </section>
@@ -468,7 +488,7 @@
 		<span class="gt-icon" aria-hidden="true">🌍</span>
 		<span class="gt-label">Game Type 02</span>
 		<h2 class="gt-title">Open World</h2>
-		<p class="gt-desc">Explore, build, and adapt in rich voxel-based worlds. Reuse the same world seed into thousands of unique challenges.</p>
+		<p class="gt-desc">Optimize for spatial reasoning, navigation, and environmental adaptation.</p>
 		<p class="gt-score"><span class="gt-score-label">SCORING</span> Resource efficiency · Map exploration · Mission complexity</p>
 	</div>
 	<div class="gt-grid-lines" aria-hidden="true"></div>
@@ -550,7 +570,7 @@
 	</div>
 	<div class="gt-content">
 		<span class="gt-icon" aria-hidden="true">🃏</span>
-		<span class="gt-label">Feature 02 · <span class="feature-tag-status coming-soon">Coming Soon</span></span>
+		<span class="gt-label">Feature 02 · <span class="feature-tag-status coming-soon">Under Research</span></span>
 		<h2 class="gt-title">Poker Mode</h2>
 		<p class="gt-desc">Strategic participation with risk and reward. Bluff, bet, and multiply your score.</p>
 		<ul class="gt-bullets">
@@ -573,18 +593,18 @@
 		<span class="gt-icon" aria-hidden="true">🔬</span>
 		<span class="gt-label">Feature 03 · <span class="feature-tag-status research">Under Research</span></span>
 		<h2 class="gt-title">Pay-per-Attempt</h2>
-		<p class="gt-desc">Upcoming payment model where each game attempt costs tokens. Strategic resource allocation meets skill.</p>
+		<p class="gt-desc">A mechanism that assigns a cost to each local execution, fostering high-quality agent development over trial-and-error.</p>
 		<ul class="gt-bullets">
-			<li>Each attempt requires a token deposit</li>
-			<li>Encourages thoughtful, high-quality submissions</li>
-			<li>Prevents brute-force spam of solutions</li>
-			<li>Token costs configurable by game creator</li>
+			<li>Incremental token cost per local execution attempt</li>
+			<li>Encourages rigorous local simulation and optimization</li>
+			<li>Disincentivizes blind brute-force strategies</li>
+			<li>Difficulty scaling fully configurable by the game creator</li>
 		</ul>
 	</div>
 	<div class="gt-grid-lines" aria-hidden="true"></div>
 </section>
 
-<!-- Hidden: multichain section (hidden per Josemi feedback, not deleted) -->
+<!-- Hidden: multichain section -->
 {#if false}
 <section class="game-type-fullscreen game-type-multichain" id="feature-multichain">
 	<div class="gt-bg-glow"></div>
@@ -753,10 +773,10 @@
 						<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" /></svg>
 						GitHub Repository
 					</a>
-					<a href="https://github.com/celaut-project" class="btn btn-secondary" target="_blank" rel="noopener" use:hoverCorners>
+					<a href="https://celaut-project.github.io" class="btn btn-secondary" target="_blank" rel="noopener" use:hoverCorners>
 						Celaut Project
 					</a>
-					<a href="https://ergoplatform.org" class="btn btn-secondary" target="_blank" rel="noopener" use:hoverCorners>
+					<a href="https://ergoblockchain.org" class="btn btn-secondary" target="_blank" rel="noopener" use:hoverCorners>
 						Ergo Platform
 					</a>
 				</div>
@@ -775,10 +795,11 @@
 			<p>Write your prompts. Build your bot. Win the throne.</p>
 			<p class="footer-links">
 				<a href="https://github.com/game-of-prompts" target="_blank" rel="noopener">GitHub</a>
-				· <a href="https://ergoplatform.org" target="_blank" rel="noopener">Ergo</a>
-				· <a href="https://github.com/celaut-project" target="_blank" rel="noopener">Celaut</a>
+				· <a href="https://ergoblockchain.org" target="_blank" rel="noopener">Ergo</a>
+				· <a href="https://celaut-project.github.io" target="_blank" rel="noopener">Celaut</a>
 			</p>
 		</div>
+		<!-- svelte-ignore a11y_invalid_attribute -->
 		<a href="#" class="back-to-top" aria-label="Back to top" use:hoverCorners>↑</a>
 	</div>
 </footer>

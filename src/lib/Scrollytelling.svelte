@@ -13,34 +13,13 @@
 		steps?: Step[];
 	}
 
-	let { title = 'How It All Comes Together', steps: propSteps }: Props = $props();
+	let { title = '', steps: propSteps }: Props = $props();
 
 	let section: HTMLElement;
 	let progress = $state(0);
 	let prefersReducedMotion = $state(false);
 
-	const defaultSteps: Step[] = [
-		{
-			title: 'A creator builds a game',
-			desc: 'Design a challenge with measurable scoring. Package it as an immutable Celaut service.',
-			icon: 'game'
-		},
-		{
-			title: 'Solvers compete',
-			desc: 'Players craft AI solver-services and race to find the highest-scoring strategy.',
-			icon: 'solvers'
-		},
-		{
-			title: 'Results sealed on Ergo',
-			desc: 'Cryptographic commitments are published on the Ergo blockchain. No tampering possible.',
-			icon: 'blockchain'
-		},
-		{
-			title: 'Winner takes the pot',
-			desc: 'The game secret is revealed. Smart contracts verify scores and the winner receives all participation fees, minus creator commission and judge fees.',
-			icon: 'trophy'
-		}
-	];
+	const defaultSteps: Step[] = [];
 
 	const steps = $derived(propSteps ?? defaultSteps);
 	const currentStep = $derived(Math.min(Math.floor(progress * steps.length), steps.length - 1));

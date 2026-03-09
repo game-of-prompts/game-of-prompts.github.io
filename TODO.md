@@ -1,0 +1,2 @@
+- Agregar en player journey que debe implementar el solver como segundo paso.
+- Agregar que ademas del premio economico el ganador recibe el NFT del juego.
