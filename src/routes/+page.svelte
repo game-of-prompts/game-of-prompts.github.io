@@ -300,6 +300,10 @@
 			description: 'Find interesting games on GoP Web. Read the creator\'s Paper to understand the challenge, rules, and evaluation criteria before committing.'
 		},
 		{
+			title: 'Implement Your Solver',
+			description: 'Build your solver-service based on the Paper so it is ready to compete once the seed is revealed.'
+		},
+		{
 			title: 'Register Solver ID',
 			description: 'Register Solver ID (Gas-only). Registration is free, you only cover the network gas fee. This pre-commitment ensures fairness before the seed is revealed.'
 		},
@@ -313,7 +317,7 @@
 		},
 		{
 			title: 'Submit Commitment & Pay Fee',
-			description: 'If you want to compete, submit your cryptographic commitment on-chain and pay the participation fee. All fees go into the pot — the winner takes all (minus creator, judges, and platform commission).'
+			description: 'If you want to compete, submit your cryptographic commitment on-chain and pay the participation fee. All fees go into the pot — the winner takes the economic prize (minus creator, judges, and platform commission) and receives the game NFT.'
 		}
 	]}
 />
@@ -343,7 +347,7 @@
 		},
 		{
 			title: 'Winner takes the pot',
-			desc: 'The game secret is revealed. Smart contracts verify scores and the winner receives all participation fees, minus commission.',
+			desc: 'The game secret is revealed. Smart contracts verify scores and the winner receives all participation fees, minus commission, plus the game NFT.',
 			icon: 'trophy'
 		}
 	]}
