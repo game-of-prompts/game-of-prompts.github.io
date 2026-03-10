@@ -94,13 +94,16 @@
 		gap: 2rem;
 		text-align: center;
 		padding: 2rem;
+		width: 100%;
+		max-width: 100vw;
+		overflow: hidden;
 	}
 
-	/* BIGGER LOGO — 300px container */
+	/* BIGGER LOGO — responsive container */
 	.logo-wrap {
 		position: relative;
-		width: 420px;
-		height: 420px;
+		width: min(420px, 80vw);
+		height: min(420px, 80vw);
 		display: flex;
 		align-items: center;
 		justify-content: center;

@@ -18,8 +18,8 @@
 <style>
 	.cyber-logo {
 		position: relative;
-		width: 420px;
-		height: 420px;
+		width: min(420px, 80vw);
+		height: min(420px, 80vw);
 		display: flex;
 		align-items: center;
 		justify-content: center;
@@ -30,8 +30,8 @@
 	/* Invert + tint logo to match title green #22c55e */
 	.logo-img {
 		position: absolute;
-		width: 380px;
-		height: 380px;
+		width: min(380px, 72vw);
+		height: min(380px, 72vw);
 		object-fit: contain;
 		filter: invert(1) sepia(1) saturate(4) hue-rotate(100deg) brightness(0.9);
 		mix-blend-mode: screen;
@@ -101,8 +101,8 @@
 	/* Subtle pulse glow on the logo */
 	.glitch-wrapper {
 		position: relative;
-		width: 380px;
-		height: 380px;
+		width: min(380px, 72vw);
+		height: min(380px, 72vw);
 		animation: logo-pulse 3s ease-in-out infinite;
 		filter: drop-shadow(0 0 12px rgba(34, 197, 94, 0.6));
 	}
