@@ -357,6 +357,7 @@
 		width: 100%;
 		max-width: 600px;
 		height: 300px;
+		overflow: visible;
 	}
 
 	.step-panel {
@@ -572,7 +573,29 @@
 		}
 
 		.steps-viewport {
-			height: 280px;
+			height: auto;
+			min-height: 300px;
+		}
+
+		.step-panel {
+			position: relative;
+			inset: auto;
+		}
+
+		.step-panel:not(.active) {
+			display: none;
+		}
+
+		.step-panel.active {
+			display: flex;
+		}
+
+		.step-text p {
+			font-size: 0.95rem;
+		}
+
+		.journey-header h2 {
+			font-size: clamp(1.5rem, 4vw, 2rem);
 		}
 	}
 </style>

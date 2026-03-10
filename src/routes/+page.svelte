@@ -973,6 +973,7 @@
 
 	.video-card {
 		max-width: 800px;
+		width: 100%;
 		margin: 2.5rem auto 0;
 		border-radius: 16px;
 		padding: 4px;
@@ -983,7 +984,6 @@
 	.video-wrapper {
 		width: 100%;
 		aspect-ratio: 16 / 9;
-		min-height: 400px;
 		border-radius: 13px;
 		overflow: hidden;
 		background: #000;
