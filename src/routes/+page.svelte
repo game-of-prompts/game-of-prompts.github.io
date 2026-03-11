@@ -10,7 +10,7 @@
 	import { hoverCorners } from '$lib/hoverCorners';
 	import FaqSection from '$lib/FaqSection.svelte';
 
-	const VIDEO_ID = 'UCjDwDj2gGs';
+	const VIDEO_ID = 'BeFfxoGaxQ4';
 	let videoStarted = $state(false);
 	function startVideo() { videoStarted = true; }
 
