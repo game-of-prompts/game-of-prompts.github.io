@@ -33,6 +33,30 @@
 	--section-padding: 80px 24px;
 	--radius: 12px;
 	--radius-lg: 16px;
+
+	/* ===== Immersive scene tokens (dark) =====
+	   Consumed by src/lib/motion.js -> cssVar(), so every procedural
+	   canvas resolves its colours from here at draw time and re-themes
+	   the instant [data-theme] flips. Keep light mode below in sync. */
+	--surface: #101010;
+	--surface-deep: #050505;
+	--surface-deep-rgb: 5, 5, 5;
+	--on-surface: #f5f5f5;
+	--on-surface-rgb: 245, 245, 245;
+	--on-surface-muted: #d1d1d1;
+	--on-surface-subtle: #7a7a7a;
+	--accent: #4ade80;
+	--accent-hover: #22c55e;
+	--accent-text: #4ade80;
+	--on-accent: #04170c;
+	--border: rgba(74, 222, 128, 0.14);
+	--border-strong: rgba(74, 222, 128, 0.3);
+	/* Canvas-only visualisation palette */
+	--viz-node: #4ade80;
+	--viz-link: rgba(74, 222, 128, 0.4);
+	--viz-grid: rgba(245, 245, 245, 0.07);
+	--viz-warm: #fbbf24;
+	--viz-dim: rgba(245, 245, 245, 0.22);
 }
 
 /* ===== Light Mode ===== */
@@ -53,6 +77,28 @@
 	--green-500: #15803d;
 	--green-600: #166534;
 	--accent-color: #16a34a;
+
+	/* ===== Immersive scene tokens (light) =====
+	   Every token declared in :root must be redeclared here — a partial
+	   light block is what produced the low-contrast regressions before. */
+	--surface: #ffffff;
+	--surface-deep: #f8fafc;
+	--surface-deep-rgb: 248, 250, 252;
+	--on-surface: #0f172a;
+	--on-surface-rgb: 15, 23, 42;
+	--on-surface-muted: #334155;
+	--on-surface-subtle: #64748b;
+	--accent: #16a34a;
+	--accent-hover: #15803d;
+	--accent-text: #15803d;
+	--on-accent: #ffffff;
+	--border: rgba(15, 23, 42, 0.12);
+	--border-strong: rgba(15, 23, 42, 0.26);
+	--viz-node: #15803d;
+	--viz-link: rgba(21, 128, 61, 0.42);
+	--viz-grid: rgba(15, 23, 42, 0.09);
+	--viz-warm: #b45309;
+	--viz-dim: rgba(15, 23, 42, 0.24);
 }
 
 @media (prefers-color-scheme: light) {
@@ -72,6 +118,25 @@
 		--green-500: #15803d;
 		--green-600: #166534;
 		--accent-color: #16a34a;
+
+		--surface: #ffffff;
+		--surface-deep: #f8fafc;
+		--surface-deep-rgb: 248, 250, 252;
+		--on-surface: #0f172a;
+		--on-surface-rgb: 15, 23, 42;
+		--on-surface-muted: #334155;
+		--on-surface-subtle: #64748b;
+		--accent: #16a34a;
+		--accent-hover: #15803d;
+		--accent-text: #15803d;
+		--on-accent: #ffffff;
+		--border: rgba(15, 23, 42, 0.12);
+		--border-strong: rgba(15, 23, 42, 0.26);
+		--viz-node: #15803d;
+		--viz-link: rgba(21, 128, 61, 0.42);
+		--viz-grid: rgba(15, 23, 42, 0.09);
+		--viz-warm: #b45309;
+		--viz-dim: rgba(15, 23, 42, 0.24);
 	}
 }
 

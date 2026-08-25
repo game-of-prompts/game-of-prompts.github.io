@@ -1,70 +1,198 @@
 <script lang="ts">
+	/*
+	 * Game of Prompts — immersive landing page.
+	 *
+	 * The story is staged as a sequence of full-screen PINNED scenes.
+	 * Each one holds the viewport while the scroll wheel scrubs a
+	 * procedural <canvas> animation and cross-fades the caption beats
+	 * beside it, so the protocol explains itself visually instead of
+	 * being listed:
+	 *
+	 *   1. The arena          — a challenge is posted, solvers compete
+	 *   2. Three components   — game service · solver service · GoP Web
+	 *   3. The creator's flow — design → paper → secret → publish → reveal
+	 *   4. The player's journey — read → build → register → seed → run → submit
+	 *   5. Score validation   — the contract recomputes the commitment
+	 *   6. The pot            — fees in, commissions out, winner + NFT
+	 *   7. Judges             — the creator gets audited, not the players
+	 *
+	 * Below the scenes the page returns to normal flow for the things
+	 * that want to be read rather than watched: the video, the security
+	 * summary, the game-type showcase, the FAQ and the CTA.
+	 *
+	 * MOTION IS ADDITIVE ONLY. Under prefers-reduced-motion the pins and
+	 * scrubs never initialise, each canvas paints one final frame, and
+	 * every caption beat renders stacked — the exact same words, as a
+	 * plain illustrated article.
+	 *
+	 * The splash screen (SplashScreen/SplashLogo, mounted in +layout)
+	 * is deliberately untouched.
+	 */
+
 	import { onMount } from 'svelte';
 	import ScrollAnimation from '$lib/ScrollAnimation.svelte';
-	import ParticleNetwork from '$lib/ParticleNetwork.svelte';
-	import Scrollytelling from '$lib/Scrollytelling.svelte';
-	import AnimatedCounter from '$lib/AnimatedCounter.svelte';
 	import SectionTransition from '$lib/SectionTransition.svelte';
 	import GameAnimation from '$lib/GameAnimation.svelte';
-	import ValidationAnimation from '$lib/ValidationAnimation.svelte';
 	import { hoverCorners } from '$lib/hoverCorners';
 	import FaqSection from '$lib/FaqSection.svelte';
+
+	import ImmersiveHero from '$lib/immersive/ImmersiveHero.svelte';
+	import PinnedScene from '$lib/immersive/PinnedScene.svelte';
+	import SceneBeat from '$lib/immersive/SceneBeat.svelte';
+	import {
+		drawArenaScene,
+		drawComponentsScene,
+		drawCreatorScene,
+		drawPlayerScene,
+		drawValidationScene,
+		drawPotScene,
+		drawJudgesScene
+	} from '$lib/immersive/scenes.js';
+	import { startSmoothScroll, loadGsap, prefersReducedMotion } from '$lib/motion.js';
 
 	const VIDEO_ID = 'BeFfxoGaxQ4';
 	let videoStarted = $state(false);
 	function startVideo() { videoStarted = true; }
 
-	function triggerExplosion(e: MouseEvent) {
-		const btn = e.currentTarget as HTMLElement;
-		btn.classList.add('sv-exploded');
-		for (let i = 0; i < 60; i++) {
-			const p = document.createElement('div');
-			p.className = 'sv-particle';
-			const angle = (Math.PI * 2 * i) / 60;
-			const dist = 80 + Math.random() * 120;
-			p.style.setProperty('--px', Math.cos(angle) * dist + 'px');
-			p.style.setProperty('--py', Math.sin(angle) * dist + 'px');
-			p.style.setProperty('--delay', (Math.random() * 0.2) + 's');
-			btn.appendChild(p);
+	const heroActions = [
+		{ label: 'Launch App', href: 'https://game-of-prompts.github.io/app/', external: true, primary: true },
+		{ label: 'View on GitHub', href: 'https://github.com/game-of-prompts', external: true },
+		{ label: 'See how it works', href: '#arena' }
+	];
+
+	const heroStats = [
+		{ value: 'P2P', label: 'Decentralized — services run on your own Celaut node' },
+		{ value: 'On-chain', label: 'Results committed and verified on Ergo' },
+		{ value: 'Trustless', label: 'Smart contracts settle the pot, not a company' }
+	];
+
+	// The five score-validation steps, kept as readable reference under
+	// the pinned validation scene.
+	const validationSteps = [
+		{
+			num: '01',
+			badge: 'SUBMITTED',
+			title: 'Player Participation',
+			desc: 'Player publishes their participation on the Ergo blockchain.'
+		},
+		{
+			num: '02',
+			badge: 'REVEALED',
+			title: 'Creator Reveals Secret',
+			desc: 'After the deadline, the creator reveals the game secret in the resolution transaction — unlocking verification.'
+		},
+		{
+			num: '03',
+			badge: 'COMPUTED',
+			title: 'Smart Contract Validation',
+			desc: 'The game contract computes a commitment for each score using the solver ID, score value, hashed logs, and revealed secret.'
+		},
+		{
+			num: '04',
+			badge: 'VERIFIED',
+			title: 'Score Verification',
+			desc: 'When the score commitment matches the participation commitment, that score is validated as authentic and tamper-proof.'
+		},
+		{
+			num: '05',
+			badge: 'DISTRIBUTED',
+			title: 'Winner Takes the Pot',
+			desc: 'Highest score wins. Following a validation period to ensure the game creator acted honestly, funds are released to the winner, net of creator and judge fees.'
 		}
-		window.setTimeout(() => {
-			const particles = btn.querySelectorAll('.sv-particle');
-			particles.forEach((el) => el.remove());
-			btn.classList.remove('sv-exploded');
-		}, 1200);
-	}
+	];
+
+	let motion = $state(false);
+	let groundRoot: HTMLElement;
 
 	onMount(() => {
-		// IntersectionObserver for validation cards — staggered cascade
-		const cards = document.querySelectorAll('.validation-card');
-		const cardObserver = new IntersectionObserver((entries) => {
-			entries.forEach(e => {
-				if (e.isIntersecting) {
-					e.target.classList.add('active');
-				}
-			});
-		}, { threshold: 0.3 });
-		cards.forEach(c => cardObserver.observe(c));
+		motion = !prefersReducedMotion();
 
-		// Copy button handlers for AI links
+		// Copy button handlers for the "ask an AI" prompt in the FAQ.
 		const copyBtns = document.querySelectorAll('.copy-btn[data-copy-url]');
+		const copyHandlers: Array<[Element, () => void]> = [];
 		copyBtns.forEach((btn) => {
-			btn.addEventListener('click', () => {
+			const handler = () => {
 				const url = btn.getAttribute('data-copy-url');
-				if (url) {
-					navigator.clipboard.writeText(url);
-					btn.classList.add('copied');
-					const label = btn.querySelector('.copy-label');
-					if (label) label.textContent = 'Copied!';
-					window.setTimeout(() => {
-						btn.classList.remove('copied');
-						if (label) label.textContent = 'Copy';
-					}, 2000);
-				}
-			});
+				if (!url) return;
+				navigator.clipboard.writeText(url);
+				btn.classList.add('copied');
+				const labelEl = btn.querySelector('.copy-label');
+				if (labelEl) labelEl.textContent = 'Copied!';
+				window.setTimeout(() => {
+					btn.classList.remove('copied');
+					if (labelEl) labelEl.textContent = 'Copy prompt';
+				}, 2000);
+			};
+			btn.addEventListener('click', handler);
+			copyHandlers.push([btn, handler]);
 		});
 
-		return () => cardObserver.disconnect();
+		let stopScroll = () => {};
+		let cleanupGsap = () => {};
+		let cancelled = false;
+
+		startSmoothScroll().then((stop) => {
+			if (cancelled) stop();
+			else stopScroll = stop;
+		});
+
+		if (prefersReducedMotion()) {
+			return () => {
+				copyHandlers.forEach(([el, h]) => el.removeEventListener('click', h));
+			};
+		}
+
+		loadGsap().then((bits) => {
+			if (!bits || cancelled) return;
+			const { gsap, ScrollTrigger } = bits;
+			const scope = gsap.context(() => {
+				// Light reveals for the non-pinned sections below the scenes.
+				gsap.utils.toArray<HTMLElement>('[data-reveal]').forEach((el) => {
+					gsap.from(el, {
+						y: 28,
+						opacity: 0,
+						duration: 0.7,
+						ease: 'power2.out',
+						scrollTrigger: { trigger: el, start: 'top 88%' }
+					});
+				});
+				gsap.utils.toArray<HTMLElement>('[data-reveal-group]').forEach((group) => {
+					gsap.from(group.children, {
+						y: 26,
+						opacity: 0,
+						duration: 0.6,
+						ease: 'power2.out',
+						stagger: 0.07,
+						scrollTrigger: { trigger: group, start: 'top 85%' }
+					});
+				});
+				// Parallax on the full-screen game-type showcases: the copy
+				// drifts against its canvas as each one passes through.
+				gsap.utils.toArray<HTMLElement>('.game-type-fullscreen').forEach((sec) => {
+					const copy = sec.querySelector('.gt-content');
+					const art = sec.querySelector('.gt-animation-canvas');
+					if (!copy || !art) return;
+					gsap
+						.timeline({
+							scrollTrigger: { trigger: sec, start: 'top bottom', end: 'bottom top', scrub: 0.5 }
+						})
+						.fromTo(copy, { y: 60 }, { y: -60, ease: 'none' }, 0)
+						.fromTo(art, { y: -34, scale: 1.06 }, { y: 34, scale: 1, ease: 'none' }, 0);
+				});
+			});
+
+			// Pins are created by the PinnedScene children; one refresh once
+			// fonts and images have settled keeps every start/end accurate.
+			ScrollTrigger.refresh();
+			cleanupGsap = () => scope.revert();
+		});
+
+		return () => {
+			cancelled = true;
+			copyHandlers.forEach(([el, h]) => el.removeEventListener('click', h));
+			stopScroll();
+			cleanupGsap();
+		};
 	});
 </script>
 
@@ -83,43 +211,387 @@
 <!-- ============================================ -->
 <!-- HERO SECTION                                 -->
 <!-- ============================================ -->
-<section class="hero">
-	<ParticleNetwork />
-	<div class="hero-glow"></div>
-	<div class="hero-content container">
-		<div class="hero-title-block">
-			<h1 class="hero-main-title" data-text="GAME OF PROMPTS">
-				<span class="hero-title-line">GAME OF</span>
-				<span class="hero-title-line hero-title-accent">PROMPTS</span>
-			</h1>
-			<p class="hero-tagline">Write your prompts. <span class="gradient-text">Build your bot.</span> Win the throne.</p>
-		</div>
-		<p class="hero-description">
-			A competitive platform where creators design game-services to evaluate AI solvers,
-			and players build solver-services to maximize their scores — all recorded and verified on-chain.
-		</p>
-		<div class="hero-actions">
-			<a href="https://game-of-prompts.github.io/app/" class="btn btn-primary btn-launch" target="_blank" rel="noopener" use:hoverCorners>
-				Launch App
-			</a>
-			<a href="https://github.com/game-of-prompts" class="btn btn-secondary" target="_blank" rel="noopener" use:hoverCorners>
-				<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" /></svg>
-				View on GitHub
-			</a>
-			<a href="#how-it-works" class="btn btn-secondary" use:hoverCorners>
-				Learn More
-				<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 13l5 5 5-5M7 6l5 5 5-5" /></svg>
-			</a>
-		</div>
-		<div class="hero-stats">
-			<AnimatedCounter text="P2P" label="Decentralized" />
-			<div class="hero-stat-divider"></div>
-			<AnimatedCounter text="On-chain" label="Verified Results" />
-			<div class="hero-stat-divider"></div>
-			<AnimatedCounter text="Trustless" label="Smart Contracts" />
-		</div>
+
+<ImmersiveHero
+	titleTop="GAME OF"
+	titleBottom="PROMPTS"
+	tagline={'Write your prompts. <span class="hero-grad">Build your bot.</span> Win the throne.'}
+	lede="A competitive platform where creators design game-services to evaluate AI solvers, and players build solver-services to maximize their scores — all recorded and verified on-chain."
+	actions={heroActions}
+	stats={heroStats}
+	firstSceneId="arena"
+/>
+
+<!-- ============================================================ -->
+<!-- SCENE 1 — The arena                                          -->
+<!-- ============================================================ -->
+<PinnedScene
+	id="arena"
+	label="The idea"
+	draw={drawArenaScene}
+	scrollLength={2.4}
+	let:progress
+	let:static={isStatic}
+>
+	<div class="beats" class:flow={isStatic}>
+		<SceneBeat {progress} {isStatic} from={0.0} to={0.315}>
+			<h2>Someone posts a challenge.</h2>
+			<p>
+				A creator designs a game with measurable scoring — and packages it as a
+				<strong>game-service</strong>: an immutable Celaut service that holds the game's
+				logic and its secret.
+			</p>
+		</SceneBeat>
+
+		<SceneBeat {progress} {isStatic} from={0.315} to={0.648}>
+			<h2>Everyone else builds a bot to beat it.</h2>
+			<p>
+				Players write <strong>solver-services</strong> — their strategy, packaged the same
+				way. The game-service runs each solver in a secure, isolated environment and scores
+				what it did.
+			</p>
+		</SceneBeat>
+
+		<SceneBeat {progress} {isStatic} from={0.648} to={1} hold>
+			<h2>The highest score wins the throne.</h2>
+			<p>
+				No leaderboard you have to trust. Every score is committed cryptographically and
+				<strong>settled on the Ergo blockchain</strong>, where anyone can check the maths.
+			</p>
+			<span class="beat-note">Write your prompts. Build your bot. Win the throne.</span>
+		</SceneBeat>
+	</div>
+</PinnedScene>
+
+<!-- ============================================================ -->
+<!-- SCENE 2 — Core components                                    -->
+<!-- ============================================================ -->
+<PinnedScene
+	id="components"
+	label="Architecture"
+	align="right"
+	draw={drawComponentsScene}
+	scrollLength={2.6}
+	let:progress
+	let:static={isStatic}
+>
+	<div class="beats" class:flow={isStatic}>
+		<SceneBeat {progress} {isStatic} from={0.0} to={0.25}>
+			<h2>Game Service</h2>
+			<p>
+				Built by game devs. An autonomous service that encapsulates a game's logic and the
+				secret. It evaluates solver performance, generates scores, and creates the
+				<strong>cryptographic commitments</strong> needed for blockchain validation.
+			</p>
+		</SceneBeat>
+
+		<SceneBeat {progress} {isStatic} from={0.25} to={0.518}>
+			<h2>Solver Service</h2>
+			<p>
+				Built by players. It implements strategies to maximize the score in a specific game.
+				The solver is packaged and sent to the game-service, which
+				<strong>executes it in a secure, isolated environment</strong> for evaluation.
+			</p>
+		</SceneBeat>
+
+		<SceneBeat {progress} {isStatic} from={0.518} to={0.786}>
+			<h2>GoP Web</h2>
+			<p>
+				The community portal. Discover games, read the rules, download game-services, and
+				publish your results on the Ergo blockchain. It
+				<strong>supports self-hosting</strong> for a fully trustless, peer-to-peer
+				experience.
+			</p>
+		</SceneBeat>
+
+		<SceneBeat {progress} {isStatic} from={0.786} to={1} hold>
+			<h2>Everything runs on your machine.</h2>
+			<p>
+				Game and solver services both run on a <strong>local Celaut node</strong>, which can
+				operate entirely offline. GoP Web can be used via its GitHub.io instance or run
+				locally as a Celaut service.
+			</p>
+			<span class="beat-note">Two technologies: Celaut for computation, Ergo for settlement.</span>
+		</SceneBeat>
+	</div>
+</PinnedScene>
+
+<!-- ============================================================ -->
+<!-- SCENE 3 — Creator flow                                       -->
+<!-- ============================================================ -->
+<PinnedScene
+	id="creator-flow"
+	label="Game creator flow"
+	draw={drawCreatorScene}
+	scrollLength={2.8}
+	let:progress
+	let:static={isStatic}
+>
+	<div class="beats" class:flow={isStatic}>
+		<SceneBeat {progress} {isStatic} from={0.0} to={0.196}>
+			<h2>Design a game.</h2>
+			<p>
+				Create a challenge with measurable scoring and high scenario variability (CDE), so
+				hardcoded solutions don't work.
+			</p>
+		</SceneBeat>
+
+		<SceneBeat {progress} {isStatic} from={0.196} to={0.393}>
+			<h2>Write the Paper.</h2>
+			<p>
+				Publish a document with all instructions, rules and evaluation criteria. Players must
+				be able to understand the challenge <strong>before</strong> they participate.
+			</p>
+		</SceneBeat>
+
+		<SceneBeat {progress} {isStatic} from={0.393} to={0.589}>
+			<h2>Generate a secret.</h2>
+			<p>
+				A unique <strong>256-bit secret</strong> underwrites the cryptographic commitments
+				and the later score validation. Nobody can see it while the game is open.
+			</p>
+		</SceneBeat>
+
+		<SceneBeat {progress} {isStatic} from={0.589} to={0.786}>
+			<h2>Package and publish.</h2>
+			<p>
+				Ship the game as a Celaut service and publish it through GoP Web with its parameters:
+				fee, deadline, and commission.
+			</p>
+		</SceneBeat>
+
+		<SceneBeat {progress} {isStatic} from={0.786} to={1} hold>
+			<h2>Reveal the secret.</h2>
+			<p>
+				When the deadline passes, the creator <strong>reveals the secret on-chain</strong>.
+				That resolves the game: score validation becomes possible and the smart contract can
+				determine the winner.
+			</p>
+			<span class="beat-note">Commit first, reveal later. That's what makes it fair.</span>
+		</SceneBeat>
+	</div>
+</PinnedScene>
+
+<!-- ============================================================ -->
+<!-- SCENE 4 — Player journey                                     -->
+<!-- ============================================================ -->
+<PinnedScene
+	id="player-journey"
+	label="The player's journey"
+	align="right"
+	draw={drawPlayerScene}
+	scrollLength={3}
+	let:progress
+	let:static={isStatic}
+>
+	<div class="beats" class:flow={isStatic}>
+		<SceneBeat {progress} {isStatic} from={0.0} to={0.174}>
+			<h2>Browse and read the Paper.</h2>
+			<p>
+				Find a game on GoP Web. Read the creator's Paper to understand the challenge, the
+				rules and the evaluation criteria before committing to anything.
+			</p>
+		</SceneBeat>
+
+		<SceneBeat {progress} {isStatic} from={0.174} to={0.348}>
+			<h2>Implement your solver.</h2>
+			<p>
+				Build your solver-service from the Paper alone, so it's ready to compete the moment
+				the seed drops.
+			</p>
+		</SceneBeat>
+
+		<SceneBeat {progress} {isStatic} from={0.348} to={0.522}>
+			<h2>Register your Solver ID.</h2>
+			<p>
+				Registration is free — you only cover the network gas fee. This
+				<strong>pre-commitment</strong> is what guarantees fairness before the seed is
+				revealed.
+			</p>
+		</SceneBeat>
+
+		<SceneBeat {progress} {isStatic} from={0.522} to={0.696}>
+			<h2>The seed is revealed.</h2>
+			<p>
+				Once the ceremony phase ends, the game seed goes public. Now — and only now — you
+				know the exact challenge parameters you'll be evaluated against.
+			</p>
+		</SceneBeat>
+
+		<SceneBeat {progress} {isStatic} from={0.696} to={0.852}>
+			<h2>Run the game service locally.</h2>
+			<p>
+				The service executes your solver in a secure environment with the revealed seed,
+				evaluates its performance, and generates the
+				<strong>cryptographic commitment</strong> needed for on-chain validation.
+			</p>
+		</SceneBeat>
+
+		<SceneBeat {progress} {isStatic} from={0.852} to={1} hold>
+			<h2>Submit your commitment and pay the fee.</h2>
+			<p>
+				If the score is worth competing with, publish the commitment on-chain and pay the
+				participation fee. <strong>All fees go into the pot</strong> — the winner takes the
+				economic prize, minus creator, judge and platform commission, and receives the game
+				NFT.
+			</p>
+			<span class="beat-note">You decide whether your run is worth submitting.</span>
+		</SceneBeat>
+	</div>
+</PinnedScene>
+
+<!-- ============================================================ -->
+<!-- SCENE 5 — Score validation                                   -->
+<!-- ============================================================ -->
+<PinnedScene
+	id="score-validation"
+	label="Score validation"
+	draw={drawValidationScene}
+	scrollLength={2.8}
+	let:progress
+	let:static={isStatic}
+>
+	<div class="beats" class:flow={isStatic}>
+		<SceneBeat {progress} {isStatic} from={0.0} to={0.239}>
+			<h2>Your score is a hash, not a claim.</h2>
+			<p>
+				When you participate, what goes on-chain is a <strong>commitment</strong> — a digest.
+				Nobody, including the creator, can read your score off the blockchain while the game
+				is still open.
+			</p>
+		</SceneBeat>
+
+		<SceneBeat {progress} {isStatic} from={0.239} to={0.486}>
+			<h2>Then the secret comes out.</h2>
+			<p>
+				After the deadline, the creator reveals the game secret in the resolution
+				transaction. That's the missing ingredient — and it
+				<strong>unlocks verification for everyone at once</strong>.
+			</p>
+		</SceneBeat>
+
+		<SceneBeat {progress} {isStatic} from={0.486} to={0.734}>
+			<h2>The contract recomputes it.</h2>
+			<p>
+				The game contract builds a commitment for each score from the
+				<strong>solver ID, the score value, the hashed logs and the revealed secret</strong>.
+				No trusted party is involved; it's arithmetic.
+			</p>
+		</SceneBeat>
+
+		<SceneBeat {progress} {isStatic} from={0.734} to={1} hold>
+			<h2>If they match, the score is real.</h2>
+			<p>
+				A recomputed commitment that equals the published one proves the score is authentic
+				and tamper-proof. Anything that doesn't match simply isn't a score.
+			</p>
+			<span class="beat-note">Transparent yet private: proven without being exposed.</span>
+		</SceneBeat>
+	</div>
+</PinnedScene>
+
+<!-- Readable reference for the five validation steps -->
+<section class="ground" bind:this={groundRoot}>
+	<div class="block">
+		<h2 data-reveal>The five steps, in order</h2>
+		<ol class="steps" data-reveal-group>
+			{#each validationSteps as s}
+				<li class="step">
+					<div class="step-head">
+						<span class="step-num">{s.num}</span>
+						<span class="step-badge">{s.badge}</span>
+					</div>
+					<h3>{s.title}</h3>
+					<p>{s.desc}</p>
+				</li>
+			{/each}
+		</ol>
 	</div>
 </section>
+
+<!-- ============================================================ -->
+<!-- SCENE 6 — The pot                                            -->
+<!-- ============================================================ -->
+<PinnedScene
+	id="the-pot"
+	label="Economics"
+	align="right"
+	draw={drawPotScene}
+	scrollLength={2.6}
+	let:progress
+	let:static={isStatic}
+>
+	<div class="beats" class:flow={isStatic}>
+		<SceneBeat {progress} {isStatic} from={0.0} to={0.278}>
+			<h2>Every entry feeds the pot.</h2>
+			<p>
+				Participation fees from everyone who submits a commitment accumulate in a single
+				on-chain pot for that game.
+			</p>
+		</SceneBeat>
+
+		<SceneBeat {progress} {isStatic} from={0.278} to={0.574}>
+			<h2>Commissions come off the top.</h2>
+			<p>
+				The creator, the judges and the platform take their agreed commission — all of it set
+				in the open when the game was published, and
+				<strong>enforced by the smart contract</strong> rather than by anyone's goodwill.
+			</p>
+		</SceneBeat>
+
+		<SceneBeat {progress} {isStatic} from={0.574} to={1} hold>
+			<h2>The rest goes to the winner.</h2>
+			<p>
+				The highest validated score takes the remaining pot — plus the
+				<strong>game NFT</strong>, a permanent, public, auditable proof of victory. Funds are
+				released after a validation period that gives judges time to check the creator acted
+				honestly.
+			</p>
+			<span class="beat-note">Nobody approves the payout. The contract does it.</span>
+		</SceneBeat>
+	</div>
+</PinnedScene>
+
+<!-- ============================================================ -->
+<!-- SCENE 7 — Judges                                             -->
+<!-- ============================================================ -->
+<PinnedScene
+	id="judges"
+	label="Trust & accountability"
+	draw={drawJudgesScene}
+	scrollLength={2.6}
+	let:progress
+	let:static={isStatic}
+>
+	<div class="beats" class:flow={isStatic}>
+		<SceneBeat {progress} {isStatic} from={0.0} to={0.315}>
+			<h2>Who watches the creator?</h2>
+			<p>
+				Judges are entities nominated by the creator who audit the resolution phase. They
+				verify that the creator's game service generated
+				<strong>valid proofs and valid scores</strong>.
+			</p>
+		</SceneBeat>
+
+		<SceneBeat {progress} {isStatic} from={0.315} to={0.648}>
+			<h2>Fraud costs the creator, not you.</h2>
+			<p>
+				If a judge catches a faulty game service or an invalid proof, that judge
+				<strong>receives the creator's commission</strong> as the reward. The incentive to
+				look closely is built in.
+			</p>
+		</SceneBeat>
+
+		<SceneBeat {progress} {isStatic} from={0.648} to={1} hold>
+			<h2>Players stay out of the blast radius.</h2>
+			<p>
+				In normal operation players cannot be penalised by judges. Judges exist to
+				<strong>protect players from dishonest creators</strong>, never the other way around.
+			</p>
+			<span class="beat-note">Audit the house, not the guests.</span>
+		</SceneBeat>
+	</div>
+</PinnedScene>
 
 <SectionTransition height={100} />
 
@@ -163,199 +635,6 @@
 
 <SectionTransition height={100} />
 
-<!-- ============================================ -->
-<!-- HOW IT WORKS                                 -->
-<!-- ============================================ -->
-<section id="how-it-works" class="section narrative-section">
-	<div class="container">
-		<div class="narrative-content">
-			<h2 class="narrative-title">A New Era of Trustless Competition</h2>
-			<p class="narrative-text">
-				Game of Prompts is built on a foundation of two powerful technologies: the <a href="https://github.com/celaut-project" target="_blank" rel="noopener">Celaut paradigm</a> for decentralized, reproducible computation, and the <a href="https://ergoblockchain.org/" target="_blank" rel="noopener">Ergo blockchain</a> for on-chain verification and trustless fund distribution.
-			</p>
-			<p class="narrative-text">
-				This unique combination creates a truly trustless environment. No central authority is needed to verify results. Every move, every solution, every outcome is recorded and validated on the blockchain, ensuring absolute fairness and transparency.
-			</p>
-		</div>
-	</div>
-</section>
-
-<SectionTransition height={100} />
-
-<!-- ============================================ -->
-<!-- CORE COMPONENTS                              -->
-<!-- ============================================ -->
-<section id="components" class="section" style="scroll-margin-top: 80px;">
-	<div class="container">
-		<ScrollAnimation>
-			<span class="section-label">Architecture</span>
-			<h2 class="section-title">Core Components</h2>
-			<p class="section-subtitle">Three fundamental elements that constitute the Game of Prompts platform.</p>
-		</ScrollAnimation>
-
-		<div class="components-grid">
-			<ScrollAnimation delay={0}>
-				<div class="card component-card" use:hoverCorners>
-					<div class="component-icon">
-						<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-							<path d="M4 4h16a2 2 0 012 2v12a2 2 0 01-2 2H4a2 2 0 01-2-2V6a2 2 0 012-2z" />
-							<polyline points="22,6 12,13 2,6" />
-						</svg>
-					</div>
-					<div class="component-badge creator-badge">Created by game devs</div>
-					<h3>Game Service</h3>
-					<p>An autonomous service that encapsulates a game's logic and the secret. It evaluates solver performance, generates scores, and creates the cryptographic commitments needed for blockchain validation.</p>
-				</div>
-			</ScrollAnimation>
-
-			<ScrollAnimation delay={150}>
-				<div class="card component-card" use:hoverCorners>
-					<div class="component-icon solver-accent">
-						<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-							<path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z" />
-						</svg>
-					</div>
-					<div class="component-badge player-badge">Created by players</div>
-					<h3>Solver Service</h3>
-					<p>Implements strategies to maximize scores in specific games. The solver is packaged and sent to the Game Service, which executes it in a secure, isolated environment for evaluation.</p>
-				</div>
-			</ScrollAnimation>
-
-			<ScrollAnimation delay={300}>
-				<div class="card component-card" use:hoverCorners>
-					<div class="component-icon web-accent">
-						<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-							<circle cx="12" cy="12" r="10" />
-							<line x1="2" y1="12" x2="22" y2="12" />
-							<path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z" />
-						</svg>
-					</div>
-					<div class="component-badge web-badge">Community portal</div>
-					<h3>GoP Web</h3>
-					<p>A community portal where users discover games, read rules, download Game Services, and publish their results on the Ergo blockchain. Supports self-hosting for a fully trustless, peer-to-peer experience.</p>
-				</div>
-			</ScrollAnimation>
-		</div>
-
-		<ScrollAnimation delay={100}>
-			<div class="components-note">
-				<div class="note-row">
-					<div class="note-icon">
-						<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="8" height="8" rx="1" /><rect x="14" y="2" width="8" height="8" rx="1" /><rect x="2" y="14" width="8" height="8" rx="1" /><rect x="14" y="14" width="8" height="8" rx="1" /></svg>
-					</div>
-					<p><strong>Game Service &amp; Solver Service</strong> must be run on a local Celaut node, which can operate entirely offline.</p>
-				</div>
-				<div class="note-row">
-					<div class="note-icon web-note">
-						<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10" /><line x1="2" y1="12" x2="22" y2="12" /><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z" /></svg>
-					</div>
-					<p><strong>GoP Web</strong> can be accessed via a GitHub.io instance or run locally as a Celaut service.</p>
-				</div>
-			</div>
-		</ScrollAnimation>
-	</div>
-</section>
-
-<SectionTransition height={100} />
-
-<!-- ============================================ -->
-<!-- CREATOR FLOW                                 -->
-<!-- ============================================ -->
-<Scrollytelling
-	title="Game Creator Flow"
-	steps={[
-		{
-			title: 'Design a Game',
-			description: 'Create a challenge with measurable scoring and high scenario variability (CDE) to discourage hardcoded solutions.'
-		},
-		{
-			title: 'Write the Paper',
-			description: 'Publish a document with all game instructions, rules, and evaluation criteria. Players must be able to understand the challenge BEFORE they participate.'
-		},
-		{
-			title: 'Generate a Secret',
-			description: 'Create a unique 256-bit secret for cryptographic commitments and score validation.'
-		},
-		{
-			title: 'Package & Publish',
-			description: 'Package your game as a Celaut service and publish it using GoP Web by sharing game parameters, fee, deadline, and commission.'
-		},
-		{
-			title: 'Reveal the Secret',
-			description: 'After the deadline ends, reveal the secret S on-chain to resolve the game. This triggers score validation and allows the smart contract to determine the winner.'
-		}
-	]}
-/>
-
-<SectionTransition height={100} />
-
-<!-- ============================================ -->
-<!-- PLAYER JOURNEY                               -->
-<!-- ============================================ -->
-<Scrollytelling
-	title="The Player's Journey"
-	steps={[
-		{
-			title: 'Browse & Read the Paper',
-			description: 'Find interesting games on GoP Web. Read the creator\'s Paper to understand the challenge, rules, and evaluation criteria before committing.'
-		},
-		{
-			title: 'Implement Your Solver',
-			description: 'Build your solver-service based on the Paper so it is ready to compete once the seed is revealed.'
-		},
-		{
-			title: 'Register Solver ID',
-			description: 'Register Solver ID (Gas-only). Registration is free, you only cover the network gas fee. This pre-commitment ensures fairness before the seed is revealed.'
-		},
-		{
-			title: 'Seed is Revealed',
-			description: 'After the ceremony phase ends, the game seed is revealed. Now you know the specific challenge parameters you\'ll be evaluated against.'
-		},
-		{
-			title: 'Run the Game Service',
-			description: 'Run the game service locally with the revealed seed. The service will execute your solver in a secure environment, evaluate its performance, and generate the cryptographic commitment needed for on-chain validation.'
-		},
-		{
-			title: 'Submit Commitment & Pay Fee',
-			description: 'If you want to compete, submit your cryptographic commitment on-chain and pay the participation fee. All fees go into the pot — the winner takes the economic prize (minus creator, judges, and platform commission) and receives the game NFT.'
-		}
-	]}
-/>
-
-<SectionTransition height={100} />
-
-<!-- ============================================ -->
-<!-- SCROLLYTELLING - THE JOURNEY                 -->
-<!-- ============================================ -->
-<Scrollytelling 
-	title="How It All Comes Together"
-	steps={[
-		{
-			title: 'A creator builds a game',
-			desc: 'Design a challenge with measurable scoring. Package it as an immutable Celaut service.',
-			icon: 'game'
-		},
-		{
-			title: 'Solvers compete',
-			desc: 'Players craft AI solver-services and race to find the highest-scoring strategy.',
-			icon: 'solvers'
-		},
-		{
-			title: 'Results sealed on Ergo',
-			desc: 'Cryptographic commitments are published on the Ergo blockchain. No tampering possible.',
-			icon: 'blockchain'
-		},
-		{
-			title: 'Winner takes the pot',
-			desc: 'The game secret is revealed. Smart contracts verify scores and the winner receives all participation fees, minus commission, plus the game NFT.',
-			icon: 'trophy'
-		}
-	]}
-/>
-
-<SectionTransition height={100} />
-
-<!-- ============================================ -->
 <!-- SECURITY                                     -->
 <!-- ============================================ -->
 <section id="security" class="section section-security" style="scroll-margin-top: 80px;">
@@ -406,43 +685,6 @@
 			</ScrollAnimation>
 		</div>
 
-	</div>
-</section>
-
-<!-- ============================================ -->
-<!-- SCORE VALIDATION — CYBERPUNK REDESIGN        -->
-<!-- ============================================ -->
-<section id="score-validation" class="section section-validation">
-	<div class="sv-glow-top"></div>
-	<div class="container sv-container">
-		<ScrollAnimation>
-			<h3 class="sv-title">Score Validation Mechanism</h3>
-			<p class="sv-subtitle">Every score cryptographically proven on the Ergo blockchain</p>
-		</ScrollAnimation>
-
-		<div class="sv-steps">
-			{#each [
-				{ num: '01', title: 'Player Participation', desc: 'Player publishes their participation on the Ergo blockchain.', type: 'participation' as const, badge: 'SUBMITTED' },
-				{ num: '02', title: 'Creator Reveals Secret', desc: 'After the deadline, the creator reveals the game secret in the resolution transaction — unlocking verification.', type: 'reveal' as const, badge: 'REVEALED' },
-				{ num: '03', title: 'Smart Contract Validation', desc: 'The game contract computes a commitment for each score using the solver ID, score value, hashed logs, and revealed secret.', type: 'validation' as const, badge: 'COMPUTED' },
-				{ num: '04', title: 'Score Verification', desc: 'When the score commitment matches the participation commitment, that score is validated as authentic and tamper-proof.', type: 'verification' as const, badge: 'VERIFIED' },
-				{ num: '05', title: 'Winner Takes the Pot', desc: 'Highest score wins. Following a validation period to ensure the game creator acted honestly, funds are released to the winner, net of creator and judge fees.', type: 'winner' as const, badge: 'DISTRIBUTED' }
-			] as step, idx}
-				<div class="validation-card" data-step={idx}>
-					<div class="vc-animation">
-						<ValidationAnimation type={step.type} active={false} />
-					</div>
-					<div class="vc-content">
-						<div class="vc-header">
-							<span class="vc-num">{step.num}</span>
-							<span class="vc-badge">{step.badge}</span>
-						</div>
-						<h4 class="vc-title">{step.title}</h4>
-						<p class="vc-desc">{step.desc}</p>
-					</div>
-				</div>
-			{/each}
-		</div>
 	</div>
 </section>
 
@@ -634,63 +876,6 @@
 <SectionTransition height={100} />
 
 <!-- ============================================ -->
-<!-- JUDGES                                       -->
-<!-- ============================================ -->
-<section id="judges" class="section" style="scroll-margin-top: 80px;">
-	<div class="container">
-		<ScrollAnimation>
-			<span class="section-label">Trust & Accountability</span>
-			<h2 class="section-title">Judges</h2>
-			<p class="section-subtitle">Judges audit the Creator — not the players. They keep the system honest.</p>
-		</ScrollAnimation>
-
-		<div class="judges-grid">
-			<ScrollAnimation delay={0}>
-				<div class="card judges-card" use:hoverCorners>
-					<div class="judges-icon">
-						<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-							<circle cx="12" cy="12" r="10" />
-							<path d="M12 16v-4M12 8h.01" />
-						</svg>
-					</div>
-					<h3>Who Are Judges?</h3>
-					<p>Entities nominated by the Creator who audit the resolution phase. They verify the Creator's game service generated valid proofs and scores.</p>
-				</div>
-			</ScrollAnimation>
-
-			<ScrollAnimation delay={150}>
-				<div class="card judges-card" use:hoverCorners>
-					<div class="judges-icon">
-						<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-							<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-							<path d="M9 12l2 2 4-4" />
-						</svg>
-					</div>
-					<h3>Creator Accountability</h3>
-					<p>If a Judge catches fraud — a faulty game service or invalid proof — they receive the Creator's commission as reward. The system penalizes the Creator, not honest players.</p>
-				</div>
-			</ScrollAnimation>
-
-			<ScrollAnimation delay={300}>
-				<div class="card judges-card" use:hoverCorners>
-					<div class="judges-icon">
-						<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-							<path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4-4v2" />
-							<circle cx="9" cy="7" r="4" />
-							<path d="M22 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75" />
-						</svg>
-					</div>
-					<h3>Player Protection</h3>
-					<p>Players cannot be penalized by judges in normal operation. Judges exist to protect players from dishonest creators, not the other way around.</p>
-				</div>
-			</ScrollAnimation>
-		</div>
-	</div>
-</section>
-
-<SectionTransition height={100} />
-
-<!-- ============================================ -->
 <!-- FAQ                                          -->
 <!-- ============================================ -->
 <section id="faq" class="section" style="scroll-margin-top: 80px;">
@@ -810,39 +995,146 @@
 
 <style>
 	/* ============================================ */
-	/* HERO                                         */
+	/* IMMERSIVE SCENE CAPTIONS                     */
 	/* ============================================ */
-	.hero {
-		position: relative;
-		min-height: 100vh;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		overflow: hidden;
-		padding: 120px 24px 80px;
+
+	/* In motion mode every beat of a scene shares one grid cell and
+	   cross-fades. The reserved min-height stops the layout jumping as
+	   beats of different lengths swap in. */
+	.beats {
+		display: grid;
+		min-height: 16.5em;
 	}
 
-	.hero-glow {
-		position: absolute;
-		width: 800px;
-		height: 800px;
-		background: radial-gradient(circle, rgba(74, 222, 128, 0.15) 0%, rgba(34, 197, 94, 0.06) 40%, transparent 70%);
-		top: 50%;
-		left: 50%;
-		transform: translate(-50%, -50%);
-		pointer-events: none;
-		animation: glowPulse 6s ease-in-out infinite;
+	/* Reduced motion / no-JS: beats become ordinary stacked paragraphs. */
+	.beats.flow {
+		display: block;
+		min-height: 0;
 	}
+
+	.beats.flow :global(.beat + .beat) {
+		margin-top: 36px;
+	}
+
+	@media (max-width: 820px) {
+		.beats {
+			min-height: 14.5em;
+		}}
+
+	/* Hero tagline accent (passed as HTML into ImmersiveHero). */
+	:global(.hero-grad) {
+		background: linear-gradient(135deg, #4ade80, #22c55e);
+		-webkit-background-clip: text;
+		background-clip: text;
+		-webkit-text-fill-color: transparent;
+	}
+
+	:global([data-theme='light']) :global(.hero-grad) {
+		background: linear-gradient(135deg, #15803d, #16a34a);
+		-webkit-background-clip: text;
+		background-clip: text;
+		-webkit-text-fill-color: transparent;
+	}
+
+	/* ============================================ */
+	/* GROUNDED REFERENCE BLOCK                     */
+	/* (the readable list under the pinned scenes)  */
+	/* ============================================ */
+	.ground {
+		max-width: 1060px;
+		margin: 0 auto;
+		padding: 0 clamp(20px, 6vw, 24px);
+		background: var(--bg-primary);
+	}
+
+	.block {
+		padding: 88px 0 72px;
+	}
+
+	.block h2 {
+		font-family: var(--font-mono);
+		font-size: clamp(1.5rem, 3.2vw, 2rem);
+		color: var(--text-primary);
+		margin: 0 0 28px;
+		padding-bottom: 12px;
+		border-bottom: 1px solid var(--border-card);
+		letter-spacing: 0.01em;
+	}
+
+	.steps {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+		gap: 20px;
+	}
+
+	.step {
+		padding: 22px;
+		border: 1px solid var(--border-card);
+		border-radius: var(--radius);
+		background: var(--bg-card);
+	}
+
+	.step-head {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 12px;
+		margin-bottom: 12px;
+	}
+
+	.step-num {
+		font-family: var(--font-mono);
+		font-size: 1.4rem;
+		font-weight: 700;
+		color: var(--green-400);
+	}
+
+	.step-badge {
+		font-family: var(--font-mono);
+		font-size: 0.62rem;
+		font-weight: 600;
+		letter-spacing: 0.14em;
+		padding: 4px 9px;
+		border-radius: 100px;
+		border: 1px solid var(--border-card);
+		color: var(--text-muted);
+	}
+
+	.step h3 {
+		font-size: 1.02rem;
+		margin: 0 0 8px;
+		color: var(--text-primary);
+	}
+
+	.step p {
+		margin: 0;
+		font-size: 0.94rem;
+		line-height: 1.62;
+		color: var(--text-secondary);
+	}
+
+	/* ============================================ */
+	/* REDUCED MOTION                               */
+	/* ============================================ */
+	/* With no pins the page is a normal document; make sure nothing
+	   still assumes a 100vh stage. */
+	@media (prefers-reduced-motion: reduce) {
+		.beats {
+			display: block;
+			min-height: 0;
+		}
+
+		.beats :global(.beat + .beat) {
+			margin-top: 36px;
+		}}
+	/* ============================================ *//* HERO                                         *//* ============================================ */
 
 	@keyframes glowPulse {
 		0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.8; }
 		50% { transform: translate(-50%, -50%) scale(1.15); opacity: 1; }
-	}
-
-	.hero-content {
-		position: relative;
-		text-align: center;
-		z-index: 1;
 	}
 
 	.hero-logo {
@@ -910,57 +1202,9 @@
 		50% { opacity: 0.3; }
 	}
 
-	.hero h1 {
-		margin-bottom: 1.5rem;
-	}
-
-	.hero-description {
-		max-width: 720px;
-		margin: 0 auto 2.5rem;
-		font-size: 1.15rem;
-		line-height: 1.8;
-	}
-
-	.hero-actions {
-		display: flex;
-		gap: 16px;
-		justify-content: center;
-		flex-wrap: wrap;
-		margin-bottom: 3.5rem;
-	}
-
-	.btn-launch {
-		font-size: 1.1rem;
-		padding: 14px 32px;
-		box-shadow: 0 0 24px rgba(34, 197, 94, 0.4), 0 0 48px rgba(34, 197, 94, 0.15);
-		animation: launchPulse 2.5s ease-in-out infinite;
-	}
-
-	.btn-launch:hover {
-		box-shadow: 0 0 36px rgba(34, 197, 94, 0.6), 0 0 72px rgba(34, 197, 94, 0.25);
-		transform: translateY(-2px);
-	}
-
 	@keyframes launchPulse {
 		0%, 100% { box-shadow: 0 0 24px rgba(34, 197, 94, 0.4), 0 0 48px rgba(34, 197, 94, 0.15); }
 		50% { box-shadow: 0 0 32px rgba(34, 197, 94, 0.55), 0 0 64px rgba(34, 197, 94, 0.2); }
-	}
-
-	.hero-stats {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		gap: 2rem;
-		flex-wrap: wrap;
-		padding-top: 2rem;
-		border-top: 1px solid rgba(74, 222, 128, 0.06);
-		margin-top: 0.5rem;
-	}
-
-	.hero-stat-divider {
-		width: 1px;
-		height: 32px;
-		background: rgba(74, 222, 128, 0.1);
 	}
 
 	/* ============================================ */
@@ -1174,119 +1418,7 @@
 		background: var(--green-glow);
 		color: var(--green-400);
 	}
-
-	/* ============================================ */
-	/* CORE COMPONENTS                              */
-	/* ============================================ */
-	.components-grid {
-		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-		gap: 24px;
-		margin-top: 3rem;
-		align-items: stretch;
-	}
-
-	.components-grid :global(.scroll-animation) {
-		display: flex;
-		flex-direction: column;
-		height: 100%;
-	}
-
-	.component-card {
-		position: relative;
-		text-align: center;
-		padding-top: 40px;
-		height: 100%;
-		display: flex;
-		flex-direction: column;
-	}
-
-	.component-icon {
-		width: 64px;
-		height: 64px;
-		border-radius: 16px;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		margin: 0 auto 1.25rem;
-		background: var(--green-glow);
-		color: var(--green-400);
-	}
-
-	.solver-accent {
-		background: rgba(74, 222, 128, 0.1) !important;
-		color: #86efac !important;
-	}
-
-	.web-accent {
-		background: rgba(74, 222, 128, 0.08) !important;
-		color: #4ade80 !important;
-	}
-
-	.component-badge {
-		font-family: var(--font-mono);
-		font-size: 0.7rem;
-		font-weight: 600;
-		text-transform: uppercase;
-		letter-spacing: 0.1em;
-		padding: 3px 10px;
-		border-radius: 100px;
-		margin-bottom: 0.75rem;
-		display: inline-block;
-	}
-
-	.creator-badge {
-		background: rgba(74, 222, 128, 0.1);
-		color: var(--green-400);
-		border: 1px solid rgba(74, 222, 128, 0.2);
-	}
-
-	.player-badge {
-		background: rgba(34, 197, 94, 0.1);
-		color: #86efac;
-		border: 1px solid rgba(34, 197, 94, 0.2);
-	}
-
-	.web-badge {
-		background: rgba(74, 222, 128, 0.08);
-		color: #4ade80;
-		border: 1px solid rgba(74, 222, 128, 0.15);
-	}
-
-	.components-note {
-		margin-top: 2.5rem;
-		padding: 20px 28px;
-		background: var(--bg-card);
-		border: 1px solid rgba(74, 222, 128, 0.08);
-		border-radius: var(--radius);
-		display: flex;
-		flex-direction: column;
-		gap: 12px;
-	}
-
-	.note-row {
-		display: flex;
-		align-items: flex-start;
-		gap: 12px;
-	}
-
-	.note-icon {
-		flex-shrink: 0;
-		color: var(--green-400);
-		margin-top: 2px;
-	}
-
-	.note-icon.web-note {
-		color: #4ade80;
-	}
-
-	.note-row p {
-		font-size: 0.95rem;
-	}
-
-	.note-row strong {
-		color: var(--text-primary);
-	}
+	/* ============================================ *//* CORE COMPONENTS                              *//* ============================================ */
 
 	/* ============================================ */
 	/* FLOW STEPS (Creator & Player)                */
@@ -1401,93 +1533,9 @@
 		background: var(--green-glow);
 		color: var(--green-400);
 	}
-
-	/* ============================================ */
-	/* SCORE VALIDATION — CYBERPUNK SECTION         */
-	/* ============================================ */
-	.section-validation {
-		background: var(--bg-primary);
-		position: relative;
-		overflow: hidden;
-		padding: 6rem 0 4rem;
-	}
-
-	.sv-glow-top {
-		position: absolute;
-		top: -200px;
-		left: 50%;
-		transform: translateX(-50%);
-		width: 800px;
-		height: 500px;
-		background: radial-gradient(ellipse, rgba(124, 58, 237, 0.12) 0%, transparent 70%);
-		pointer-events: none;
-	}
-
-	.sv-container {
-		position: relative;
-		z-index: 1;
-	}
-
-	.sv-title {
-		font-family: var(--font-mono), 'JetBrains Mono', monospace;
-		font-size: clamp(1.8rem, 4vw, 2.8rem);
-		font-weight: 700;
-		text-align: center;
-		color: #00ff88;
-		background: linear-gradient(135deg, #00ff88 0%, #00cc6e 50%, #00ff88 100%);
-		-webkit-background-clip: text;
-		-webkit-text-fill-color: transparent;
-		background-clip: text;
-		margin-bottom: 0.75rem;
-		letter-spacing: -0.02em;
-	}
-
-	.sv-subtitle {
-		text-align: center;
-		color: rgba(255, 255, 255, 0.6) !important;
-		font-size: 1.05rem;
-		margin-bottom: 3.5rem;
-		font-family: var(--font-mono), monospace;
-	}
-
-	.sv-steps {
-		display: flex;
-		flex-direction: column;
-		gap: 24px;
-		max-width: 900px;
-		margin: 0 auto;
-	}
+	/* ============================================ *//* SCORE VALIDATION — CYBERPUNK SECTION         *//* ============================================ */
 
 	/* Glassmorphism card */
-	.validation-card {
-		background: rgba(0, 255, 136, 0.03);
-		border: 1px solid rgba(0, 255, 136, 0.15);
-		backdrop-filter: blur(12px);
-		-webkit-backdrop-filter: blur(12px);
-		border-radius: 16px;
-		padding: 24px 32px;
-		display: flex;
-		gap: 32px;
-		align-items: center;
-		transition: all 0.4s ease;
-		position: relative;
-		overflow: hidden;
-		opacity: 0;
-		transform: translateY(20px);
-	}
-
-	.validation-card::before {
-		content: '';
-		position: absolute;
-		left: 0;
-		top: 0;
-		bottom: 0;
-		width: 3px;
-		background: #00ff88;
-		transform: scaleY(0);
-		transform-origin: top;
-		transition: transform 0.6s ease;
-	}
 
 	:global(.validation-card.active) {
 		opacity: 1 !important;
@@ -1496,64 +1544,6 @@
 
 	:global(.validation-card.active)::before {
 		transform: scaleY(1) !important;
-	}
-
-	.validation-card:hover {
-		box-shadow: 0 0 40px rgba(0, 255, 136, 0.12), 0 0 80px rgba(0, 255, 136, 0.05);
-		transform: translateY(-2px);
-		border-color: rgba(0, 255, 136, 0.3);
-	}
-
-	.vc-animation {
-		flex: 0 0 40%;
-		min-width: 0;
-	}
-
-	.vc-content {
-		flex: 1;
-		min-width: 0;
-	}
-
-	.vc-header {
-		display: flex;
-		align-items: center;
-		gap: 12px;
-		margin-bottom: 12px;
-	}
-
-	.vc-num {
-		font-family: var(--font-mono), 'JetBrains Mono', monospace;
-		font-size: 0.8rem;
-		font-weight: 700;
-		color: #00ff88;
-		opacity: 0.6;
-		letter-spacing: 0.1em;
-	}
-
-	.vc-badge {
-		font-family: var(--font-mono), monospace;
-		font-size: 0.65rem;
-		font-weight: 600;
-		color: #00ff88;
-		background: rgba(0, 255, 136, 0.08);
-		border: 1px solid rgba(0, 255, 136, 0.2);
-		padding: 2px 10px;
-		border-radius: 100px;
-		letter-spacing: 0.1em;
-		text-transform: uppercase;
-	}
-
-	.vc-title {
-		font-size: 1.15rem;
-		font-weight: 600;
-		color: #ffffff !important;
-		margin-bottom: 8px;
-	}
-
-	.vc-desc {
-		font-size: 0.9rem;
-		color: rgba(255, 255, 255, 0.55) !important;
-		line-height: 1.6;
 	}
 
 	/* CTA Button */
@@ -1965,11 +1955,6 @@
 		line-height: 1.8;
 		color: var(--text-secondary);
 	}
-	
-	.narrative-text a {
-		color: var(--green-400);
-		text-decoration: underline;
-	}
 
 	/* ============================================ */
 	/* GAME TYPE FULL-SCREEN SECTIONS               */
@@ -2332,83 +2317,13 @@
 		border-color: rgba(22, 163, 74, 0.4);
 		background: rgba(22, 163, 74, 0.05);
 	}
-
-	/* ============================================ */
-	/* HERO TITLE REDESIGN                          */
-	/* ============================================ */
-	.hero-title-block {
-		text-align: center;
-		margin-bottom: 2rem;
-	}
-
-	.hero-main-title {
-		font-family: var(--font-mono);
-		font-size: clamp(3rem, 10vw, 7rem) !important;
-		font-weight: 800;
-		letter-spacing: 0.08em;
-		line-height: 1.05;
-		margin-bottom: 1rem;
-		position: relative;
-	}
-
-	.hero-title-line {
-		display: block;
-		color: var(--text-primary);
-		text-shadow: 0 0 40px rgba(74, 222, 128, 0.2);
-	}
-
-	.hero-title-accent {
-		background: linear-gradient(135deg, #4ade80, #22c55e, #86efac);
-		-webkit-background-clip: text;
-		-webkit-text-fill-color: transparent;
-		background-clip: text;
-		filter: drop-shadow(0 0 30px rgba(74, 222, 128, 0.5));
-		animation: heroTitleGlow 4s ease-in-out infinite;
-	}
+	/* ============================================ *//* HERO TITLE REDESIGN                          *//* ============================================ */
 
 	@keyframes heroTitleGlow {
 		0%, 100% { filter: drop-shadow(0 0 30px rgba(74, 222, 128, 0.5)); }
 		50% { filter: drop-shadow(0 0 60px rgba(74, 222, 128, 0.8)); }
 	}
-
-	.hero-tagline {
-		font-size: clamp(1rem, 2.5vw, 1.4rem);
-		font-weight: 500;
-		color: var(--text-secondary);
-		letter-spacing: 0.02em;
-	}
-
-	/* (old validation pipeline styles removed — replaced by .section-validation) */
-
-	/* ============================================ */
-	/* JUDGES                                       */
-	/* ============================================ */
-	.judges-grid {
-		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-		gap: 24px;
-		margin-top: 3rem;
-		align-items: stretch;
-	}
-
-	.judges-card {
-		text-align: center;
-		height: 100%;
-		display: flex;
-		flex-direction: column;
-	}
-
-	.judges-icon {
-		width: 56px;
-		height: 56px;
-		border-radius: 14px;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		margin: 0 auto 1rem;
-		background: var(--green-glow);
-		color: var(--green-400);
-	}
+	/* (old validation pipeline styles removed — replaced by .section-validation) *//* ============================================ *//* JUDGES                                       *//* ============================================ */
 
 	/* ============================================ */
 	/* FAQ                                          */
@@ -2700,31 +2615,8 @@
 	/* RESPONSIVE                                   */
 	/* ============================================ */
 	@media (max-width: 768px) {
-		.hero {
-			padding: 100px 16px 60px;
-		}
-
-		.hero h1 {
-			font-size: 2.2rem;
-		}
-
-		.hero-description {
-			font-size: 1rem;
-		}
-
-		.hero-stats {
-			gap: 1rem;
-		}
-
-		.hero-stat-divider {
-			display: none;
-		}
 
 		.foundations-grid {
-			grid-template-columns: 1fr;
-		}
-
-		.components-grid {
 			grid-template-columns: 1fr;
 		}
 
@@ -2732,18 +2624,7 @@
 			flex-direction: column;
 			gap: 16px;
 		}
-
-		/* Validation cards — mobile stack */
-		.validation-card {
-			flex-direction: column;
-			padding: 20px;
-			gap: 16px;
-		}
-
-		.vc-animation {
-			flex: none;
-			width: 100%;
-		}
+	/* Validation cards — mobile stack */
 
 		.games-grid {
 			grid-template-columns: 1fr;
@@ -2761,10 +2642,6 @@
 			flex-direction: column;
 		}
 
-		.judges-grid {
-			grid-template-columns: 1fr;
-		}
-
 		.faq-footer {
 			padding: 24px 16px;
 		}
@@ -2776,22 +2653,11 @@
 		.btn-ai {
 			min-width: unset;
 			width: 100%;
-		}
-	}
+		}}
 
 	@media (max-width: 480px) {
-		.hero h1 {
-			font-size: 1.8rem;
-		}
-
-		.hero-actions {
-			flex-direction: column;
-			align-items: center;
-		}
 
 		.cta-actions {
 			flex-direction: column;
 			align-items: center;
-		}
-	}
-</style>
+		}}</style>
