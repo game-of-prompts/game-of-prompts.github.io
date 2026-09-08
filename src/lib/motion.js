@@ -112,6 +112,39 @@ export async function startSmoothScroll() {
 	};
 }
 
+/**
+ * Put the reader back where they were after a re-render that is not a
+ * change of content — specifically, a locale switch.
+ *
+ * Naively calling `window.scrollTo` is not enough here, for two
+ * reasons. Lenis keeps its own scroll coordinate and will animate the
+ * page back to wherever it thought it was, so it has to be told too.
+ * And the pinned scenes' ScrollTrigger start/end offsets are measured
+ * from translated text, which has just changed length — so the pins
+ * need a refresh, and the restore has to happen once more AFTER it,
+ * because refreshing pins moves the document.
+ *
+ * @param {number} top scrollY captured before the navigation
+ */
+export function restoreScrollPosition(top) {
+	if (!browser) return;
+	const restore = () => {
+		window.scrollTo(0, top);
+		if (lenis) lenis.scrollTo(top, { immediate: true, force: true });
+	};
+	restore();
+	requestAnimationFrame(() => {
+		restore();
+		if (gsapPromise) {
+			gsapPromise.then((bits) => {
+				if (!bits) return;
+				bits.ScrollTrigger.refresh();
+				restore();
+			});
+		}
+	});
+}
+
 /** Scroll to an element/offset through Lenis when it is running. */
 export function scrollTo(target, options = {}) {
 	if (!browser) return;
@@ -155,7 +188,7 @@ export function onThemeChange(callback) {
 	const observer = new MutationObserver(() => callback());
 	observer.observe(document.documentElement, {
 		attributes: true,
-		attributeFilter: ['data-theme']
+		attributeFilter: ['data-theme', 'lang']
 	});
 	return () => observer.disconnect();
 }

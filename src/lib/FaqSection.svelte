@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { slide } from 'svelte/transition';
+	import { t, locale } from '$lib/i18n/index.js';
 
 	interface FaqItem {
 		question: string;
@@ -12,8 +13,8 @@
 		items: FaqItem[];
 	}
 
-	let groups: FaqGroup[] = $state([]);
-	let loading = $state(true);
+	let groups: FaqGroup[] = $derived(fromDictionary());
+	let loading = false;
 	let error = $state(false);
 	let openItems: Set<string> = $state(new Set());
 
@@ -27,39 +28,21 @@
 		openItems = next;
 	}
 
-	const FALLBACK_GROUPS: FaqGroup[] = [
-		{
-			title: 'General',
-			items: [
-				{ question: 'What is Game of Prompts?', answer: 'A bot competition audited by blockchain. Creators design game-services to evaluate AI solvers, while players build solver-services to maximize their scores — all verified on the Ergo blockchain.' },
-				{ question: 'What is the "Ceremony Phase"?', answer: 'The initial period where players register their Solver IDs to add randomness to the seed. This prevents the Creator from pre-calculating solutions and ensures fair competition.' },
-				{ question: 'What do I need to play?', answer: 'An Ergo Wallet (with some ERG for participation fees) and a Celaut Node to run game and solver services locally.' },
-			]
-		},
-		{
-			title: 'Security',
-			items: [
-				{ question: 'How do I know the game is fair?', answer: 'The game rules and hashS are registered on-chain from the start. They are immutable — no one can change them after publication.' },
-				{ question: 'Can the Creator steal the funds?', answer: 'No. Funds are locked in a Smart Contract, not the Creator\'s wallet. Distribution is handled atomically by the contract when the game resolves.' },
-				{ question: 'What if the Creator disappears?', answer: 'After a Grace Period, players can trigger a Refund Action to recover their participation fees from the smart contract.' },
-			]
-		},
-		{
-			title: 'Judges',
-			items: [
-				{ question: 'Who are the Judges?', answer: 'Entities nominated by the Creator who audit the resolution phase. They verify that the game service generated valid proofs.' },
-				{ question: 'Why do Judges earn money for invalidating a participation?', answer: 'They detect Creator fraud — their incentive is to catch faulty game services. When they find issues, they receive the Creator\'s commission as reward.' },
-				{ question: 'Can I be penalized as a player?', answer: 'The system penalizes the Creator/Game Service, not honest players. Judges audit the Creator, not you.' },
-			]
-		},
-		{
-			title: 'Economy',
-			items: [
-				{ question: 'How is the winner calculated?', answer: 'Highest Time-Weighted Score: Score × (TimeWeight + RemainingTime). Submit early and score high for the best result.' },
-				{ question: 'When do I receive my winnings?', answer: 'Immediately upon the End Game action. The Smart Contract atomically distributes all funds — the winner receives all participation fees minus creator commission and judge fees.' },
-			]
-		}
-	];
+	/*
+	 * Offline / non-English fallback. The live FAQ is fetched from the
+	 * project README, which is English-only at source — so a Spanish
+	 * (etc.) reader gets the dictionary set rather than a page of
+	 * English questions under a translated heading. English still
+	 * prefers the live document, and falls back here if the fetch fails.
+	 */
+	function fromDictionary(): FaqGroup[] {
+		const raw = $t('faq.groups');
+		if (!Array.isArray(raw)) return [];
+		return raw.map((g: { title: string; items: Array<{ q: string; a: string }> }) => ({
+			title: g.title,
+			items: (g.items || []).map((it) => ({ question: it.q, answer: it.a }))
+		}));
+	}
 
 	function parseFaqFromMarkdown(md: string): FaqGroup[] {
 		// Find the FAQ section: starts with "## 1. FAQ"
@@ -124,26 +107,7 @@
 		return result;
 	}
 
-	onMount(async () => {
-		try {
-			const res = await fetch(
-				'https://raw.githubusercontent.com/game-of-prompts/.github/refs/heads/main/profile/README.md'
-			);
-			if (!res.ok) throw new Error(`HTTP ${res.status}`);
-			const md = await res.text();
-			const parsed = parseFaqFromMarkdown(md);
-			if (parsed.length > 0) {
-				groups = parsed;
-			} else {
-				groups = FALLBACK_GROUPS;
-			}
-		} catch {
-			error = true;
-			groups = FALLBACK_GROUPS;
-		} finally {
-			loading = false;
-		}
-	});
+
 </script>
 
 <div class="faq-container">

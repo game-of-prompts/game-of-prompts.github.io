@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import SplashLogo from '$lib/SplashLogo.svelte';
+	import { t } from '$lib/i18n/index.js';
 
 	let el: HTMLDivElement;
 
@@ -29,9 +30,9 @@
 				<div class="logo-glow"></div>
 			</div>
 			<div class="title-wrap">
-				<h1 class="title" data-text="GAME OF PROMPTS">GAME OF PROMPTS</h1>
+				<h1 class="title" data-text={$t('splash.title')}>{$t('splash.title')}</h1>
 			</div>
-			<p class="subtitle">WRITE YOUR PROMPTS. BUILD YOUR BOT. WIN THE THRONE.</p>
+			<p class="subtitle">{$t('splash.subtitle')}</p>
 			<div class="progress-bar">
 				<div class="progress-fill"></div>
 			</div>

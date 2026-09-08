@@ -25,8 +25,16 @@
 	 * every caption beat renders stacked — the exact same words, as a
 	 * plain illustrated article.
 	 *
-	 * The splash screen (SplashScreen/SplashLogo, mounted in +layout)
-	 * is deliberately untouched.
+	 * EVERY USER-FACING STRING COMES FROM THE DICTIONARY.
+	 * There is no English in this file's markup: the copy lives in
+	 * `$lib/i18n/en.js` and its sixteen siblings, and is read through
+	 * `$t('some.key')`. Scene captions are whole arrays (`scenes.arena.beats`),
+	 * indexed positionally by the SceneBeat list below — so adding a
+	 * beat means adding an entry to seventeen dictionaries, which is
+	 * exactly the friction that keeps them in sync. Beat boundaries
+	 * (`from`/`to`) are computed from the array length rather than
+	 * hardcoded, so a translation with a different number of beats
+	 * would still divide the scroll evenly instead of leaving a gap.
 	 */
 
 	import { onMount } from 'svelte';
@@ -49,57 +57,36 @@
 		drawJudgesScene
 	} from '$lib/immersive/scenes.js';
 	import { startSmoothScroll, loadGsap, prefersReducedMotion } from '$lib/motion.js';
+	import { t, href } from '$lib/i18n/index.js';
 
 	const VIDEO_ID = 'BeFfxoGaxQ4';
+	const DOC_URL =
+		'https://raw.githubusercontent.com/game-of-prompts/.github/refs/heads/main/profile/README.md';
+	const AI_PROMPT = `Please read this Markdown document and answer questions about it: ${DOC_URL}`;
+
 	let videoStarted = $state(false);
 	function startVideo() { videoStarted = true; }
 
-	const heroActions = [
-		{ label: 'Launch App', href: 'https://game-of-prompts.github.io/app/', external: true, primary: true },
-		{ label: 'View on GitHub', href: 'https://github.com/game-of-prompts', external: true },
-		{ label: 'See how it works', href: '#arena' }
-	];
+	/*
+	 * Beat boundaries, derived rather than written down.
+	 *
+	 * The old markup carried literal `from={0.315} to={0.648}` pairs,
+	 * which encoded "three beats" in two places at once. Translations
+	 * are read from arrays now, so the split is computed from the array
+	 * length: n beats divide [0,1] into n equal spans, the last one
+	 * `hold`s to the end of the pin. Same numbers as before for the
+	 * scenes that had even splits, and no way for a dictionary and a
+	 * timeline to disagree.
+	 */
+	function span(i: number, n: number) {
+		return { from: i / n, to: (i + 1) / n };
+	}
 
-	const heroStats = [
-		{ value: 'P2P', label: 'Decentralized — services run on your own Celaut node' },
-		{ value: 'On-chain', label: 'Results committed and verified on Ergo' },
-		{ value: 'Trustless', label: 'Smart contracts settle the pot, not a company' }
-	];
-
-	// The five score-validation steps, kept as readable reference under
-	// the pinned validation scene.
-	const validationSteps = [
-		{
-			num: '01',
-			badge: 'SUBMITTED',
-			title: 'Player Participation',
-			desc: 'Player publishes their participation on the Ergo blockchain.'
-		},
-		{
-			num: '02',
-			badge: 'REVEALED',
-			title: 'Creator Reveals Secret',
-			desc: 'After the deadline, the creator reveals the game secret in the resolution transaction — unlocking verification.'
-		},
-		{
-			num: '03',
-			badge: 'COMPUTED',
-			title: 'Smart Contract Validation',
-			desc: 'The game contract computes a commitment for each score using the solver ID, score value, hashed logs, and revealed secret.'
-		},
-		{
-			num: '04',
-			badge: 'VERIFIED',
-			title: 'Score Verification',
-			desc: 'When the score commitment matches the participation commitment, that score is validated as authentic and tamper-proof.'
-		},
-		{
-			num: '05',
-			badge: 'DISTRIBUTED',
-			title: 'Winner Takes the Pot',
-			desc: 'Highest score wins. Following a validation period to ensure the game creator acted honestly, funds are released to the winner, net of creator and judge fees.'
-		}
-	];
+	const heroActions = $derived([
+		{ label: $t('hero.actions.launch'), href: 'https://game-of-prompts.github.io/app/', external: true, primary: true },
+		{ label: $t('hero.actions.github'), href: 'https://github.com/game-of-prompts', external: true },
+		{ label: $t('hero.actions.how'), href: '#arena' }
+	]);
 
 	let motion = $state(false);
 	let groundRoot: HTMLElement;
@@ -108,6 +95,8 @@
 		motion = !prefersReducedMotion();
 
 		// Copy button handlers for the "ask an AI" prompt in the FAQ.
+		// The label is restored from the dictionary rather than from a
+		// literal, so the "Copied!" state speaks the reader's language.
 		const copyBtns = document.querySelectorAll('.copy-btn[data-copy-url]');
 		const copyHandlers: Array<[Element, () => void]> = [];
 		copyBtns.forEach((btn) => {
@@ -117,10 +106,12 @@
 				navigator.clipboard.writeText(url);
 				btn.classList.add('copied');
 				const labelEl = btn.querySelector('.copy-label');
-				if (labelEl) labelEl.textContent = 'Copied!';
+				const idle = labelEl?.getAttribute('data-idle-label') || '';
+				const done = labelEl?.getAttribute('data-copied-label') || '';
+				if (labelEl) labelEl.textContent = done;
 				window.setTimeout(() => {
 					btn.classList.remove('copied');
-					if (labelEl) labelEl.textContent = 'Copy prompt';
+					if (labelEl) labelEl.textContent = idle;
 				}, 2000);
 			};
 			btn.addEventListener('click', handler);
@@ -197,15 +188,18 @@
 </script>
 
 <svelte:head>
-	<title>Game of Prompts — Write your prompts. Build your bot. Win the throne.</title>
-	<meta name="description" content="A revolutionary competitive platform where creators design game-services to evaluate AI solvers, while players build solver-services to maximize their scores—powered by Ergo blockchain and Celaut." />
+	<title>{$t('meta.title')}</title>
+	<meta name="description" content={$t('meta.description')} />
 	<meta name="theme-color" content="#0a0a0a" />
-	<meta property="og:title" content="Game of Prompts" />
-	<meta property="og:description" content="Write your prompts. Build your bot. Win the throne." />
+	<meta property="og:title" content={$t('meta.ogTitle')} />
+	<meta property="og:description" content={$t('meta.ogDescription')} />
 	<meta property="og:type" content="website" />
 	<link rel="preconnect" href="https://fonts.googleapis.com" />
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
-	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+	<!-- Noto covers the scripts Inter has no glyphs for: Arabic, Devanagari,
+	     Korean, and the CJK ranges used by the Chinese and Japanese
+	     dictionaries. Without them those locales render as tofu boxes. -->
+	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Noto+Sans+Arabic:wght@400;600;700&family=Noto+Sans+Devanagari:wght@400;600;700&family=Noto+Sans+KR:wght@400;600;700&family=Noto+Sans+SC:wght@400;600;700&family=Noto+Sans+JP:wght@400;600;700&display=swap" rel="stylesheet" />
 </svelte:head>
 
 <!-- ============================================ -->
@@ -213,12 +207,13 @@
 <!-- ============================================ -->
 
 <ImmersiveHero
-	titleTop="GAME OF"
-	titleBottom="PROMPTS"
-	tagline={'Write your prompts. <span class="hero-grad">Build your bot.</span> Win the throne.'}
-	lede="A competitive platform where creators design game-services to evaluate AI solvers, and players build solver-services to maximize their scores — all recorded and verified on-chain."
+	titleTop={$t('hero.titleTop')}
+	titleBottom={$t('hero.titleBottom')}
+	tagline={$t('hero.tagline')}
+	lede={$t('hero.lede')}
 	actions={heroActions}
-	stats={heroStats}
+	stats={$t('hero.stats')}
+	scrollLabel={$t('hero.scroll')}
 	firstSceneId="arena"
 />
 
@@ -227,39 +222,21 @@
 <!-- ============================================================ -->
 <PinnedScene
 	id="arena"
-	label="The idea"
+	label={$t('scenes.arena.label')}
 	draw={drawArenaScene}
 	scrollLength={2.4}
 	let:progress
 	let:static={isStatic}
 >
 	<div class="beats" class:flow={isStatic}>
-		<SceneBeat {progress} {isStatic} from={0.0} to={0.315}>
-			<h2>Someone posts a challenge.</h2>
-			<p>
-				A creator designs a game with measurable scoring — and packages it as a
-				<strong>game-service</strong>: an immutable Celaut service that holds the game's
-				logic and its secret.
-			</p>
-		</SceneBeat>
-
-		<SceneBeat {progress} {isStatic} from={0.315} to={0.648}>
-			<h2>Everyone else builds a bot to beat it.</h2>
-			<p>
-				Players write <strong>solver-services</strong> — their strategy, packaged the same
-				way. The game-service runs each solver in a secure, isolated environment and scores
-				what it did.
-			</p>
-		</SceneBeat>
-
-		<SceneBeat {progress} {isStatic} from={0.648} to={1} hold>
-			<h2>The highest score wins the throne.</h2>
-			<p>
-				No leaderboard you have to trust. Every score is committed cryptographically and
-				<strong>settled on the Ergo blockchain</strong>, where anyone can check the maths.
-			</p>
-			<span class="beat-note">Write your prompts. Build your bot. Win the throne.</span>
-		</SceneBeat>
+		{#each $t('scenes.arena.beats') as beat, i}
+			{@const n = $t('scenes.arena.beats').length}
+			<SceneBeat {progress} {isStatic} {...span(i, n)} hold={i === n - 1}>
+				<h2>{beat.h}</h2>
+				<p>{@html beat.p}</p>
+				{#if beat.note}<span class="beat-note">{beat.note}</span>{/if}
+			</SceneBeat>
+		{/each}
 	</div>
 </PinnedScene>
 
@@ -268,7 +245,7 @@
 <!-- ============================================================ -->
 <PinnedScene
 	id="components"
-	label="Architecture"
+	label={$t('scenes.components.label')}
 	align="right"
 	draw={drawComponentsScene}
 	scrollLength={2.6}
@@ -276,43 +253,14 @@
 	let:static={isStatic}
 >
 	<div class="beats" class:flow={isStatic}>
-		<SceneBeat {progress} {isStatic} from={0.0} to={0.25}>
-			<h2>Game Service</h2>
-			<p>
-				Built by game devs. An autonomous service that encapsulates a game's logic and the
-				secret. It evaluates solver performance, generates scores, and creates the
-				<strong>cryptographic commitments</strong> needed for blockchain validation.
-			</p>
-		</SceneBeat>
-
-		<SceneBeat {progress} {isStatic} from={0.25} to={0.518}>
-			<h2>Solver Service</h2>
-			<p>
-				Built by players. It implements strategies to maximize the score in a specific game.
-				The solver is packaged and sent to the game-service, which
-				<strong>executes it in a secure, isolated environment</strong> for evaluation.
-			</p>
-		</SceneBeat>
-
-		<SceneBeat {progress} {isStatic} from={0.518} to={0.786}>
-			<h2>GoP Web</h2>
-			<p>
-				The community portal. Discover games, read the rules, download game-services, and
-				publish your results on the Ergo blockchain. It
-				<strong>supports self-hosting</strong> for a fully trustless, peer-to-peer
-				experience.
-			</p>
-		</SceneBeat>
-
-		<SceneBeat {progress} {isStatic} from={0.786} to={1} hold>
-			<h2>Everything runs on your machine.</h2>
-			<p>
-				Game and solver services both run on a <strong>local Celaut node</strong>, which can
-				operate entirely offline. GoP Web can be used via its GitHub.io instance or run
-				locally as a Celaut service.
-			</p>
-			<span class="beat-note">Two technologies: Celaut for computation, Ergo for settlement.</span>
-		</SceneBeat>
+		{#each $t('scenes.components.beats') as beat, i}
+			{@const n = $t('scenes.components.beats').length}
+			<SceneBeat {progress} {isStatic} {...span(i, n)} hold={i === n - 1}>
+				<h2>{beat.h}</h2>
+				<p>{@html beat.p}</p>
+				{#if beat.note}<span class="beat-note">{beat.note}</span>{/if}
+			</SceneBeat>
+		{/each}
 	</div>
 </PinnedScene>
 
@@ -321,54 +269,21 @@
 <!-- ============================================================ -->
 <PinnedScene
 	id="creator-flow"
-	label="Game creator flow"
+	label={$t('scenes.creator.label')}
 	draw={drawCreatorScene}
 	scrollLength={2.8}
 	let:progress
 	let:static={isStatic}
 >
 	<div class="beats" class:flow={isStatic}>
-		<SceneBeat {progress} {isStatic} from={0.0} to={0.196}>
-			<h2>Design a game.</h2>
-			<p>
-				Create a challenge with measurable scoring and high scenario variability (CDE), so
-				hardcoded solutions don't work.
-			</p>
-		</SceneBeat>
-
-		<SceneBeat {progress} {isStatic} from={0.196} to={0.393}>
-			<h2>Write the Paper.</h2>
-			<p>
-				Publish a document with all instructions, rules and evaluation criteria. Players must
-				be able to understand the challenge <strong>before</strong> they participate.
-			</p>
-		</SceneBeat>
-
-		<SceneBeat {progress} {isStatic} from={0.393} to={0.589}>
-			<h2>Generate a secret.</h2>
-			<p>
-				A unique <strong>256-bit secret</strong> underwrites the cryptographic commitments
-				and the later score validation. Nobody can see it while the game is open.
-			</p>
-		</SceneBeat>
-
-		<SceneBeat {progress} {isStatic} from={0.589} to={0.786}>
-			<h2>Package and publish.</h2>
-			<p>
-				Ship the game as a Celaut service and publish it through GoP Web with its parameters:
-				fee, deadline, and commission.
-			</p>
-		</SceneBeat>
-
-		<SceneBeat {progress} {isStatic} from={0.786} to={1} hold>
-			<h2>Reveal the secret.</h2>
-			<p>
-				When the deadline passes, the creator <strong>reveals the secret on-chain</strong>.
-				That resolves the game: score validation becomes possible and the smart contract can
-				determine the winner.
-			</p>
-			<span class="beat-note">Commit first, reveal later. That's what makes it fair.</span>
-		</SceneBeat>
+		{#each $t('scenes.creator.beats') as beat, i}
+			{@const n = $t('scenes.creator.beats').length}
+			<SceneBeat {progress} {isStatic} {...span(i, n)} hold={i === n - 1}>
+				<h2>{beat.h}</h2>
+				<p>{@html beat.p}</p>
+				{#if beat.note}<span class="beat-note">{beat.note}</span>{/if}
+			</SceneBeat>
+		{/each}
 	</div>
 </PinnedScene>
 
@@ -377,7 +292,7 @@
 <!-- ============================================================ -->
 <PinnedScene
 	id="player-journey"
-	label="The player's journey"
+	label={$t('scenes.player.label')}
 	align="right"
 	draw={drawPlayerScene}
 	scrollLength={3}
@@ -385,58 +300,14 @@
 	let:static={isStatic}
 >
 	<div class="beats" class:flow={isStatic}>
-		<SceneBeat {progress} {isStatic} from={0.0} to={0.174}>
-			<h2>Browse and read the Paper.</h2>
-			<p>
-				Find a game on GoP Web. Read the creator's Paper to understand the challenge, the
-				rules and the evaluation criteria before committing to anything.
-			</p>
-		</SceneBeat>
-
-		<SceneBeat {progress} {isStatic} from={0.174} to={0.348}>
-			<h2>Implement your solver.</h2>
-			<p>
-				Build your solver-service from the Paper alone, so it's ready to compete the moment
-				the seed drops.
-			</p>
-		</SceneBeat>
-
-		<SceneBeat {progress} {isStatic} from={0.348} to={0.522}>
-			<h2>Register your Solver ID.</h2>
-			<p>
-				Registration is free — you only cover the network gas fee. This
-				<strong>pre-commitment</strong> is what guarantees fairness before the seed is
-				revealed.
-			</p>
-		</SceneBeat>
-
-		<SceneBeat {progress} {isStatic} from={0.522} to={0.696}>
-			<h2>The seed is revealed.</h2>
-			<p>
-				Once the ceremony phase ends, the game seed goes public. Now — and only now — you
-				know the exact challenge parameters you'll be evaluated against.
-			</p>
-		</SceneBeat>
-
-		<SceneBeat {progress} {isStatic} from={0.696} to={0.852}>
-			<h2>Run the game service locally.</h2>
-			<p>
-				The service executes your solver in a secure environment with the revealed seed,
-				evaluates its performance, and generates the
-				<strong>cryptographic commitment</strong> needed for on-chain validation.
-			</p>
-		</SceneBeat>
-
-		<SceneBeat {progress} {isStatic} from={0.852} to={1} hold>
-			<h2>Submit your commitment and pay the fee.</h2>
-			<p>
-				If the score is worth competing with, publish the commitment on-chain and pay the
-				participation fee. <strong>All fees go into the pot</strong> — the winner takes the
-				economic prize, minus creator, judge and platform commission, and receives the game
-				NFT.
-			</p>
-			<span class="beat-note">You decide whether your run is worth submitting.</span>
-		</SceneBeat>
+		{#each $t('scenes.player.beats') as beat, i}
+			{@const n = $t('scenes.player.beats').length}
+			<SceneBeat {progress} {isStatic} {...span(i, n)} hold={i === n - 1}>
+				<h2>{beat.h}</h2>
+				<p>{@html beat.p}</p>
+				{#if beat.note}<span class="beat-note">{beat.note}</span>{/if}
+			</SceneBeat>
+		{/each}
 	</div>
 </PinnedScene>
 
@@ -445,60 +316,33 @@
 <!-- ============================================================ -->
 <PinnedScene
 	id="score-validation"
-	label="Score validation"
+	label={$t('scenes.validation.label')}
 	draw={drawValidationScene}
 	scrollLength={2.8}
 	let:progress
 	let:static={isStatic}
 >
 	<div class="beats" class:flow={isStatic}>
-		<SceneBeat {progress} {isStatic} from={0.0} to={0.239}>
-			<h2>Your score is a hash, not a claim.</h2>
-			<p>
-				When you participate, what goes on-chain is a <strong>commitment</strong> — a digest.
-				Nobody, including the creator, can read your score off the blockchain while the game
-				is still open.
-			</p>
-		</SceneBeat>
-
-		<SceneBeat {progress} {isStatic} from={0.239} to={0.486}>
-			<h2>Then the secret comes out.</h2>
-			<p>
-				After the deadline, the creator reveals the game secret in the resolution
-				transaction. That's the missing ingredient — and it
-				<strong>unlocks verification for everyone at once</strong>.
-			</p>
-		</SceneBeat>
-
-		<SceneBeat {progress} {isStatic} from={0.486} to={0.734}>
-			<h2>The contract recomputes it.</h2>
-			<p>
-				The game contract builds a commitment for each score from the
-				<strong>solver ID, the score value, the hashed logs and the revealed secret</strong>.
-				No trusted party is involved; it's arithmetic.
-			</p>
-		</SceneBeat>
-
-		<SceneBeat {progress} {isStatic} from={0.734} to={1} hold>
-			<h2>If they match, the score is real.</h2>
-			<p>
-				A recomputed commitment that equals the published one proves the score is authentic
-				and tamper-proof. Anything that doesn't match simply isn't a score.
-			</p>
-			<span class="beat-note">Transparent yet private: proven without being exposed.</span>
-		</SceneBeat>
+		{#each $t('scenes.validation.beats') as beat, i}
+			{@const n = $t('scenes.validation.beats').length}
+			<SceneBeat {progress} {isStatic} {...span(i, n)} hold={i === n - 1}>
+				<h2>{beat.h}</h2>
+				<p>{@html beat.p}</p>
+				{#if beat.note}<span class="beat-note">{beat.note}</span>{/if}
+			</SceneBeat>
+		{/each}
 	</div>
 </PinnedScene>
 
 <!-- Readable reference for the five validation steps -->
 <section class="ground" bind:this={groundRoot}>
 	<div class="block">
-		<h2 data-reveal>The five steps, in order</h2>
+		<h2 data-reveal>{$t('steps.title')}</h2>
 		<ol class="steps" data-reveal-group>
-			{#each validationSteps as s}
+			{#each $t('steps.items') as s, i}
 				<li class="step">
 					<div class="step-head">
-						<span class="step-num">{s.num}</span>
+						<span class="step-num">{String(i + 1).padStart(2, '0')}</span>
 						<span class="step-badge">{s.badge}</span>
 					</div>
 					<h3>{s.title}</h3>
@@ -514,7 +358,7 @@
 <!-- ============================================================ -->
 <PinnedScene
 	id="the-pot"
-	label="Economics"
+	label={$t('scenes.pot.label')}
 	align="right"
 	draw={drawPotScene}
 	scrollLength={2.6}
@@ -522,33 +366,14 @@
 	let:static={isStatic}
 >
 	<div class="beats" class:flow={isStatic}>
-		<SceneBeat {progress} {isStatic} from={0.0} to={0.278}>
-			<h2>Every entry feeds the pot.</h2>
-			<p>
-				Participation fees from everyone who submits a commitment accumulate in a single
-				on-chain pot for that game.
-			</p>
-		</SceneBeat>
-
-		<SceneBeat {progress} {isStatic} from={0.278} to={0.574}>
-			<h2>Commissions come off the top.</h2>
-			<p>
-				The creator, the judges and the platform take their agreed commission — all of it set
-				in the open when the game was published, and
-				<strong>enforced by the smart contract</strong> rather than by anyone's goodwill.
-			</p>
-		</SceneBeat>
-
-		<SceneBeat {progress} {isStatic} from={0.574} to={1} hold>
-			<h2>The rest goes to the winner.</h2>
-			<p>
-				The highest validated score takes the remaining pot — plus the
-				<strong>game NFT</strong>, a permanent, public, auditable proof of victory. Funds are
-				released after a validation period that gives judges time to check the creator acted
-				honestly.
-			</p>
-			<span class="beat-note">Nobody approves the payout. The contract does it.</span>
-		</SceneBeat>
+		{#each $t('scenes.pot.beats') as beat, i}
+			{@const n = $t('scenes.pot.beats').length}
+			<SceneBeat {progress} {isStatic} {...span(i, n)} hold={i === n - 1}>
+				<h2>{beat.h}</h2>
+				<p>{@html beat.p}</p>
+				{#if beat.note}<span class="beat-note">{beat.note}</span>{/if}
+			</SceneBeat>
+		{/each}
 	</div>
 </PinnedScene>
 
@@ -557,39 +382,21 @@
 <!-- ============================================================ -->
 <PinnedScene
 	id="judges"
-	label="Trust & accountability"
+	label={$t('scenes.judges.label')}
 	draw={drawJudgesScene}
 	scrollLength={2.6}
 	let:progress
 	let:static={isStatic}
 >
 	<div class="beats" class:flow={isStatic}>
-		<SceneBeat {progress} {isStatic} from={0.0} to={0.315}>
-			<h2>Who watches the creator?</h2>
-			<p>
-				Judges are entities nominated by the creator who audit the resolution phase. They
-				verify that the creator's game service generated
-				<strong>valid proofs and valid scores</strong>.
-			</p>
-		</SceneBeat>
-
-		<SceneBeat {progress} {isStatic} from={0.315} to={0.648}>
-			<h2>Fraud costs the creator, not you.</h2>
-			<p>
-				If a judge catches a faulty game service or an invalid proof, that judge
-				<strong>receives the creator's commission</strong> as the reward. The incentive to
-				look closely is built in.
-			</p>
-		</SceneBeat>
-
-		<SceneBeat {progress} {isStatic} from={0.648} to={1} hold>
-			<h2>Players stay out of the blast radius.</h2>
-			<p>
-				In normal operation players cannot be penalised by judges. Judges exist to
-				<strong>protect players from dishonest creators</strong>, never the other way around.
-			</p>
-			<span class="beat-note">Audit the house, not the guests.</span>
-		</SceneBeat>
+		{#each $t('scenes.judges.beats') as beat, i}
+			{@const n = $t('scenes.judges.beats').length}
+			<SceneBeat {progress} {isStatic} {...span(i, n)} hold={i === n - 1}>
+				<h2>{beat.h}</h2>
+				<p>{@html beat.p}</p>
+				{#if beat.note}<span class="beat-note">{beat.note}</span>{/if}
+			</SceneBeat>
+		{/each}
 	</div>
 </PinnedScene>
 
@@ -601,16 +408,16 @@
 <section id="overview" class="section video-section">
 	<div class="container">
 		<ScrollAnimation>
-			<span class="section-label">Overview</span>
-			<h2 class="section-title">Watch the Breakdown</h2>
-			<p class="section-subtitle">Get up to speed in minutes — see how Game of Prompts brings blockchain and AI competitions together.</p>
+			<span class="section-label">{$t('video.label')}</span>
+			<h2 class="section-title">{$t('video.title')}</h2>
+			<p class="section-subtitle">{$t('video.subtitle')}</p>
 		</ScrollAnimation>
 		<div class="video-card" style="margin-top: 2.5rem;">
 			<div class="video-wrapper">
 				{#if videoStarted}
 					<iframe
 						src="https://www.youtube.com/embed/{VIDEO_ID}?autoplay=1&rel=0&modestbranding=1"
-						title="Game of Prompts - Brief Breakdown"
+						title={$t('video.iframeTitle')}
 						frameborder="0"
 						allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
 						allowfullscreen
@@ -619,7 +426,7 @@
 					<!-- svelte-ignore a11y_click_events_have_key_events -->
 					<!-- svelte-ignore a11y_no_static_element_interactions -->
 					<div class="video-thumbnail" onclick={startVideo}>
-						<img src="https://img.youtube.com/vi/{VIDEO_ID}/hqdefault.jpg" alt="Game of Prompts video thumbnail" class="video-thumb-img" />
+						<img src="https://img.youtube.com/vi/{VIDEO_ID}/hqdefault.jpg" alt={$t('video.thumbAlt')} class="video-thumb-img" />
 						<div class="play-btn-overlay">
 							<svg class="play-btn-svg" width="80" height="80" viewBox="0 0 80 80" fill="none">
 								<circle cx="40" cy="40" r="38" stroke="#22c55e" stroke-width="3" fill="rgba(34, 197, 94, 0.15)" />
@@ -640,49 +447,39 @@
 <section id="security" class="section section-security" style="scroll-margin-top: 80px;">
 	<div class="container">
 		<ScrollAnimation>
-			<span class="section-label">Security</span>
-			<h2 class="section-title">Transparent Yet Private Competition</h2>
-			<p class="section-subtitle">Cryptography ensures fair competition while protecting participants' strategies.</p>
+			<span class="section-label">{$t('security.label')}</span>
+			<h2 class="section-title">{$t('security.title')}</h2>
+			<p class="section-subtitle">{$t('security.subtitle')}</p>
 		</ScrollAnimation>
 
 		<div class="security-grid">
-			<ScrollAnimation delay={0} animation="scale">
-				<div class="card security-card" use:hoverCorners>
-					<div class="security-icon">
-						<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-							<rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
-							<path d="M7 11V7a5 5 0 0110 0v4" />
-						</svg>
+			{#each $t('security.cards') as card, i}
+				<ScrollAnimation delay={i * 150} animation="scale">
+					<div class="card security-card" use:hoverCorners>
+						<div class="security-icon">
+							{#if i === 0}
+								<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+									<rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+									<path d="M7 11V7a5 5 0 0110 0v4" />
+								</svg>
+							{:else if i === 1}
+								<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+									<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+									<circle cx="12" cy="12" r="3" />
+									<line x1="1" y1="1" x2="23" y2="23" stroke-width="2" />
+								</svg>
+							{:else}
+								<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+									<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+									<polyline points="9 12 11 14 15 10" />
+								</svg>
+							{/if}
+						</div>
+						<h3>{card.title}</h3>
+						<p>{card.desc}</p>
 					</div>
-					<h3>Code Protection</h3>
-					<p>The game's intellectual property and game secret are protected through obfuscation to prevent reverse engineering.</p>
-				</div>
-			</ScrollAnimation>
-			<ScrollAnimation delay={150} animation="scale">
-				<div class="card security-card" use:hoverCorners>
-					<div class="security-icon">
-						<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-							<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
-							<circle cx="12" cy="12" r="3" />
-							<line x1="1" y1="1" x2="23" y2="23" stroke-width="2" />
-						</svg>
-					</div>
-					<h3>Private Results</h3>
-					<p>Strategic decoys and cryptographic commitments conceal your true score, protecting your strategy until the final reveal.</p>
-				</div>
-			</ScrollAnimation>
-			<ScrollAnimation delay={300} animation="scale">
-				<div class="card security-card" use:hoverCorners>
-					<div class="security-icon">
-						<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-							<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-							<polyline points="9 12 11 14 15 10" />
-						</svg>
-					</div>
-					<h3>Immutable Proof</h3>
-					<p>Final validation on the Ergo blockchain generates a public, immutable, and auditable proof of victory.</p>
-				</div>
-			</ScrollAnimation>
+				</ScrollAnimation>
+			{/each}
 		</div>
 
 	</div>
@@ -696,10 +493,8 @@
 <section id="games" class="section narrative-section">
 	<div class="container">
 		<div class="narrative-content">
-			<h2 class="narrative-title">What Can Be a Game?</h2>
-			<p class="narrative-text">
-				Game of Prompts is a versatile platform that can host a wide variety of competitions. Here are just a few examples of what's possible.
-			</p>
+			<h2 class="narrative-title">{$t('gameTypes.title')}</h2>
+			<p class="narrative-text">{$t('gameTypes.text')}</p>
 		</div>
 	</div>
 </section>
@@ -708,67 +503,29 @@
 
 <!-- ============================================ -->
 <!-- GAME TYPES — full-screen, unique per type   -->
+<!--                                              -->
+<!-- The canvas type, the emoji and the per-type  -->
+<!-- class are structure, not copy, so they stay  -->
+<!-- here and pair positionally with the          -->
+<!-- dictionary's `gameTypes.items`.              -->
 <!-- ============================================ -->
-
-<section class="game-type-fullscreen game-type-arcade">
-	<div class="gt-bg-glow"></div>
-	<div class="gt-animation-canvas">
-		<GameAnimation type="arcade" />
-	</div>
-	<div class="gt-content">
-		<span class="gt-icon" aria-hidden="true">🎮</span>
-		<span class="gt-label">Game Type 01</span>
-		<h2 class="gt-title">Classic Arcade</h2>
-		<p class="gt-desc">The AI solver controls the character in fast-paced, skill-based game environments. Reflexes, pattern recognition, timing.</p>
-		<p class="gt-score"><span class="gt-score-label">SCORING</span> Game points · Survival time · Levels cleared</p>
-	</div>
-	<div class="gt-grid-lines" aria-hidden="true"></div>
-</section>
-
-<section class="game-type-fullscreen game-type-world">
-	<div class="gt-bg-glow"></div>
-	<div class="gt-animation-canvas">
-		<GameAnimation type="openworld" />
-	</div>
-	<div class="gt-content">
-		<span class="gt-icon" aria-hidden="true">🌍</span>
-		<span class="gt-label">Game Type 02</span>
-		<h2 class="gt-title">Open World</h2>
-		<p class="gt-desc">Optimize for spatial reasoning, navigation, and environmental adaptation.</p>
-		<p class="gt-score"><span class="gt-score-label">SCORING</span> Resource efficiency · Map exploration · Mission complexity</p>
-	</div>
-	<div class="gt-grid-lines" aria-hidden="true"></div>
-</section>
-
-<section class="game-type-fullscreen game-type-trading">
-	<div class="gt-bg-glow"></div>
-	<div class="gt-animation-canvas">
-		<GameAnimation type="trading" />
-	</div>
-	<div class="gt-content">
-		<span class="gt-icon" aria-hidden="true">📈</span>
-		<span class="gt-label">Game Type 03</span>
-		<h2 class="gt-title">Financial Trading</h2>
-		<p class="gt-desc">Bot vs. market. Trade virtual assets in realistic simulations using historical or synthetic data. Pure strategy, zero luck.</p>
-		<p class="gt-score"><span class="gt-score-label">SCORING</span> Net profit · Sharpe ratio · Drawdown · Benchmarks</p>
-	</div>
-	<div class="gt-grid-lines" aria-hidden="true"></div>
-</section>
-
-<section class="game-type-fullscreen game-type-science">
-	<div class="gt-bg-glow"></div>
-	<div class="gt-animation-canvas">
-		<GameAnimation type="protein" />
-	</div>
-	<div class="gt-content">
-		<span class="gt-icon" aria-hidden="true">🧬</span>
-		<span class="gt-label">Game Type 04</span>
-		<h2 class="gt-title">Protein Folding</h2>
-		<p class="gt-desc">Predict 3D protein structures from amino acid sequences. A real scientific challenge — AI solvers advancing biology.</p>
-		<p class="gt-score"><span class="gt-score-label">SCORING</span> Structural stability · Folding accuracy · Efficiency</p>
-	</div>
-	<div class="gt-grid-lines" aria-hidden="true"></div>
-</section>
+{#each [{ kind: 'arcade', cls: 'game-type-arcade', icon: '🎮' }, { kind: 'openworld', cls: 'game-type-world', icon: '🌍' }, { kind: 'trading', cls: 'game-type-trading', icon: '📈' }, { kind: 'protein', cls: 'game-type-science', icon: '🧬' }] as gt, i}
+	{@const item = $t('gameTypes.items')[i]}
+	<section class="game-type-fullscreen {gt.cls}">
+		<div class="gt-bg-glow"></div>
+		<div class="gt-animation-canvas">
+			<GameAnimation type={gt.kind as 'arcade' | 'openworld' | 'trading' | 'protein'} />
+		</div>
+		<div class="gt-content">
+			<span class="gt-icon" aria-hidden="true">{gt.icon}</span>
+			<span class="gt-label">{$t('gameTypes.eyebrow', { n: String(i + 1).padStart(2, '0') })}</span>
+			<h2 class="gt-title">{item.title}</h2>
+			<p class="gt-desc">{item.desc}</p>
+			<p class="gt-score"><span class="gt-score-label">{$t('common.scoring')}</span> {item.score}</p>
+		</div>
+		<div class="gt-grid-lines" aria-hidden="true"></div>
+	</section>
+{/each}
 
 <SectionTransition height={100} />
 
@@ -779,99 +536,40 @@
 <section class="section narrative-section">
 	<div class="container">
 		<div class="narrative-content">
-			<h2 class="narrative-title">Optional Game Features</h2>
-			<p class="narrative-text">
-				Creators can enhance their games with powerful optional mechanics — from poker-style bluffing to resource constraints and pay-per-attempt models.
-			</p>
+			<h2 class="narrative-title">{$t('features.title')}</h2>
+			<p class="narrative-text">{$t('features.text')}</p>
 		</div>
 	</div>
 </section>
 
 <SectionTransition height={80} />
 
-<section class="game-type-fullscreen game-type-resource" id="feature-resource">
-	<div class="gt-bg-glow"></div>
-	<div class="gt-animation-canvas">
-		<GameAnimation type="resource" />
-	</div>
-	<div class="gt-content">
-		<span class="gt-icon" aria-hidden="true">⚙️</span>
-		<span class="gt-label">Feature 01 · <span class="feature-tag-status active">Available</span></span>
-		<h2 class="gt-title">Resource Limitation</h2>
-		<p class="gt-desc">Technical challenge by constraining computational resources. Efficiency is king.</p>
-		<ul class="gt-bullets">
-			<li>Game creator sets specific limits on computational resources</li>
-			<li>Constraints: maximum RAM, CPU time, or service dependencies</li>
-			<li>Forces players to develop highly efficient, optimized solutions</li>
-			<li>Adds a significant engineering challenge to the game</li>
-		</ul>
-	</div>
-	<div class="gt-grid-lines" aria-hidden="true"></div>
-</section>
-
-<section class="game-type-fullscreen game-type-poker" id="feature-poker">
-	<div class="gt-bg-glow"></div>
-	<div class="gt-animation-canvas">
-		<GameAnimation type="poker" />
-	</div>
-	<div class="gt-content">
-		<span class="gt-icon" aria-hidden="true">🃏</span>
-		<span class="gt-label">Feature 02 · <span class="feature-tag-status coming-soon">Under Research</span></span>
-		<h2 class="gt-title">Poker Mode</h2>
-		<p class="gt-desc">Strategic participation with risk and reward. Bluff, bet, and multiply your score.</p>
-		<ul class="gt-bullets">
-			<li>Participants choose how much to pay (above a set minimum)</li>
-			<li>Higher payment = higher final score multiplier (e.g. ×2, ×5)</li>
-			<li>Players can submit multiple decoy scores</li>
-			<li>Bluff strategy: pay high fee + submit fake high scores to intimidate</li>
-			<li>Game creator sets score multiplier based on fee paid</li>
-		</ul>
-	</div>
-	<div class="gt-grid-lines" aria-hidden="true"></div>
-</section>
-
-<section class="game-type-fullscreen game-type-payattempt" id="feature-payattempt">
-	<div class="gt-bg-glow"></div>
-	<div class="gt-animation-canvas">
-		<GameAnimation type="payattempt" />
-	</div>
-	<div class="gt-content">
-		<span class="gt-icon" aria-hidden="true">🔬</span>
-		<span class="gt-label">Feature 03 · <span class="feature-tag-status research">Under Research</span></span>
-		<h2 class="gt-title">Pay-per-Attempt</h2>
-		<p class="gt-desc">A mechanism that assigns a cost to each local execution, fostering high-quality agent development over trial-and-error.</p>
-		<ul class="gt-bullets">
-			<li>Incremental token cost per local execution attempt</li>
-			<li>Encourages rigorous local simulation and optimization</li>
-			<li>Disincentivizes blind brute-force strategies</li>
-			<li>Difficulty scaling fully configurable by the game creator</li>
-		</ul>
-	</div>
-	<div class="gt-grid-lines" aria-hidden="true"></div>
-</section>
-
-<!-- Hidden: multichain section -->
-{#if false}
-<section class="game-type-fullscreen game-type-multichain" id="feature-multichain">
-	<div class="gt-bg-glow"></div>
-	<div class="gt-animation-canvas">
-		<GameAnimation type="multichain" />
-	</div>
-	<div class="gt-content">
-		<span class="gt-icon" aria-hidden="true">🔗</span>
-		<span class="gt-label">Feature 04 · <span class="feature-tag-status research">Under Research</span></span>
-		<h2 class="gt-title">Multi-chain</h2>
-		<p class="gt-desc">Cross-chain capabilities with Ergo as the foundation. Bridge games and funds across blockchains.</p>
-		<ul class="gt-bullets">
-			<li>Ergo-centric architecture with cross-chain bridges</li>
-			<li>Accept participation fees from multiple chains</li>
-			<li>Distribute winnings across different blockchain networks</li>
-			<li>Unified scoring and validation on Ergo</li>
-		</ul>
-	</div>
-	<div class="gt-grid-lines" aria-hidden="true"></div>
-</section>
-{/if}
+{#each [{ kind: 'resource', cls: 'game-type-resource', id: 'feature-resource', icon: '⚙️', status: 'available' }, { kind: 'poker', cls: 'game-type-poker', id: 'feature-poker', icon: '🃏', status: 'research' }, { kind: 'payattempt', cls: 'game-type-payattempt', id: 'feature-payattempt', icon: '🔬', status: 'research' }] as f, i}
+	{@const item = $t('features.items')[i]}
+	<section class="game-type-fullscreen {f.cls}" id={f.id}>
+		<div class="gt-bg-glow"></div>
+		<div class="gt-animation-canvas">
+			<GameAnimation type={f.kind as 'resource' | 'poker' | 'payattempt'} />
+		</div>
+		<div class="gt-content">
+			<span class="gt-icon" aria-hidden="true">{f.icon}</span>
+			<span class="gt-label">
+				{$t('features.eyebrow', { n: String(i + 1).padStart(2, '0') })} ·
+				<span class="feature-tag-status" class:active={f.status === 'available'} class:research={f.status === 'research'}>
+					{$t(`features.status.${f.status}`)}
+				</span>
+			</span>
+			<h2 class="gt-title">{item.title}</h2>
+			<p class="gt-desc">{item.desc}</p>
+			<ul class="gt-bullets">
+				{#each item.bullets as b}
+					<li>{b}</li>
+				{/each}
+			</ul>
+		</div>
+		<div class="gt-grid-lines" aria-hidden="true"></div>
+	</section>
+{/each}
 
 <SectionTransition height={100} />
 
@@ -881,50 +579,57 @@
 <section id="faq" class="section" style="scroll-margin-top: 80px;">
 	<div class="container">
 		<ScrollAnimation>
-			<span class="section-label">FAQ</span>
-			<h2 class="section-title">Frequently Asked Questions</h2>
+			<span class="section-label">{$t('faq.label')}</span>
+			<h2 class="section-title">{$t('faq.title')}</h2>
 		</ScrollAnimation>
 
 		<FaqSection />
 
 		<!-- Still have questions? -->
 		<div class="faq-footer">
-			<h3 class="faq-footer-title">Still have questions?</h3>
-			<p class="faq-footer-desc">Copy the prompt below and paste it into any AI assistant — it includes a link to our full documentation.</p>
+			<h3 class="faq-footer-title">{$t('faq.footerTitle')}</h3>
+			<p class="faq-footer-desc">{$t('faq.footerDesc')}</p>
 
 			<!-- Primary: copy prompt -->
 			<div class="faq-copy-prompt">
 				<!-- svelte-ignore a11y_click_events_have_key_events -->
 				<!-- svelte-ignore a11y_no_static_element_interactions -->
-				<div class="prompt-box copy-btn" data-copy-url="Please read this Markdown document and answer questions about it: https://raw.githubusercontent.com/game-of-prompts/.github/refs/heads/main/profile/README.md">
-					<span class="prompt-text">Please read this Markdown document and answer questions about it: https://raw.githubusercontent.com/game-of-prompts/.github/refs/heads/main/profile/README.md</span>
+				<div class="prompt-box copy-btn" data-copy-url={AI_PROMPT}>
+					<span class="prompt-text">{AI_PROMPT}</span>
 					<span class="prompt-copy-icon">
 						<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" /><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1" /></svg>
-						<span class="copy-label">Copy prompt</span>
+						<!-- The idle/copied labels ride on the element so the
+						     onMount handler can restore them in the active
+						     language without importing the store. -->
+						<span
+							class="copy-label"
+							data-idle-label={$t('faq.copyPrompt')}
+							data-copied-label={$t('faq.copied')}>{$t('faq.copyPrompt')}</span
+						>
 					</span>
 				</div>
 			</div>
 
 			<!-- Secondary: open directly -->
-			<p class="faq-or-label">or open directly in:</p>
+			<p class="faq-or-label">{$t('faq.orLabel')}</p>
 			<div class="ai-links-secondary">
-				<a href="https://chat.openai.com/?prompt=Please%20read%20this%20Markdown%20document%20and%20answer%20questions%20about%20it:%20https://raw.githubusercontent.com/game-of-prompts/.github/refs/heads/main/profile/README.md" class="btn-ai-secondary" target="_blank" rel="noopener">
+				<a href="https://chat.openai.com/?prompt={encodeURIComponent(AI_PROMPT)}" class="btn-ai-secondary" target="_blank" rel="noopener">
 					ChatGPT ↗
 				</a>
-				<a href="https://claude.ai/new?q=Please%20read%20this%20Markdown%20document%20and%20answer%20questions%20about%20it:%20https://raw.githubusercontent.com/game-of-prompts/.github/refs/heads/main/profile/README.md" class="btn-ai-secondary" target="_blank" rel="noopener">
+				<a href="https://claude.ai/new?q={encodeURIComponent(AI_PROMPT)}" class="btn-ai-secondary" target="_blank" rel="noopener">
 					Claude ↗
 				</a>
 			</div>
 
 			<!-- Disclaimer -->
 			<p class="faq-disclaimer">
-				⚠️ AI responses may not be fully accurate. Always refer to the <a href="https://github.com/game-of-prompts/.github/blob/main/profile/README.md" target="_blank" rel="noopener">official documentation</a> for authoritative information.
+				{$t('faq.disclaimerBefore')}<a href="https://github.com/game-of-prompts/.github/blob/main/profile/README.md" target="_blank" rel="noopener">{$t('faq.disclaimerLink')}</a>{$t('faq.disclaimerAfter')}
 			</p>
 
 			<div class="telegram-link">
 				<a href="https://t.me/unstop_bots" class="btn btn-secondary" target="_blank" rel="noopener" use:hoverCorners>
 					<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.479.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
-					Join Telegram Community
+					{$t('faq.telegram')}
 				</a>
 			</div>
 		</div>
@@ -941,32 +646,26 @@
 		<ScrollAnimation animation="scale">
 			<div class="cta-block">
 				<div class="cta-glow"></div>
-				<span class="section-label">Get Started</span>
-				<h2>Get Started with Game of Prompts</h2>
+				<span class="section-label">{$t('cta.label')}</span>
+				<h2>{$t('cta.title')}</h2>
 				<div class="cta-steps">
-					<div class="cta-step">
-						<div class="cta-step-number">1</div>
-						<p>Install the <strong>Celaut node</strong> software to run Game and Solver Services in a secure, deterministic environment.</p>
-					</div>
-					<div class="cta-step">
-						<div class="cta-step-number">2</div>
-						<p>Set up an <strong>Ergo blockchain wallet</strong> to participate in games and receive winnings.</p>
-					</div>
-					<div class="cta-step">
-						<div class="cta-step-number">3</div>
-						<p>Browse available games on <strong>GoP Web</strong> and start developing your own solvers or create challenging games for others.</p>
-					</div>
+					{#each $t('cta.steps') as step, i}
+						<div class="cta-step">
+							<div class="cta-step-number">{i + 1}</div>
+							<p>{@html step}</p>
+						</div>
+					{/each}
 				</div>
 				<div class="cta-actions">
 					<a href="https://github.com/game-of-prompts" class="btn btn-primary" target="_blank" rel="noopener" use:hoverCorners>
 						<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" /></svg>
-						GitHub Repository
+						{$t('cta.github')}
 					</a>
 					<a href="https://celaut-project.github.io" class="btn btn-secondary" target="_blank" rel="noopener" use:hoverCorners>
-						Celaut Project
+						{$t('cta.celaut')}
 					</a>
 					<a href="https://ergoblockchain.org" class="btn btn-secondary" target="_blank" rel="noopener" use:hoverCorners>
-						Ergo Platform
+						{$t('cta.ergo')}
 					</a>
 				</div>
 			</div>
@@ -978,18 +677,18 @@
 <footer class="footer">
 	<div class="container">
 		<div class="footer-content">
-			<a href="/" class="footer-logo">
+			<a href={$href('/')} class="footer-logo">
 				<img src="/gop-logo.png" alt="GoP" class="footer-logo-img" />
 			</a>
-			<p>Write your prompts. Build your bot. Win the throne.</p>
+			<p>{$t('footer.tagline')}</p>
 			<p class="footer-links">
-				<a href="https://github.com/game-of-prompts" target="_blank" rel="noopener">GitHub</a>
-				· <a href="https://ergoblockchain.org" target="_blank" rel="noopener">Ergo</a>
-				· <a href="https://celaut-project.github.io" target="_blank" rel="noopener">Celaut</a>
+				<a href="https://github.com/game-of-prompts" target="_blank" rel="noopener">{$t('footer.github')}</a>
+				· <a href="https://ergoblockchain.org" target="_blank" rel="noopener">{$t('footer.ergo')}</a>
+				· <a href="https://celaut-project.github.io" target="_blank" rel="noopener">{$t('footer.celaut')}</a>
 			</p>
 		</div>
 		<!-- svelte-ignore a11y_invalid_attribute -->
-		<a href="#" class="back-to-top" aria-label="Back to top" use:hoverCorners>↑</a>
+		<a href="#" class="back-to-top" aria-label={$t('common.backToTop')} use:hoverCorners>↑</a>
 	</div>
 </footer>
 
