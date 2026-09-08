@@ -45,6 +45,13 @@
 	export let stats = [];
 	/** Anchor id of the first pinned scene, for the "see how" jump. */
 	export let firstSceneId = '';
+	/*
+	 * The word under the scroll arrow. A prop rather than a literal
+	 * because it is the one string this component owned itself — every
+	 * other one is passed in — and it has to speak the reader's
+	 * language like the rest of the page.
+	 */
+	export let scrollLabel = 'Scroll';
 
 	let root;
 	let canvasEl;
@@ -303,7 +310,7 @@
 	</div>
 
 	<div class="scroll-hint" bind:this={layerScroll} aria-hidden="true">
-		<span>Scroll</span>
+		<span>{scrollLabel}</span>
 		<svg
 			viewBox="0 0 24 24"
 			fill="none"

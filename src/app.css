@@ -39,6 +39,8 @@
 	   canvas resolves its colours from here at draw time and re-themes
 	   the instant [data-theme] flips. Keep light mode below in sync. */
 	--surface: #101010;
+	--surface-rgb: 16, 16, 16;
+	--surface-raised: #1a1a1a;
 	--surface-deep: #050505;
 	--surface-deep-rgb: 5, 5, 5;
 	--on-surface: #f5f5f5;
@@ -49,8 +51,16 @@
 	--accent-hover: #22c55e;
 	--accent-text: #4ade80;
 	--on-accent: #04170c;
+	--accent-soft: rgba(74, 222, 128, 0.14);
 	--border: rgba(74, 222, 128, 0.14);
 	--border-strong: rgba(74, 222, 128, 0.3);
+	--shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.35);
+	--shadow-md: 0 12px 34px rgba(0, 0, 0, 0.5);
+	/* The glossary/language chrome was lifted from the Celaut landing,
+	   which names its faces --font-heading/--font-body. Aliased rather
+	   than renamed so both vocabularies work across this stylesheet. */
+	--font-heading: var(--font-mono);
+	--font-body: var(--font-sans);
 	/* Canvas-only visualisation palette */
 	--viz-node: #4ade80;
 	--viz-link: rgba(74, 222, 128, 0.4);
@@ -120,12 +130,17 @@
 		--accent-color: #16a34a;
 
 		--surface: #ffffff;
+		--surface-rgb: 255, 255, 255;
+		--surface-raised: #f8fafc;
 		--surface-deep: #f8fafc;
 		--surface-deep-rgb: 248, 250, 252;
 		--on-surface: #0f172a;
 		--on-surface-rgb: 15, 23, 42;
 		--on-surface-muted: #334155;
 		--on-surface-subtle: #64748b;
+		--accent-soft: rgba(22, 163, 74, 0.12);
+		--shadow-sm: 0 2px 8px rgba(15, 23, 42, 0.1);
+		--shadow-md: 0 12px 34px rgba(15, 23, 42, 0.16);
 		--accent: #16a34a;
 		--accent-hover: #15803d;
 		--accent-text: #15803d;
