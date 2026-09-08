@@ -9,6 +9,9 @@
 
 	let { data, children } = $props();
 
+	// Static prerendering must select its dictionary before children render.
+	if (!browser) commitLocale(data.lang);
+
 	/*
 	 * `data.lang` comes from +layout.ts's load(), which already awaited
 	 * this locale's dictionary — so it's safe to switch synchronously.
@@ -18,13 +21,19 @@
 	 * unprefixed route has no locale of its own to be authoritative
 	 * about, so it falls back to the client-side bootstrap (saved
 	 * choice, else browser languages, else English).
+	 *
+	 * Read inside $effect so Svelte 5 doesn't warn that we captured the
+	 * initial `data` snapshot; a locale-only navigation still re-runs
+	 * this because `data` is the effect's dependency.
 	 */
-	if (data.isPrefixed) {
-		commitLocale(data.lang);
-	} else if (browser) {
-		const initial = detectLocale();
-		if (initial !== data.lang) setLocale(initial);
-	}
+	$effect(() => {
+		if (data.isPrefixed) {
+			commitLocale(data.lang);
+		} else if (browser) {
+			const initial = detectLocale();
+			if (initial !== data.lang) setLocale(initial);
+		}
+	});
 
 	// Keep <html lang>/<html dir> in sync with the store.
 	$effect(() => {

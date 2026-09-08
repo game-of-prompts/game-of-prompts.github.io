@@ -1,273 +1,352 @@
 /*
- * src/lib/i18n/en.js
+ * src/lib/i18n/ro.js
  * ------------------------------------------------------------------
- * English — the source dictionary and the fallback for every other
- * locale. If a key is missing anywhere else, `$t` resolves it here, so
- * this file is the only one that must never have a hole in it.
+ * Română — traducere a en.js, cheie cu cheie.
  *
- * HOW TO WRITE THE COPY
- * ---------------------
- * Everything here is the landing page's actual voice: short sentences,
- * concrete nouns, no marketing adjectives. `<strong>` is used for the
- * one term a sentence is really about, never for emphasis in general —
- * the scene captions lean on it heavily and it stops meaning anything
- * if every clause has one.
+ * Aceeași structură, aceleași lungimi de tablou. glossary.terms are
+ * exact 33 de înregistrări și se cuplează pe poziție cu GLOSSARY_IDS
+ * din glossary/terms.js.
  *
- * HOW TO WRITE THE GLOSSARY
- * -------------------------
- * The glossary explains the JARGON, not the project. A definition that
- * says "in Game of Prompts, a commitment is…" has failed: the reader
- * clicked because they don't know what a commitment IS. Explain the
- * word in plain language with an everyday comparison, then — only in
- * `more`, and only if it earns its place — say why it matters here.
- * Never write down to the reader. They are not stupid, they just
- * haven't met this word before.
- *
- * `match` is the list of trigger words IN THIS LANGUAGE. Translators
- * choose their own; nothing assumes English word order or that a term
- * is even one word in the target language.
+ * `match` nu e traducerea titlului: e lista de forme care, când apar
+ * ÎN ACEASTĂ PROZĂ, primesc subliniere. Pluralul, articolul hotărât
+ * și genurile românești sunt trecute explicit; matcherul nu știe decât
+ * -s/-es englezesc.
  */
 
 export default {
 	/* ============================================================== *
-	 * Chrome shared by every control in the corner cluster
+	 * Controalele din colț
 	 * ============================================================== */
 	common: {
-		languageLabel: 'Language',
-		switchLanguage: 'Change language',
-		themeToLight: 'Switch to light theme',
-		themeToDark: 'Switch to dark theme',
-		backToTop: 'Back to top',
-		scoring: 'SCORING'
+		languageLabel: 'Limbă',
+		switchLanguage: 'Schimbă limba',
+		themeToLight: 'Treci la tema luminoasă',
+		themeToDark: 'Treci la tema întunecată',
+		backToTop: 'Înapoi sus',
+		scoring: 'PUNCTARE'
 	},
 
 	/* ============================================================== *
-	 * The glossary
-	 * Ids and ordering live in src/lib/glossary/terms.js, paired with
-	 * this array by position.
+	 * Glosar
 	 * ============================================================== */
 	glossary: {
-		/* Chrome */
-		toggleOn: 'Explain technical terms',
-		toggleOff: 'Hide term explanations',
-		toggleLabel: 'Explanations',
-		close: 'Close',
-		// {term} is replaced with the marked word.
-		explain: 'What does "{term}" mean?',
-		// Shown once, on a reader's first visit, near the first mark.
-		hintTitle: 'Some words are underlined.',
+		toggleOn: 'Explică termenii tehnici',
+		toggleOff: 'Ascunde explicațiile',
+		toggleLabel: 'Explicații',
+		close: 'Închide',
+		explain: 'Ce înseamnă «{term}»?',
+		hintTitle: 'Unele cuvinte sunt subliniate.',
 		hintBody:
-			'Tap any underlined word for a plain-language explanation. Turn them off any time with the button in the corner.',
-		hintDismiss: 'Got it',
+			'Atinge orice cuvânt subliniat pentru o explicație pe înțeles. Le poți opri oricând cu butonul din colț.',
+		hintDismiss: 'Am înțeles',
 
 		terms: [
 			{
-				match: ['game-service', 'game service', 'game-services', 'game services'],
-				title: 'Game service',
-				body: 'The challenge itself, packaged as a sealed program anyone can download and run. It holds the rules, the scoring, and the creator\u2019s hidden secret \u2014 like a sealed exam paper that also marks itself.',
-				more: 'You run it on your own machine. It scores your bot and produces the cryptographic receipt that the blockchain later checks.'
+				match: [
+					'serviciu de joc',
+					'serviciul de joc',
+					'serviciului de joc',
+					'servicii de joc',
+					'serviciile de joc'
+				],
+				title: 'Serviciu de joc',
+				body: 'Provocarea însăși, împachetată ca un program sigilat pe care oricine îl poate descărca și rula. Conține regulile, punctajul și secretul ascuns al celui care l-a creat — ca o lucrare de examen pecetluită care se și corectează singură.',
+				more: 'Îl rulezi pe mașina ta. Punctează botul și produce chitanța criptografică pe care blockchainul o va verifica după aceea.'
 			},
 			{
-				match: ['solver-service', 'solver service', 'solver-services', 'solver services', 'solver', 'solvers'],
-				title: 'Solver service',
-				body: 'Your entry. The bot you build to play the game, packaged the same sealed way so it runs identically on any machine \u2014 your strategy as a single, portable box.',
-				more: 'It is handed to the game service, which runs it in isolation and scores what it did. Nobody sees your code but you.'
+				match: [
+					'serviciu solver',
+					'serviciul solver',
+					'servicii solver',
+					'solver',
+					'solverul',
+					'solverului',
+					'solvere'
+				],
+				title: 'Serviciu solver',
+				body: 'Participarea ta. Botul pe care îl construiești ca să joci, împachetat la fel de sigilat ca să ruleze identic pe orice mașină — strategia ta, într-o singură cutie de luat la drum.',
+				more: 'E predat serviciului de joc, care îl rulează izolat și punctează ce a făcut. Codul nu-l vede nimeni în afară de tine.'
 			},
 			{
-				match: ['GoP Web', 'GoP web portal', 'the portal'],
+				match: ['GoP Web', 'portalul comunității', 'portalul'],
 				title: 'GoP Web',
-				body: 'The website where games are listed: read the rules, download a game, publish your result. It is a directory and a signing tool, not a referee \u2014 nothing it shows you has to be taken on trust.',
-				more: 'You can run your own copy of it. That is the point: if the public one vanished, the games would carry on.'
+				body: 'Site-ul unde sunt listate jocurile: citești regulile, descarci un joc, publici rezultatul. E un catalog și un instrument de semnare, nu un arbitru — nimic din ce arată nu trebuie crezut pe cuvânt.',
+				more: 'Poți rula propria copie. Asta e ideea: dacă cea publică ar dispărea, jocurile ar continua.'
 			},
 			{
-				match: ['Celaut', 'Celaut node', 'Celaut nodes'],
+				match: ['Celaut', 'nod Celaut', 'nodul Celaut', 'noduri Celaut'],
 				title: 'Celaut',
-				body: 'The system that actually runs the sealed programs. You install it once, and from then on any game or solver package can be handed to your machine and executed in its own locked room.',
-				more: 'It is what makes "run it yourself" realistic rather than a slogan: the same package behaves the same way on every machine that opens it.'
+				body: 'Sistemul care rulează cu adevărat programele sigilate. Îl instalezi o dată și, de-atunci, orice pachet de joc sau de solver poate fi dat mașinii tale și executat în camera lui încuiată.',
+				more: 'Face ca «rulează-l tu» să fie realitate, nu slogan: același pachet se poartă la fel pe orice mașină care îl deschide.'
 			},
 			{
-				match: ['node', 'nodes'],
-				title: 'Node',
-				body: 'One computer taking part in a network. Your laptop, a spare desktop, a server in a rack \u2014 once it runs the software and starts talking to other machines, it is a node.',
-				more: 'Here it is simply the machine that runs the games and the solvers. Yours, not somebody\u2019s data centre.'
+				match: ['nod', 'nodul', 'nodului', 'noduri', 'nodurile'],
+				title: 'Nod',
+				body: 'Un calculator care participă la o rețea. Laptopul, un desktop ținut deoparte, un server în rack — de îndată ce rulează programul și vorbește cu alte mașini, e un nod.',
+				more: 'Aici e pur și simplu mașina care rulează jocurile și solvere. A ta, nu centrul de date al cuiva.'
 			},
 			{
-				match: ['service', 'services'],
-				title: 'Service',
-				body: 'A self-contained piece of software that does one job and can be handed to any machine to run \u2014 closer to a single appliance than to a whole program you install.',
-				more: 'Both halves of a competition here are services: the game and the bot playing it.'
+				match: ['serviciu', 'serviciul', 'serviciului', 'servicii', 'serviciile'],
+				title: 'Serviciu',
+				body: 'O bucată de software de sine stătătoare, care face o singură treabă și poate fi dată oricărei mașini să o ruleze — mai aproape de un aparat decât de un program întreg pe care îl instalezi.',
+				more: 'Ambele jumătăți ale unei competiții sunt servicii: jocul și botul care îl joacă.'
 			},
 			{
-				match: ['blockchain', 'blockchains', 'ledger', 'ledgers'],
+				match: ['blockchain', 'blockchainul', 'blockchainului'],
 				title: 'Blockchain',
-				body: 'A shared record book that thousands of computers keep copies of at once. Adding an entry requires the others to agree it is valid, and past entries cannot be rewritten \u2014 so no single participant controls the history.',
-				more: 'Used here for two narrow jobs: recording who claimed what score, and paying out the winner. Nothing more.'
+				body: 'Un registru comun pe care mii de calculatoare țin copii în același timp. Ca să adaugi un rând, ceilalți trebuie să accepte că e valid, iar rândurile vechi nu se rescriu — nimeni nu controlează istoria de unul singur.',
+				more: 'Aici e folosit pentru două trebi înguste: să înregistreze cine a revendicat ce punctaj și să plătească câștigătorul. Nimic mai mult.'
 			},
 			{
 				match: ['Ergo', 'ERG'],
 				title: 'Ergo',
-				body: 'The particular blockchain this platform records results on and settles payments through. ERG is its unit of currency.',
-				more: 'It is a choice, not a foundation: the platform has no coin of its own.'
+				body: 'Blockchainul anume pe care această platformă înregistrează rezultatele și decontează plățile. ERG e unitatea lui de monedă.',
+				more: 'E o alegere, nu o temelie: platforma nu are monedă proprie.'
 			},
 			{
-				match: ['smart contract', 'smart contracts', 'contract', 'contracts', 'game contract'],
-				title: 'Smart contract',
-				body: 'A program that lives on the blockchain and holds money under rules written down in advance. When the conditions are met it pays out by itself \u2014 nobody signs a cheque, and nobody can decide not to.',
-				more: 'It is why the prize is safe before anyone has won it: the funds are held by the rules, not by the person who wrote them.'
+				match: [
+					'contract inteligent',
+					'contractul inteligent',
+					'contracte inteligente',
+					'contractul jocului',
+					'contract',
+					'contractul',
+					'contractului',
+					'contracte'
+				],
+				title: 'Contract inteligent',
+				body: 'Un program care trăiește pe blockchain și ține bani după reguli scrise dinainte. Când condițiile sunt îndeplinite, plătește singur — nimeni nu semnează un cec, nimeni nu poate decide să nu plătească.',
+				more: 'De-asta premiul e în siguranță înainte ca cineva să-l fi câștigat: fondurile le țin regulile, nu persoana care le-a scris.'
 			},
 			{
-				match: ['on-chain', 'on chain', 'onchain'],
+				match: ['on-chain', 'în lanț'],
 				title: 'On-chain',
-				body: 'Written into the blockchain itself, where everyone can see it and nobody can quietly change it later \u2014 as opposed to sitting in a company\u2019s private database.'
+				body: 'Scris în blockchainul însuși, unde toată lumea îl vede și nimeni nu-l poate schimba în tăcere mai târziu — spre deosebire de o bază de date privată a unei companii.'
 			},
 			{
-				match: ['commitment', 'commitments', 'score commitment', 'cryptographic commitment', 'pre-commitment'],
-				title: 'Commitment',
-				body: 'A sealed envelope. You publish something that proves what you chose, without revealing what it was \u2014 and later, when the envelope is opened, everyone can check you didn\u2019t swap the contents.',
-				more: 'It is what lets a score be locked in publicly while the game is still running, without telling your rivals how well you did.'
+				match: [
+					'angajament criptografic',
+					'angajamente criptografice',
+					'angajamentul de punctaj',
+					'pre-angajament',
+					'angajament',
+					'angajamentul',
+					'angajamente'
+				],
+				title: 'Angajament',
+				body: 'Un plic sigilat. Publici ceva care dovedește ce ai ales, fără să arate ce era — și mai târziu, când plicul se deschide, oricine poate verifica că n-ai schimbat conținutul.',
+				more: 'Permite ca un punctaj să fie blocat public cât jocul e încă deschis, fără să le spui rivalilor cât de bine ți-a mers.'
 			},
 			{
-				match: ['hash', 'hashes', 'hashed', 'digest', 'hashed logs'],
+				match: ['jurnale hash-uite', 'hash', 'digest'],
 				title: 'Hash',
-				body: 'A short fingerprint calculated from a piece of data. The same data always gives the same fingerprint, a single changed byte gives a completely different one, and you cannot work backwards from the fingerprint to the data.',
-				more: 'That one-way property is the whole trick: it lets you prove something matches without showing what it is.'
+				body: 'O amprentă scurtă calculată dintr-o bucată de date. Aceleași date dau mereu aceeași amprentă, un singur octet schimbat dă una cu totul alta, și nu poți merge înapoi de la amprentă la date.',
+				more: 'Sensul unic e tot trucul: poți dovedi că ceva se potrivește fără să arăți ce e.'
 			},
 			{
-				match: ['secret', 'game secret', '256-bit secret'],
+				match: [
+					'secret de 256 de biți',
+					'secretul jocului',
+					'secret',
+					'secretul',
+					'secrete'
+				],
 				title: 'Secret',
-				body: 'A large random number the creator generates and keeps hidden while the game is open. Every score is sealed using it, so no score can be verified \u2014 or forged \u2014 until the creator publishes it.',
-				more: 'Publishing it at the end is what makes everyone\u2019s results checkable at the same moment, rather than one at a time.'
+				body: 'Un număr aleatoriu mare pe care cel care creează jocul îl generează și îl ține ascuns cât jocul e deschis. Fiecare punctaj e sigilat cu el, deci niciunul nu poate fi verificat — ori falsificat — până când îl publică.',
+				more: 'Publicarea la final face ca rezultatele tuturor să fie verificabile în același moment, nu unul câte unul.'
 			},
 			{
-				match: ['seed', 'game seed', 'seeds'],
-				title: 'Seed',
-				body: 'The starting number that decides exactly which version of a challenge you face \u2014 which board, which market data, which puzzle. Same seed, same challenge, for everyone.',
-				more: 'It is revealed only after entries close, so nobody can tune a bot for the specific run in advance.'
+				match: ['sămânța jocului', 'sămânță', 'sămânța', 'semințe'],
+				title: 'Sămânță',
+				body: 'Numărul de start care decide exact ce variantă de provocare întâlnești — ce tablă, ce date de piață, ce puzzle. Aceeași sămânță, aceeași provocare, pentru toată lumea.',
+				more: 'E dezvăluită abia după ce se închid înscrierile, ca nimeni să nu-și poată regla botul dinainte pe tura aia anume.'
 			},
 			{
-				match: ['ceremony phase', 'ceremony', 'ceremony period'],
-				title: 'Ceremony phase',
-				body: 'The window at the start of a game when players sign up and each one\u2019s registration stirs a little unpredictability into the final seed. Like everyone throwing a die into the same cup before the lid comes off.',
-				more: 'It exists so the creator cannot know the challenge in advance either \u2014 the players collectively decide it without meaning to.'
+				match: ['faza de ceremonie', 'perioada de ceremonie', 'ceremonie'],
+				title: 'Faza de ceremonie',
+				body: 'Fereastra de la începutul unui joc în care jucătorii se înscriu și fiecare înscriere amestecă un pic de imprevizibil în sămânța finală. Ca și cum toți ar arunca un zar în aceeași cupă înainte să se ridice capacul.',
+				more: 'Există ca nici cel care a creat jocul să nu cunoască provocarea dinainte — jucătorii o decid împreună, fără să-și propună.'
 			},
 			{
-				match: ['Solver ID', 'Solver IDs', 'solver identifier'],
+				match: ['Solver ID', 'identificatorul solverului'],
 				title: 'Solver ID',
-				body: 'The unique fingerprint of the exact bot you registered. It names one specific version of your code, so a bot cannot be quietly swapped for a different one after the seed is revealed.'
+				body: 'Amprenta unică a botului exact pe care l-ai înscris. Denumește o versiune anume a codului tău, deci un bot nu poate fi schimbat pe tăcute după ce sămânța e dezvăluită.'
 			},
 			{
-				match: ['Paper', 'the Paper', 'game paper'],
+				match: ['Paper', 'Paperul', 'Paperul jocului'],
 				title: 'Paper',
-				body: 'The written rules: what the challenge is, how it is scored, what counts as a valid entry. Published before anyone can play, so the terms cannot change once people have committed.',
-				more: 'You are meant to be able to build your entry from this document alone.'
+				body: 'Regulile scrise: ce e provocarea, cum se punctează, ce contează ca participare validă. Se publică înainte ca cineva să poată juca, ca termenii să nu se schimbe după ce oamenii s-au angajat.',
+				more: 'Ideea e să-ți poți construi participarea numai din documentul ăsta.'
 			},
 			{
-				match: ['pot', 'the pot', 'prize pool'],
-				title: 'Pot',
-				body: 'All the entry fees, pooled together and held by the contract until the game resolves. Everyone who competes pays in; the winner takes what is left after the agreed cuts.'
+				match: ['oală', 'oala', 'oalei', 'fond de premii'],
+				title: 'Oală',
+				body: 'Toate taxele de participare, adunate și ținute de contract până se rezolvă jocul. Cine concurează plătește; câștigătorul ia ce rămâne după tăieturile convenite.'
 			},
 			{
-				match: ['participation fee', 'participation fees', 'entry fee', 'entry fees'],
-				title: 'Participation fee',
-				body: 'What it costs to submit a result you want counted. It goes into the pot rather than to the organisers, so every entry makes the prize bigger.',
-				more: 'You only pay it if you decide your run was worth entering \u2014 running the game locally is free.'
+				match: [
+					'taxă de participare',
+					'taxa de participare',
+					'taxe de participare',
+					'taxele de participare',
+					'taxă de înscriere'
+				],
+				title: 'Taxă de participare',
+				body: 'Ce costă să trimiți un rezultat pe care vrei să conteze. Intră în oală, nu la organizatori, deci fiecare participare mărește premiul.',
+				more: 'O plătești doar dacă decizi că tura a meritat trimisă — rularea jocului pe mașina ta e gratuită.'
 			},
 			{
-				match: ['commission', 'commissions', 'creator commission', 'platform commission'],
-				title: 'Commission',
-				body: 'The agreed slice of the pot that goes to the game\u2019s creator, its judges and the platform. Set in the open when the game is published, and taken automatically \u2014 not negotiated afterwards.'
+				match: [
+					'comisionul creatorului',
+					'comision',
+					'comisionul',
+					'comisionului',
+					'comisioane'
+				],
+				title: 'Comision',
+				body: 'Felie convenită din oală care se duce la cel care a creat jocul, la judecători și la platformă. Se fixează la vedere când se publică jocul și se ia automat — nu se negociază după.'
 			},
 			{
-				match: ['judge', 'judges'],
-				title: 'Judge',
-				body: 'Someone whose job is to check the creator, not the players: did the game actually score honestly, and are its receipts valid? If they catch a cheat, they are paid out of the creator\u2019s cut.',
-				more: 'Being paid for finding fraud, rather than for approving things, is what makes the role worth having.'
+				match: [
+					'judecător',
+					'judecătorul',
+					'judecătorului',
+					'judecători',
+					'judecătorii',
+					'judecătorilor'
+				],
+				title: 'Judecător',
+				body: 'Cineva a cărui treabă e să-l verifice pe cel care a creat jocul, nu pe jucători: a punctat jocul cinstit, sunt chitanțele valide? Dacă prinde o trișare, e plătit din partea creatorului.',
+				more: 'Să fii plătit ca să găsești frauda, nu ca să aprobi lucruri, e ce face rolul meritat.'
 			},
 			{
-				match: ['NFT', 'NFTs', 'game NFT'],
+				match: ['NFT', 'NFT-ul jocului'],
 				title: 'NFT',
-				body: 'A one-of-a-kind token recorded on the blockchain, which can be owned and transferred but not duplicated. Here it is the trophy: permanent, public proof of who won a particular game.'
+				body: 'Un token unic înregistrat pe blockchain, care poate fi deținut și transferat, dar nu duplicat. Aici e trofeul: dovada publică, permanentă, a cine a câștigat un joc anume.'
 			},
 			{
-				match: ['wallet', 'wallets', 'Ergo wallet'],
-				title: 'Wallet',
-				body: 'The app that holds the keys to your funds and signs your actions on the blockchain. Not an account with a company \u2014 nobody can freeze it, and nobody can recover it for you.'
+				match: ['portofel Ergo', 'portofel', 'portofelul', 'portofele'],
+				title: 'Portofel',
+				body: 'Aplicația care ține cheile fondurilor tale și semnează acțiunile pe blockchain. Nu e un cont la o firmă — nimeni nu-l poate îngheța, nimeni nu ți-l poate recupera.'
 			},
 			{
-				match: ['gas fee', 'gas fees', 'network gas fee', 'network fee'],
-				title: 'Gas fee',
-				body: 'The small charge for having the network record your transaction. It pays the computers doing the recording, not the platform \u2014 like postage rather than a ticket price.'
+				match: [
+					'taxă de gaz a rețelei',
+					'taxă de gaz',
+					'taxa de gaz',
+					'taxe de gaz',
+					'taxă de rețea'
+				],
+				title: 'Taxă de gaz',
+				body: 'Mica taxă ca rețeaua să-ți înregistreze tranzacția. Plătește calculatoarele care fac înregistrarea, nu platforma — mai degrabă timbru decât preț de bilet.'
 			},
 			{
-				match: ['deterministic', 'determinism', 'reproducible', 'reproducibility'],
-				title: 'Deterministic',
-				body: 'Same input, same output, every time \u2014 like a recipe that produces an identical cake in any kitchen, rather than one that depends on the cook. Nothing about the machine, the day or the location changes the result.',
-				more: 'It is what makes a score checkable by somebody else: they can re-run it and must get your number.'
+				match: [
+					'determinist',
+					'deterministă',
+					'determinism',
+					'reproductibil',
+					'reproductibilitate'
+				],
+				title: 'Determinist',
+				body: 'Aceeași intrare, aceeași ieșire, de fiecare dată — ca o rețetă care dă același tort în orice bucătărie, nu una care depinde de bucătar. Nici mașina, nici ziua, nici locul nu schimbă rezultatul.',
+				more: 'E ce face un punctaj verificabil de altcineva: poate re-rula și trebuie să iasă numărul tău.'
 			},
 			{
-				match: ['isolation', 'isolated', 'sealed', 'sandboxed', 'secure isolated environment', 'isolated environment'],
-				title: 'Isolation',
-				body: 'Keeping a running program inside a boundary it cannot reach past \u2014 it sees only what it was given, and nothing of the machine around it or of anything else running there.',
-				more: 'It is what lets a game run a stranger\u2019s bot safely, and lets you run a stranger\u2019s game safely.'
+				match: [
+					'mediu izolat sigur',
+					'mediu izolat',
+					'izolare',
+					'izolat',
+					'izolată',
+					'sigilat',
+					'sigilate',
+					'sigilată'
+				],
+				title: 'Izolare',
+				body: 'A ține un program în rulare înăuntrul unei granițe pe care n-o poate trece — vede doar ce i s-a dat, nimic din mașina din jur ori din altceva care rulează acolo.',
+				more: 'E ce permite unui joc să ruleze în siguranță botul unui străin, și ție să rulezi în siguranță jocul unui străin.'
 			},
 			{
-				match: ['obfuscation', 'obfuscated', 'obfuscate'],
-				title: 'Obfuscation',
-				body: 'Deliberately scrambling a program so that it still runs perfectly but is painful to read \u2014 the software equivalent of a document printed without spaces or line breaks.',
-				more: 'Used here to keep a game\u2019s hidden secret hidden, even though everyone has a copy of the program that contains it.'
+				match: ['ofuscare', 'ofuscat', 'ofuscată', 'ofusca'],
+				title: 'Ofuscare',
+				body: 'A încurca un program dinadins ca să ruleze perfect, dar să doară să-l citești — echivalentul software al unui document tipărit fără spații și fără rânduri noi.',
+				more: 'Aici ține secretul ascuns al unui joc ascuns, chiar dacă toată lumea are o copie a programului care îl conține.'
 			},
 			{
-				match: ['peer-to-peer', 'peer to peer', 'P2P'],
+				match: ['peer-to-peer', 'P2P', 'de la egal la egal'],
 				title: 'Peer-to-peer',
-				body: 'Two computers dealing with each other directly, the way two people have a phone call \u2014 instead of both sending everything through a company in the middle, the way email or a marketplace works. Each computer is a "peer": equal, no one in charge.',
-				more: 'It matters here because the company in the middle is usually the one that sets the price, takes a cut, and can remove you.'
+				body: 'Două calculatoare care se ocupă direct unul de altul, ca doi oameni la telefon — în loc să trimită totul printr-o firmă la mijloc, cum merg poșta electronică sau o piață. Fiecare calculator e un «peer»: egali, nimeni la comandă.',
+				more: 'Contează aici pentru că firma din mijloc e de obicei cea care pune prețul, își ia partea și te poate da afară.'
 			},
 			{
-				match: ['self-hosting', 'self-hosted', 'self-host', 'run locally', 'runs locally'],
-				title: 'Self-hosting',
-				body: 'Running your own copy of a service on your own machine instead of using somebody else\u2019s. The thing keeps working even if the public version is switched off, censored, or simply having a bad day.'
+				match: [
+					'auto-găzduire',
+					'auto-găzduit',
+					'auto-găzduită',
+					'rulare locală'
+				],
+				title: 'Auto-găzduire',
+				body: 'A rula propria copie a unui serviciu pe mașina ta, în loc să o folosești pe a altcuiva. Lucrul continuă să meargă chiar dacă versiunea publică e oprită, cenzurată sau pur și simplu are o zi proastă.'
 			},
 			{
-				match: ['decoy', 'decoys', 'decoy score', 'decoy scores', 'fake high scores'],
-				title: 'Decoy',
-				body: 'A deliberately misleading entry \u2014 a score you publish that isn\u2019t your real one \u2014 submitted to make rivals guess wrong about how well you actually did. Bluffing, made possible because nobody can read a sealed score.'
+				match: [
+					'punctaj momeală',
+					'punctaje momeală',
+					'punctaje false',
+					'momeală',
+					'momeala',
+					'momeli'
+				],
+				title: 'Momeală',
+				body: 'O participare dinadins înșelătoare — un punctaj pe care îl publici și care nu e cel real — trimis ca rivalii să ghicească greșit cât de bine ți-a mers. Un bluff, posibil pentru că nimeni nu poate citi un punctaj sigilat.'
 			},
 			{
-				match: ['Time-Weighted Score', 'time-weighted score', 'time weighted score', 'TimeWeight'],
-				title: 'Time-weighted score',
-				body: 'A score adjusted for how early you submitted it. Two identical results do not tie: the one entered sooner counts for more, so sitting on a good answer until the deadline costs you.'
+				match: [
+					'scor ponderat în timp',
+					'punctaj ponderat în timp',
+					'TimeWeight'
+				],
+				title: 'Scor ponderat în timp',
+				body: 'Un punctaj ajustat după cât de devreme l-ai trimis. Două rezultate identice nu egalează: cel intrat mai devreme contează mai mult, deci să stai pe un răspuns bun până la termen te costă.'
 			},
 			{
-				match: ['Grace Period', 'grace period', 'validation period', 'refund'],
-				title: 'Grace period',
-				body: 'A waiting window built into the rules before money moves \u2014 time for judges to object, and time for players to claim their fees back if the creator never resolves the game at all.',
-				more: 'It is the answer to "what if the organiser just disappears": the contract lets everyone walk away with their money.'
+				match: [
+					'perioadă de grație',
+					'perioada de grație',
+					'perioadă de validare',
+					'rambursare',
+					'rambursări'
+				],
+				title: 'Perioadă de grație',
+				body: 'O fereastră de așteptare scrisă în reguli înainte să se miște banii — timp pentru judecători să obiecteze și pentru jucători să-și ceară taxele înapoi dacă cel care a creat jocul nu-l rezolvă niciodată.',
+				more: 'E răspunsul la «ce se întâmplă dacă organizatorul dispare»: contractul lasă pe toată lumea să plece cu banii lor.'
 			},
 			{
-				match: ['CDE', 'scenario variability', 'high scenario variability'],
-				title: 'Scenario variability (CDE)',
-				body: 'How different each run of a game can be from the last. High variability means a bot has to actually play well, because there is no single fixed answer to memorise and hardcode.'
+				match: ['CDE', 'variabilitate de scenarii', 'variabilitate mare de scenarii'],
+				title: 'Variabilitate de scenarii (CDE)',
+				body: 'Cât de diferită poate fi fiecare rulare a unui joc față de cea dinainte. Variabilitate mare înseamnă că botul trebuie să joace cu adevărat bine, pentru că nu există un singur răspuns fix de memorat și bătut în cuie.'
 			}
 		]
 	},
 
 	/* ============================================================== *
-	 * Splash screen
+	 * Ecran de start
 	 * ============================================================== */
 	splash: {
 		title: 'GAME OF PROMPTS',
-		subtitle: 'WRITE YOUR PROMPTS. BUILD YOUR BOT. WIN THE THRONE.'
+		subtitle: 'SCRIE-ȚI PROMPTURILE. CONSTRUIEȘTE BOTUL. IA TRONUL.'
 	},
 
 	/* ============================================================== *
 	 * <head>
 	 * ============================================================== */
 	meta: {
-		title: 'Game of Prompts — Write your prompts. Build your bot. Win the throne.',
+		title: 'Game of Prompts — Scrie-ți prompturile. Construiește botul. Ia tronul.',
 		description:
-			'A competitive platform where creators design game-services to evaluate AI solvers, while players build solver-services to maximize their scores — powered by the Ergo blockchain and Celaut.',
+			'O platformă competitivă unde cei care creează proiectează servicii de joc ca să evalueze solvere de IA, iar jucătorii construiesc servicii solver ca să-și maximizeze punctajul — pe blockchainul Ergo și Celaut.',
 		ogTitle: 'Game of Prompts',
-		ogDescription: 'Write your prompts. Build your bot. Win the throne.'
+		ogDescription: 'Scrie-ți prompturile. Construiește botul. Ia tronul.'
 	},
 
 	/* ============================================================== *
@@ -276,222 +355,217 @@ export default {
 	hero: {
 		titleTop: 'GAME OF',
 		titleBottom: 'PROMPTS',
-		// `<span class="hero-grad">` is the accent gradient. Keep the tag
-		// around whichever clause deserves the emphasis in this language;
-		// it does not have to be the middle one.
-		tagline: 'Write your prompts. <span class="hero-grad">Build your bot.</span> Win the throne.',
-		lede: 'A competitive platform where creators design game-services to evaluate AI solvers, and players build solver-services to maximize their scores — all recorded and verified on-chain.',
+		tagline: 'Scrie-ți prompturile. <span class="hero-grad">Construiește botul.</span> Ia tronul.',
+		lede: 'O platformă competitivă unde cei care creează proiectează servicii de joc ca să evalueze solvere de IA, iar jucătorii construiesc servicii solver ca să-și maximizeze punctajul — totul înregistrat și verificat on-chain.',
 		actions: {
-			launch: 'Launch App',
-			github: 'View on GitHub',
-			how: 'See how it works'
+			launch: 'Deschide aplicația',
+			github: 'Vezi pe GitHub',
+			how: 'Vezi cum funcționează'
 		},
 		stats: [
-			{ value: 'P2P', label: 'Decentralized — services run on your own Celaut node' },
-			{ value: 'On-chain', label: 'Results committed and verified on Ergo' },
-			{ value: 'Trustless', label: 'Smart contracts settle the pot, not a company' }
+			{ value: 'P2P', label: 'Descentralizat — serviciile rulează pe propriul nod Celaut' },
+			{ value: 'On-chain', label: 'Rezultate angajate și verificate pe Ergo' },
+			{ value: 'Fără încredere', label: 'Oala o decontează contractele inteligente, nu o firmă' }
 		],
-		scroll: 'Scroll'
+		scroll: 'Derulează'
 	},
 
 	/* ============================================================== *
-	 * The seven pinned scenes
-	 * Each `beats` array is positional: one entry per SceneBeat in
-	 * +page.svelte, in order. `note` is the closing line of a scene.
+	 * Cele șapte scene
 	 * ============================================================== */
 	scenes: {
 		arena: {
-			label: 'The idea',
+			label: 'Ideea',
 			beats: [
 				{
-					h: 'Someone posts a challenge.',
-					p: 'A creator designs a game with measurable scoring — and packages it as a <strong>game-service</strong>: an immutable Celaut service that holds the game\u2019s logic and its secret.'
+					h: 'Cineva publică o provocare.',
+					p: 'Cel care creează proiectează un joc cu punctaj măsurabil și îl împachetează ca <strong>serviciu de joc</strong>: un serviciu Celaut imuabil care ține logica jocului și secretul lui.'
 				},
 				{
-					h: 'Everyone else builds a bot to beat it.',
-					p: 'Players write <strong>solver-services</strong> — their strategy, packaged the same way. The game-service runs each solver in a secure, isolated environment and scores what it did.'
+					h: 'Ceilalți construiesc un bot ca să-l bată.',
+					p: 'Jucătorii scriu <strong>servicii solver</strong> — strategia lor, împachetată la fel. Serviciul de joc rulează fiecare solver într-un mediu izolat sigur și punctează ce a făcut.'
 				},
 				{
-					h: 'The highest score wins the throne.',
-					p: 'No leaderboard you have to trust. Every score is committed cryptographically and <strong>settled on the Ergo blockchain</strong>, where anyone can check the maths.',
-					note: 'Write your prompts. Build your bot. Win the throne.'
+					h: 'Cel mai mare punctaj ia tronul.',
+					p: 'Niciun clasament pe care trebuie să-l crezi. Fiecare punctaj e angajat criptografic și <strong>decontat pe blockchainul Ergo</strong>, unde oricine poate reface calculele.',
+					note: 'Scrie-ți prompturile. Construiește botul. Ia tronul.'
 				}
 			]
 		},
 
 		components: {
-			label: 'Architecture',
+			label: 'Arhitectură',
 			beats: [
 				{
-					h: 'Game Service',
-					p: 'Built by game devs. An autonomous service that encapsulates a game\u2019s logic and the secret. It evaluates solver performance, generates scores, and creates the <strong>cryptographic commitments</strong> needed for blockchain validation.'
+					h: 'Serviciu de joc',
+					p: 'Îl construiesc cei care dezvoltă jocul. Un serviciu autonom care încapsulează logica și secretul. Evaluează performanța solverului, generează punctaje și creează <strong>angajamentele criptografice</strong> necesare validării pe blockchain.'
 				},
 				{
-					h: 'Solver Service',
-					p: 'Built by players. It implements strategies to maximize the score in a specific game. The solver is packaged and sent to the game-service, which <strong>executes it in a secure, isolated environment</strong> for evaluation.'
+					h: 'Serviciu solver',
+					p: 'Îl construiesc jucătorii. Implementează strategii ca să maximizeze punctajul într-un joc anume. Solverul e împachetat și trimis serviciului de joc, care îl <strong>execută într-un mediu izolat sigur</strong> pentru evaluare.'
 				},
 				{
 					h: 'GoP Web',
-					p: 'The community portal. Discover games, read the rules, download game-services, and publish your results on the Ergo blockchain. It <strong>supports self-hosting</strong> for a fully trustless, peer-to-peer experience.'
+					p: 'Portalul comunității. Descoperi jocuri, citești regulile, descarci servicii de joc și publici rezultatele pe blockchainul Ergo. <strong>Suportă auto-găzduirea</strong> pentru o experiență peer-to-peer, fără să depinzi de nimeni.'
 				},
 				{
-					h: 'Everything runs on your machine.',
-					p: 'Game and solver services both run on a <strong>local Celaut node</strong>, which can operate entirely offline. GoP Web can be used via its GitHub.io instance or run locally as a Celaut service.',
-					note: 'Two technologies: Celaut for computation, Ergo for settlement.'
+					h: 'Totul rulează pe mașina ta.',
+					p: 'Serviciile de joc și de solver rulează pe un <strong>nod Celaut local</strong>, care poate funcționa complet offline. GoP Web se poate folosi de pe instanța GitHub.io sau rula local ca serviciu Celaut.',
+					note: 'Două tehnologii: Celaut pentru calcul, Ergo pentru decontare.'
 				}
 			]
 		},
 
 		creator: {
-			label: 'Game creator flow',
+			label: 'Fluxul celui care creează jocul',
 			beats: [
 				{
-					h: 'Design a game.',
-					p: 'Create a challenge with measurable scoring and high scenario variability (CDE), so hardcoded solutions don\u2019t work.'
+					h: 'Proiectează un joc.',
+					p: 'Creează o provocare cu punctaj măsurabil și variabilitate mare de scenarii (CDE), ca soluțiile bătute în cuie să nu meargă.'
 				},
 				{
-					h: 'Write the Paper.',
-					p: 'Publish a document with all instructions, rules and evaluation criteria. Players must be able to understand the challenge <strong>before</strong> they participate.'
+					h: 'Scrie Paperul.',
+					p: 'Publică un document cu toate instrucțiunile, regulile și criteriile de evaluare. Jucătorii trebuie să poată înțelege provocarea <strong>înainte</strong> să participe.'
 				},
 				{
-					h: 'Generate a secret.',
-					p: 'A unique <strong>256-bit secret</strong> underwrites the cryptographic commitments and the later score validation. Nobody can see it while the game is open.'
+					h: 'Generează un secret.',
+					p: 'Un <strong>secret de 256 de biți</strong> unic susține angajamentele criptografice și validarea ulterioară a punctajelor. Nimeni nu-l poate vedea cât jocul e deschis.'
 				},
 				{
-					h: 'Package and publish.',
-					p: 'Ship the game as a Celaut service and publish it through GoP Web with its parameters: fee, deadline, and commission.'
+					h: 'Împachetează și publică.',
+					p: 'Scoate jocul ca serviciu Celaut și publică-l prin GoP Web cu parametrii: taxă, termen, comision.'
 				},
 				{
-					h: 'Reveal the secret.',
-					p: 'When the deadline passes, the creator <strong>reveals the secret on-chain</strong>. That resolves the game: score validation becomes possible and the smart contract can determine the winner.',
-					note: 'Commit first, reveal later. That\u2019s what makes it fair.'
+					h: 'Dezvăluie secretul.',
+					p: 'Când trece termenul, cel care a creat jocul <strong>dezvăluie secretul on-chain</strong>. Asta rezolvă jocul: validarea punctajelor devine posibilă și contractul inteligent poate determina câștigătorul.',
+					note: 'Întâi angajamentul, apoi dezvăluirea. Asta îl face cinstit.'
 				}
 			]
 		},
 
 		player: {
-			label: 'The player\u2019s journey',
+			label: 'Drumul jucătorului',
 			beats: [
 				{
-					h: 'Browse and read the Paper.',
-					p: 'Find a game on GoP Web. Read the creator\u2019s Paper to understand the challenge, the rules and the evaluation criteria before committing to anything.'
+					h: 'Răsfoiește și citește Paperul.',
+					p: 'Găsește un joc pe GoP Web. Citește Paperul ca să înțelegi provocarea, regulile și criteriile de evaluare înainte să te angajezi la ceva.'
 				},
 				{
-					h: 'Implement your solver.',
-					p: 'Build your solver-service from the Paper alone, so it\u2019s ready to compete the moment the seed drops.'
+					h: 'Implementează solverul.',
+					p: 'Construiește serviciul solver numai din Paper, ca să fie gata de concurs în clipa în care cade sămânța.'
 				},
 				{
-					h: 'Register your Solver ID.',
-					p: 'Registration is free — you only cover the network gas fee. This <strong>pre-commitment</strong> is what guarantees fairness before the seed is revealed.'
+					h: 'Înregistrează-ți Solver ID.',
+					p: 'Înregistrarea e gratuită — acoperi doar taxa de gaz a rețelei. Acest <strong>pre-angajament</strong> e ce garantează corectitudinea înainte ca sămânța să fie dezvăluită.'
 				},
 				{
-					h: 'The seed is revealed.',
-					p: 'Once the ceremony phase ends, the game seed goes public. Now — and only now — you know the exact challenge parameters you\u2019ll be evaluated against.'
+					h: 'Sămânța e dezvăluită.',
+					p: 'Când se termină faza de ceremonie, sămânța jocului iese public. Acum — și abia acum — cunoști parametrii exacți ai provocării pe care vei fi evaluat.'
 				},
 				{
-					h: 'Run the game service locally.',
-					p: 'The service executes your solver in a secure environment with the revealed seed, evaluates its performance, and generates the <strong>cryptographic commitment</strong> needed for on-chain validation.'
+					h: 'Rulează serviciul de joc local.',
+					p: 'Serviciul execută solverul într-un mediu sigur cu sămânța dezvăluită, evaluează performanța și generează <strong>angajamentul criptografic</strong> necesar validării on-chain.'
 				},
 				{
-					h: 'Submit your commitment and pay the fee.',
-					p: 'If the score is worth competing with, publish the commitment on-chain and pay the participation fee. <strong>All fees go into the pot</strong> — the winner takes the economic prize, minus creator, judge and platform commission, and receives the game NFT.',
-					note: 'You decide whether your run is worth submitting.'
+					h: 'Trimite angajamentul și plătește taxa.',
+					p: 'Dacă punctajul merită concursul, publică angajamentul on-chain și plătește taxa de participare. <strong>Toate taxele intră în oală</strong> — câștigătorul ia premiul economic, minus comisionul creatorului, judecătorilor și platformei, și primește NFT-ul jocului.',
+					note: 'Tu decizi dacă tura merită trimisă.'
 				}
 			]
 		},
 
 		validation: {
-			label: 'Score validation',
+			label: 'Validarea punctajelor',
 			beats: [
 				{
-					h: 'Your score is a hash, not a claim.',
-					p: 'When you participate, what goes on-chain is a <strong>commitment</strong> — a digest. Nobody, including the creator, can read your score off the blockchain while the game is still open.'
+					h: 'Punctajul tău e un hash, nu o afirmație.',
+					p: 'Când participi, ce merge on-chain e un <strong>angajament</strong> — un digest. Nimeni, inclusiv cel care a creat jocul, nu-ți poate citi punctajul de pe blockchain cât jocul e încă deschis.'
 				},
 				{
-					h: 'Then the secret comes out.',
-					p: 'After the deadline, the creator reveals the game secret in the resolution transaction. That\u2019s the missing ingredient — and it <strong>unlocks verification for everyone at once</strong>.'
+					h: 'Apoi iese secretul.',
+					p: 'După termen, cel care a creat jocul dezvăluie secretul jocului în tranzacția de rezolvare. Ăsta e ingredientul care lipsea — și <strong>deschide verificarea pentru toată lumea deodată</strong>.'
 				},
 				{
-					h: 'The contract recomputes it.',
-					p: 'The game contract builds a commitment for each score from the <strong>solver ID, the score value, the hashed logs and the revealed secret</strong>. No trusted party is involved; it\u2019s arithmetic.'
+					h: 'Contractul recalculează.',
+					p: 'Contractul jocului construiește un angajament pentru fiecare punctaj din <strong>Solver ID, valoarea punctajului, jurnalele hash-uite și secretul dezvăluit</strong>. Nu intervine nicio parte de încredere; e aritmetică.'
 				},
 				{
-					h: 'If they match, the score is real.',
-					p: 'A recomputed commitment that equals the published one proves the score is authentic and tamper-proof. Anything that doesn\u2019t match simply isn\u2019t a score.',
-					note: 'Transparent yet private: proven without being exposed.'
+					h: 'Dacă se potrivesc, punctajul e real.',
+					p: 'Un angajament recalculat egal cu cel publicat dovedește că punctajul e autentic și neatins. Ce nu se potrivește pur și simplu nu e un punctaj.',
+					note: 'Transparent și privat totodată: dovedit fără să fie expus.'
 				}
 			]
 		},
 
 		pot: {
-			label: 'Economics',
+			label: 'Economie',
 			beats: [
 				{
-					h: 'Every entry feeds the pot.',
-					p: 'Participation fees from everyone who submits a commitment accumulate in a single on-chain pot for that game.'
+					h: 'Fiecare participare hrănește oala.',
+					p: 'Taxele de participare ale tuturor celor care trimit un angajament se adună într-o singură oală on-chain pentru jocul ăla.'
 				},
 				{
-					h: 'Commissions come off the top.',
-					p: 'The creator, the judges and the platform take their agreed commission — all of it set in the open when the game was published, and <strong>enforced by the smart contract</strong> rather than by anyone\u2019s goodwill.'
+					h: 'Comisioanele se iau de sus.',
+					p: 'Cel care a creat jocul, judecătorii și platforma își iau comisionul convenit — fixat la vedere când s-a publicat jocul și <strong>aplicat de contractul inteligent</strong>, nu de bunăvoința cuiva.'
 				},
 				{
-					h: 'The rest goes to the winner.',
-					p: 'The highest validated score takes the remaining pot — plus the <strong>game NFT</strong>, a permanent, public, auditable proof of victory. Funds are released after a validation period that gives judges time to check the creator acted honestly.',
-					note: 'Nobody approves the payout. The contract does it.'
+					h: 'Restul se duce la câștigător.',
+					p: 'Cel mai mare punctaj validat ia oala rămasă — plus <strong>NFT-ul jocului</strong>, o dovadă de victorie permanentă, publică, auditabilă. Fondurile se eliberează după o perioadă de validare care dă judecătorilor timp să verifice că cel care a creat jocul a acționat cinstit.',
+					note: 'Nimeni nu aprobă plata. O face contractul.'
 				}
 			]
 		},
 
 		judges: {
-			label: 'Trust & accountability',
+			label: 'Încredere și răspundere',
 			beats: [
 				{
-					h: 'Who watches the creator?',
-					p: 'Judges are entities nominated by the creator who audit the resolution phase. They verify that the creator\u2019s game service generated <strong>valid proofs and valid scores</strong>.'
+					h: 'Cine îl veghează pe cel care creează jocul?',
+					p: 'Judecătorii sunt entități nominalizate de cel care creează jocul, care auditează faza de rezolvare. Verifică că serviciul de joc a generat <strong>dovezi valide și punctaje valide</strong>.'
 				},
 				{
-					h: 'Fraud costs the creator, not you.',
-					p: 'If a judge catches a faulty game service or an invalid proof, that judge <strong>receives the creator\u2019s commission</strong> as the reward. The incentive to look closely is built in.'
+					h: 'Frauda îl costă pe creator, nu pe tine.',
+					p: 'Dacă un judecător prinde un serviciu de joc defect sau o dovadă invalidă, judecătorul ăla <strong>primește comisionul creatorului</strong> ca recompensă. Motivul să se uite atent e construit din start.'
 				},
 				{
-					h: 'Players stay out of the blast radius.',
-					p: 'In normal operation players cannot be penalised by judges. Judges exist to <strong>protect players from dishonest creators</strong>, never the other way around.',
-					note: 'Audit the house, not the guests.'
+					h: 'Jucătorii stau în afara razei exploziei.',
+					p: 'În funcționare normală, judecătorii nu pot penaliza jucătorii. Judecătorii există ca să <strong>protejeze jucătorii de creatori necinstiți</strong>, niciodată invers.',
+					note: 'Se auditează casa, nu oaspeții.'
 				}
 			]
 		}
 	},
 
 	/* ============================================================== *
-	 * The readable reference list under the validation scene
+	 * Lista de referință de sub scena de validare
 	 * ============================================================== */
 	steps: {
-		title: 'The five steps, in order',
+		title: 'Cei cinci pași, în ordine',
 		items: [
 			{
-				badge: 'SUBMITTED',
-				title: 'Player Participation',
-				desc: 'Player publishes their participation on the Ergo blockchain.'
+				badge: 'TRIMIS',
+				title: 'Participarea jucătorului',
+				desc: 'Jucătorul publică participarea pe blockchainul Ergo.'
 			},
 			{
-				badge: 'REVEALED',
-				title: 'Creator Reveals Secret',
-				desc: 'After the deadline, the creator reveals the game secret in the resolution transaction — unlocking verification.'
+				badge: 'DEZVĂLUIT',
+				title: 'Creatorul dezvăluie secretul',
+				desc: 'După termen, cel care a creat jocul dezvăluie secretul în tranzacția de rezolvare — deblochează verificarea.'
 			},
 			{
-				badge: 'COMPUTED',
-				title: 'Smart Contract Validation',
-				desc: 'The game contract computes a commitment for each score using the solver ID, score value, hashed logs, and revealed secret.'
+				badge: 'CALCULAT',
+				title: 'Validare prin contract inteligent',
+				desc: 'Contractul jocului calculează un angajament pentru fiecare punctaj folosind Solver ID, valoarea punctajului, jurnalele hash-uite și secretul dezvăluit.'
 			},
 			{
-				badge: 'VERIFIED',
-				title: 'Score Verification',
-				desc: 'When the score commitment matches the participation commitment, that score is validated as authentic and tamper-proof.'
+				badge: 'VERIFICAT',
+				title: 'Verificarea punctajului',
+				desc: 'Când angajamentul de punctaj se potrivește cu cel de participare, punctajul e validat ca autentic și neatins.'
 			},
 			{
-				badge: 'DISTRIBUTED',
-				title: 'Winner Takes the Pot',
-				desc: 'Highest score wins. Following a validation period to ensure the game creator acted honestly, funds are released to the winner, net of creator and judge fees.'
+				badge: 'DISTRIBUIT',
+				title: 'Câștigătorul ia oala',
+				desc: 'Câștigă punctajul cel mai mare. După o perioadă de validare care asigură că creatorul a acționat cinstit, fondurile se eliberează câștigătorului, net de taxele creatorului și ale judecătorilor.'
 			}
 		]
 	},
@@ -500,201 +574,192 @@ export default {
 	 * Video
 	 * ============================================================== */
 	video: {
-		label: 'Overview',
-		title: 'Watch the Breakdown',
+		label: 'Privire de ansamblu',
+		title: 'Uită-te la rezumat',
 		subtitle:
-			'Get up to speed in minutes — see how Game of Prompts brings blockchain and AI competitions together.',
-		thumbAlt: 'Game of Prompts video thumbnail',
-		iframeTitle: 'Game of Prompts — Brief Breakdown'
+			'Pune-te la curent în câteva minute — cum leagă Game of Prompts blockchainul de competițiile de IA.',
+		thumbAlt: 'Miniatura video Game of Prompts',
+		iframeTitle: 'Game of Prompts — Rezumat scurt'
 	},
 
 	/* ============================================================== *
-	 * Security
+	 * Securitate
 	 * ============================================================== */
 	security: {
-		label: 'Security',
-		title: 'Transparent Yet Private Competition',
-		subtitle:
-			'Cryptography ensures fair competition while protecting participants\u2019 strategies.',
+		label: 'Securitate',
+		title: 'Competiție transparentă și totodată privată',
+		subtitle: 'Criptografia asigură o competiție corectă și protejează strategiile celor care participă.',
 		cards: [
 			{
-				title: 'Code Protection',
-				desc: 'The game\u2019s intellectual property and game secret are protected through obfuscation to prevent reverse engineering.'
+				title: 'Protecția codului',
+				desc: 'Proprietatea intelectuală a jocului și secretul jocului sunt protejate prin ofuscare, ca să împiedice ingineria inversă.'
 			},
 			{
-				title: 'Private Results',
-				desc: 'Strategic decoys and cryptographic commitments conceal your true score, protecting your strategy until the final reveal.'
+				title: 'Rezultate private',
+				desc: 'Momeala strategică și angajamentele criptografice îți ascund punctajul real, protejând strategia până la dezvăluirea finală.'
 			},
 			{
-				title: 'Immutable Proof',
-				desc: 'Final validation on the Ergo blockchain generates a public, immutable, and auditable proof of victory.'
+				title: 'Dovadă imuabilă',
+				desc: 'Validarea finală pe blockchainul Ergo generează o dovadă de victorie publică, imuabilă și auditabilă.'
 			}
 		]
 	},
 
 	/* ============================================================== *
-	 * Game types
+	 * Tipuri de joc
 	 * ============================================================== */
 	gameTypes: {
-		title: 'What Can Be a Game?',
-		text: 'Game of Prompts is a versatile platform that can host a wide variety of competitions. Here are just a few examples of what\u2019s possible.',
-		// `label` is the "Game Type 01" eyebrow; {n} is the number.
-		eyebrow: 'Game Type {n}',
+		title: 'Ce poate fi un joc?',
+		text: 'Game of Prompts e o platformă versatilă care poate găzdui competiții foarte diferite. Astea sunt doar câteva exemple de ce se poate face.',
+		eyebrow: 'Tip de joc {n}',
 		items: [
 			{
-				title: 'Classic Arcade',
-				desc: 'The AI solver controls the character in fast-paced, skill-based game environments. Reflexes, pattern recognition, timing.',
-				score: 'Game points · Survival time · Levels cleared'
+				title: 'Arcade clasic',
+				desc: 'Solverul de IA controlează personajul în medii rapide, bazate pe îndemânare. Reflexe, recunoaștere de tipare, sincronizare.',
+				score: 'Puncte de joc · Timp de supraviețuire · Niveluri trecute'
 			},
 			{
-				title: 'Open World',
-				desc: 'Optimize for spatial reasoning, navigation, and environmental adaptation.',
-				score: 'Resource efficiency · Map exploration · Mission complexity'
+				title: 'Lume deschisă',
+				desc: 'Optimizează raționamentul spațial, navigarea și adaptarea la mediu.',
+				score: 'Eficiența resurselor · Explorarea hărții · Complexitatea misiunilor'
 			},
 			{
-				title: 'Financial Trading',
-				desc: 'Bot vs. market. Trade virtual assets in realistic simulations using historical or synthetic data. Pure strategy, zero luck.',
-				score: 'Net profit · Sharpe ratio · Drawdown · Benchmarks'
+				title: 'Tranzacții financiare',
+				desc: 'Bot contra piață. Tranzacționează active virtuale în simulări realiste, cu date istorice sau sintetice. Strategie pură, zero noroc.',
+				score: 'Profit net · Raport Sharpe · Drawdown · Referințe'
 			},
 			{
-				title: 'Protein Folding',
-				desc: 'Predict 3D protein structures from amino acid sequences. A real scientific challenge — AI solvers advancing biology.',
-				score: 'Structural stability · Folding accuracy · Efficiency'
+				title: 'Plierea proteinelor',
+				desc: 'Prezice structuri 3D de proteine din secvențe de aminoacizi. O provocare științifică reală — solvere de IA care împing biologia.',
+				score: 'Stabilitate structurală · Acuratețea plierii · Eficiență'
 			}
 		]
 	},
 
 	/* ============================================================== *
-	 * Optional features
+	 * Funcții opționale
 	 * ============================================================== */
 	features: {
-		title: 'Optional Game Features',
-		text: 'Creators can enhance their games with powerful optional mechanics — from poker-style bluffing to resource constraints and pay-per-attempt models.',
-		// {n} is the number; {status} is one of `status` below.
-		eyebrow: 'Feature {n}',
+		title: 'Funcții opționale ale jocului',
+		text: 'Cei care creează pot adăuga mecanici opționale puternice — de la bluff-ul de poker la limite de resurse și plată pe încercare.',
+		eyebrow: 'Funcție {n}',
 		status: {
-			available: 'Available',
-			research: 'Under Research'
+			available: 'Disponibil',
+			research: 'În cercetare'
 		},
 		items: [
 			{
-				title: 'Resource Limitation',
-				desc: 'Technical challenge by constraining computational resources. Efficiency is king.',
+				title: 'Limită de resurse',
+				desc: 'Provocare tehnică prin strangularea resurselor de calcul. Eficiența e rege.',
 				bullets: [
-					'Game creator sets specific limits on computational resources',
-					'Constraints: maximum RAM, CPU time, or service dependencies',
-					'Forces players to develop highly efficient, optimized solutions',
-					'Adds a significant engineering challenge to the game'
+					'Cel care creează jocul pune limite concrete pe resursele de calcul',
+					'Constrângeri: RAM maxim, timp de CPU sau dependențe de servicii',
+					'Forțează jucătorii să dezvolte soluții foarte eficiente, optimizate',
+					'Adaugă jocului o provocare de inginerie serioasă'
 				]
 			},
 			{
-				title: 'Poker Mode',
-				desc: 'Strategic participation with risk and reward. Bluff, bet, and multiply your score.',
+				title: 'Mod poker',
+				desc: 'Participare strategică cu risc și recompensă. Bluffează, pariază, înmulțește punctajul.',
 				bullets: [
-					'Participants choose how much to pay (above a set minimum)',
-					'Higher payment = higher final score multiplier (e.g. ×2, ×5)',
-					'Players can submit multiple decoy scores',
-					'Bluff strategy: pay high fee + submit fake high scores to intimidate',
-					'Game creator sets score multiplier based on fee paid'
+					'Cine participă alege cât plătește (peste un minim fixat)',
+					'Plată mai mare = multiplicator mai mare al punctajului final (de ex. ×2, ×5)',
+					'Jucătorii pot trimite mai multe punctaje momeală',
+					'Strategie de bluff: plătești taxă mare + trimiți punctaje false ca să intimidezi',
+					'Cel care creează jocul fixează multiplicatorul după taxa plătită'
 				]
 			},
 			{
-				title: 'Pay-per-Attempt',
-				desc: 'A mechanism that assigns a cost to each local execution, fostering high-quality agent development over trial-and-error.',
+				title: 'Plată pe încercare',
+				desc: 'Un mecanism care pune un cost pe fiecare execuție locală, încurajând agenți bine făcuți în loc de încercare și eroare.',
 				bullets: [
-					'Incremental token cost per local execution attempt',
-					'Encourages rigorous local simulation and optimization',
-					'Disincentivizes blind brute-force strategies',
-					'Difficulty scaling fully configurable by the game creator'
+					'Cost incremental în tokeni la fiecare încercare de execuție locală',
+					'Încurajează simulare și optimizare locale riguroase',
+					'Descurajează strategiile de forță brută oarbe',
+					'Scalarea dificultății e configurabilă integral de cel care creează jocul'
 				]
 			}
 		]
 	},
 
 	/* ============================================================== *
-	 * FAQ
-	 *
-	 * The live questions are fetched from the project README at
-	 * runtime and are English-only at source, so they are NOT
-	 * translated here. What IS translated is the chrome around them
-	 * and the offline fallback set, which is what a reader sees when
-	 * the fetch fails.
+	 * Întrebări frecvente
 	 * ============================================================== */
 	faq: {
-		label: 'FAQ',
-		title: 'Frequently Asked Questions',
-		footerTitle: 'Still have questions?',
+		label: 'Întrebări frecvente',
+		title: 'Întrebări frecvente',
+		footerTitle: 'Mai ai întrebări?',
 		footerDesc:
-			'Copy the prompt below and paste it into any AI assistant — it includes a link to our full documentation.',
-		copyPrompt: 'Copy prompt',
-		copied: 'Copied!',
-		orLabel: 'or open directly in:',
-		disclaimerBefore: '⚠️ AI responses may not be fully accurate. Always refer to the ',
-		disclaimerLink: 'official documentation',
-		disclaimerAfter: ' for authoritative information.',
-		telegram: 'Join Telegram Community',
+			'Copiază promptul de mai jos și lipește-l în orice asistent de IA — include un link către toată documentația.',
+		copyPrompt: 'Copiază promptul',
+		copied: 'Copiat!',
+		orLabel: 'sau deschide direct în:',
+		disclaimerBefore: '⚠️ Răspunsurile IA pot să nu fie pe deplin exacte. Consultă întotdeauna ',
+		disclaimerLink: 'documentația oficială',
+		disclaimerAfter: ' pentru informație cu autoritate.',
+		telegram: 'Intră în comunitatea de Telegram',
 		groups: [
 			{
 				title: 'General',
 				items: [
 					{
-						q: 'What is Game of Prompts?',
-						a: 'A bot competition audited by blockchain. Creators design game-services to evaluate AI solvers, while players build solver-services to maximize their scores — all verified on the Ergo blockchain.'
+						q: 'Ce e Game of Prompts?',
+						a: 'O competiție de boți auditată de blockchain. Cei care creează proiectează servicii de joc ca să evalueze solvere de IA, iar jucătorii construiesc servicii solver ca să-și maximizeze punctajul — totul verificat pe blockchainul Ergo.'
 					},
 					{
-						q: 'What is the "Ceremony Phase"?',
-						a: 'The initial period where players register their Solver IDs to add randomness to the seed. This prevents the Creator from pre-calculating solutions and ensures fair competition.'
+						q: 'Ce e «faza de ceremonie»?',
+						a: 'Perioada inițială în care jucătorii își înregistrează Solver ID ca să adauge aleatoriu în sămânță. Împiedică creatorul să precalculeze soluții și asigură o competiție corectă.'
 					},
 					{
-						q: 'What do I need to play?',
-						a: 'An Ergo Wallet (with some ERG for participation fees) and a Celaut Node to run game and solver services locally.'
+						q: 'De ce am nevoie ca să joc?',
+						a: 'Un portofel Ergo (cu ceva ERG pentru taxele de participare) și un nod Celaut ca să rulezi local serviciile de joc și de solver.'
 					}
 				]
 			},
 			{
-				title: 'Security',
+				title: 'Securitate',
 				items: [
 					{
-						q: 'How do I know the game is fair?',
-						a: 'The game rules and hashS are registered on-chain from the start. They are immutable — no one can change them after publication.'
+						q: 'Cum știu că jocul e corect?',
+						a: 'Regulile jocului și hashS sunt înregistrate on-chain de la început. Sunt imuabile — nimeni nu le poate schimba după publicare.'
 					},
 					{
-						q: 'Can the Creator steal the funds?',
-						a: 'No. Funds are locked in a Smart Contract, not the Creator\u2019s wallet. Distribution is handled atomically by the contract when the game resolves.'
+						q: 'Poate creatorul să fure fondurile?',
+						a: 'Nu. Fondurile sunt blocate într-un contract inteligent, nu în portofelul creatorului. Distribuția o face contractul atomic când jocul se rezolvă.'
 					},
 					{
-						q: 'What if the Creator disappears?',
-						a: 'After a Grace Period, players can trigger a Refund Action to recover their participation fees from the smart contract.'
+						q: 'Dacă dispar creatorul?',
+						a: 'După o perioadă de grație, jucătorii pot declanșa o acțiune de rambursare ca să-și recupereze taxele de participare din contractul inteligent.'
 					}
 				]
 			},
 			{
-				title: 'Judges',
+				title: 'Judecători',
 				items: [
 					{
-						q: 'Who are the Judges?',
-						a: 'Entities nominated by the Creator who audit the resolution phase. They verify that the game service generated valid proofs.'
+						q: 'Cine sunt judecătorii?',
+						a: 'Entități nominalizate de creator care auditează faza de rezolvare. Verifică că serviciul de joc a generat dovezi valide.'
 					},
 					{
-						q: 'Why do Judges earn money for invalidating a participation?',
-						a: 'They detect Creator fraud — their incentive is to catch faulty game services. When they find issues, they receive the Creator\u2019s commission as reward.'
+						q: 'De ce câștigă judecătorii bani când invalidează o participare?',
+						a: 'Detectează frauda creatorului — stimulentul lor e să prindă servicii de joc defecte. Când găsesc probleme, primesc comisionul creatorului ca recompensă.'
 					},
 					{
-						q: 'Can I be penalized as a player?',
-						a: 'The system penalizes the Creator/Game Service, not honest players. Judges audit the Creator, not you.'
+						q: 'Pot fi penalizat ca jucător?',
+						a: 'Sistemul îl penalizează pe creator / serviciul de joc, nu pe jucătorii cinstiți. Judecătorii auditează creatorul, nu pe tine.'
 					}
 				]
 			},
 			{
-				title: 'Economy',
+				title: 'Economie',
 				items: [
 					{
-						q: 'How is the winner calculated?',
-						a: 'Highest Time-Weighted Score: Score × (TimeWeight + RemainingTime). Submit early and score high for the best result.'
+						q: 'Cum se calculează câștigătorul?',
+						a: 'Cel mai mare scor ponderat în timp: Punctaj × (TimeWeight + Timp rămas). Trimite devreme și punctează sus pentru cel mai bun rezultat.'
 					},
 					{
-						q: 'When do I receive my winnings?',
-						a: 'Immediately upon the End Game action. The Smart Contract atomically distributes all funds — the winner receives all participation fees minus creator commission and judge fees.'
+						q: 'Când îmi primesc câștigurile?',
+						a: 'Imediat la acțiunea de încheiere a jocului. Contractul inteligent distribuie atomic toate fondurile — câștigătorul primește toate taxele de participare minus comisionul creatorului și taxele judecătorilor.'
 					}
 				]
 			}
@@ -702,23 +767,23 @@ export default {
 	},
 
 	/* ============================================================== *
-	 * Call to action + footer
+	 * Îndemn + subsol
 	 * ============================================================== */
 	cta: {
-		label: 'Get Started',
-		title: 'Get Started with Game of Prompts',
+		label: 'Începe',
+		title: 'Începe cu Game of Prompts',
 		steps: [
-			'Install the <strong>Celaut node</strong> software to run Game and Solver Services in a secure, deterministic environment.',
-			'Set up an <strong>Ergo blockchain wallet</strong> to participate in games and receive winnings.',
-			'Browse available games on <strong>GoP Web</strong> and start developing your own solvers or create challenging games for others.'
+			'Instalează programul <strong>nodului Celaut</strong> ca să rulezi servicii de joc și de solver într-un mediu sigur, determinist.',
+			'Configurează un <strong>portofel pe blockchainul Ergo</strong> ca să participi la jocuri și să încasezi câștigurile.',
+			'Răsfoiește jocurile de pe <strong>GoP Web</strong> și începe să-ți dezvolți propriile solvere sau să creezi jocuri grele pentru alții.'
 		],
-		github: 'GitHub Repository',
-		celaut: 'Celaut Project',
-		ergo: 'Ergo Platform'
+		github: 'Depozitul GitHub',
+		celaut: 'Proiectul Celaut',
+		ergo: 'Platforma Ergo'
 	},
 
 	footer: {
-		tagline: 'Write your prompts. Build your bot. Win the throne.',
+		tagline: 'Scrie-ți prompturile. Construiește botul. Ia tronul.',
 		github: 'GitHub',
 		ergo: 'Ergo',
 		celaut: 'Celaut'

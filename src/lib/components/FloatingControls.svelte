@@ -36,9 +36,10 @@
 	.floating-controls {
 		position: fixed;
 		top: 18px;
-		inset-inline-start: 18px;
+		left: 18px;
 		z-index: 1000;
 		display: flex;
+		direction: ltr;
 		align-items: center;
 		gap: 8px;
 	}
@@ -46,7 +47,7 @@
 	@media (max-width: 560px) {
 		.floating-controls {
 			top: 12px;
-			inset-inline-start: 12px;
+			left: 12px;
 			gap: 6px;
 		}
 	}

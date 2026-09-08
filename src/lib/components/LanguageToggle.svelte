@@ -167,8 +167,13 @@
 	.lang-menu {
 		position: absolute;
 		top: calc(100% + 8px);
-		inset-inline-end: 0;
-		min-width: 128px;
+		/* Cluster sits top-left, so the menu grows inward (to the right in
+		   LTR, to the left in RTL) rather than off the screen edge. */
+		left: 0;
+		min-width: 160px;
+		max-height: calc(100dvh - 90px);
+		overflow-y: auto;
+		overscroll-behavior: contain;
 		margin: 0;
 		padding: 6px;
 		list-style: none;

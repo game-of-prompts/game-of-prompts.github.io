@@ -1,497 +1,549 @@
 /*
- * src/lib/i18n/en.js
+ * src/lib/i18n/tr.js
  * ------------------------------------------------------------------
- * English — the source dictionary and the fallback for every other
- * locale. If a key is missing anywhere else, `$t` resolves it here, so
- * this file is the only one that must never have a hole in it.
+ * Türkçe — en.js çevirisi, anahtar anahtar.
  *
- * HOW TO WRITE THE COPY
- * ---------------------
- * Everything here is the landing page's actual voice: short sentences,
- * concrete nouns, no marketing adjectives. `<strong>` is used for the
- * one term a sentence is really about, never for emphasis in general —
- * the scene captions lean on it heavily and it stops meaning anything
- * if every clause has one.
+ * Aynı yapı, aynı dizi uzunlukları. glossary.terms tam 33 kayıt
+ * ve glossary/terms.js içindeki GLOSSARY_IDS ile konumla eşleşir.
  *
- * HOW TO WRITE THE GLOSSARY
- * -------------------------
- * The glossary explains the JARGON, not the project. A definition that
- * says "in Game of Prompts, a commitment is…" has failed: the reader
- * clicked because they don't know what a commitment IS. Explain the
- * word in plain language with an everyday comparison, then — only in
- * `more`, and only if it earns its place — say why it matters here.
- * Never write down to the reader. They are not stupid, they just
- * haven't met this word before.
- *
- * `match` is the list of trigger words IN THIS LANGUAGE. Translators
- * choose their own; nothing assumes English word order or that a term
- * is even one word in the target language.
+ * `match` başlık çevirisi değil: BU metinde altı çizilip tanımı açan
+ * sözcükler. İngilizce -s/-es ekleri Türkçe çekime yetmez; kullanılan
+ * çoğullar ve ekler (servisi, taahhüdü, yargıçlar…) açıkça yazılır.
  */
 
 export default {
 	/* ============================================================== *
-	 * Chrome shared by every control in the corner cluster
+	 * Köşe kümesinin ortak kontrolleri
 	 * ============================================================== */
 	common: {
-		languageLabel: 'Language',
-		switchLanguage: 'Change language',
-		themeToLight: 'Switch to light theme',
-		themeToDark: 'Switch to dark theme',
-		backToTop: 'Back to top',
-		scoring: 'SCORING'
+		languageLabel: 'Dil',
+		switchLanguage: 'Dili değiştir',
+		themeToLight: 'Açık temaya geç',
+		themeToDark: 'Koyu temaya geç',
+		backToTop: 'Başa dön',
+		scoring: 'PUANLANIYOR'
 	},
 
 	/* ============================================================== *
-	 * The glossary
-	 * Ids and ordering live in src/lib/glossary/terms.js, paired with
-	 * this array by position.
+	 * Sözlük
 	 * ============================================================== */
 	glossary: {
-		/* Chrome */
-		toggleOn: 'Explain technical terms',
-		toggleOff: 'Hide term explanations',
-		toggleLabel: 'Explanations',
-		close: 'Close',
-		// {term} is replaced with the marked word.
-		explain: 'What does "{term}" mean?',
-		// Shown once, on a reader's first visit, near the first mark.
-		hintTitle: 'Some words are underlined.',
+		toggleOn: 'Teknik terimleri açıkla',
+		toggleOff: 'Terim açıklamalarını gizle',
+		toggleLabel: 'Açıklamalar',
+		close: 'Kapat',
+		explain: '«{term}» ne demek?',
+		hintTitle: 'Bazı sözcüklerin altı çizili.',
 		hintBody:
-			'Tap any underlined word for a plain-language explanation. Turn them off any time with the button in the corner.',
-		hintDismiss: 'Got it',
+			'Altı çizili herhangi bir sözcüğe dokun, sade bir açıklama çıkar. İstediğin an köşedeki düğmeyle kapatırsın.',
+		hintDismiss: 'Anladım',
 
 		terms: [
 			{
-				match: ['game-service', 'game service', 'game-services', 'game services'],
-				title: 'Game service',
-				body: 'The challenge itself, packaged as a sealed program anyone can download and run. It holds the rules, the scoring, and the creator\u2019s hidden secret \u2014 like a sealed exam paper that also marks itself.',
-				more: 'You run it on your own machine. It scores your bot and produces the cryptographic receipt that the blockchain later checks.'
+				match: [
+					'oyun servisi',
+					'oyun servisini',
+					'oyun servisinin',
+					'oyun servisleri',
+					'oyun servislerini'
+				],
+				title: 'Oyun servisi',
+				body: 'Görevin kendisi, herkesin indirip çalıştırabileceği mühürlü bir program olarak paketlenmiş. Kurallar, puanlama ve yaratanın gizlediği sır içinde durur — kendi kendini de notlayan, mühürlü bir sınav kâğıdı gibi.',
+				more: 'Kendi makinenizde çalıştırırsınız. Botunuzu puanlar ve blokzincirin sonra kontrol edeceği kriptografik makbuzu üretir.'
 			},
 			{
-				match: ['solver-service', 'solver service', 'solver-services', 'solver services', 'solver', 'solvers'],
-				title: 'Solver service',
-				body: 'Your entry. The bot you build to play the game, packaged the same sealed way so it runs identically on any machine \u2014 your strategy as a single, portable box.',
-				more: 'It is handed to the game service, which runs it in isolation and scores what it did. Nobody sees your code but you.'
+				match: [
+					'çözücü servisi',
+					'çözücü servisini',
+					'çözücü servisleri',
+					'çözücü',
+					'çözücüyü',
+					'çözücüler',
+					'çözücülerin'
+				],
+				title: 'Çözücü servisi',
+				body: 'Sizin katılımınız. Oyunu oynamak için kurduğunuz bot, aynı mühürlü yolla paketlenir ki her makinede aynı çalışsın — stratejiniz, taşınabilir tek bir kutu.',
+				more: 'Oyun servisine verilir; o da onu yalıtarak çalıştırır ve ne yaptığını puanlar. Kodu sizden başka kimse görmez.'
 			},
 			{
-				match: ['GoP Web', 'GoP web portal', 'the portal'],
+				match: ['GoP Web', 'topluluk portalı'],
 				title: 'GoP Web',
-				body: 'The website where games are listed: read the rules, download a game, publish your result. It is a directory and a signing tool, not a referee \u2014 nothing it shows you has to be taken on trust.',
-				more: 'You can run your own copy of it. That is the point: if the public one vanished, the games would carry on.'
+				body: 'Oyunların listelendiği site: kuralları oku, bir oyunu indir, sonucunu yayınla. Bir dizin ve imza aracıdır, hakem değildir — gösterdiği hiçbir şeye güvenmek zorunda değilsiniz.',
+				more: 'Kendi kopyanızı çalıştırabilirsiniz. Mesele bu: kamuya açık olan yok olsa da oyunlar sürer.'
 			},
 			{
-				match: ['Celaut', 'Celaut node', 'Celaut nodes'],
+				match: ['Celaut', 'Celaut düğümü', 'Celaut düğümünde'],
 				title: 'Celaut',
-				body: 'The system that actually runs the sealed programs. You install it once, and from then on any game or solver package can be handed to your machine and executed in its own locked room.',
-				more: 'It is what makes "run it yourself" realistic rather than a slogan: the same package behaves the same way on every machine that opens it.'
+				body: 'Mühürlü programları gerçekten çalıştıran sistem. Bir kez kurarsınız; o andan sonra herhangi bir oyun veya çözücü paketi makinenize verilip kendi kilitli odasında çalıştırılabilir.',
+				more: '«Kendin çalıştır»ı slogan olmaktan çıkarıp gerçek yapan şey budur: aynı paket, onu açan her makinede aynı davranır.'
 			},
 			{
-				match: ['node', 'nodes'],
-				title: 'Node',
-				body: 'One computer taking part in a network. Your laptop, a spare desktop, a server in a rack \u2014 once it runs the software and starts talking to other machines, it is a node.',
-				more: 'Here it is simply the machine that runs the games and the solvers. Yours, not somebody\u2019s data centre.'
+				match: ['düğüm', 'düğümü', 'düğümde', 'düğümler'],
+				title: 'Düğüm',
+				body: 'Ağa katılan bir bilgisayar. Dizüstü, kenarda duran bir masaüstü, raftaki bir sunucu — yazılımı çalıştırıp başka makinelerle konuşmaya başlayınca düğüm olur.',
+				more: 'Burada yalnızca oyunları ve çözücüleri çalıştıran makinedir. Sizinki; birinin veri merkezi değil.'
 			},
 			{
-				match: ['service', 'services'],
-				title: 'Service',
-				body: 'A self-contained piece of software that does one job and can be handed to any machine to run \u2014 closer to a single appliance than to a whole program you install.',
-				more: 'Both halves of a competition here are services: the game and the bot playing it.'
+				match: ['servis', 'servisi', 'servisler', 'servislerin'],
+				title: 'Servis',
+				body: 'Tek iş yapan, kendi başına duran bir yazılım parçası; herhangi bir makineye verilip çalıştırılabilir — kurduğunuz koca bir programdan çok, tek işlevli bir aygıta yakındır.',
+				more: 'Bir yarışmanın iki yarısı da servistir: oyun ve onu oynayan bot.'
 			},
 			{
-				match: ['blockchain', 'blockchains', 'ledger', 'ledgers'],
-				title: 'Blockchain',
-				body: 'A shared record book that thousands of computers keep copies of at once. Adding an entry requires the others to agree it is valid, and past entries cannot be rewritten \u2014 so no single participant controls the history.',
-				more: 'Used here for two narrow jobs: recording who claimed what score, and paying out the winner. Nothing more.'
+				match: [
+					'blokzincir',
+					'blokzinciri',
+					'blokzincirde',
+					'blokzincirin',
+					'blokzincirinde'
+				],
+				title: 'Blokzincir',
+				body: 'Binlerce bilgisayarın aynı anda kopyasını tuttuğu ortak bir kayıt defteri. Bir satır eklemek için diğerlerinin geçerli olduğunu kabul etmesi gerekir; geçmiş satırlar yeniden yazılamaz — tarihi tek kişi kontrol edemez.',
+				more: 'Burada dar iki iş için kullanılır: kimin hangi puanı iddia ettiğini kaydetmek ve kazananı ödemek. Başka bir şey değil.'
 			},
 			{
 				match: ['Ergo', 'ERG'],
 				title: 'Ergo',
-				body: 'The particular blockchain this platform records results on and settles payments through. ERG is its unit of currency.',
-				more: 'It is a choice, not a foundation: the platform has no coin of its own.'
+				body: 'Bu platformun sonuçları kaydettiği ve ödemeleri tasfiye ettiği belirli blokzincir. ERG onun para birimidir.',
+				more: 'Bir seçimdir, temel değil: platformun kendi coini yoktur.'
 			},
 			{
-				match: ['smart contract', 'smart contracts', 'contract', 'contracts', 'game contract'],
-				title: 'Smart contract',
-				body: 'A program that lives on the blockchain and holds money under rules written down in advance. When the conditions are met it pays out by itself \u2014 nobody signs a cheque, and nobody can decide not to.',
-				more: 'It is why the prize is safe before anyone has won it: the funds are held by the rules, not by the person who wrote them.'
+				match: [
+					'akıllı sözleşme',
+					'akıllı sözleşmeler',
+					'akıllı sözleşmenin',
+					'oyun sözleşmesi',
+					'sözleşme',
+					'sözleşmesi',
+					'sözleşmenin',
+					'sözleşmeler'
+				],
+				title: 'Akıllı sözleşme',
+				body: 'Blokzincirde yaşayan ve parayı önceden yazılmış kurallarla tutan bir program. Koşullar sağlanınca kendi öder — çek imzalayan yoktur, ödememeye karar veren de yoktur.',
+				more: 'Kimse kazanmadan önce ödülün güvende olmasının nedeni budur: fonları tutan kurallardır, onları yazan kişi değil.'
 			},
 			{
-				match: ['on-chain', 'on chain', 'onchain'],
-				title: 'On-chain',
-				body: 'Written into the blockchain itself, where everyone can see it and nobody can quietly change it later \u2014 as opposed to sitting in a company\u2019s private database.'
+				match: ['zincir üstü', 'on-chain'],
+				title: 'Zincir üstü',
+				body: 'Blokzincirin kendisine yazılmış; herkes görür, kimse sonra sessizce değiştirmez — bir şirketin özel veritabanında durmanın tersi.'
 			},
 			{
-				match: ['commitment', 'commitments', 'score commitment', 'cryptographic commitment', 'pre-commitment'],
-				title: 'Commitment',
-				body: 'A sealed envelope. You publish something that proves what you chose, without revealing what it was \u2014 and later, when the envelope is opened, everyone can check you didn\u2019t swap the contents.',
-				more: 'It is what lets a score be locked in publicly while the game is still running, without telling your rivals how well you did.'
+				match: [
+					'kriptografik taahhüt',
+					'kriptografik taahhüdü',
+					'kriptografik taahhütler',
+					'puan taahhüdü',
+					'ön taahhüt',
+					'taahhüt',
+					'taahhüdü',
+					'taahhütler'
+				],
+				title: 'Taahhüt',
+				body: 'Mühürlü bir zarf. Ne seçtiğinizi kanıtlayan bir şey yayımlarsınız, ne olduğunu göstermeden — sonra zarf açılınca herkes içeriği değiştirmediğinizi denetleyebilir.',
+				more: 'Oyun hâlâ açıkken bir puanın kamuya kilitlenmesini sağlar, rakiplere ne kadar iyi yaptığınızı söylemeden.'
 			},
 			{
-				match: ['hash', 'hashes', 'hashed', 'digest', 'hashed logs'],
+				match: ['hashlenmiş günlükler', 'hash', 'özet değer'],
 				title: 'Hash',
-				body: 'A short fingerprint calculated from a piece of data. The same data always gives the same fingerprint, a single changed byte gives a completely different one, and you cannot work backwards from the fingerprint to the data.',
-				more: 'That one-way property is the whole trick: it lets you prove something matches without showing what it is.'
+				body: 'Bir veri parçasından hesaplanan kısa parmak izi. Aynı veri her zaman aynı izi verir, tek bayt değişince iz bambaşka olur, izden veriye geri gidilemez.',
+				more: 'Bu tek yönlülük bütün numara: ne olduğunu göstermeden eşleşmeyi kanıtlar.'
 			},
 			{
-				match: ['secret', 'game secret', '256-bit secret'],
-				title: 'Secret',
-				body: 'A large random number the creator generates and keeps hidden while the game is open. Every score is sealed using it, so no score can be verified \u2014 or forged \u2014 until the creator publishes it.',
-				more: 'Publishing it at the end is what makes everyone\u2019s results checkable at the same moment, rather than one at a time.'
+				match: [
+					'256 bitlik sır',
+					'oyun sırrı',
+					'oyunun sırrı',
+					'sır',
+					'sırrı',
+					'sırrın'
+				],
+				title: 'Sır',
+				body: 'Yaratanın ürettiği ve oyun açıkken gizlediği büyük bir rastgele sayı. Her puan bununla mühürlenir; yaratan yayımlayana dek hiçbir puan doğrulanamaz — ya da sahte üretilemez.',
+				more: 'Sonda yayımlamak, herkesin sonucunun aynı anda denetlenebilir olmasını sağlar; tek tek değil.'
 			},
 			{
-				match: ['seed', 'game seed', 'seeds'],
-				title: 'Seed',
-				body: 'The starting number that decides exactly which version of a challenge you face \u2014 which board, which market data, which puzzle. Same seed, same challenge, for everyone.',
-				more: 'It is revealed only after entries close, so nobody can tune a bot for the specific run in advance.'
+				match: ['oyun tohumu', 'tohum', 'tohumu', 'tohumlar'],
+				title: 'Tohum',
+				body: 'Hangi görev sürümüyle karşılaşacağınızı kararlaştıran başlangıç sayısı — hangi tahta, hangi piyasa verisi, hangi bulmaca. Aynı tohum, herkes için aynı görev.',
+				more: 'Kayıtlar kapandıktan sonra açıklanır; kimse o koşuya özel botunu önceden ayarlamasın diye.'
 			},
 			{
-				match: ['ceremony phase', 'ceremony', 'ceremony period'],
-				title: 'Ceremony phase',
-				body: 'The window at the start of a game when players sign up and each one\u2019s registration stirs a little unpredictability into the final seed. Like everyone throwing a die into the same cup before the lid comes off.',
-				more: 'It exists so the creator cannot know the challenge in advance either \u2014 the players collectively decide it without meaning to.'
+				match: ['tören evresi', 'tören dönemi', 'tören'],
+				title: 'Tören evresi',
+				body: 'Oyunun başında oyuncuların kaydolduğu pencere; her kayıt, nihai tohuma biraz öngörülemezlik katar. Kapak açılmadan herkesin aynı kaba zar atması gibi.',
+				more: 'Yaratanın da görevi önceden bilememesi için vardır — oyuncular, istemeden, birlikte karar verir.'
 			},
 			{
-				match: ['Solver ID', 'Solver IDs', 'solver identifier'],
+				match: ['Solver ID', 'çözücü kimliği'],
 				title: 'Solver ID',
-				body: 'The unique fingerprint of the exact bot you registered. It names one specific version of your code, so a bot cannot be quietly swapped for a different one after the seed is revealed.'
+				body: 'Kaydettiğiniz tam botun benzersiz parmak izi. Kodunuzun belirli bir sürümünü adlandırır; tohum açıklandıktan sonra bot sessizce başka biriyle değiştirilemez.'
 			},
 			{
-				match: ['Paper', 'the Paper', 'game paper'],
+				match: ['Paper', 'oyun Paper'],
 				title: 'Paper',
-				body: 'The written rules: what the challenge is, how it is scored, what counts as a valid entry. Published before anyone can play, so the terms cannot change once people have committed.',
-				more: 'You are meant to be able to build your entry from this document alone.'
+				body: 'Yazılı kurallar: görev nedir, nasıl puanlanır, ne geçerli katılım sayılır. Kimse oynamadan önce yayımlanır; insanlar taahhüt ettikten sonra koşullar değişemesin diye.',
+				more: 'Katılımınızı yalnızca bu belgeden kurabilmeniz beklenir.'
 			},
 			{
-				match: ['pot', 'the pot', 'prize pool'],
-				title: 'Pot',
-				body: 'All the entry fees, pooled together and held by the contract until the game resolves. Everyone who competes pays in; the winner takes what is left after the agreed cuts.'
+				match: ['havuz', 'havuzu', 'ödül havuzu'],
+				title: 'Havuz',
+				body: 'Tüm katılım ücretleri, oyun çözülene dek sözleşmenin tuttuğu tek yerde toplanır. Yarışan herkes yatırır; kazanan, kararlaştırılmış kesintilerden sonra kalanı alır.'
 			},
 			{
-				match: ['participation fee', 'participation fees', 'entry fee', 'entry fees'],
-				title: 'Participation fee',
-				body: 'What it costs to submit a result you want counted. It goes into the pot rather than to the organisers, so every entry makes the prize bigger.',
-				more: 'You only pay it if you decide your run was worth entering \u2014 running the game locally is free.'
+				match: [
+					'katılım ücreti',
+					'katılım ücretleri',
+					'katılım ücretini',
+					'giriş ücreti'
+				],
+				title: 'Katılım ücreti',
+				body: 'Sayılmasını istediğiniz bir sonucu göndermenin bedeli. Düzenleyenlere değil havuza gider; her katılım ödülü büyütür.',
+				more: 'Yalnızca o koşuyu göndermeye değer bulursanız ödersiniz — oyunu yerelde çalıştırmak ücretsizdir.'
 			},
 			{
-				match: ['commission', 'commissions', 'creator commission', 'platform commission'],
-				title: 'Commission',
-				body: 'The agreed slice of the pot that goes to the game\u2019s creator, its judges and the platform. Set in the open when the game is published, and taken automatically \u2014 not negotiated afterwards.'
+				match: [
+					'yaratan komisyonu',
+					'komisyon',
+					'komisyonu',
+					'komisyonlar',
+					'komisyonunu'
+				],
+				title: 'Komisyon',
+				body: 'Havuzun, oyunun yaratanına, yargıçlarına ve platforma giden kararlaştırılmış dilimi. Oyun yayımlanırken açıkça konur ve otomatik alınır — sonradan pazarlık edilmez.'
 			},
 			{
-				match: ['judge', 'judges'],
-				title: 'Judge',
-				body: 'Someone whose job is to check the creator, not the players: did the game actually score honestly, and are its receipts valid? If they catch a cheat, they are paid out of the creator\u2019s cut.',
-				more: 'Being paid for finding fraud, rather than for approving things, is what makes the role worth having.'
+				match: ['yargıç', 'yargıcı', 'yargıca', 'yargıçlar', 'yargıçların'],
+				title: 'Yargıç',
+				body: 'İşi oyuncuları değil yaratanı denetlemek olan kişi: oyun gerçekten dürüstçe mi puanladı, makbuzlar geçerli mi? Hile yakalarsa, yaratanın payından ödenir.',
+				more: 'Onaylamak için değil dolandırıcılık bulmak için ödenmesi, bu rolü değerli kılar.'
 			},
 			{
-				match: ['NFT', 'NFTs', 'game NFT'],
+				match: ['NFT', 'oyun NFT'],
 				title: 'NFT',
-				body: 'A one-of-a-kind token recorded on the blockchain, which can be owned and transferred but not duplicated. Here it is the trophy: permanent, public proof of who won a particular game.'
+				body: 'Blokzincire kaydedilmiş, sahip olunup devredilebilen ama kopyalanamayan tekil bir jeton. Burada kupa: belirli bir oyunu kimin kazandığının kalıcı, kamuya açık kanıtı.'
 			},
 			{
-				match: ['wallet', 'wallets', 'Ergo wallet'],
-				title: 'Wallet',
-				body: 'The app that holds the keys to your funds and signs your actions on the blockchain. Not an account with a company \u2014 nobody can freeze it, and nobody can recover it for you.'
+				match: ['Ergo cüzdanı', 'cüzdan', 'cüzdanı', 'cüzdanlar'],
+				title: 'Cüzdan',
+				body: 'Fonlarınızın anahtarlarını tutan ve blokzincirdeki işlemlerinize imza atan uygulama. Bir şirketteki hesap değil — kimse donduramaz, kimse sizin yerinize kurtaramaz.'
 			},
 			{
-				match: ['gas fee', 'gas fees', 'network gas fee', 'network fee'],
-				title: 'Gas fee',
-				body: 'The small charge for having the network record your transaction. It pays the computers doing the recording, not the platform \u2014 like postage rather than a ticket price.'
+				match: ['ağ gaz ücreti', 'gaz ücreti', 'gaz ücretini', 'ağ ücreti'],
+				title: 'Gaz ücreti',
+				body: 'Ağın işleminizi kaydetmesi için alınan küçük ücret. Platforma değil, kaydı yapan bilgisayarlara gider — bilet fiyatından çok pul ücreti.'
 			},
 			{
-				match: ['deterministic', 'determinism', 'reproducible', 'reproducibility'],
-				title: 'Deterministic',
-				body: 'Same input, same output, every time \u2014 like a recipe that produces an identical cake in any kitchen, rather than one that depends on the cook. Nothing about the machine, the day or the location changes the result.',
-				more: 'It is what makes a score checkable by somebody else: they can re-run it and must get your number.'
+				match: [
+					'deterministik',
+					'determinizm',
+					'yeniden üretilebilir',
+					'yeniden üretilebilirlik'
+				],
+				title: 'Deterministik',
+				body: 'Aynı girdi, her seferinde aynı çıktı — aşçıya bağlı bir yemek değil, her mutfakta aynı pastayı veren bir tarif. Makine, gün, yer sonucu değiştirmez.',
+				more: 'Bir puanın başkası tarafından denetlenebilmesinin nedeni budur: yeniden çalıştırınca sizin sayınız çıkmalıdır.'
 			},
 			{
-				match: ['isolation', 'isolated', 'sealed', 'sandboxed', 'secure isolated environment', 'isolated environment'],
-				title: 'Isolation',
-				body: 'Keeping a running program inside a boundary it cannot reach past \u2014 it sees only what it was given, and nothing of the machine around it or of anything else running there.',
-				more: 'It is what lets a game run a stranger\u2019s bot safely, and lets you run a stranger\u2019s game safely.'
+				match: [
+					'güvenli yalıtılmış ortam',
+					'yalıtılmış ortam',
+					'yalıtım',
+					'yalıtarak',
+					'mühürlü',
+					'kum havuzu'
+				],
+				title: 'Yalıtım',
+				body: 'Çalışan bir programı aşamayacağı bir sınırın içinde tutmak — yalnızca kendisine verileni görür; çevresindeki makineden ve orada çalışan başka her şeyden habersizdir.',
+				more: 'Bir oyunun yabancı bir botu güvenle çalıştırmasını, sizin de yabancı bir oyunu güvenle çalıştırmanızı sağlayan şey budur.'
 			},
 			{
-				match: ['obfuscation', 'obfuscated', 'obfuscate'],
-				title: 'Obfuscation',
-				body: 'Deliberately scrambling a program so that it still runs perfectly but is painful to read \u2014 the software equivalent of a document printed without spaces or line breaks.',
-				more: 'Used here to keep a game\u2019s hidden secret hidden, even though everyone has a copy of the program that contains it.'
+				match: ['gizleme', 'gizlenmiş', 'ofuskasyon'],
+				title: 'Gizleme',
+				body: 'Bir programı kasten karıştırmak; kusursuz çalışsın ama okuması acı versin — boşluksuz, satır sonu olmadan basılmış bir belgenin yazılım karşılığı.',
+				more: 'Burada, herkes programın bir kopyasına sahip olsa bile oyunun gizlediği sırrı gizli tutmak için kullanılır.'
 			},
 			{
-				match: ['peer-to-peer', 'peer to peer', 'P2P'],
-				title: 'Peer-to-peer',
-				body: 'Two computers dealing with each other directly, the way two people have a phone call \u2014 instead of both sending everything through a company in the middle, the way email or a marketplace works. Each computer is a "peer": equal, no one in charge.',
-				more: 'It matters here because the company in the middle is usually the one that sets the price, takes a cut, and can remove you.'
+				match: ['eşler arası', 'peer-to-peer', 'P2P'],
+				title: 'Eşler arası',
+				body: 'İki bilgisayarın doğrudan muhatap olması, iki kişinin telefon konuşması gibi — e-posta veya bir pazar yeri gibi her şeyi ortadaki bir şirkete göndermek yerine. Her bilgisayar bir «eş»: eşit, kimse amir değil.',
+				more: 'Burada önemlidir çünkü ortadaki şirket genellikle fiyatı koyan, payını alan ve sizi çıkarabilen taraftır.'
 			},
 			{
-				match: ['self-hosting', 'self-hosted', 'self-host', 'run locally', 'runs locally'],
-				title: 'Self-hosting',
-				body: 'Running your own copy of a service on your own machine instead of using somebody else\u2019s. The thing keeps working even if the public version is switched off, censored, or simply having a bad day.'
+				match: [
+					'kendi barındırma',
+					'kendi barındırmayı',
+					'yerelde çalıştırma',
+					'yerelde çalıştırmak'
+				],
+				title: 'Kendi barındırma',
+				body: 'Bir hizmetin kopyasını başkasınınkinde değil, kendi makinenizde çalıştırmak. Kamuya açık sürüm kapatılsa, sansürlense ya da yalnızca kötü bir gün geçirse bile iş yürümeye devam eder.'
 			},
 			{
-				match: ['decoy', 'decoys', 'decoy score', 'decoy scores', 'fake high scores'],
-				title: 'Decoy',
-				body: 'A deliberately misleading entry \u2014 a score you publish that isn\u2019t your real one \u2014 submitted to make rivals guess wrong about how well you actually did. Bluffing, made possible because nobody can read a sealed score.'
+				match: [
+					'yem skor',
+					'yem skorlar',
+					'sahte yüksek skorlar',
+					'yem',
+					'yemler'
+				],
+				title: 'Yem',
+				body: 'Kasten yanıltıcı bir katılım — gerçek olmayan, yayımladığınız bir puan — rakiplerin gerçekte ne kadar iyi yaptığınızı yanlış tahmin etmesi için. Mühürlü bir puanı kimse okuyamadığı için mümkün olan bir blöf.'
 			},
 			{
-				match: ['Time-Weighted Score', 'time-weighted score', 'time weighted score', 'TimeWeight'],
-				title: 'Time-weighted score',
-				body: 'A score adjusted for how early you submitted it. Two identical results do not tie: the one entered sooner counts for more, so sitting on a good answer until the deadline costs you.'
+				match: ['zamana ağırlıklı skor', 'TimeWeight'],
+				title: 'Zamana ağırlıklı skor',
+				body: 'Ne kadar erken gönderdiğinize göre ayarlanmış bir puan. İki özdeş sonuç berabere kalmaz: önce giren daha ağır basar; iyi bir yanıtı son güne kadar bekletmek size mal olur.'
 			},
 			{
-				match: ['Grace Period', 'grace period', 'validation period', 'refund'],
-				title: 'Grace period',
-				body: 'A waiting window built into the rules before money moves \u2014 time for judges to object, and time for players to claim their fees back if the creator never resolves the game at all.',
-				more: 'It is the answer to "what if the organiser just disappears": the contract lets everyone walk away with their money.'
+				match: ['ek süre', 'doğrulama süresi', 'iade', 'iadesi'],
+				title: 'Ek süre',
+				body: 'Para hareket etmeden önce kurallara gömülmüş bir bekleme penceresi — yargıçların itiraz etmesi, yaratan oyunu hiç çözmezse oyuncuların ücretlerini geri alması için zaman.',
+				more: '«Düzenleyen ortadan kaybolursa» sorusunun yanıtıdır: sözleşme herkesin parasıyla çekip gitmesine izin verir.'
 			},
 			{
-				match: ['CDE', 'scenario variability', 'high scenario variability'],
-				title: 'Scenario variability (CDE)',
-				body: 'How different each run of a game can be from the last. High variability means a bot has to actually play well, because there is no single fixed answer to memorise and hardcode.'
+				match: ['CDE', 'senaryo değişkenliği', 'yüksek senaryo değişkenliği'],
+				title: 'Senaryo değişkenliği (CDE)',
+				body: 'Oyunun her çalışmasının bir öncekinden ne kadar farklı olabileceği. Yüksek değişkenlik, botun gerçekten iyi oynaması gerektiği demektir: ezberleyip koda gömülecek tek bir sabit yanıt yoktur.'
 			}
 		]
 	},
 
 	/* ============================================================== *
-	 * Splash screen
+	 * Açılış ekranı
 	 * ============================================================== */
 	splash: {
 		title: 'GAME OF PROMPTS',
-		subtitle: 'WRITE YOUR PROMPTS. BUILD YOUR BOT. WIN THE THRONE.'
+		subtitle: 'PROMPTUNU YAZ. BOTUNU KUR. TAHTI KAZAN.'
 	},
 
 	/* ============================================================== *
 	 * <head>
 	 * ============================================================== */
 	meta: {
-		title: 'Game of Prompts — Write your prompts. Build your bot. Win the throne.',
+		title: 'Game of Prompts — Promptunu yaz. Botunu kur. Tahtı kazan.',
 		description:
-			'A competitive platform where creators design game-services to evaluate AI solvers, while players build solver-services to maximize their scores — powered by the Ergo blockchain and Celaut.',
+			'Yaratanların AI çözücüleri değerlendirmek için oyun servisleri tasarladığı, oyuncuların puanını yükseltmek için çözücü servisleri kurduğu rekabet platformu — Ergo blokzinciri ve Celaut ile.',
 		ogTitle: 'Game of Prompts',
-		ogDescription: 'Write your prompts. Build your bot. Win the throne.'
+		ogDescription: 'Promptunu yaz. Botunu kur. Tahtı kazan.'
 	},
 
 	/* ============================================================== *
-	 * Hero
+	 * Kahraman bölümü
 	 * ============================================================== */
 	hero: {
 		titleTop: 'GAME OF',
 		titleBottom: 'PROMPTS',
-		// `<span class="hero-grad">` is the accent gradient. Keep the tag
-		// around whichever clause deserves the emphasis in this language;
-		// it does not have to be the middle one.
-		tagline: 'Write your prompts. <span class="hero-grad">Build your bot.</span> Win the throne.',
-		lede: 'A competitive platform where creators design game-services to evaluate AI solvers, and players build solver-services to maximize their scores — all recorded and verified on-chain.',
+		tagline: 'Promptunu yaz. <span class="hero-grad">Botunu kur.</span> Tahtı kazan.',
+		lede: 'Yaratanların AI çözücüleri değerlendirmek için oyun servisleri tasarladığı, oyuncuların puanını yükseltmek için çözücü servisleri kurduğu rekabet platformu — kayıt ve doğrulama zincir üstü.',
 		actions: {
-			launch: 'Launch App',
-			github: 'View on GitHub',
-			how: 'See how it works'
+			launch: 'Uygulamayı aç',
+			github: 'GitHub üzerinde gör',
+			how: 'Nasıl çalıştığını gör'
 		},
 		stats: [
-			{ value: 'P2P', label: 'Decentralized — services run on your own Celaut node' },
-			{ value: 'On-chain', label: 'Results committed and verified on Ergo' },
-			{ value: 'Trustless', label: 'Smart contracts settle the pot, not a company' }
+			{ value: 'P2P', label: 'Merkeziyetsiz — servisler kendi Celaut düğümünüzde çalışır' },
+			{ value: 'Zincir üstü', label: 'Sonuçlar taahhüt edilir ve Ergo üzerinde doğrulanır' },
+			{ value: 'Güvene gerek yok', label: 'Havuzu şirket değil akıllı sözleşmeler tasfiye eder' }
 		],
-		scroll: 'Scroll'
+		scroll: 'Kaydır'
 	},
 
 	/* ============================================================== *
-	 * The seven pinned scenes
-	 * Each `beats` array is positional: one entry per SceneBeat in
-	 * +page.svelte, in order. `note` is the closing line of a scene.
+	 * Yedi sahne
 	 * ============================================================== */
 	scenes: {
 		arena: {
-			label: 'The idea',
+			label: 'Fikir',
 			beats: [
 				{
-					h: 'Someone posts a challenge.',
-					p: 'A creator designs a game with measurable scoring — and packages it as a <strong>game-service</strong>: an immutable Celaut service that holds the game\u2019s logic and its secret.'
+					h: 'Biri bir görev yayımlar.',
+					p: 'Yaratan, ölçülebilir puanlaması olan bir oyun tasarlar ve onu <strong>oyun servisi</strong> olarak paketler: oyunun mantığını ve sırrını tutan, değişmez bir Celaut servisi.'
 				},
 				{
-					h: 'Everyone else builds a bot to beat it.',
-					p: 'Players write <strong>solver-services</strong> — their strategy, packaged the same way. The game-service runs each solver in a secure, isolated environment and scores what it did.'
+					h: 'Ötekiler onu yenecek bir bot kurar.',
+					p: 'Oyuncular <strong>çözücü servisleri</strong> yazar — aynı yolla paketlenmiş stratejileri. Oyun servisi her çözücüyü güvenli, yalıtılmış bir ortamda çalıştırır ve ne yaptığını puanlar.'
 				},
 				{
-					h: 'The highest score wins the throne.',
-					p: 'No leaderboard you have to trust. Every score is committed cryptographically and <strong>settled on the Ergo blockchain</strong>, where anyone can check the maths.',
-					note: 'Write your prompts. Build your bot. Win the throne.'
+					h: 'En yüksek puan tahtı kazanır.',
+					p: 'Güvenmek zorunda olduğunuz bir sıralama yok. Her puan kriptografik olarak taahhüt edilir ve <strong>Ergo blokzincirinde tasfiye edilir</strong>; matematiği herkes denetleyebilir.',
+					note: 'Promptunu yaz. Botunu kur. Tahtı kazan.'
 				}
 			]
 		},
 
 		components: {
-			label: 'Architecture',
+			label: 'Mimari',
 			beats: [
 				{
-					h: 'Game Service',
-					p: 'Built by game devs. An autonomous service that encapsulates a game\u2019s logic and the secret. It evaluates solver performance, generates scores, and creates the <strong>cryptographic commitments</strong> needed for blockchain validation.'
+					h: 'Oyun servisi',
+					p: 'Oyun geliştirenler kurar. Mantığı ve sırrı kapsayan özerk bir servis. Çözücü başarımını değerlendirir, puan üretir ve blokzincir doğrulaması için gereken <strong>kriptografik taahhütleri</strong> oluşturur.'
 				},
 				{
-					h: 'Solver Service',
-					p: 'Built by players. It implements strategies to maximize the score in a specific game. The solver is packaged and sent to the game-service, which <strong>executes it in a secure, isolated environment</strong> for evaluation.'
+					h: 'Çözücü servisi',
+					p: 'Oyuncular kurar. Belirli bir oyunda puanı yükseltecek stratejileri uygular. Çözücü paketlenip oyun servisine gönderilir; o da değerlendirme için onu <strong>güvenli, yalıtılmış bir ortamda çalıştırır</strong>.'
 				},
 				{
 					h: 'GoP Web',
-					p: 'The community portal. Discover games, read the rules, download game-services, and publish your results on the Ergo blockchain. It <strong>supports self-hosting</strong> for a fully trustless, peer-to-peer experience.'
+					p: 'Topluluk portalı. Oyunları keşfedin, kuralları okuyun, oyun servislerini indirin, sonuçlarınızı Ergo blokzincirinde yayımlayın. Güvene gerek duymayan, eşler arası bir deneyim için <strong>kendi barındırmayı destekler</strong>.'
 				},
 				{
-					h: 'Everything runs on your machine.',
-					p: 'Game and solver services both run on a <strong>local Celaut node</strong>, which can operate entirely offline. GoP Web can be used via its GitHub.io instance or run locally as a Celaut service.',
-					note: 'Two technologies: Celaut for computation, Ergo for settlement.'
+					h: 'Her şey sizin makinenizde çalışır.',
+					p: 'Oyun ve çözücü servisleri bir <strong>yerel Celaut düğümünde</strong> çalışır; tamamen çevrimdışı da işleyebilir. GoP Web, GitHub.io örneğinden kullanılabilir veya Celaut servisi olarak yerelde çalıştırılabilir.',
+					note: 'İki teknoloji: hesap için Celaut, tasfiye için Ergo.'
 				}
 			]
 		},
 
 		creator: {
-			label: 'Game creator flow',
+			label: 'Oyun yaratanın akışı',
 			beats: [
 				{
-					h: 'Design a game.',
-					p: 'Create a challenge with measurable scoring and high scenario variability (CDE), so hardcoded solutions don\u2019t work.'
+					h: 'Bir oyun tasarla.',
+					p: 'Ölçülebilir puanlama ve yüksek senaryo değişkenliği (CDE) olan bir görev oluşturun; koda gömülü çözümler işe yaramasın.'
 				},
 				{
-					h: 'Write the Paper.',
-					p: 'Publish a document with all instructions, rules and evaluation criteria. Players must be able to understand the challenge <strong>before</strong> they participate.'
+					h: 'Paper yaz.',
+					p: 'Tüm yönergeleri, kuralları ve değerlendirme ölçütlerini içeren bir belge yayımlayın. Oyuncular görevi katılmadan <strong>önce</strong> anlayabilmelidir.'
 				},
 				{
-					h: 'Generate a secret.',
-					p: 'A unique <strong>256-bit secret</strong> underwrites the cryptographic commitments and the later score validation. Nobody can see it while the game is open.'
+					h: 'Bir sır üret.',
+					p: 'Benzersiz bir <strong>256 bitlik sır</strong> kriptografik taahhütleri ve sonraki puan doğrulamasını taşır. Oyun açıkken kimse göremez.'
 				},
 				{
-					h: 'Package and publish.',
-					p: 'Ship the game as a Celaut service and publish it through GoP Web with its parameters: fee, deadline, and commission.'
+					h: 'Paketle ve yayımlayın.',
+					p: 'Oyunu bir Celaut servisi olarak çıkarın ve GoP Web üzerinden parametreleriyle yayımlayın: ücret, son tarih, komisyon.'
 				},
 				{
-					h: 'Reveal the secret.',
-					p: 'When the deadline passes, the creator <strong>reveals the secret on-chain</strong>. That resolves the game: score validation becomes possible and the smart contract can determine the winner.',
-					note: 'Commit first, reveal later. That\u2019s what makes it fair.'
+					h: 'Sırrı açıkla.',
+					p: 'Son tarih geçince yaratan <strong>sırrı zincir üstünde açıklar</strong>. Oyun çözülür: puan doğrulaması mümkün olur ve akıllı sözleşme kazananı belirleyebilir.',
+					note: 'Önce taahhüt, sonra açıklama. Adalet bundan gelir.'
 				}
 			]
 		},
 
 		player: {
-			label: 'The player\u2019s journey',
+			label: 'Oyuncunun yolu',
 			beats: [
 				{
-					h: 'Browse and read the Paper.',
-					p: 'Find a game on GoP Web. Read the creator\u2019s Paper to understand the challenge, the rules and the evaluation criteria before committing to anything.'
+					h: 'Gezin ve Paper oku.',
+					p: 'GoP Web üzerinde bir oyun bulun. Bir şeye taahhüt etmeden önce Paper belgesini okuyup görevi, kuralları ve değerlendirme ölçütlerini anlayın.'
 				},
 				{
-					h: 'Implement your solver.',
-					p: 'Build your solver-service from the Paper alone, so it\u2019s ready to compete the moment the seed drops.'
+					h: 'Çözücünü uygula.',
+					p: 'Çözücü servisini yalnızca Paperdan kurun; tohum düşer düşmez yarışmaya hazır olsun.'
 				},
 				{
-					h: 'Register your Solver ID.',
-					p: 'Registration is free — you only cover the network gas fee. This <strong>pre-commitment</strong> is what guarantees fairness before the seed is revealed.'
+					h: 'Solver ID kaydet.',
+					p: 'Kayıt ücretsizdir — yalnızca ağ gaz ücretini karşılarsınız. Bu <strong>ön taahhüt</strong>, tohum açıklanmadan önce adaleti güvenceye alır.'
 				},
 				{
-					h: 'The seed is revealed.',
-					p: 'Once the ceremony phase ends, the game seed goes public. Now — and only now — you know the exact challenge parameters you\u2019ll be evaluated against.'
+					h: 'Tohum açıklanır.',
+					p: 'Tören evresi bitince oyun tohumu kamuya açılır. Şimdi — ve yalnızca şimdi — değerlendirileceğiniz tam görev parametrelerini bilirsiniz.'
 				},
 				{
-					h: 'Run the game service locally.',
-					p: 'The service executes your solver in a secure environment with the revealed seed, evaluates its performance, and generates the <strong>cryptographic commitment</strong> needed for on-chain validation.'
+					h: 'Oyun servisini yerelde çalıştır.',
+					p: 'Servis, açıklanan tohumla çözücünüzü güvenli bir ortamda çalıştırır, başarımını değerlendirir ve zincir üstü doğrulama için gereken <strong>kriptografik taahhüdü</strong> üretir.'
 				},
 				{
-					h: 'Submit your commitment and pay the fee.',
-					p: 'If the score is worth competing with, publish the commitment on-chain and pay the participation fee. <strong>All fees go into the pot</strong> — the winner takes the economic prize, minus creator, judge and platform commission, and receives the game NFT.',
-					note: 'You decide whether your run is worth submitting.'
+					h: 'Taahhüdünü gönder ve ücreti öde.',
+					p: 'Puan yarışmaya değiyorsa taahhüdü zincir üstünde yayımlayın ve katılım ücretini ödeyin. <strong>Tüm ücretler havuza gider</strong> — kazanan ekonomik ödülü alır, yaratan, yargıç ve platform komisyonu düşülür, oyun NFT verilir.',
+					note: 'Koşunuzu göndermeye değip değmediğine siz karar verirsiniz.'
 				}
 			]
 		},
 
 		validation: {
-			label: 'Score validation',
+			label: 'Puan doğrulama',
 			beats: [
 				{
-					h: 'Your score is a hash, not a claim.',
-					p: 'When you participate, what goes on-chain is a <strong>commitment</strong> — a digest. Nobody, including the creator, can read your score off the blockchain while the game is still open.'
+					h: 'Puanınız bir iddia değil, bir hash.',
+					p: 'Katıldığınızda zincir üstüne giden şey bir <strong>taahhüt</strong> — bir özet değer. Yaratan dahil kimse, oyun açıkken puanınızı blokzincirden okuyamaz.'
 				},
 				{
-					h: 'Then the secret comes out.',
-					p: 'After the deadline, the creator reveals the game secret in the resolution transaction. That\u2019s the missing ingredient — and it <strong>unlocks verification for everyone at once</strong>.'
+					h: 'Sonra sır ortaya çıkar.',
+					p: 'Son tarihten sonra yaratan, çözüm işleminde oyun sırrını açıklar. Eksik malzeme odur — ve <strong>herkes için doğrulamayı bir anda açar</strong>.'
 				},
 				{
-					h: 'The contract recomputes it.',
-					p: 'The game contract builds a commitment for each score from the <strong>solver ID, the score value, the hashed logs and the revealed secret</strong>. No trusted party is involved; it\u2019s arithmetic.'
+					h: 'Sözleşme yeniden hesaplar.',
+					p: 'Oyun sözleşmesi her puan için <strong>çözücü kimliği, puan değeri, hashlenmiş günlükler ve açıklanan sır</strong>dan bir taahhüt kurar. Güvenilen taraf yoktur; aritmetiktir.'
 				},
 				{
-					h: 'If they match, the score is real.',
-					p: 'A recomputed commitment that equals the published one proves the score is authentic and tamper-proof. Anything that doesn\u2019t match simply isn\u2019t a score.',
-					note: 'Transparent yet private: proven without being exposed.'
+					h: 'Eşleşirlerse puan gerçektir.',
+					p: 'Yeniden hesaplanan taahhüt yayımlananla eşitse puanın özgün ve dokunulmamış olduğunu kanıtlar. Eşleşmeyen şey puan değildir.',
+					note: 'Hem şeffaf hem özel: ifşa etmeden kanıtlanmış.'
 				}
 			]
 		},
 
 		pot: {
-			label: 'Economics',
+			label: 'Ekonomi',
 			beats: [
 				{
-					h: 'Every entry feeds the pot.',
-					p: 'Participation fees from everyone who submits a commitment accumulate in a single on-chain pot for that game.'
+					h: 'Her katılım havuzu besler.',
+					p: 'Taahhüt gönderen herkesin katılım ücretleri, o oyun için tek bir zincir üstü havuzda birikir.'
 				},
 				{
-					h: 'Commissions come off the top.',
-					p: 'The creator, the judges and the platform take their agreed commission — all of it set in the open when the game was published, and <strong>enforced by the smart contract</strong> rather than by anyone\u2019s goodwill.'
+					h: 'Komisyonlar tepeden kesilir.',
+					p: 'Yaratan, yargıçlar ve platform kararlaştırılmış komisyonunu alır — oyun yayımlanırken açıkça konmuş ve kimsenin iyiniyetiyle değil <strong>akıllı sözleşmeyle uygulanır</strong>.'
 				},
 				{
-					h: 'The rest goes to the winner.',
-					p: 'The highest validated score takes the remaining pot — plus the <strong>game NFT</strong>, a permanent, public, auditable proof of victory. Funds are released after a validation period that gives judges time to check the creator acted honestly.',
-					note: 'Nobody approves the payout. The contract does it.'
+					h: 'Kalan kazananın.',
+					p: 'En yüksek doğrulanmış puan kalan havuzu alır — artı <strong>oyun NFT</strong>, kalıcı, kamuya açık, denetlenebilir bir zafer kanıtı. Fonlar, yargıçlara yaratanın dürüst davrandığını kontrol edecek doğrulama süresinden sonra salınır.',
+					note: 'Ödemeyi kimse onaylamaz. Sözleşme yapar.'
 				}
 			]
 		},
 
 		judges: {
-			label: 'Trust & accountability',
+			label: 'Güven ve hesap verebilirlik',
 			beats: [
 				{
-					h: 'Who watches the creator?',
-					p: 'Judges are entities nominated by the creator who audit the resolution phase. They verify that the creator\u2019s game service generated <strong>valid proofs and valid scores</strong>.'
+					h: 'Yaratanı kim izler?',
+					p: 'Yargıçlar, yaratanın aday gösterdiği ve çözüm evresini denetleyen taraflardır. Oyun servisinin <strong>geçerli kanıtlar ve geçerli puanlar</strong> ürettiğini doğrularlar.'
 				},
 				{
-					h: 'Fraud costs the creator, not you.',
-					p: 'If a judge catches a faulty game service or an invalid proof, that judge <strong>receives the creator\u2019s commission</strong> as the reward. The incentive to look closely is built in.'
+					h: 'Dolandırıcılık yaratanıya patlar, size değil.',
+					p: 'Bir yargıç kusurlu bir oyun servisi veya geçersiz bir kanıt yakalarsa, o yargıç ödül olarak <strong>yaratan komisyonunu alır</strong>. Yakından bakma dürtüsü baştan gömülüdür.'
 				},
 				{
-					h: 'Players stay out of the blast radius.',
-					p: 'In normal operation players cannot be penalised by judges. Judges exist to <strong>protect players from dishonest creators</strong>, never the other way around.',
-					note: 'Audit the house, not the guests.'
+					h: 'Oyuncular patlama yarıçapının dışında kalır.',
+					p: 'Normal işleyişte yargıçlar oyuncuları cezalandıramaz. Yargıçlar <strong>oyuncuları dürüst olmayan yaratanlardan korumak</strong> için vardır, tersi için değil.',
+					note: 'Evi denetle, konukları değil.'
 				}
 			]
 		}
 	},
 
 	/* ============================================================== *
-	 * The readable reference list under the validation scene
+	 * Doğrulama sahnesinin altındaki başvuru listesi
 	 * ============================================================== */
 	steps: {
-		title: 'The five steps, in order',
+		title: 'Beş adım, sırayla',
 		items: [
 			{
-				badge: 'SUBMITTED',
-				title: 'Player Participation',
-				desc: 'Player publishes their participation on the Ergo blockchain.'
+				badge: 'GÖNDERİLDİ',
+				title: 'Oyuncu katılımı',
+				desc: 'Oyuncu katılımını Ergo blokzincirinde yayımlar.'
 			},
 			{
-				badge: 'REVEALED',
-				title: 'Creator Reveals Secret',
-				desc: 'After the deadline, the creator reveals the game secret in the resolution transaction — unlocking verification.'
+				badge: 'AÇIKLANDI',
+				title: 'Yaratan sırrı açıklar',
+				desc: 'Son tarihten sonra yaratan, çözüm işleminde oyun sırrını açıklar — doğrulamayı açar.'
 			},
 			{
-				badge: 'COMPUTED',
-				title: 'Smart Contract Validation',
-				desc: 'The game contract computes a commitment for each score using the solver ID, score value, hashed logs, and revealed secret.'
+				badge: 'HESAPLANDI',
+				title: 'Akıllı sözleşme doğrulaması',
+				desc: 'Oyun sözleşmesi her puan için çözücü kimliği, puan değeri, hashlenmiş günlükler ve açıklanan sırla bir taahhüt hesaplar.'
 			},
 			{
-				badge: 'VERIFIED',
-				title: 'Score Verification',
-				desc: 'When the score commitment matches the participation commitment, that score is validated as authentic and tamper-proof.'
+				badge: 'DOĞRULANDI',
+				title: 'Puan doğrulaması',
+				desc: 'Puan taahhüdü katılım taahhüdüyle eşleşince o puan özgün ve dokunulmamış sayılır.'
 			},
 			{
-				badge: 'DISTRIBUTED',
-				title: 'Winner Takes the Pot',
-				desc: 'Highest score wins. Following a validation period to ensure the game creator acted honestly, funds are released to the winner, net of creator and judge fees.'
+				badge: 'DAĞITILDI',
+				title: 'Kazanan havuzu alır',
+				desc: 'En yüksek puan kazanır. Oyun yaratanının dürüst davrandığını doğrulayan bir süreden sonra fonlar, yaratan ve yargıç kesintileri düşülerek kazanana salınır.'
 			}
 		]
 	},
@@ -500,201 +552,192 @@ export default {
 	 * Video
 	 * ============================================================== */
 	video: {
-		label: 'Overview',
-		title: 'Watch the Breakdown',
+		label: 'Genel bakış',
+		title: 'Özeti izle',
 		subtitle:
-			'Get up to speed in minutes — see how Game of Prompts brings blockchain and AI competitions together.',
-		thumbAlt: 'Game of Prompts video thumbnail',
-		iframeTitle: 'Game of Prompts — Brief Breakdown'
+			'Dakikalar içinde yetişin — Game of Prompts blokzinciri ve AI yarışmalarını nasıl bir araya getirir.',
+		thumbAlt: 'Game of Prompts video küçük resmi',
+		iframeTitle: 'Game of Prompts — Kısa özet'
 	},
 
 	/* ============================================================== *
-	 * Security
+	 * Güvenlik
 	 * ============================================================== */
 	security: {
-		label: 'Security',
-		title: 'Transparent Yet Private Competition',
-		subtitle:
-			'Cryptography ensures fair competition while protecting participants\u2019 strategies.',
+		label: 'Güvenlik',
+		title: 'Hem şeffaf hem özel yarışma',
+		subtitle: 'Kriptografi adil yarışmayı sağlar, katılımcıların stratejisini korur.',
 		cards: [
 			{
-				title: 'Code Protection',
-				desc: 'The game\u2019s intellectual property and game secret are protected through obfuscation to prevent reverse engineering.'
+				title: 'Kod koruması',
+				desc: 'Oyunun fikri mülkiyeti ve oyun sırrı, tersine mühendisliği önlemek için gizleme ile korunur.'
 			},
 			{
-				title: 'Private Results',
-				desc: 'Strategic decoys and cryptographic commitments conceal your true score, protecting your strategy until the final reveal.'
+				title: 'Özel sonuçlar',
+				desc: 'Stratejik yemler ve kriptografik taahhütler gerçek puanınızı gizler, stratejinizi son açıklamaya dek korur.'
 			},
 			{
-				title: 'Immutable Proof',
-				desc: 'Final validation on the Ergo blockchain generates a public, immutable, and auditable proof of victory.'
+				title: 'Değişmez kanıt',
+				desc: 'Ergo blokzincirindeki nihai doğrulama kamuya açık, değişmez ve denetlenebilir bir zafer kanıtı üretir.'
 			}
 		]
 	},
 
 	/* ============================================================== *
-	 * Game types
+	 * Oyun türleri
 	 * ============================================================== */
 	gameTypes: {
-		title: 'What Can Be a Game?',
-		text: 'Game of Prompts is a versatile platform that can host a wide variety of competitions. Here are just a few examples of what\u2019s possible.',
-		// `label` is the "Game Type 01" eyebrow; {n} is the number.
-		eyebrow: 'Game Type {n}',
+		title: 'Ne bir oyun olabilir?',
+		text: 'Game of Prompts, çok farklı yarışmaları barındırabilen esnek bir platformdur. Bunlar yapılabileceklerin yalnızca birkaç örneği.',
+		eyebrow: 'Oyun türü {n}',
 		items: [
 			{
-				title: 'Classic Arcade',
-				desc: 'The AI solver controls the character in fast-paced, skill-based game environments. Reflexes, pattern recognition, timing.',
-				score: 'Game points · Survival time · Levels cleared'
+				title: 'Klasik arcade',
+				desc: 'AI çözücü, hızlı ve beceriye dayalı oyun ortamlarında karakteri kontrol eder. Refleks, örüntü tanıma, zamanlama.',
+				score: 'Oyun puanı · Hayatta kalma süresi · Geçilen seviyeler'
 			},
 			{
-				title: 'Open World',
-				desc: 'Optimize for spatial reasoning, navigation, and environmental adaptation.',
-				score: 'Resource efficiency · Map exploration · Mission complexity'
+				title: 'Açık dünya',
+				desc: 'Uzamsal akıl yürütme, gezinme ve çevreye uyumu eniyileyin.',
+				score: 'Kaynak verimi · Harita keşfi · Görev karmaşıklığı'
 			},
 			{
-				title: 'Financial Trading',
-				desc: 'Bot vs. market. Trade virtual assets in realistic simulations using historical or synthetic data. Pure strategy, zero luck.',
-				score: 'Net profit · Sharpe ratio · Drawdown · Benchmarks'
+				title: 'Finansal alım satım',
+				desc: 'Bot piyasaya karşı. Tarihsel veya sentetik veriyle gerçekçi simülasyonlarda sanal varlık ticareti. Saf strateji, sıfır şans.',
+				score: 'Net kâr · Sharpe oranı · Düşüş · Kıyaslar'
 			},
 			{
-				title: 'Protein Folding',
-				desc: 'Predict 3D protein structures from amino acid sequences. A real scientific challenge — AI solvers advancing biology.',
-				score: 'Structural stability · Folding accuracy · Efficiency'
+				title: 'Protein katlama',
+				desc: 'Amino asit dizilerinden 3B protein yapılarını tahmin edin. Gerçek bir bilim görevi — biyolojiyi ileri taşıyan AI çözücüler.',
+				score: 'Yapısal kararlılık · Katlama doğruluğu · Verim'
 			}
 		]
 	},
 
 	/* ============================================================== *
-	 * Optional features
+	 * İsteğe bağlı özellikler
 	 * ============================================================== */
 	features: {
-		title: 'Optional Game Features',
-		text: 'Creators can enhance their games with powerful optional mechanics — from poker-style bluffing to resource constraints and pay-per-attempt models.',
-		// {n} is the number; {status} is one of `status` below.
-		eyebrow: 'Feature {n}',
+		title: 'İsteğe bağlı oyun özellikleri',
+		text: 'Yaratanlar oyunlarına güçlü isteğe bağlı mekanikler ekleyebilir — poker blöfünden kaynak kısıtlarına ve deneme başı ödemeye.',
+		eyebrow: 'Özellik {n}',
 		status: {
-			available: 'Available',
-			research: 'Under Research'
+			available: 'Hazır',
+			research: 'Araştırma altında'
 		},
 		items: [
 			{
-				title: 'Resource Limitation',
-				desc: 'Technical challenge by constraining computational resources. Efficiency is king.',
+				title: 'Kaynak sınırı',
+				desc: 'Hesap kaynaklarını kısarak teknik görev. Verim kraldır.',
 				bullets: [
-					'Game creator sets specific limits on computational resources',
-					'Constraints: maximum RAM, CPU time, or service dependencies',
-					'Forces players to develop highly efficient, optimized solutions',
-					'Adds a significant engineering challenge to the game'
+					'Oyun yaratanı hesap kaynaklarına somut sınırlar koyar',
+					'Kısıtlar: azami RAM, CPU süresi veya servis bağımlılıkları',
+					'Oyuncuları son derece verimli, eniyilenmiş çözümler geliştirmeye zorlar',
+					'Oyuna ciddi bir mühendislik görevi katar'
 				]
 			},
 			{
-				title: 'Poker Mode',
-				desc: 'Strategic participation with risk and reward. Bluff, bet, and multiply your score.',
+				title: 'Poker kipi',
+				desc: 'Risk ve ödülle stratejik katılım. Blöf yapın, bahis koyun, puanınızı çarpın.',
 				bullets: [
-					'Participants choose how much to pay (above a set minimum)',
-					'Higher payment = higher final score multiplier (e.g. ×2, ×5)',
-					'Players can submit multiple decoy scores',
-					'Bluff strategy: pay high fee + submit fake high scores to intimidate',
-					'Game creator sets score multiplier based on fee paid'
+					'Katılımcılar (konmuş bir tabanın üstünde) ne kadar ödeyeceğini seçer',
+					'Daha yüksek ödeme = daha yüksek nihai puan çarpanı (ör. ×2, ×5)',
+					'Oyuncular birden fazla yem skor gönderebilir',
+					'Blöf stratejisi: yüksek ücret öde + sahte yüksek skorlar gönder, korkut',
+					'Oyun yaratanı, ödenen ücrete göre puan çarpanını koyar'
 				]
 			},
 			{
-				title: 'Pay-per-Attempt',
-				desc: 'A mechanism that assigns a cost to each local execution, fostering high-quality agent development over trial-and-error.',
+				title: 'Deneme başı ödeme',
+				desc: 'Her yerel çalıştırmaya bir maliyet bağlayan, deneme-yanılmadan çok iyi kurulmuş etmenleri teşvik eden bir düzenek.',
 				bullets: [
-					'Incremental token cost per local execution attempt',
-					'Encourages rigorous local simulation and optimization',
-					'Disincentivizes blind brute-force strategies',
-					'Difficulty scaling fully configurable by the game creator'
+					'Her yerel çalıştırma denemesinde artan jeton maliyeti',
+					'Sıkı yerel simülasyon ve eniyilemeyi teşvik eder',
+					'Kör kaba kuvvet stratejilerini caydırır',
+					'Zorluk ölçeklemesi oyun yaratanı tarafından tamamen ayarlanır'
 				]
 			}
 		]
 	},
 
 	/* ============================================================== *
-	 * FAQ
-	 *
-	 * The live questions are fetched from the project README at
-	 * runtime and are English-only at source, so they are NOT
-	 * translated here. What IS translated is the chrome around them
-	 * and the offline fallback set, which is what a reader sees when
-	 * the fetch fails.
+	 * SSS
 	 * ============================================================== */
 	faq: {
-		label: 'FAQ',
-		title: 'Frequently Asked Questions',
-		footerTitle: 'Still have questions?',
+		label: 'SSS',
+		title: 'Sık sorulan sorular',
+		footerTitle: 'Hâlâ sorunuz mu var?',
 		footerDesc:
-			'Copy the prompt below and paste it into any AI assistant — it includes a link to our full documentation.',
-		copyPrompt: 'Copy prompt',
-		copied: 'Copied!',
-		orLabel: 'or open directly in:',
-		disclaimerBefore: '⚠️ AI responses may not be fully accurate. Always refer to the ',
-		disclaimerLink: 'official documentation',
-		disclaimerAfter: ' for authoritative information.',
-		telegram: 'Join Telegram Community',
+			'Aşağıdaki promptu kopyalayıp herhangi bir AI asistanına yapıştırın — tam belgelere bir bağlantı içerir.',
+		copyPrompt: 'Promptu kopyala',
+		copied: 'Kopyalandı!',
+		orLabel: 'veya doğrudan şurada açın:',
+		disclaimerBefore: '⚠️ AI yanıtları tam doğru olmayabilir. Yetkin bilgi için her zaman ',
+		disclaimerLink: 'resmi belgelere',
+		disclaimerAfter: ' bakın.',
+		telegram: 'Telegram topluluğuna katıl',
 		groups: [
 			{
-				title: 'General',
+				title: 'Genel',
 				items: [
 					{
-						q: 'What is Game of Prompts?',
-						a: 'A bot competition audited by blockchain. Creators design game-services to evaluate AI solvers, while players build solver-services to maximize their scores — all verified on the Ergo blockchain.'
+						q: 'Game of Prompts nedir?',
+						a: 'Blokzincirin denetlediği bir bot yarışması. Yaratanlar AI çözücüleri değerlendirmek için oyun servisleri tasarlar, oyuncular puanını yükseltmek için çözücü servisleri kurar — hepsi Ergo blokzincirinde doğrulanır.'
 					},
 					{
-						q: 'What is the "Ceremony Phase"?',
-						a: 'The initial period where players register their Solver IDs to add randomness to the seed. This prevents the Creator from pre-calculating solutions and ensures fair competition.'
+						q: '«Tören evresi» nedir?',
+						a: 'Oyuncuların Solver ID kaydederek tohuma rastgelelik kattığı ilk dönem. Yaratanın çözümleri önceden hesaplamasını engeller ve adil yarışmayı güvenceye alır.'
 					},
 					{
-						q: 'What do I need to play?',
-						a: 'An Ergo Wallet (with some ERG for participation fees) and a Celaut Node to run game and solver services locally.'
+						q: 'Oynamak için ne gerekir?',
+						a: 'Bir Ergo cüzdanı (katılım ücretleri için biraz ERG) ve oyun ile çözücü servislerini yerelde çalıştırmak için bir Celaut düğümü.'
 					}
 				]
 			},
 			{
-				title: 'Security',
+				title: 'Güvenlik',
 				items: [
 					{
-						q: 'How do I know the game is fair?',
-						a: 'The game rules and hashS are registered on-chain from the start. They are immutable — no one can change them after publication.'
+						q: 'Oyunun adil olduğunu nasıl bilirim?',
+						a: 'Oyun kuralları ve hashS baştan zincir üstüne kaydedilir. Değişmezdir — yayımladıktan sonra kimse değiştiremez.'
 					},
 					{
-						q: 'Can the Creator steal the funds?',
-						a: 'No. Funds are locked in a Smart Contract, not the Creator\u2019s wallet. Distribution is handled atomically by the contract when the game resolves.'
+						q: 'Yaratan fonları çalabilir mi?',
+						a: 'Hayır. Fonlar yaratanın cüzdanında değil, bir akıllı sözleşmede kilitlidir. Dağıtımı, oyun çözülünce sözleşme atomik olarak yapar.'
 					},
 					{
-						q: 'What if the Creator disappears?',
-						a: 'After a Grace Period, players can trigger a Refund Action to recover their participation fees from the smart contract.'
+						q: 'Yaratan ortadan kaybolursa?',
+						a: 'Bir ek süre sonra oyuncular bir iade eylemi tetikleyip katılım ücretlerini akıllı sözleşmeden geri alabilir.'
 					}
 				]
 			},
 			{
-				title: 'Judges',
+				title: 'Yargıçlar',
 				items: [
 					{
-						q: 'Who are the Judges?',
-						a: 'Entities nominated by the Creator who audit the resolution phase. They verify that the game service generated valid proofs.'
+						q: 'Yargıçlar kim?',
+						a: 'Yaratanın aday gösterdiği, çözüm evresini denetleyen taraflar. Oyun servisinin geçerli kanıtlar ürettiğini doğrularlar.'
 					},
 					{
-						q: 'Why do Judges earn money for invalidating a participation?',
-						a: 'They detect Creator fraud — their incentive is to catch faulty game services. When they find issues, they receive the Creator\u2019s commission as reward.'
+						q: 'Yargıçlar bir katılımı geçersiz kılınca neden para kazanır?',
+						a: 'Yaratan dolandırıcılığını yakalarlar — dürtüleri kusurlu oyun servislerini bulmaktır. Sorun bulunca ödül olarak yaratan komisyonunu alırlar.'
 					},
 					{
-						q: 'Can I be penalized as a player?',
-						a: 'The system penalizes the Creator/Game Service, not honest players. Judges audit the Creator, not you.'
+						q: 'Oyuncu olarak cezalandırılabilir miyim?',
+						a: 'Sistem dürüst oyuncuları değil yaratanı / oyun servisini cezalandırır. Yargıçlar sizi değil yaratanı denetler.'
 					}
 				]
 			},
 			{
-				title: 'Economy',
+				title: 'Ekonomi',
 				items: [
 					{
-						q: 'How is the winner calculated?',
-						a: 'Highest Time-Weighted Score: Score × (TimeWeight + RemainingTime). Submit early and score high for the best result.'
+						q: 'Kazanan nasıl hesaplanır?',
+						a: 'En yüksek zamana ağırlıklı skor: Puan × (TimeWeight + Kalan süre). En iyi sonuç için erken gönderin ve yüksek puan alın.'
 					},
 					{
-						q: 'When do I receive my winnings?',
-						a: 'Immediately upon the End Game action. The Smart Contract atomically distributes all funds — the winner receives all participation fees minus creator commission and judge fees.'
+						q: 'Kazancımı ne zaman alırım?',
+						a: 'Oyun bitirme eylemi olur olmaz. Akıllı sözleşme tüm fonları atomik dağıtır — kazanan, yaratan komisyonu ve yargıç ücretleri düşülmüş bütün katılım ücretlerini alır.'
 					}
 				]
 			}
@@ -702,23 +745,23 @@ export default {
 	},
 
 	/* ============================================================== *
-	 * Call to action + footer
+	 * Çağrı + altbilgi
 	 * ============================================================== */
 	cta: {
-		label: 'Get Started',
-		title: 'Get Started with Game of Prompts',
+		label: 'Başla',
+		title: 'Game of Prompts ile başla',
 		steps: [
-			'Install the <strong>Celaut node</strong> software to run Game and Solver Services in a secure, deterministic environment.',
-			'Set up an <strong>Ergo blockchain wallet</strong> to participate in games and receive winnings.',
-			'Browse available games on <strong>GoP Web</strong> and start developing your own solvers or create challenging games for others.'
+			'Oyun ve çözücü servislerini güvenli, deterministik bir ortamda çalıştırmak için <strong>Celaut düğümü</strong> yazılımını kurun.',
+			'Oyunlara katılmak ve kazanç almak için bir <strong>Ergo blokzincir cüzdanı</strong> kurun.',
+			'<strong>GoP Web</strong> üzerindeki oyunlara bakın; kendi çözücülerinizi geliştirmeye veya başkaları için zor oyunlar yaratmaya başlayın.'
 		],
-		github: 'GitHub Repository',
-		celaut: 'Celaut Project',
-		ergo: 'Ergo Platform'
+		github: 'GitHub deposu',
+		celaut: 'Celaut projesi',
+		ergo: 'Ergo platformu'
 	},
 
 	footer: {
-		tagline: 'Write your prompts. Build your bot. Win the throne.',
+		tagline: 'Promptunu yaz. Botunu kur. Tahtı kazan.',
 		github: 'GitHub',
 		ergo: 'Ergo',
 		celaut: 'Celaut'

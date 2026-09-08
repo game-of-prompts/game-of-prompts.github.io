@@ -1,3 +1,4 @@
+import { localizedLabel } from './labels.js';
 /*
  * src/lib/immersive/scene-kit.js
  * ------------------------------------------------------------------
@@ -120,7 +121,7 @@ export function label(ctx, text, x, y, palette, alpha = 1, size = 12, weight = 7
 	ctx.textAlign = 'center';
 	ctx.textBaseline = 'middle';
 	ctx.fillStyle = rgba(palette.onSurfaceRgb, 0.8);
-	ctx.fillText(text, x, y);
+	ctx.fillText(localizedLabel(text), x, y, Math.min(200, ctx.canvas.clientWidth * 0.34));
 	ctx.restore();
 }
 

@@ -1,273 +1,296 @@
 /*
- * src/lib/i18n/en.js
+ * src/lib/i18n/es.js
  * ------------------------------------------------------------------
- * English — the source dictionary and the fallback for every other
- * locale. If a key is missing anywhere else, `$t` resolves it here, so
- * this file is the only one that must never have a hole in it.
+ * Español — traducción de en.js, clave por clave.
  *
- * HOW TO WRITE THE COPY
- * ---------------------
- * Everything here is the landing page's actual voice: short sentences,
- * concrete nouns, no marketing adjectives. `<strong>` is used for the
- * one term a sentence is really about, never for emphasis in general —
- * the scene captions lean on it heavily and it stops meaning anything
- * if every clause has one.
+ * Misma estructura, mismas longitudes de array. `glossary.terms` tiene
+ * exactamente 33 entradas y se empareja por posición con GLOSSARY_IDS
+ * en src/lib/glossary/terms.js.
  *
- * HOW TO WRITE THE GLOSSARY
- * -------------------------
- * The glossary explains the JARGON, not the project. A definition that
- * says "in Game of Prompts, a commitment is…" has failed: the reader
- * clicked because they don't know what a commitment IS. Explain the
- * word in plain language with an everyday comparison, then — only in
- * `more`, and only if it earns its place — say why it matters here.
- * Never write down to the reader. They are not stupid, they just
- * haven't met this word before.
- *
- * `match` is the list of trigger words IN THIS LANGUAGE. Translators
- * choose their own; nothing assumes English word order or that a term
- * is even one word in the target language.
+ * `match` no es texto traducido: es la lista de palabras que, cuando
+ * aparecen EN ESTA PROSA, se subrayan y abren la definición. Las
+ * formas listadas son las que realmente se usan aquí, con sus plurales
+ * y concordancias de género.
  */
 
 export default {
 	/* ============================================================== *
-	 * Chrome shared by every control in the corner cluster
+	 * Controles del grupo de la esquina
 	 * ============================================================== */
 	common: {
-		languageLabel: 'Language',
-		switchLanguage: 'Change language',
-		themeToLight: 'Switch to light theme',
-		themeToDark: 'Switch to dark theme',
-		backToTop: 'Back to top',
-		scoring: 'SCORING'
+		languageLabel: 'Idioma',
+		switchLanguage: 'Cambiar de idioma',
+		themeToLight: 'Cambiar al tema claro',
+		themeToDark: 'Cambiar al tema oscuro',
+		backToTop: 'Volver arriba',
+		scoring: 'PUNTUANDO'
 	},
 
 	/* ============================================================== *
-	 * The glossary
-	 * Ids and ordering live in src/lib/glossary/terms.js, paired with
-	 * this array by position.
+	 * Glosario
 	 * ============================================================== */
 	glossary: {
-		/* Chrome */
-		toggleOn: 'Explain technical terms',
-		toggleOff: 'Hide term explanations',
-		toggleLabel: 'Explanations',
-		close: 'Close',
-		// {term} is replaced with the marked word.
-		explain: 'What does "{term}" mean?',
-		// Shown once, on a reader's first visit, near the first mark.
-		hintTitle: 'Some words are underlined.',
+		toggleOn: 'Explicar los términos técnicos',
+		toggleOff: 'Ocultar las explicaciones',
+		toggleLabel: 'Explicaciones',
+		close: 'Cerrar',
+		explain: '¿Qué significa «{term}»?',
+		hintTitle: 'Algunas palabras están subrayadas.',
 		hintBody:
-			'Tap any underlined word for a plain-language explanation. Turn them off any time with the button in the corner.',
-		hintDismiss: 'Got it',
+			'Toca cualquier palabra subrayada para leer una explicación en lenguaje llano. Puedes desactivarlas cuando quieras con el botón de la esquina.',
+		hintDismiss: 'Entendido',
 
 		terms: [
 			{
-				match: ['game-service', 'game service', 'game-services', 'game services'],
-				title: 'Game service',
-				body: 'The challenge itself, packaged as a sealed program anyone can download and run. It holds the rules, the scoring, and the creator\u2019s hidden secret \u2014 like a sealed exam paper that also marks itself.',
-				more: 'You run it on your own machine. It scores your bot and produces the cryptographic receipt that the blockchain later checks.'
+				match: ['servicio de juego', 'servicios de juego', 'game-service', 'game-services'],
+				title: 'Servicio de juego',
+				body: 'El propio reto, empaquetado como un programa sellado que cualquiera puede descargar y ejecutar. Contiene las reglas, la puntuación y el secreto oculto de quien lo creó: como un examen precintado que además se corrige solo.',
+				more: 'Lo ejecutas en tu propia máquina. Puntúa tu bot y produce el recibo criptográfico que la blockchain comprobará después.'
 			},
 			{
-				match: ['solver-service', 'solver service', 'solver-services', 'solver services', 'solver', 'solvers'],
-				title: 'Solver service',
-				body: 'Your entry. The bot you build to play the game, packaged the same sealed way so it runs identically on any machine \u2014 your strategy as a single, portable box.',
-				more: 'It is handed to the game service, which runs it in isolation and scores what it did. Nobody sees your code but you.'
+				match: ['servicio solver', 'servicios solver', 'solver', 'solvers'],
+				title: 'Servicio solver',
+				body: 'Tu participación. El bot que construyes para jugar, empaquetado del mismo modo sellado para que funcione igual en cualquier máquina: tu estrategia dentro de una única caja portátil.',
+				more: 'Se entrega al servicio de juego, que lo ejecuta aislado y puntúa lo que hizo. Nadie ve tu código salvo tú.'
 			},
 			{
-				match: ['GoP Web', 'GoP web portal', 'the portal'],
+				match: ['GoP Web', 'portal GoP', 'el portal'],
 				title: 'GoP Web',
-				body: 'The website where games are listed: read the rules, download a game, publish your result. It is a directory and a signing tool, not a referee \u2014 nothing it shows you has to be taken on trust.',
-				more: 'You can run your own copy of it. That is the point: if the public one vanished, the games would carry on.'
+				body: 'La web donde se listan los juegos: leer las reglas, descargar un juego, publicar tu resultado. Es un directorio y una herramienta de firma, no un árbitro: nada de lo que muestra hay que creérselo por fe.',
+				more: 'Puedes ejecutar tu propia copia. De eso se trata: si la pública desapareciera, los juegos seguirían.'
 			},
 			{
-				match: ['Celaut', 'Celaut node', 'Celaut nodes'],
+				match: ['Celaut', 'nodo Celaut', 'nodos Celaut'],
 				title: 'Celaut',
-				body: 'The system that actually runs the sealed programs. You install it once, and from then on any game or solver package can be handed to your machine and executed in its own locked room.',
-				more: 'It is what makes "run it yourself" realistic rather than a slogan: the same package behaves the same way on every machine that opens it.'
+				body: 'El sistema que ejecuta de verdad los programas sellados. Lo instalas una vez y, a partir de ahí, cualquier paquete de juego o de solver puede entregarse a tu máquina y ejecutarse en su propia habitación cerrada.',
+				more: 'Es lo que hace que «ejecútalo tú mismo» sea realista y no un eslogan: el mismo paquete se comporta igual en cualquier máquina que lo abra.'
 			},
 			{
-				match: ['node', 'nodes'],
-				title: 'Node',
-				body: 'One computer taking part in a network. Your laptop, a spare desktop, a server in a rack \u2014 once it runs the software and starts talking to other machines, it is a node.',
-				more: 'Here it is simply the machine that runs the games and the solvers. Yours, not somebody\u2019s data centre.'
+				match: ['nodo', 'nodos'],
+				title: 'Nodo',
+				body: 'Un ordenador que participa en una red. Tu portátil, un sobremesa que tenías guardado, un servidor en un armario: en cuanto ejecuta el software y empieza a hablar con otras máquinas, es un nodo.',
+				more: 'Aquí es sencillamente la máquina que ejecuta los juegos y los solvers. La tuya, no el centro de datos de nadie.'
 			},
 			{
-				match: ['service', 'services'],
-				title: 'Service',
-				body: 'A self-contained piece of software that does one job and can be handed to any machine to run \u2014 closer to a single appliance than to a whole program you install.',
-				more: 'Both halves of a competition here are services: the game and the bot playing it.'
+				match: ['servicio', 'servicios'],
+				title: 'Servicio',
+				body: 'Una pieza de software autocontenida que hace un solo trabajo y puede entregarse a cualquier máquina para que la ejecute: más parecido a un electrodoméstico que a un programa que instalas.',
+				more: 'Las dos mitades de una competición son servicios: el juego y el bot que lo juega.'
 			},
 			{
-				match: ['blockchain', 'blockchains', 'ledger', 'ledgers'],
+				match: ['blockchain', 'blockchains', 'cadena de bloques'],
 				title: 'Blockchain',
-				body: 'A shared record book that thousands of computers keep copies of at once. Adding an entry requires the others to agree it is valid, and past entries cannot be rewritten \u2014 so no single participant controls the history.',
-				more: 'Used here for two narrow jobs: recording who claimed what score, and paying out the winner. Nothing more.'
+				body: 'Un libro de registro compartido del que miles de ordenadores guardan copia a la vez. Añadir una entrada exige que los demás acepten que es válida, y las entradas pasadas no se pueden reescribir: nadie controla la historia por su cuenta.',
+				more: 'Aquí se usa para dos tareas concretas: dejar constancia de quién reclamó qué puntuación y pagar al ganador. Nada más.'
 			},
 			{
 				match: ['Ergo', 'ERG'],
 				title: 'Ergo',
-				body: 'The particular blockchain this platform records results on and settles payments through. ERG is its unit of currency.',
-				more: 'It is a choice, not a foundation: the platform has no coin of its own.'
+				body: 'La blockchain concreta en la que esta plataforma registra resultados y liquida pagos. ERG es su unidad de moneda.',
+				more: 'Es una elección, no un cimiento: la plataforma no tiene moneda propia.'
 			},
 			{
-				match: ['smart contract', 'smart contracts', 'contract', 'contracts', 'game contract'],
-				title: 'Smart contract',
-				body: 'A program that lives on the blockchain and holds money under rules written down in advance. When the conditions are met it pays out by itself \u2014 nobody signs a cheque, and nobody can decide not to.',
-				more: 'It is why the prize is safe before anyone has won it: the funds are held by the rules, not by the person who wrote them.'
+				match: [
+					'contrato inteligente',
+					'contratos inteligentes',
+					'contrato',
+					'contratos',
+					'contrato del juego'
+				],
+				title: 'Contrato inteligente',
+				body: 'Un programa que vive en la blockchain y custodia dinero bajo reglas escritas de antemano. Cuando se cumplen las condiciones, paga por sí mismo: nadie firma un cheque y nadie puede decidir que no.',
+				more: 'Por eso el premio está seguro antes de que nadie haya ganado: los fondos los guardan las reglas, no la persona que las escribió.'
 			},
 			{
-				match: ['on-chain', 'on chain', 'onchain'],
+				match: ['on-chain', 'en cadena'],
 				title: 'On-chain',
-				body: 'Written into the blockchain itself, where everyone can see it and nobody can quietly change it later \u2014 as opposed to sitting in a company\u2019s private database.'
+				body: 'Escrito dentro de la propia blockchain, donde todo el mundo puede verlo y nadie puede cambiarlo en silencio más tarde, en vez de estar en la base de datos privada de una empresa.'
 			},
 			{
-				match: ['commitment', 'commitments', 'score commitment', 'cryptographic commitment', 'pre-commitment'],
-				title: 'Commitment',
-				body: 'A sealed envelope. You publish something that proves what you chose, without revealing what it was \u2014 and later, when the envelope is opened, everyone can check you didn\u2019t swap the contents.',
-				more: 'It is what lets a score be locked in publicly while the game is still running, without telling your rivals how well you did.'
+				match: [
+					'compromiso criptográfico',
+					'compromisos criptográficos',
+					'compromiso de puntuación',
+					'compromiso',
+					'compromisos'
+				],
+				title: 'Compromiso',
+				body: 'Un sobre lacrado. Publicas algo que demuestra qué elegiste sin revelar qué era y, más tarde, al abrir el sobre, cualquiera puede comprobar que no cambiaste el contenido.',
+				more: 'Es lo que permite fijar una puntuación en público mientras el juego sigue abierto, sin contarles a tus rivales qué tal te fue.'
 			},
 			{
-				match: ['hash', 'hashes', 'hashed', 'digest', 'hashed logs'],
+				match: ['hash', 'hashes', 'registros hasheados', 'hasheados', 'huella criptográfica'],
 				title: 'Hash',
-				body: 'A short fingerprint calculated from a piece of data. The same data always gives the same fingerprint, a single changed byte gives a completely different one, and you cannot work backwards from the fingerprint to the data.',
-				more: 'That one-way property is the whole trick: it lets you prove something matches without showing what it is.'
+				body: 'Una huella corta calculada a partir de un dato. El mismo dato da siempre la misma huella, cambiar un solo byte da una completamente distinta, y no se puede ir hacia atrás desde la huella hasta el dato.',
+				more: 'Ese sentido único es todo el truco: permite demostrar que algo coincide sin enseñar qué es.'
 			},
 			{
-				match: ['secret', 'game secret', '256-bit secret'],
-				title: 'Secret',
-				body: 'A large random number the creator generates and keeps hidden while the game is open. Every score is sealed using it, so no score can be verified \u2014 or forged \u2014 until the creator publishes it.',
-				more: 'Publishing it at the end is what makes everyone\u2019s results checkable at the same moment, rather than one at a time.'
+				match: ['secreto del juego', 'secreto de 256 bits', 'secreto', 'secretos'],
+				title: 'Secreto',
+				body: 'Un número aleatorio muy grande que quien crea el juego genera y mantiene oculto mientras el juego está abierto. Cada puntuación se sella con él, así que ninguna puede verificarse —ni falsificarse— hasta que lo publique.',
+				more: 'Publicarlo al final es lo que hace que los resultados de todos sean comprobables en el mismo instante, y no de uno en uno.'
 			},
 			{
-				match: ['seed', 'game seed', 'seeds'],
-				title: 'Seed',
-				body: 'The starting number that decides exactly which version of a challenge you face \u2014 which board, which market data, which puzzle. Same seed, same challenge, for everyone.',
-				more: 'It is revealed only after entries close, so nobody can tune a bot for the specific run in advance.'
+				match: ['semilla', 'semillas', 'semilla del juego'],
+				title: 'Semilla',
+				body: 'El número inicial que decide exactamente a qué versión del reto te enfrentas: qué tablero, qué datos de mercado, qué rompecabezas. Misma semilla, mismo reto, para todo el mundo.',
+				more: 'Se revela solo cuando cierran las inscripciones, para que nadie pueda afinar su bot de antemano para esa partida concreta.'
 			},
 			{
-				match: ['ceremony phase', 'ceremony', 'ceremony period'],
-				title: 'Ceremony phase',
-				body: 'The window at the start of a game when players sign up and each one\u2019s registration stirs a little unpredictability into the final seed. Like everyone throwing a die into the same cup before the lid comes off.',
-				more: 'It exists so the creator cannot know the challenge in advance either \u2014 the players collectively decide it without meaning to.'
+				match: ['fase de ceremonia', 'ceremonia', 'periodo de ceremonia'],
+				title: 'Fase de ceremonia',
+				body: 'La ventana del inicio de un juego en la que los jugadores se inscriben y cada inscripción remueve un poco de azar dentro de la semilla final. Como si todos echaran un dado en el mismo cubilete antes de destaparlo.',
+				more: 'Existe para que quien creó el juego tampoco pueda conocer el reto de antemano: lo deciden entre todos los jugadores sin proponérselo.'
 			},
 			{
-				match: ['Solver ID', 'Solver IDs', 'solver identifier'],
+				match: ['Solver ID', 'Solver IDs', 'ID del solver', 'identificador del solver'],
 				title: 'Solver ID',
-				body: 'The unique fingerprint of the exact bot you registered. It names one specific version of your code, so a bot cannot be quietly swapped for a different one after the seed is revealed.'
+				body: 'La huella única del bot exacto que inscribiste. Nombra una versión concreta de tu código, de modo que no se pueda cambiar un bot por otro en silencio después de revelarse la semilla.'
 			},
 			{
-				match: ['Paper', 'the Paper', 'game paper'],
+				match: ['Paper', 'el Paper', 'Paper del juego'],
 				title: 'Paper',
-				body: 'The written rules: what the challenge is, how it is scored, what counts as a valid entry. Published before anyone can play, so the terms cannot change once people have committed.',
-				more: 'You are meant to be able to build your entry from this document alone.'
+				body: 'Las reglas escritas: en qué consiste el reto, cómo se puntúa, qué cuenta como participación válida. Se publica antes de que nadie pueda jugar, para que las condiciones no cambien una vez la gente se ha comprometido.',
+				more: 'La idea es que puedas construir tu participación solo con ese documento.'
 			},
 			{
-				match: ['pot', 'the pot', 'prize pool'],
-				title: 'Pot',
-				body: 'All the entry fees, pooled together and held by the contract until the game resolves. Everyone who competes pays in; the winner takes what is left after the agreed cuts.'
+				match: ['bote', 'el bote', 'pozo'],
+				title: 'Bote',
+				body: 'Todas las cuotas de entrada, juntadas y custodiadas por el contrato hasta que el juego se resuelve. Quien compite paga; quien gana se lleva lo que queda tras los recortes acordados.'
 			},
 			{
-				match: ['participation fee', 'participation fees', 'entry fee', 'entry fees'],
-				title: 'Participation fee',
-				body: 'What it costs to submit a result you want counted. It goes into the pot rather than to the organisers, so every entry makes the prize bigger.',
-				more: 'You only pay it if you decide your run was worth entering \u2014 running the game locally is free.'
+				match: [
+					'cuota de participación',
+					'cuotas de participación',
+					'cuota de entrada',
+					'cuotas de entrada'
+				],
+				title: 'Cuota de participación',
+				body: 'Lo que cuesta enviar un resultado para que cuente. Va al bote, no a los organizadores, así que cada participación agranda el premio.',
+				more: 'Solo la pagas si decides que tu partida merecía la pena presentarla: ejecutar el juego en tu máquina es gratis.'
 			},
 			{
-				match: ['commission', 'commissions', 'creator commission', 'platform commission'],
-				title: 'Commission',
-				body: 'The agreed slice of the pot that goes to the game\u2019s creator, its judges and the platform. Set in the open when the game is published, and taken automatically \u2014 not negotiated afterwards.'
+				match: ['comisión', 'comisiones', 'comisión del creador'],
+				title: 'Comisión',
+				body: 'La parte acordada del bote que va a quien creó el juego, a sus jueces y a la plataforma. Se fija a la vista de todos cuando se publica el juego y se cobra automáticamente, sin negociarla después.'
 			},
 			{
-				match: ['judge', 'judges'],
-				title: 'Judge',
-				body: 'Someone whose job is to check the creator, not the players: did the game actually score honestly, and are its receipts valid? If they catch a cheat, they are paid out of the creator\u2019s cut.',
-				more: 'Being paid for finding fraud, rather than for approving things, is what makes the role worth having.'
+				match: ['juez', 'jueces'],
+				title: 'Juez',
+				body: 'Alguien cuyo trabajo es vigilar a quien creó el juego, no a los jugadores: ¿puntuó el juego con honestidad?, ¿son válidos sus recibos? Si pilla una trampa, cobra de la parte del creador.',
+				more: 'Que se cobre por detectar fraude, y no por aprobar cosas, es lo que hace que el papel merezca la pena.'
 			},
 			{
-				match: ['NFT', 'NFTs', 'game NFT'],
+				match: ['NFT', 'NFTs', 'NFT del juego'],
 				title: 'NFT',
-				body: 'A one-of-a-kind token recorded on the blockchain, which can be owned and transferred but not duplicated. Here it is the trophy: permanent, public proof of who won a particular game.'
+				body: 'Un token único registrado en la blockchain, que se puede poseer y transferir pero no duplicar. Aquí es el trofeo: prueba pública y permanente de quién ganó un juego concreto.'
 			},
 			{
-				match: ['wallet', 'wallets', 'Ergo wallet'],
-				title: 'Wallet',
-				body: 'The app that holds the keys to your funds and signs your actions on the blockchain. Not an account with a company \u2014 nobody can freeze it, and nobody can recover it for you.'
+				match: ['monedero', 'monederos', 'wallet', 'monedero de Ergo'],
+				title: 'Monedero',
+				body: 'La aplicación que guarda las llaves de tus fondos y firma tus acciones en la blockchain. No es una cuenta en una empresa: nadie puede congelarlo, y nadie puede recuperarlo por ti.'
 			},
 			{
-				match: ['gas fee', 'gas fees', 'network gas fee', 'network fee'],
-				title: 'Gas fee',
-				body: 'The small charge for having the network record your transaction. It pays the computers doing the recording, not the platform \u2014 like postage rather than a ticket price.'
+				match: ['comisión de gas', 'comisiones de gas', 'gas', 'comisión de red'],
+				title: 'Comisión de gas',
+				body: 'El pequeño cargo por que la red registre tu transacción. Paga a los ordenadores que hacen el registro, no a la plataforma: se parece más al sello de una carta que al precio de una entrada.'
 			},
 			{
-				match: ['deterministic', 'determinism', 'reproducible', 'reproducibility'],
-				title: 'Deterministic',
-				body: 'Same input, same output, every time \u2014 like a recipe that produces an identical cake in any kitchen, rather than one that depends on the cook. Nothing about the machine, the day or the location changes the result.',
-				more: 'It is what makes a score checkable by somebody else: they can re-run it and must get your number.'
+				match: ['determinista', 'deterministas', 'determinismo', 'reproducible', 'reproducibilidad'],
+				title: 'Determinista',
+				body: 'La misma entrada da la misma salida, siempre: como una receta que produce un pastel idéntico en cualquier cocina, en vez de depender de quien cocina. Ni la máquina, ni el día, ni el lugar cambian el resultado.',
+				more: 'Es lo que hace que otra persona pueda comprobar una puntuación: puede repetir la ejecución y tiene que salirle tu número.'
 			},
 			{
-				match: ['isolation', 'isolated', 'sealed', 'sandboxed', 'secure isolated environment', 'isolated environment'],
-				title: 'Isolation',
-				body: 'Keeping a running program inside a boundary it cannot reach past \u2014 it sees only what it was given, and nothing of the machine around it or of anything else running there.',
-				more: 'It is what lets a game run a stranger\u2019s bot safely, and lets you run a stranger\u2019s game safely.'
+				match: [
+					'entorno seguro y aislado',
+					'entorno aislado',
+					'aislamiento',
+					'aislado',
+					'aislada',
+					'sellado',
+					'sellados',
+					'sellada'
+				],
+				title: 'Aislamiento',
+				body: 'Mantener un programa en ejecución dentro de una frontera que no puede cruzar: solo ve lo que se le entregó, y nada de la máquina que lo rodea ni de lo demás que se ejecuta ahí.',
+				more: 'Es lo que permite que un juego ejecute el bot de un desconocido sin riesgo, y que tú ejecutes el juego de un desconocido sin riesgo.'
 			},
 			{
-				match: ['obfuscation', 'obfuscated', 'obfuscate'],
-				title: 'Obfuscation',
-				body: 'Deliberately scrambling a program so that it still runs perfectly but is painful to read \u2014 the software equivalent of a document printed without spaces or line breaks.',
-				more: 'Used here to keep a game\u2019s hidden secret hidden, even though everyone has a copy of the program that contains it.'
+				match: ['ofuscación', 'ofuscado', 'ofuscada', 'ofuscar'],
+				title: 'Ofuscación',
+				body: 'Enredar un programa a propósito para que siga funcionando perfectamente pero resulte doloroso de leer: el equivalente informático de un documento impreso sin espacios ni saltos de línea.',
+				more: 'Aquí sirve para que el secreto oculto de un juego siga oculto, aunque todo el mundo tenga una copia del programa que lo contiene.'
 			},
 			{
-				match: ['peer-to-peer', 'peer to peer', 'P2P'],
+				match: ['peer-to-peer', 'P2P', 'de igual a igual'],
 				title: 'Peer-to-peer',
-				body: 'Two computers dealing with each other directly, the way two people have a phone call \u2014 instead of both sending everything through a company in the middle, the way email or a marketplace works. Each computer is a "peer": equal, no one in charge.',
-				more: 'It matters here because the company in the middle is usually the one that sets the price, takes a cut, and can remove you.'
+				body: 'Dos ordenadores tratando directamente entre sí, como dos personas en una llamada de teléfono, en lugar de mandarlo todo a través de una empresa intermedia, como funcionan el correo o un marketplace. Cada ordenador es un «par»: iguales, sin nadie al mando.',
+				more: 'Importa aquí porque la empresa del medio suele ser la que pone el precio, se lleva su parte y puede echarte.'
 			},
 			{
-				match: ['self-hosting', 'self-hosted', 'self-host', 'run locally', 'runs locally'],
-				title: 'Self-hosting',
-				body: 'Running your own copy of a service on your own machine instead of using somebody else\u2019s. The thing keeps working even if the public version is switched off, censored, or simply having a bad day.'
+				match: ['autoalojamiento', 'autoalojado', 'autoalojada', 'autoalojar'],
+				title: 'Autoalojamiento',
+				body: 'Ejecutar tu propia copia de un servicio en tu propia máquina en vez de usar la de otro. La cosa sigue funcionando aunque la versión pública se apague, la censuren o simplemente tenga un mal día.'
 			},
 			{
-				match: ['decoy', 'decoys', 'decoy score', 'decoy scores', 'fake high scores'],
-				title: 'Decoy',
-				body: 'A deliberately misleading entry \u2014 a score you publish that isn\u2019t your real one \u2014 submitted to make rivals guess wrong about how well you actually did. Bluffing, made possible because nobody can read a sealed score.'
+				match: [
+					'puntuación señuelo',
+					'puntuaciones señuelo',
+					'puntuaciones falsas',
+					'señuelo',
+					'señuelos'
+				],
+				title: 'Señuelo',
+				body: 'Una participación deliberadamente engañosa: una puntuación que publicas y que no es la real, enviada para que tus rivales se equivoquen al calcular qué tal te fue. Un farol, posible porque nadie puede leer una puntuación sellada.'
 			},
 			{
-				match: ['Time-Weighted Score', 'time-weighted score', 'time weighted score', 'TimeWeight'],
-				title: 'Time-weighted score',
-				body: 'A score adjusted for how early you submitted it. Two identical results do not tie: the one entered sooner counts for more, so sitting on a good answer until the deadline costs you.'
+				match: [
+					'puntuación ponderada por tiempo',
+					'puntuación ponderada en el tiempo',
+					'ponderada por tiempo',
+					'TimeWeight'
+				],
+				title: 'Puntuación ponderada por tiempo',
+				body: 'Una puntuación ajustada según lo pronto que la enviaste. Dos resultados idénticos no empatan: el que entró antes cuenta más, así que sentarse sobre una buena respuesta hasta el último día te sale caro.'
 			},
 			{
-				match: ['Grace Period', 'grace period', 'validation period', 'refund'],
-				title: 'Grace period',
-				body: 'A waiting window built into the rules before money moves \u2014 time for judges to object, and time for players to claim their fees back if the creator never resolves the game at all.',
-				more: 'It is the answer to "what if the organiser just disappears": the contract lets everyone walk away with their money.'
+				match: [
+					'periodo de gracia',
+					'período de gracia',
+					'periodo de validación',
+					'reembolso',
+					'reembolsos'
+				],
+				title: 'Periodo de gracia',
+				body: 'Una ventana de espera incluida en las reglas antes de que se mueva el dinero: tiempo para que los jueces objeten y para que los jugadores recuperen sus cuotas si quien creó el juego nunca lo resuelve.',
+				more: 'Es la respuesta a «¿y si el organizador desaparece?»: el contrato deja que todos se marchen con su dinero.'
 			},
 			{
-				match: ['CDE', 'scenario variability', 'high scenario variability'],
-				title: 'Scenario variability (CDE)',
-				body: 'How different each run of a game can be from the last. High variability means a bot has to actually play well, because there is no single fixed answer to memorise and hardcode.'
+				match: ['CDE', 'variabilidad de escenarios', 'alta variabilidad de escenarios'],
+				title: 'Variabilidad de escenarios (CDE)',
+				body: 'Cuánto puede diferenciarse cada partida de un juego de la anterior. Mucha variabilidad significa que el bot tiene que jugar bien de verdad, porque no hay una única respuesta fija que memorizar y dejar escrita a fuego.'
 			}
 		]
 	},
 
 	/* ============================================================== *
-	 * Splash screen
+	 * Splash
 	 * ============================================================== */
 	splash: {
 		title: 'GAME OF PROMPTS',
-		subtitle: 'WRITE YOUR PROMPTS. BUILD YOUR BOT. WIN THE THRONE.'
+		subtitle: 'ESCRIBE TUS PROMPTS. CONSTRUYE TU BOT. GANA EL TRONO.'
 	},
 
 	/* ============================================================== *
 	 * <head>
 	 * ============================================================== */
 	meta: {
-		title: 'Game of Prompts — Write your prompts. Build your bot. Win the throne.',
+		title: 'Game of Prompts — Escribe tus prompts. Construye tu bot. Gana el trono.',
 		description:
-			'A competitive platform where creators design game-services to evaluate AI solvers, while players build solver-services to maximize their scores — powered by the Ergo blockchain and Celaut.',
+			'Una plataforma competitiva donde quienes crean diseñan servicios de juego para evaluar solvers de IA, mientras los jugadores construyen servicios solver para maximizar su puntuación — con Ergo y Celaut por debajo.',
 		ogTitle: 'Game of Prompts',
-		ogDescription: 'Write your prompts. Build your bot. Win the throne.'
+		ogDescription: 'Escribe tus prompts. Construye tu bot. Gana el trono.'
 	},
 
 	/* ============================================================== *
@@ -276,336 +299,328 @@ export default {
 	hero: {
 		titleTop: 'GAME OF',
 		titleBottom: 'PROMPTS',
-		// `<span class="hero-grad">` is the accent gradient. Keep the tag
-		// around whichever clause deserves the emphasis in this language;
-		// it does not have to be the middle one.
-		tagline: 'Write your prompts. <span class="hero-grad">Build your bot.</span> Win the throne.',
-		lede: 'A competitive platform where creators design game-services to evaluate AI solvers, and players build solver-services to maximize their scores — all recorded and verified on-chain.',
+		tagline: 'Escribe tus prompts. <span class="hero-grad">Construye tu bot.</span> Gana el trono.',
+		lede: 'Una plataforma competitiva donde quienes crean diseñan servicios de juego para evaluar solvers de IA, y los jugadores construyen servicios solver para maximizar su puntuación — todo registrado y verificado on-chain.',
 		actions: {
-			launch: 'Launch App',
-			github: 'View on GitHub',
-			how: 'See how it works'
+			launch: 'Abrir la app',
+			github: 'Ver en GitHub',
+			how: 'Ver cómo funciona'
 		},
 		stats: [
-			{ value: 'P2P', label: 'Decentralized — services run on your own Celaut node' },
-			{ value: 'On-chain', label: 'Results committed and verified on Ergo' },
-			{ value: 'Trustless', label: 'Smart contracts settle the pot, not a company' }
+			{ value: 'P2P', label: 'Descentralizado: los servicios corren en tu propio nodo Celaut' },
+			{ value: 'On-chain', label: 'Resultados comprometidos y verificados en Ergo' },
+			{ value: 'Sin confianza', label: 'El bote lo reparten contratos inteligentes, no una empresa' }
 		],
-		scroll: 'Scroll'
+		scroll: 'Desplázate'
 	},
 
 	/* ============================================================== *
-	 * The seven pinned scenes
-	 * Each `beats` array is positional: one entry per SceneBeat in
-	 * +page.svelte, in order. `note` is the closing line of a scene.
+	 * Las siete escenas
 	 * ============================================================== */
 	scenes: {
 		arena: {
-			label: 'The idea',
+			label: 'La idea',
 			beats: [
 				{
-					h: 'Someone posts a challenge.',
-					p: 'A creator designs a game with measurable scoring — and packages it as a <strong>game-service</strong>: an immutable Celaut service that holds the game\u2019s logic and its secret.'
+					h: 'Alguien publica un reto.',
+					p: 'Quien lo crea diseña un juego con una puntuación medible y lo empaqueta como <strong>servicio de juego</strong>: un servicio Celaut inmutable que guarda la lógica del juego y su secreto.'
 				},
 				{
-					h: 'Everyone else builds a bot to beat it.',
-					p: 'Players write <strong>solver-services</strong> — their strategy, packaged the same way. The game-service runs each solver in a secure, isolated environment and scores what it did.'
+					h: 'Los demás construyen un bot para batirlo.',
+					p: 'Los jugadores escriben <strong>servicios solver</strong>: su estrategia, empaquetada igual. El servicio de juego ejecuta cada solver en un entorno seguro y aislado, y puntúa lo que hizo.'
 				},
 				{
-					h: 'The highest score wins the throne.',
-					p: 'No leaderboard you have to trust. Every score is committed cryptographically and <strong>settled on the Ergo blockchain</strong>, where anyone can check the maths.',
-					note: 'Write your prompts. Build your bot. Win the throne.'
+					h: 'La puntuación más alta gana el trono.',
+					p: 'Ninguna clasificación que haya que creerse. Cada puntuación se compromete criptográficamente y se <strong>liquida en la blockchain de Ergo</strong>, donde cualquiera puede rehacer las cuentas.',
+					note: 'Escribe tus prompts. Construye tu bot. Gana el trono.'
 				}
 			]
 		},
 
 		components: {
-			label: 'Architecture',
+			label: 'Arquitectura',
 			beats: [
 				{
-					h: 'Game Service',
-					p: 'Built by game devs. An autonomous service that encapsulates a game\u2019s logic and the secret. It evaluates solver performance, generates scores, and creates the <strong>cryptographic commitments</strong> needed for blockchain validation.'
+					h: 'Servicio de juego',
+					p: 'Lo construye quien desarrolla el juego. Un servicio autónomo que encapsula la lógica y el secreto. Evalúa el rendimiento del solver, genera puntuaciones y crea los <strong>compromisos criptográficos</strong> que la blockchain necesita para validar.'
 				},
 				{
-					h: 'Solver Service',
-					p: 'Built by players. It implements strategies to maximize the score in a specific game. The solver is packaged and sent to the game-service, which <strong>executes it in a secure, isolated environment</strong> for evaluation.'
+					h: 'Servicio solver',
+					p: 'Lo construyen los jugadores. Implementa estrategias para maximizar la puntuación en un juego concreto. El solver se empaqueta y se envía al servicio de juego, que lo <strong>ejecuta en un entorno seguro y aislado</strong> para evaluarlo.'
 				},
 				{
 					h: 'GoP Web',
-					p: 'The community portal. Discover games, read the rules, download game-services, and publish your results on the Ergo blockchain. It <strong>supports self-hosting</strong> for a fully trustless, peer-to-peer experience.'
+					p: 'El portal de la comunidad. Descubre juegos, lee las reglas, descarga servicios de juego y publica tus resultados en la blockchain de Ergo. <strong>Admite el autoalojamiento</strong> para una experiencia peer-to-peer sin depender de nadie.'
 				},
 				{
-					h: 'Everything runs on your machine.',
-					p: 'Game and solver services both run on a <strong>local Celaut node</strong>, which can operate entirely offline. GoP Web can be used via its GitHub.io instance or run locally as a Celaut service.',
-					note: 'Two technologies: Celaut for computation, Ergo for settlement.'
+					h: 'Todo corre en tu máquina.',
+					p: 'Los servicios de juego y de solver corren en un <strong>nodo Celaut local</strong>, que puede funcionar completamente sin conexión. GoP Web se puede usar desde su instancia en GitHub.io o ejecutarse en local como servicio Celaut.',
+					note: 'Dos tecnologías: Celaut para computar, Ergo para liquidar.'
 				}
 			]
 		},
 
 		creator: {
-			label: 'Game creator flow',
+			label: 'Flujo de quien crea el juego',
 			beats: [
 				{
-					h: 'Design a game.',
-					p: 'Create a challenge with measurable scoring and high scenario variability (CDE), so hardcoded solutions don\u2019t work.'
+					h: 'Diseña un juego.',
+					p: 'Crea un reto con puntuación medible y alta variabilidad de escenarios (CDE), para que las soluciones escritas a fuego no funcionen.'
 				},
 				{
-					h: 'Write the Paper.',
-					p: 'Publish a document with all instructions, rules and evaluation criteria. Players must be able to understand the challenge <strong>before</strong> they participate.'
+					h: 'Escribe el Paper.',
+					p: 'Publica un documento con todas las instrucciones, reglas y criterios de evaluación. Los jugadores tienen que poder entender el reto <strong>antes</strong> de participar.'
 				},
 				{
-					h: 'Generate a secret.',
-					p: 'A unique <strong>256-bit secret</strong> underwrites the cryptographic commitments and the later score validation. Nobody can see it while the game is open.'
+					h: 'Genera un secreto.',
+					p: 'Un <strong>secreto de 256 bits</strong> único respalda los compromisos criptográficos y la posterior validación de puntuaciones. Nadie puede verlo mientras el juego está abierto.'
 				},
 				{
-					h: 'Package and publish.',
-					p: 'Ship the game as a Celaut service and publish it through GoP Web with its parameters: fee, deadline, and commission.'
+					h: 'Empaqueta y publica.',
+					p: 'Publica el juego como servicio Celaut a través de GoP Web con sus parámetros: cuota, fecha límite y comisión.'
 				},
 				{
-					h: 'Reveal the secret.',
-					p: 'When the deadline passes, the creator <strong>reveals the secret on-chain</strong>. That resolves the game: score validation becomes possible and the smart contract can determine the winner.',
-					note: 'Commit first, reveal later. That\u2019s what makes it fair.'
+					h: 'Revela el secreto.',
+					p: 'Cuando pasa la fecha límite, quien creó el juego <strong>revela el secreto on-chain</strong>. Eso resuelve el juego: la validación de puntuaciones se vuelve posible y el contrato inteligente puede determinar al ganador.',
+					note: 'Comprometerse primero, revelar después. Eso es lo que lo hace justo.'
 				}
 			]
 		},
 
 		player: {
-			label: 'The player\u2019s journey',
+			label: 'El recorrido del jugador',
 			beats: [
 				{
-					h: 'Browse and read the Paper.',
-					p: 'Find a game on GoP Web. Read the creator\u2019s Paper to understand the challenge, the rules and the evaluation criteria before committing to anything.'
+					h: 'Explora y lee el Paper.',
+					p: 'Encuentra un juego en GoP Web. Lee el Paper para entender el reto, las reglas y los criterios de evaluación antes de comprometerte con nada.'
 				},
 				{
-					h: 'Implement your solver.',
-					p: 'Build your solver-service from the Paper alone, so it\u2019s ready to compete the moment the seed drops.'
+					h: 'Implementa tu solver.',
+					p: 'Construye tu servicio solver solo a partir del Paper, para que esté listo en cuanto caiga la semilla.'
 				},
 				{
-					h: 'Register your Solver ID.',
-					p: 'Registration is free — you only cover the network gas fee. This <strong>pre-commitment</strong> is what guarantees fairness before the seed is revealed.'
+					h: 'Registra tu Solver ID.',
+					p: 'Registrarse es gratis: solo cubres la comisión de gas de la red. Este <strong>compromiso previo</strong> es lo que garantiza que sea justo antes de revelarse la semilla.'
 				},
 				{
-					h: 'The seed is revealed.',
-					p: 'Once the ceremony phase ends, the game seed goes public. Now — and only now — you know the exact challenge parameters you\u2019ll be evaluated against.'
+					h: 'Se revela la semilla.',
+					p: 'Cuando termina la fase de ceremonia, la semilla del juego se hace pública. Ahora —y solo ahora— conoces los parámetros exactos del reto con el que te van a evaluar.'
 				},
 				{
-					h: 'Run the game service locally.',
-					p: 'The service executes your solver in a secure environment with the revealed seed, evaluates its performance, and generates the <strong>cryptographic commitment</strong> needed for on-chain validation.'
+					h: 'Ejecuta el servicio de juego en local.',
+					p: 'El servicio ejecuta tu solver en un entorno seguro con la semilla revelada, evalúa su rendimiento y genera el <strong>compromiso criptográfico</strong> que hace falta para la validación on-chain.'
 				},
 				{
-					h: 'Submit your commitment and pay the fee.',
-					p: 'If the score is worth competing with, publish the commitment on-chain and pay the participation fee. <strong>All fees go into the pot</strong> — the winner takes the economic prize, minus creator, judge and platform commission, and receives the game NFT.',
-					note: 'You decide whether your run is worth submitting.'
+					h: 'Envía tu compromiso y paga la cuota.',
+					p: 'Si la puntuación merece la pena, publica el compromiso on-chain y paga la cuota de participación. <strong>Todas las cuotas van al bote</strong>: quien gana se lleva el premio económico, menos la comisión de creador, jueces y plataforma, y recibe el NFT del juego.',
+					note: 'Tú decides si tu partida merece enviarse.'
 				}
 			]
 		},
 
 		validation: {
-			label: 'Score validation',
+			label: 'Validación de puntuaciones',
 			beats: [
 				{
-					h: 'Your score is a hash, not a claim.',
-					p: 'When you participate, what goes on-chain is a <strong>commitment</strong> — a digest. Nobody, including the creator, can read your score off the blockchain while the game is still open.'
+					h: 'Tu puntuación es un hash, no una afirmación.',
+					p: 'Cuando participas, lo que va on-chain es un <strong>compromiso</strong>. Nadie, ni siquiera quien creó el juego, puede leer tu puntuación en la blockchain mientras el juego sigue abierto.'
 				},
 				{
-					h: 'Then the secret comes out.',
-					p: 'After the deadline, the creator reveals the game secret in the resolution transaction. That\u2019s the missing ingredient — and it <strong>unlocks verification for everyone at once</strong>.'
+					h: 'Después sale el secreto.',
+					p: 'Pasada la fecha límite, quien creó el juego revela el secreto en la transacción de resolución. Ese es el ingrediente que faltaba, y <strong>abre la verificación para todos a la vez</strong>.'
 				},
 				{
-					h: 'The contract recomputes it.',
-					p: 'The game contract builds a commitment for each score from the <strong>solver ID, the score value, the hashed logs and the revealed secret</strong>. No trusted party is involved; it\u2019s arithmetic.'
+					h: 'El contrato lo recalcula.',
+					p: 'El contrato del juego construye un compromiso para cada puntuación a partir del <strong>Solver ID, el valor de la puntuación, los registros hasheados y el secreto revelado</strong>. No interviene ninguna parte de confianza: es aritmética.'
 				},
 				{
-					h: 'If they match, the score is real.',
-					p: 'A recomputed commitment that equals the published one proves the score is authentic and tamper-proof. Anything that doesn\u2019t match simply isn\u2019t a score.',
-					note: 'Transparent yet private: proven without being exposed.'
+					h: 'Si coinciden, la puntuación es real.',
+					p: 'Un compromiso recalculado que coincide con el publicado demuestra que la puntuación es auténtica e inalterable. Lo que no coincide sencillamente no es una puntuación.',
+					note: 'Transparente y privado a la vez: demostrado sin quedar expuesto.'
 				}
 			]
 		},
 
 		pot: {
-			label: 'Economics',
+			label: 'Economía',
 			beats: [
 				{
-					h: 'Every entry feeds the pot.',
-					p: 'Participation fees from everyone who submits a commitment accumulate in a single on-chain pot for that game.'
+					h: 'Cada participación alimenta el bote.',
+					p: 'Las cuotas de participación de todo el que envía un compromiso se acumulan en un único bote on-chain para ese juego.'
 				},
 				{
-					h: 'Commissions come off the top.',
-					p: 'The creator, the judges and the platform take their agreed commission — all of it set in the open when the game was published, and <strong>enforced by the smart contract</strong> rather than by anyone\u2019s goodwill.'
+					h: 'Las comisiones salen de arriba.',
+					p: 'Quien creó el juego, los jueces y la plataforma se llevan la comisión acordada, fijada a la vista de todos cuando se publicó el juego y <strong>aplicada por el contrato inteligente</strong> y no por la buena voluntad de nadie.'
 				},
 				{
-					h: 'The rest goes to the winner.',
-					p: 'The highest validated score takes the remaining pot — plus the <strong>game NFT</strong>, a permanent, public, auditable proof of victory. Funds are released after a validation period that gives judges time to check the creator acted honestly.',
-					note: 'Nobody approves the payout. The contract does it.'
+					h: 'El resto va para quien gana.',
+					p: 'La puntuación validada más alta se lleva el bote restante, más el <strong>NFT del juego</strong>: una prueba de victoria permanente, pública y auditable. Los fondos se liberan tras un periodo de validación que da tiempo a los jueces a comprobar que quien creó el juego actuó honestamente.',
+					note: 'Nadie aprueba el pago. Lo hace el contrato.'
 				}
 			]
 		},
 
 		judges: {
-			label: 'Trust & accountability',
+			label: 'Confianza y rendición de cuentas',
 			beats: [
 				{
-					h: 'Who watches the creator?',
-					p: 'Judges are entities nominated by the creator who audit the resolution phase. They verify that the creator\u2019s game service generated <strong>valid proofs and valid scores</strong>.'
+					h: '¿Quién vigila a quien crea el juego?',
+					p: 'Los jueces son entidades nombradas por quien crea el juego que auditan la fase de resolución. Verifican que su servicio de juego generó <strong>pruebas válidas y puntuaciones válidas</strong>.'
 				},
 				{
-					h: 'Fraud costs the creator, not you.',
-					p: 'If a judge catches a faulty game service or an invalid proof, that judge <strong>receives the creator\u2019s commission</strong> as the reward. The incentive to look closely is built in.'
+					h: 'El fraude le cuesta al creador, no a ti.',
+					p: 'Si un juez detecta un servicio de juego defectuoso o una prueba inválida, ese juez <strong>recibe la comisión del creador</strong> como recompensa. El incentivo para mirar de cerca está incorporado.'
 				},
 				{
-					h: 'Players stay out of the blast radius.',
-					p: 'In normal operation players cannot be penalised by judges. Judges exist to <strong>protect players from dishonest creators</strong>, never the other way around.',
-					note: 'Audit the house, not the guests.'
+					h: 'Los jugadores quedan fuera del radio de la explosión.',
+					p: 'En funcionamiento normal, los jueces no pueden penalizar a los jugadores. Los jueces existen para <strong>proteger a los jugadores de creadores deshonestos</strong>, nunca al revés.',
+					note: 'Se audita la casa, no a los invitados.'
 				}
 			]
 		}
 	},
 
 	/* ============================================================== *
-	 * The readable reference list under the validation scene
+	 * Lista de referencia bajo la escena de validación
 	 * ============================================================== */
 	steps: {
-		title: 'The five steps, in order',
+		title: 'Los cinco pasos, en orden',
 		items: [
 			{
-				badge: 'SUBMITTED',
-				title: 'Player Participation',
-				desc: 'Player publishes their participation on the Ergo blockchain.'
+				badge: 'ENVIADO',
+				title: 'Participación del jugador',
+				desc: 'El jugador publica su participación en la blockchain de Ergo.'
 			},
 			{
-				badge: 'REVEALED',
-				title: 'Creator Reveals Secret',
-				desc: 'After the deadline, the creator reveals the game secret in the resolution transaction — unlocking verification.'
+				badge: 'REVELADO',
+				title: 'El creador revela el secreto',
+				desc: 'Pasada la fecha límite, quien creó el juego revela el secreto en la transacción de resolución, lo que abre la verificación.'
 			},
 			{
-				badge: 'COMPUTED',
-				title: 'Smart Contract Validation',
-				desc: 'The game contract computes a commitment for each score using the solver ID, score value, hashed logs, and revealed secret.'
+				badge: 'CALCULADO',
+				title: 'Validación por contrato inteligente',
+				desc: 'El contrato del juego calcula un compromiso para cada puntuación usando el Solver ID, el valor de la puntuación, los registros hasheados y el secreto revelado.'
 			},
 			{
-				badge: 'VERIFIED',
-				title: 'Score Verification',
-				desc: 'When the score commitment matches the participation commitment, that score is validated as authentic and tamper-proof.'
+				badge: 'VERIFICADO',
+				title: 'Verificación de la puntuación',
+				desc: 'Cuando el compromiso de la puntuación coincide con el de la participación, esa puntuación queda validada como auténtica e inalterable.'
 			},
 			{
-				badge: 'DISTRIBUTED',
-				title: 'Winner Takes the Pot',
-				desc: 'Highest score wins. Following a validation period to ensure the game creator acted honestly, funds are released to the winner, net of creator and judge fees.'
+				badge: 'REPARTIDO',
+				title: 'Quien gana se lleva el bote',
+				desc: 'Gana la puntuación más alta. Tras un periodo de validación que asegura que el creador actuó honestamente, los fondos se liberan al ganador, descontadas las comisiones de creador y jueces.'
 			}
 		]
 	},
 
 	/* ============================================================== *
-	 * Video
+	 * Vídeo
 	 * ============================================================== */
 	video: {
-		label: 'Overview',
-		title: 'Watch the Breakdown',
+		label: 'Visión general',
+		title: 'Mira el resumen',
 		subtitle:
-			'Get up to speed in minutes — see how Game of Prompts brings blockchain and AI competitions together.',
-		thumbAlt: 'Game of Prompts video thumbnail',
-		iframeTitle: 'Game of Prompts — Brief Breakdown'
+			'Ponte al día en minutos: cómo Game of Prompts junta blockchain y competiciones de IA.',
+		thumbAlt: 'Miniatura del vídeo de Game of Prompts',
+		iframeTitle: 'Game of Prompts — Resumen breve'
 	},
 
 	/* ============================================================== *
-	 * Security
+	 * Seguridad
 	 * ============================================================== */
 	security: {
-		label: 'Security',
-		title: 'Transparent Yet Private Competition',
-		subtitle:
-			'Cryptography ensures fair competition while protecting participants\u2019 strategies.',
+		label: 'Seguridad',
+		title: 'Competición transparente y privada a la vez',
+		subtitle: 'La criptografía garantiza una competición justa y protege las estrategias de quienes participan.',
 		cards: [
 			{
-				title: 'Code Protection',
-				desc: 'The game\u2019s intellectual property and game secret are protected through obfuscation to prevent reverse engineering.'
+				title: 'Protección del código',
+				desc: 'La propiedad intelectual del juego y su secreto se protegen mediante ofuscación para impedir la ingeniería inversa.'
 			},
 			{
-				title: 'Private Results',
-				desc: 'Strategic decoys and cryptographic commitments conceal your true score, protecting your strategy until the final reveal.'
+				title: 'Resultados privados',
+				desc: 'Los señuelos estratégicos y los compromisos criptográficos ocultan tu puntuación real y protegen tu estrategia hasta la revelación final.'
 			},
 			{
-				title: 'Immutable Proof',
-				desc: 'Final validation on the Ergo blockchain generates a public, immutable, and auditable proof of victory.'
+				title: 'Prueba inmutable',
+				desc: 'La validación final en la blockchain de Ergo genera una prueba de victoria pública, inmutable y auditable.'
 			}
 		]
 	},
 
 	/* ============================================================== *
-	 * Game types
+	 * Tipos de juego
 	 * ============================================================== */
 	gameTypes: {
-		title: 'What Can Be a Game?',
-		text: 'Game of Prompts is a versatile platform that can host a wide variety of competitions. Here are just a few examples of what\u2019s possible.',
-		// `label` is the "Game Type 01" eyebrow; {n} is the number.
-		eyebrow: 'Game Type {n}',
+		title: '¿Qué puede ser un juego?',
+		text: 'Game of Prompts es una plataforma versátil capaz de albergar competiciones muy distintas. Estos son solo algunos ejemplos de lo que se puede hacer.',
+		eyebrow: 'Tipo de juego {n}',
 		items: [
 			{
-				title: 'Classic Arcade',
-				desc: 'The AI solver controls the character in fast-paced, skill-based game environments. Reflexes, pattern recognition, timing.',
-				score: 'Game points · Survival time · Levels cleared'
+				title: 'Arcade clásico',
+				desc: 'El solver de IA controla al personaje en entornos rápidos y de habilidad. Reflejos, reconocimiento de patrones, sincronización.',
+				score: 'Puntos · Tiempo de supervivencia · Niveles superados'
 			},
 			{
-				title: 'Open World',
-				desc: 'Optimize for spatial reasoning, navigation, and environmental adaptation.',
-				score: 'Resource efficiency · Map exploration · Mission complexity'
+				title: 'Mundo abierto',
+				desc: 'Optimiza el razonamiento espacial, la navegación y la adaptación al entorno.',
+				score: 'Eficiencia de recursos · Exploración del mapa · Complejidad de las misiones'
 			},
 			{
-				title: 'Financial Trading',
-				desc: 'Bot vs. market. Trade virtual assets in realistic simulations using historical or synthetic data. Pure strategy, zero luck.',
-				score: 'Net profit · Sharpe ratio · Drawdown · Benchmarks'
+				title: 'Trading financiero',
+				desc: 'Bot contra mercado. Opera activos virtuales en simulaciones realistas con datos históricos o sintéticos. Estrategia pura, cero suerte.',
+				score: 'Beneficio neto · Ratio de Sharpe · Drawdown · Referencias'
 			},
 			{
-				title: 'Protein Folding',
-				desc: 'Predict 3D protein structures from amino acid sequences. A real scientific challenge — AI solvers advancing biology.',
-				score: 'Structural stability · Folding accuracy · Efficiency'
+				title: 'Plegamiento de proteínas',
+				desc: 'Predice estructuras 3D de proteínas a partir de secuencias de aminoácidos. Un reto científico real: solvers de IA que hacen avanzar la biología.',
+				score: 'Estabilidad estructural · Precisión del plegado · Eficiencia'
 			}
 		]
 	},
 
 	/* ============================================================== *
-	 * Optional features
+	 * Funciones opcionales
 	 * ============================================================== */
 	features: {
-		title: 'Optional Game Features',
-		text: 'Creators can enhance their games with powerful optional mechanics — from poker-style bluffing to resource constraints and pay-per-attempt models.',
-		// {n} is the number; {status} is one of `status` below.
-		eyebrow: 'Feature {n}',
+		title: 'Funciones opcionales del juego',
+		text: 'Quien crea un juego puede añadirle mecánicas opcionales potentes: desde faroles de póker hasta límites de recursos y modelos de pago por intento.',
+		eyebrow: 'Función {n}',
 		status: {
-			available: 'Available',
-			research: 'Under Research'
+			available: 'Disponible',
+			research: 'En investigación'
 		},
 		items: [
 			{
-				title: 'Resource Limitation',
-				desc: 'Technical challenge by constraining computational resources. Efficiency is king.',
+				title: 'Límite de recursos',
+				desc: 'Reto técnico por la vía de restringir los recursos de cómputo. Manda la eficiencia.',
 				bullets: [
-					'Game creator sets specific limits on computational resources',
-					'Constraints: maximum RAM, CPU time, or service dependencies',
-					'Forces players to develop highly efficient, optimized solutions',
-					'Adds a significant engineering challenge to the game'
+					'Quien crea el juego fija límites concretos de recursos de cómputo',
+					'Restricciones: RAM máxima, tiempo de CPU o dependencias de servicios',
+					'Obliga a los jugadores a desarrollar soluciones muy eficientes y optimizadas',
+					'Añade al juego un reto de ingeniería considerable'
 				]
 			},
 			{
-				title: 'Poker Mode',
-				desc: 'Strategic participation with risk and reward. Bluff, bet, and multiply your score.',
+				title: 'Modo póker',
+				desc: 'Participación estratégica con riesgo y recompensa. Farolea, apuesta y multiplica tu puntuación.',
 				bullets: [
-					'Participants choose how much to pay (above a set minimum)',
-					'Higher payment = higher final score multiplier (e.g. ×2, ×5)',
-					'Players can submit multiple decoy scores',
-					'Bluff strategy: pay high fee + submit fake high scores to intimidate',
-					'Game creator sets score multiplier based on fee paid'
+					'Quien participa elige cuánto paga (por encima de un mínimo fijado)',
+					'Pagar más = mayor multiplicador de la puntuación final (p. ej. ×2, ×5)',
+					'Los jugadores pueden enviar varias puntuaciones señuelo',
+					'Estrategia de farol: pagar una cuota alta y enviar puntuaciones falsas para intimidar',
+					'Quien crea el juego fija el multiplicador según la cuota pagada'
 				]
 			},
 			{
-				title: 'Pay-per-Attempt',
-				desc: 'A mechanism that assigns a cost to each local execution, fostering high-quality agent development over trial-and-error.',
+				title: 'Pago por intento',
+				desc: 'Un mecanismo que asigna un coste a cada ejecución local y fomenta agentes bien construidos frente al ensayo y error.',
 				bullets: [
-					'Incremental token cost per local execution attempt',
-					'Encourages rigorous local simulation and optimization',
-					'Disincentivizes blind brute-force strategies',
-					'Difficulty scaling fully configurable by the game creator'
+					'Coste incremental en tokens por cada intento de ejecución local',
+					'Fomenta una simulación y optimización locales rigurosas',
+					'Desincentiva las estrategias de fuerza bruta a ciegas',
+					'Escalado de dificultad totalmente configurable por quien crea el juego'
 				]
 			}
 		]
@@ -613,88 +628,82 @@ export default {
 
 	/* ============================================================== *
 	 * FAQ
-	 *
-	 * The live questions are fetched from the project README at
-	 * runtime and are English-only at source, so they are NOT
-	 * translated here. What IS translated is the chrome around them
-	 * and the offline fallback set, which is what a reader sees when
-	 * the fetch fails.
 	 * ============================================================== */
 	faq: {
-		label: 'FAQ',
-		title: 'Frequently Asked Questions',
-		footerTitle: 'Still have questions?',
+		label: 'Preguntas frecuentes',
+		title: 'Preguntas frecuentes',
+		footerTitle: '¿Te quedan dudas?',
 		footerDesc:
-			'Copy the prompt below and paste it into any AI assistant — it includes a link to our full documentation.',
-		copyPrompt: 'Copy prompt',
-		copied: 'Copied!',
-		orLabel: 'or open directly in:',
-		disclaimerBefore: '⚠️ AI responses may not be fully accurate. Always refer to the ',
-		disclaimerLink: 'official documentation',
-		disclaimerAfter: ' for authoritative information.',
-		telegram: 'Join Telegram Community',
+			'Copia el prompt de abajo y pégalo en cualquier asistente de IA: incluye un enlace a toda nuestra documentación.',
+		copyPrompt: 'Copiar prompt',
+		copied: '¡Copiado!',
+		orLabel: 'o ábrelo directamente en:',
+		disclaimerBefore: '⚠️ Las respuestas de IA pueden no ser del todo exactas. Consulta siempre la ',
+		disclaimerLink: 'documentación oficial',
+		disclaimerAfter: ' para obtener información fiable.',
+		telegram: 'Únete a la comunidad de Telegram',
 		groups: [
 			{
 				title: 'General',
 				items: [
 					{
-						q: 'What is Game of Prompts?',
-						a: 'A bot competition audited by blockchain. Creators design game-services to evaluate AI solvers, while players build solver-services to maximize their scores — all verified on the Ergo blockchain.'
+						q: '¿Qué es Game of Prompts?',
+						a: 'Una competición de bots auditada por blockchain. Quienes crean diseñan servicios de juego para evaluar solvers de IA, mientras los jugadores construyen servicios solver para maximizar su puntuación, todo verificado en la blockchain de Ergo.'
 					},
 					{
-						q: 'What is the "Ceremony Phase"?',
-						a: 'The initial period where players register their Solver IDs to add randomness to the seed. This prevents the Creator from pre-calculating solutions and ensures fair competition.'
+						q: '¿Qué es la «fase de ceremonia»?',
+						a: 'El periodo inicial en el que los jugadores registran sus Solver ID para añadir azar a la semilla. Impide que el creador precalcule soluciones y garantiza una competición justa.'
 					},
 					{
-						q: 'What do I need to play?',
-						a: 'An Ergo Wallet (with some ERG for participation fees) and a Celaut Node to run game and solver services locally.'
+						q: '¿Qué necesito para jugar?',
+						a: 'Un monedero de Ergo (con algo de ERG para las cuotas de participación) y un nodo Celaut para ejecutar en local los servicios de juego y de solver.'
 					}
 				]
 			},
 			{
-				title: 'Security',
+				title: 'Seguridad',
 				items: [
 					{
-						q: 'How do I know the game is fair?',
-						a: 'The game rules and hashS are registered on-chain from the start. They are immutable — no one can change them after publication.'
+						q: '¿Cómo sé que el juego es justo?',
+						a: 'Las reglas del juego y el hashS quedan registrados on-chain desde el principio. Son inmutables: nadie puede cambiarlos tras la publicación.'
 					},
 					{
-						q: 'Can the Creator steal the funds?',
-						a: 'No. Funds are locked in a Smart Contract, not the Creator\u2019s wallet. Distribution is handled atomically by the contract when the game resolves.'
+						q: '¿Puede el creador robar los fondos?',
+						a: 'No. Los fondos quedan bloqueados en un contrato inteligente, no en el monedero del creador. El reparto lo hace el contrato de forma atómica cuando el juego se resuelve.'
 					},
 					{
-						q: 'What if the Creator disappears?',
-						a: 'After a Grace Period, players can trigger a Refund Action to recover their participation fees from the smart contract.'
+						q: '¿Y si el creador desaparece?',
+						a: 'Pasado un periodo de gracia, los jugadores pueden lanzar una acción de reembolso para recuperar del contrato inteligente sus cuotas de participación.'
 					}
 				]
 			},
 			{
-				title: 'Judges',
+				title: 'Jueces',
 				items: [
 					{
-						q: 'Who are the Judges?',
-						a: 'Entities nominated by the Creator who audit the resolution phase. They verify that the game service generated valid proofs.'
+						q: '¿Quiénes son los jueces?',
+						a: 'Entidades nombradas por el creador que auditan la fase de resolución. Verifican que el servicio de juego generó pruebas válidas.'
 					},
 					{
-						q: 'Why do Judges earn money for invalidating a participation?',
-						a: 'They detect Creator fraud — their incentive is to catch faulty game services. When they find issues, they receive the Creator\u2019s commission as reward.'
+						q: '¿Por qué cobran los jueces al invalidar una participación?',
+						a: 'Porque detectan fraude del creador: su incentivo es pillar servicios de juego defectuosos. Cuando encuentran problemas, reciben la comisión del creador como recompensa.'
 					},
 					{
-						q: 'Can I be penalized as a player?',
-						a: 'The system penalizes the Creator/Game Service, not honest players. Judges audit the Creator, not you.'
+						q: '¿Pueden penalizarme como jugador?',
+						a: 'El sistema penaliza al creador y a su servicio de juego, no a los jugadores honestos. Los jueces auditan al creador, no a ti.'
 					}
 				]
 			},
 			{
-				title: 'Economy',
+				title: 'Economía',
 				items: [
 					{
-						q: 'How is the winner calculated?',
-						a: 'Highest Time-Weighted Score: Score × (TimeWeight + RemainingTime). Submit early and score high for the best result.'
+						q: '¿Cómo se calcula el ganador?',
+						a: 'Por la puntuación ponderada por tiempo más alta: puntuación × (TimeWeight + tiempo restante). Envía pronto y puntúa alto para el mejor resultado.'
 					},
 					{
-						q: 'When do I receive my winnings?',
-						a: 'Immediately upon the End Game action. The Smart Contract atomically distributes all funds — the winner receives all participation fees minus creator commission and judge fees.'
+						q: '¿Cuándo recibo mis ganancias?',
+						a: 'En cuanto se ejecuta la acción de fin de juego. El contrato inteligente reparte todos los fondos de forma atómica: quien gana recibe todas las cuotas de participación menos la comisión del creador y la de los jueces.'
 					}
 				]
 			}
@@ -702,23 +711,23 @@ export default {
 	},
 
 	/* ============================================================== *
-	 * Call to action + footer
+	 * Llamada a la acción + pie
 	 * ============================================================== */
 	cta: {
-		label: 'Get Started',
-		title: 'Get Started with Game of Prompts',
+		label: 'Empezar',
+		title: 'Empieza con Game of Prompts',
 		steps: [
-			'Install the <strong>Celaut node</strong> software to run Game and Solver Services in a secure, deterministic environment.',
-			'Set up an <strong>Ergo blockchain wallet</strong> to participate in games and receive winnings.',
-			'Browse available games on <strong>GoP Web</strong> and start developing your own solvers or create challenging games for others.'
+			'Instala el software del <strong>nodo Celaut</strong> para ejecutar servicios de juego y de solver en un entorno seguro y determinista.',
+			'Configura un <strong>monedero de la blockchain Ergo</strong> para participar en juegos y cobrar tus ganancias.',
+			'Explora los juegos disponibles en <strong>GoP Web</strong> y empieza a desarrollar tus propios solvers o a crear juegos difíciles para los demás.'
 		],
-		github: 'GitHub Repository',
-		celaut: 'Celaut Project',
-		ergo: 'Ergo Platform'
+		github: 'Repositorio de GitHub',
+		celaut: 'Proyecto Celaut',
+		ergo: 'Plataforma Ergo'
 	},
 
 	footer: {
-		tagline: 'Write your prompts. Build your bot. Win the throne.',
+		tagline: 'Escribe tus prompts. Construye tu bot. Gana el trono.',
 		github: 'GitHub',
 		ergo: 'Ergo',
 		celaut: 'Celaut'

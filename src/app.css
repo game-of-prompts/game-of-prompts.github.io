@@ -92,12 +92,17 @@
 	   Every token declared in :root must be redeclared here — a partial
 	   light block is what produced the low-contrast regressions before. */
 	--surface: #ffffff;
+	--surface-rgb: 255, 255, 255;
+	--surface-raised: #f8fafc;
 	--surface-deep: #f8fafc;
 	--surface-deep-rgb: 248, 250, 252;
 	--on-surface: #0f172a;
 	--on-surface-rgb: 15, 23, 42;
 	--on-surface-muted: #334155;
 	--on-surface-subtle: #64748b;
+	--accent-soft: rgba(22, 163, 74, 0.12);
+	--shadow-sm: 0 2px 8px rgba(15, 23, 42, 0.1);
+	--shadow-md: 0 12px 34px rgba(15, 23, 42, 0.16);
 	--accent: #16a34a;
 	--accent-hover: #15803d;
 	--accent-text: #15803d;

@@ -1,611 +1,580 @@
 /*
- * src/lib/i18n/en.js
+ * src/lib/i18n/ko.js
  * ------------------------------------------------------------------
- * English — the source dictionary and the fallback for every other
- * locale. If a key is missing anywhere else, `$t` resolves it here, so
- * this file is the only one that must never have a hole in it.
+ * 한국어. en.js 와 같은 키·같은 중첩·같은 배열 길이. glossary.terms 는
+ * 딱 33 개이며 glossary/terms.js 의 GLOSSARY_IDS 와 위치로 짝을 이룬다.
  *
- * HOW TO WRITE THE COPY
- * ---------------------
- * Everything here is the landing page's actual voice: short sentences,
- * concrete nouns, no marketing adjectives. `<strong>` is used for the
- * one term a sentence is really about, never for emphasis in general —
- * the scene captions lean on it heavily and it stops meaning anything
- * if every clause has one.
- *
- * HOW TO WRITE THE GLOSSARY
- * -------------------------
- * The glossary explains the JARGON, not the project. A definition that
- * says "in Game of Prompts, a commitment is…" has failed: the reader
- * clicked because they don't know what a commitment IS. Explain the
- * word in plain language with an everyday comparison, then — only in
- * `more`, and only if it earns its place — say why it matters here.
- * Never write down to the reader. They are not stupid, they just
- * haven't met this word before.
- *
- * `match` is the list of trigger words IN THIS LANGUAGE. Translators
- * choose their own; nothing assumes English word order or that a term
- * is even one word in the target language.
+ * `match` 는 번역문이 아니다. 이 한국어 본문에 실제로 나온, 밑줄을 치고
+ * 정의를 여는 말의 목록. annotate.js 는 한글을 공백 없는 부분 문자열로
+ * 보므로, 한 글자 별칭은 쓰지 않고 다른 용어 안에 삼켜지지 않을 길이로
+ * 둔다.
  */
 
 export default {
 	/* ============================================================== *
-	 * Chrome shared by every control in the corner cluster
+	 * 구석 조작 묶음
 	 * ============================================================== */
 	common: {
-		languageLabel: 'Language',
-		switchLanguage: 'Change language',
-		themeToLight: 'Switch to light theme',
-		themeToDark: 'Switch to dark theme',
-		backToTop: 'Back to top',
-		scoring: 'SCORING'
+		languageLabel: '언어',
+		switchLanguage: '언어 바꾸기',
+		themeToLight: '밝은 테마로 바꾸기',
+		themeToDark: '어두운 테마로 바꾸기',
+		backToTop: '맨 위로',
+		scoring: '채점 중'
 	},
 
 	/* ============================================================== *
-	 * The glossary
-	 * Ids and ordering live in src/lib/glossary/terms.js, paired with
-	 * this array by position.
+	 * 용어집
 	 * ============================================================== */
 	glossary: {
-		/* Chrome */
-		toggleOn: 'Explain technical terms',
-		toggleOff: 'Hide term explanations',
-		toggleLabel: 'Explanations',
-		close: 'Close',
-		// {term} is replaced with the marked word.
-		explain: 'What does "{term}" mean?',
-		// Shown once, on a reader's first visit, near the first mark.
-		hintTitle: 'Some words are underlined.',
+		toggleOn: '전문 용어 설명하기',
+		toggleOff: '용어 설명 숨기기',
+		toggleLabel: '용어 설명',
+		close: '닫기',
+		explain: '「{term}」이란?',
+		hintTitle: '밑줄이 그어진 말이 있습니다.',
 		hintBody:
-			'Tap any underlined word for a plain-language explanation. Turn them off any time with the button in the corner.',
-		hintDismiss: 'Got it',
+			'밑줄 친 말을 누르면 쉬운 설명이 나옵니다. 언제든 구석 버튼으로 끌 수 있습니다.',
+		hintDismiss: '알겠습니다',
 
 		terms: [
 			{
-				match: ['game-service', 'game service', 'game-services', 'game services'],
-				title: 'Game service',
-				body: 'The challenge itself, packaged as a sealed program anyone can download and run. It holds the rules, the scoring, and the creator\u2019s hidden secret \u2014 like a sealed exam paper that also marks itself.',
-				more: 'You run it on your own machine. It scores your bot and produces the cryptographic receipt that the blockchain later checks.'
+				match: ['게임 서비스', 'game-service', 'game service'],
+				title: '게임 서비스',
+				body: '과제 그 자체. 누구나 내려받아 실행할 수 있는 봉인된 프로그램으로 포장한 것. 규칙, 채점, 만든 사람이 숨긴 비밀값이 들어 있다. 스스로 채점까지 하는, 봉한 시험지와 같다.',
+				more: '자기 기계에서 돌린다. 봇을 채점하고, 나중에 블록체인이 대조할 암호학적 영수증을 만든다.'
 			},
 			{
-				match: ['solver-service', 'solver service', 'solver-services', 'solver services', 'solver', 'solvers'],
-				title: 'Solver service',
-				body: 'Your entry. The bot you build to play the game, packaged the same sealed way so it runs identically on any machine \u2014 your strategy as a single, portable box.',
-				more: 'It is handed to the game service, which runs it in isolation and scores what it did. Nobody sees your code but you.'
+				match: ['솔버 서비스', '솔버', 'solver-service', 'solver service'],
+				title: '솔버 서비스',
+				body: '당신의 출품. 그 게임을 이기려고 만든 봇을, 같은 봉인 방식으로 포장해 어느 기계에서든 똑같이 돌아가게 한 것. 전략을 들고 다닐 수 있는 상자 하나에 넣은 셈이다.',
+				more: '게임 서비스에 넘겨지고, 격리된 채로 실행된 뒤, 한 일이 채점된다. 코드를 보는 사람은 당신뿐이다.'
 			},
 			{
-				match: ['GoP Web', 'GoP web portal', 'the portal'],
+				match: ['GoP Web', '커뮤니티 포털'],
 				title: 'GoP Web',
-				body: 'The website where games are listed: read the rules, download a game, publish your result. It is a directory and a signing tool, not a referee \u2014 nothing it shows you has to be taken on trust.',
-				more: 'You can run your own copy of it. That is the point: if the public one vanished, the games would carry on.'
+				body: '게임이 목록으로 올라오는 웹사이트. 규칙을 읽고, 게임을 내려받고, 결과를 공개한다. 목록이자 서명 도구이지, 심판이 아니다. 화면에 나온 것을 믿어야 할 이유는 없다.',
+				more: '자기 복사본을 돌려도 된다. 그게 요점이다. 공개판이 사라져도 게임은 이어진다.'
 			},
 			{
-				match: ['Celaut', 'Celaut node', 'Celaut nodes'],
+				match: ['Celaut', 'Celaut 노드'],
 				title: 'Celaut',
-				body: 'The system that actually runs the sealed programs. You install it once, and from then on any game or solver package can be handed to your machine and executed in its own locked room.',
-				more: 'It is what makes "run it yourself" realistic rather than a slogan: the same package behaves the same way on every machine that opens it.'
+				body: '봉인된 프로그램을 실제로 실행하는 시스템. 한 번 설치하면, 이후 게임이나 솔버 꾸러미를 기계에 넘겨 잠긴 방에서 돌릴 수 있다.',
+				more: '「직접 실행하라」를 구호가 아니라 현실로 만든다. 같은 꾸러미는 여는 기계마다 같은 행동을 한다.'
 			},
 			{
-				match: ['node', 'nodes'],
-				title: 'Node',
-				body: 'One computer taking part in a network. Your laptop, a spare desktop, a server in a rack \u2014 once it runs the software and starts talking to other machines, it is a node.',
-				more: 'Here it is simply the machine that runs the games and the solvers. Yours, not somebody\u2019s data centre.'
+				match: ['노드'],
+				title: '노드',
+				body: '네트워크에 참여하는 컴퓨터 한 대. 노트북, 남는 데스크톱, 랙의 서버. 소프트웨어를 돌리고 다른 기계와 말하기 시작하면, 그게 노드다.',
+				more: '여기서는 게임과 솔버를 돌리는 그 기계. 당신 것이고, 누군가의 데이터 센터가 아니다.'
 			},
 			{
-				match: ['service', 'services'],
-				title: 'Service',
-				body: 'A self-contained piece of software that does one job and can be handed to any machine to run \u2014 closer to a single appliance than to a whole program you install.',
-				more: 'Both halves of a competition here are services: the game and the bot playing it.'
+				match: ['서비스'],
+				title: '서비스',
+				body: '한 가지 일만 하는, 스스로 완결된 소프트웨어 조각. 어느 기계에 넘겨도 실행할 수 있다. 통째로 설치하는 큰 프로그램보다 가전 한 대에 가깝다.',
+				more: '경기의 양쪽이 다 서비스다. 게임, 그리고 그걸 플레이하는 봇.'
 			},
 			{
-				match: ['blockchain', 'blockchains', 'ledger', 'ledgers'],
-				title: 'Blockchain',
-				body: 'A shared record book that thousands of computers keep copies of at once. Adding an entry requires the others to agree it is valid, and past entries cannot be rewritten \u2014 so no single participant controls the history.',
-				more: 'Used here for two narrow jobs: recording who claimed what score, and paying out the winner. Nothing more.'
+				match: ['블록체인'],
+				title: '블록체인',
+				body: '수천 대의 컴퓨터가 동시에 사본을 들고 있는 공유 장부. 한 줄을 넣으려면 다른 쪽이 유효하다고 인정해야 하고, 지난 기록은 다시 쓸 수 없다. 누가 혼자 이력을 쥐지 못한다.',
+				more: '여기서는 좁은 두 가지 일에만 쓴다. 누가 몇 점을 주장했는지 기록하고, 승자에게 돈을 지급하는 것. 그 이상은 아니다.'
 			},
 			{
 				match: ['Ergo', 'ERG'],
 				title: 'Ergo',
-				body: 'The particular blockchain this platform records results on and settles payments through. ERG is its unit of currency.',
-				more: 'It is a choice, not a foundation: the platform has no coin of its own.'
+				body: '이 플랫폼이 결과를 기록하고 지급을 정산하는, 그 특정 블록체인. ERG 가 통화 단위다.',
+				more: '선택이지 토대가 아니다. 플랫폼에 자체 코인은 없다.'
 			},
 			{
-				match: ['smart contract', 'smart contracts', 'contract', 'contracts', 'game contract'],
-				title: 'Smart contract',
-				body: 'A program that lives on the blockchain and holds money under rules written down in advance. When the conditions are met it pays out by itself \u2014 nobody signs a cheque, and nobody can decide not to.',
-				more: 'It is why the prize is safe before anyone has won it: the funds are held by the rules, not by the person who wrote them.'
+				match: ['스마트 계약', '게임 계약', '계약'],
+				title: '스마트 계약',
+				body: '블록체인 위에 살면서, 미리 적어 둔 규칙으로 돈을 맡아 두는 프로그램. 조건이 맞으면 스스로 지급한다. 수표에 서명하는 사람도, 안 주기로 결정하는 사람도 없다.',
+				more: '아무도 이기기 전부터 상금이 안전한 이유다. 돈을 들고 있는 것은 규칙이지, 규칙을 쓴 사람이 아니다.'
 			},
 			{
-				match: ['on-chain', 'on chain', 'onchain'],
-				title: 'On-chain',
-				body: 'Written into the blockchain itself, where everyone can see it and nobody can quietly change it later \u2014 as opposed to sitting in a company\u2019s private database.'
+				match: ['온체인'],
+				title: '온체인',
+				body: '블록체인 자체에 쓰여, 누구나 볼 수 있고 나중에 몰래 바꿀 수 없는 상태. 회사의 비공개 데이터베이스에 앉아 있는 것과는 반대다.'
 			},
 			{
-				match: ['commitment', 'commitments', 'score commitment', 'cryptographic commitment', 'pre-commitment'],
-				title: 'Commitment',
-				body: 'A sealed envelope. You publish something that proves what you chose, without revealing what it was \u2014 and later, when the envelope is opened, everyone can check you didn\u2019t swap the contents.',
-				more: 'It is what lets a score be locked in publicly while the game is still running, without telling your rivals how well you did.'
+				match: ['암호학적 커밋먼트', '점수 커밋먼트', '사전 커밋먼트', '커밋먼트'],
+				title: '커밋먼트',
+				body: '봉한 봉투. 무엇을 골랐는지를 증명하는 무언가를 공개하되, 내용물은 밝히지 않는다. 나중에 봉투를 열면, 바꿔 치기하지 않았음을 누구나 확인할 수 있다.',
+				more: '게임이 아직 열린 동안 점수를 공개적으로 고정하면서도, 경쟁자에게 성적을 알려 주지 않게 해 준다.'
 			},
 			{
-				match: ['hash', 'hashes', 'hashed', 'digest', 'hashed logs'],
-				title: 'Hash',
-				body: 'A short fingerprint calculated from a piece of data. The same data always gives the same fingerprint, a single changed byte gives a completely different one, and you cannot work backwards from the fingerprint to the data.',
-				more: 'That one-way property is the whole trick: it lets you prove something matches without showing what it is.'
+				match: ['해시된 로그', '해시', '다이제스트'],
+				title: '해시',
+				body: '데이터에서 계산한 짧은 지문. 같은 데이터는 언제나 같은 지문, 한 바이트만 바꿔도 전혀 다른 지문, 지문에서 데이터로는 거꾸로 갈 수 없다.',
+				more: '이 한쪽 방향이 전부다. 무엇인지 보여 주지 않고도, 일치한다는 것을 증명할 수 있다.'
 			},
 			{
-				match: ['secret', 'game secret', '256-bit secret'],
-				title: 'Secret',
-				body: 'A large random number the creator generates and keeps hidden while the game is open. Every score is sealed using it, so no score can be verified \u2014 or forged \u2014 until the creator publishes it.',
-				more: 'Publishing it at the end is what makes everyone\u2019s results checkable at the same moment, rather than one at a time.'
+				match: ['256비트 비밀값', '게임 비밀값', '비밀값'],
+				title: '비밀값',
+				body: '만든 사람이 생성해, 게임이 열려 있는 동안 숨겨 두는 큰 난수. 모든 점수가 이것으로 봉인되므로, 만든 사람이 공개하기 전에는 검증도 위조도 할 수 없다.',
+				more: '끝에 공개하는 것이, 모두의 결과를 같은 순간에 대조 가능하게 만든다. 한 사람씩이 아니다.'
 			},
 			{
-				match: ['seed', 'game seed', 'seeds'],
-				title: 'Seed',
-				body: 'The starting number that decides exactly which version of a challenge you face \u2014 which board, which market data, which puzzle. Same seed, same challenge, for everyone.',
-				more: 'It is revealed only after entries close, so nobody can tune a bot for the specific run in advance.'
+				match: ['게임 시드', '시드'],
+				title: '시드',
+				body: '어떤 판의 과제를 맞닥뜨릴지 정하는 시작 숫자. 어떤 보드, 어떤 시장 데이터, 어떤 퍼즐인지. 같은 시드면, 누구에게나 같은 과제다.',
+				more: '접수가 닫힌 뒤에야 공개된다. 그 한 판에 맞춰 봇을 미리 조율하지 못하게 하려는 것이다.'
 			},
 			{
-				match: ['ceremony phase', 'ceremony', 'ceremony period'],
-				title: 'Ceremony phase',
-				body: 'The window at the start of a game when players sign up and each one\u2019s registration stirs a little unpredictability into the final seed. Like everyone throwing a die into the same cup before the lid comes off.',
-				more: 'It exists so the creator cannot know the challenge in advance either \u2014 the players collectively decide it without meaning to.'
+				match: ['세레모니 단계', '세레모니 기간', '세레모니'],
+				title: '세레모니 단계',
+				body: '게임 시작 때 플레이어가 등록하는 창. 각자의 등록이 최종 시드에 약간의 예측 불가를 섞는다. 뚜껑을 열기 전에 모두가 같은 컵에 주사위를 던지는 것과 같다.',
+				more: '만든 사람조차 과제를 미리 알지 못하게 하려고 있다. 플레이어들이 의도하지 않고 함께 정한다.'
 			},
 			{
-				match: ['Solver ID', 'Solver IDs', 'solver identifier'],
+				match: ['Solver ID', '솔버 ID', '솔버 식별자'],
 				title: 'Solver ID',
-				body: 'The unique fingerprint of the exact bot you registered. It names one specific version of your code, so a bot cannot be quietly swapped for a different one after the seed is revealed.'
+				body: '등록한 그 봇만의 지문. 코드의 특정 버전에 이름을 붙이므로, 시드가 공개된 뒤에 다른 봇으로 몰래 바꿔 끼울 수 없다.'
 			},
 			{
-				match: ['Paper', 'the Paper', 'game paper'],
+				match: ['Paper', '페이퍼', '게임 페이퍼'],
 				title: 'Paper',
-				body: 'The written rules: what the challenge is, how it is scored, what counts as a valid entry. Published before anyone can play, so the terms cannot change once people have committed.',
-				more: 'You are meant to be able to build your entry from this document alone.'
+				body: '적힌 규칙. 과제가 무엇인지, 어떻게 채점하는지, 무엇이 유효한 출품인지. 아무도 플레이하기 전에 공개되어, 사람들이 커밋한 뒤에는 조건을 바꿀 수 없다.',
+				more: '이 문서만으로 출품을 만들 수 있어야 한다는 뜻이다.'
 			},
 			{
-				match: ['pot', 'the pot', 'prize pool'],
-				title: 'Pot',
-				body: 'All the entry fees, pooled together and held by the contract until the game resolves. Everyone who competes pays in; the winner takes what is left after the agreed cuts.'
+				match: ['상금 팟', '상금 풀'],
+				title: '상금 팟',
+				body: '참가비를 모두 모아, 게임이 결산될 때까지 계약이 맡아 두는 상금 팟. 겨루는 사람은 모두 넣고, 승자는 합의한 몫을 뺀 나머지를 가져간다.'
 			},
 			{
-				match: ['participation fee', 'participation fees', 'entry fee', 'entry fees'],
-				title: 'Participation fee',
-				body: 'What it costs to submit a result you want counted. It goes into the pot rather than to the organisers, so every entry makes the prize bigger.',
-				more: 'You only pay it if you decide your run was worth entering \u2014 running the game locally is free.'
+				match: ['참가비', '입장료'],
+				title: '참가비',
+				body: '세고 싶은 결과를 제출하는 데 드는 비용. 주최자가 아니라 상금 팟으로 들어가, 출품할 때마다 상금이 커진다.',
+				more: '그 판을 제출할 가치가 있다고 판단했을 때만 낸다. 게임을 로컬에서 돌리는 것은 무료다.'
 			},
 			{
-				match: ['commission', 'commissions', 'creator commission', 'platform commission'],
-				title: 'Commission',
-				body: 'The agreed slice of the pot that goes to the game\u2019s creator, its judges and the platform. Set in the open when the game is published, and taken automatically \u2014 not negotiated afterwards.'
+				match: ['제작자 수수료', '수수료'],
+				title: '수수료',
+				body: '상금 팟 가운데 게임 제작자, 심사원, 플랫폼에 가기로 한 몫. 게임이 공개될 때 공개적으로 정해지고, 나중에 협상하지 않고 자동으로 떼인다.'
 			},
 			{
-				match: ['judge', 'judges'],
-				title: 'Judge',
-				body: 'Someone whose job is to check the creator, not the players: did the game actually score honestly, and are its receipts valid? If they catch a cheat, they are paid out of the creator\u2019s cut.',
-				more: 'Being paid for finding fraud, rather than for approving things, is what makes the role worth having.'
+				match: ['심사원'],
+				title: '심사원',
+				body: '보는 대상은 플레이어가 아니라 만든 사람. 게임이 정말 정직하게 채점했는가, 영수증은 유효한가. 부정행위를 잡으면, 만든 사람 몫에서 받는다.',
+				more: '승인하려고가 아니라 사기를 찾으려고 돈을 받는다. 그래서 이 역할에 의미가 있다.'
 			},
 			{
-				match: ['NFT', 'NFTs', 'game NFT'],
+				match: ['NFT', '게임 NFT'],
 				title: 'NFT',
-				body: 'A one-of-a-kind token recorded on the blockchain, which can be owned and transferred but not duplicated. Here it is the trophy: permanent, public proof of who won a particular game.'
+				body: '블록체인에 기록된 하나뿐인 토큰. 소유하고 넘길 수는 있지만 복제는 못 한다. 여기서는 트로피. 그 게임의 승자를 영구히, 공개적으로 증명한다.'
 			},
 			{
-				match: ['wallet', 'wallets', 'Ergo wallet'],
-				title: 'Wallet',
-				body: 'The app that holds the keys to your funds and signs your actions on the blockchain. Not an account with a company \u2014 nobody can freeze it, and nobody can recover it for you.'
+				match: ['Ergo 지갑', '지갑'],
+				title: '지갑',
+				body: '자금의 열쇠를 들고, 블록체인 위의 행동에 서명하는 앱. 회사 계정이 아니다. 아무도 동결하지 못하고, 아무도 대신 찾아 주지 않는다.'
 			},
 			{
-				match: ['gas fee', 'gas fees', 'network gas fee', 'network fee'],
-				title: 'Gas fee',
-				body: 'The small charge for having the network record your transaction. It pays the computers doing the recording, not the platform \u2014 like postage rather than a ticket price.'
+				match: ['네트워크 수수료', '가스비'],
+				title: '가스비',
+				body: '네트워크가 거래를 기록해 주는 작은 요금. 플랫폼이 아니라, 기록하는 컴퓨터에 돌아가는 돈. 입장료라기보다 우표값이다.'
 			},
 			{
-				match: ['deterministic', 'determinism', 'reproducible', 'reproducibility'],
-				title: 'Deterministic',
-				body: 'Same input, same output, every time \u2014 like a recipe that produces an identical cake in any kitchen, rather than one that depends on the cook. Nothing about the machine, the day or the location changes the result.',
-				more: 'It is what makes a score checkable by somebody else: they can re-run it and must get your number.'
+				match: ['결정적', '결정성', '재현 가능', '재현성'],
+				title: '결정적',
+				body: '같은 입력이면 매번 같은 출력. 어떤 부엌에서든 같은 케이크가 나오는 레시피이지, 요리사 손에 달린 요리가 아니다. 기계도 날짜도 장소도 결과를 바꾸지 않는다.',
+				more: '다른 사람이 점수를 대조할 수 있는 이유다. 다시 돌리면 당신의 숫자가 나와야 한다.'
 			},
 			{
-				match: ['isolation', 'isolated', 'sealed', 'sandboxed', 'secure isolated environment', 'isolated environment'],
-				title: 'Isolation',
-				body: 'Keeping a running program inside a boundary it cannot reach past \u2014 it sees only what it was given, and nothing of the machine around it or of anything else running there.',
-				more: 'It is what lets a game run a stranger\u2019s bot safely, and lets you run a stranger\u2019s game safely.'
+				match: ['격리된 환경', '격리 환경', '샌드박스', '격리', '봉인'],
+				title: '격리',
+				body: '실행 중인 프로그램을, 넘을 수 없는 경계 안에 두는 것. 넘겨받은 것만 보이고, 주변 기계도 거기서 도는 다른 것도 보이지 않는다.',
+				more: '낯선 사람의 봇을 게임이 안전하게 돌릴 수 있는 이유이고, 낯선 사람의 게임을 당신이 안전하게 돌릴 수 있는 이유이기도 하다.'
 			},
 			{
-				match: ['obfuscation', 'obfuscated', 'obfuscate'],
-				title: 'Obfuscation',
-				body: 'Deliberately scrambling a program so that it still runs perfectly but is painful to read \u2014 the software equivalent of a document printed without spaces or line breaks.',
-				more: 'Used here to keep a game\u2019s hidden secret hidden, even though everyone has a copy of the program that contains it.'
+				match: ['난독화', '난독화된'],
+				title: '난독화',
+				body: '프로그램이 완벽하게 돌아가게 두면서, 읽기는 고통스럽게 일부러 뒤섞는 것. 공백도 줄바꿈도 없이 찍은 문서의, 소프트웨어 판.',
+				more: '게임의 숨긴 비밀값을, 그 프로그램 복사본을 모두가 갖고 있어도 숨겨 두려고 쓴다.'
 			},
 			{
-				match: ['peer-to-peer', 'peer to peer', 'P2P'],
-				title: 'Peer-to-peer',
-				body: 'Two computers dealing with each other directly, the way two people have a phone call \u2014 instead of both sending everything through a company in the middle, the way email or a marketplace works. Each computer is a "peer": equal, no one in charge.',
-				more: 'It matters here because the company in the middle is usually the one that sets the price, takes a cut, and can remove you.'
+				match: ['피어 투 피어', 'P2P'],
+				title: '피어 투 피어',
+				body: '두 컴퓨터가 직접 상대한다. 전화하는 두 사람처럼. 이메일이나 마켓처럼 가운데 회사에 전부 보내는 방식이 아니다. 각 컴퓨터가 「피어」다. 대등하고, 위에 선 사람은 없다.',
+				more: '가운데 회사야말로 값을 매기고, 몫을 떼고, 당신을 내쫓을 수 있는 쪽이기 때문에, 여기서는 중요하다.'
 			},
 			{
-				match: ['self-hosting', 'self-hosted', 'self-host', 'run locally', 'runs locally'],
-				title: 'Self-hosting',
-				body: 'Running your own copy of a service on your own machine instead of using somebody else\u2019s. The thing keeps working even if the public version is switched off, censored, or simply having a bad day.'
+				match: ['셀프 호스팅', '셀프 호스트', '로컬 실행'],
+				title: '셀프 호스팅',
+				body: '남의 복사본이 아니라, 자기 기계에서 서비스의 자기 복사본을 돌리는 것. 공개판이 꺼져도, 검열돼도, 그냥 컨디션이 나빠도, 계속 돌아간다.'
 			},
 			{
-				match: ['decoy', 'decoys', 'decoy score', 'decoy scores', 'fake high scores'],
-				title: 'Decoy',
-				body: 'A deliberately misleading entry \u2014 a score you publish that isn\u2019t your real one \u2014 submitted to make rivals guess wrong about how well you actually did. Bluffing, made possible because nobody can read a sealed score.'
+				match: ['미끼 점수', '가짜 고득점', '미끼'],
+				title: '미끼',
+				body: '일부러 오해하게 만드는 출품. 진짜가 아닌 점수를 공개해, 경쟁자가 성적을 잘못 읽게 한다. 봉인된 점수는 아무도 못 읽으니까 가능한, 허세.',
 			},
 			{
-				match: ['Time-Weighted Score', 'time-weighted score', 'time weighted score', 'TimeWeight'],
-				title: 'Time-weighted score',
-				body: 'A score adjusted for how early you submitted it. Two identical results do not tie: the one entered sooner counts for more, so sitting on a good answer until the deadline costs you.'
+				match: ['시간 가중 점수', 'TimeWeight'],
+				title: '시간 가중 점수',
+				body: '얼마나 일찍 제출했느냐로 조정한 점수. 같은 결과라도 무승부가 아니다. 먼저 넣은 쪽이 더 무겁고, 좋은 답을 마감까지 들고 있으면 손해다.'
 			},
 			{
-				match: ['Grace Period', 'grace period', 'validation period', 'refund'],
-				title: 'Grace period',
-				body: 'A waiting window built into the rules before money moves \u2014 time for judges to object, and time for players to claim their fees back if the creator never resolves the game at all.',
-				more: 'It is the answer to "what if the organiser just disappears": the contract lets everyone walk away with their money.'
+				match: ['유예 기간', '검증 기간', '환불'],
+				title: '유예 기간',
+				body: '돈이 움직이기 전에 규칙에 넣어 둔 대기 창. 심사원이 이의를 제기할 시간, 만든 사람이 게임을 결산하지 않으면 플레이어가 참가비를 돌려받을 시간.',
+				more: '「주최자가 사라지면?」에 대한 답이다. 계약이 모두에게 자기 돈을 들고 떠나게 한다.'
 			},
 			{
-				match: ['CDE', 'scenario variability', 'high scenario variability'],
-				title: 'Scenario variability (CDE)',
-				body: 'How different each run of a game can be from the last. High variability means a bot has to actually play well, because there is no single fixed answer to memorise and hardcode.'
+				match: ['CDE', '시나리오 변동성', '높은 시나리오 변동성'],
+				title: '시나리오 변동성 (CDE)',
+				body: '게임의 각 실행이 지난번과 얼마나 다른가. 변동성이 높으면 봇은 정말로 잘 플레이해야 한다. 외워서 박아 넣을, 고정된 한 가지 답이 없기 때문이다.'
 			}
 		]
 	},
 
 	/* ============================================================== *
-	 * Splash screen
+	 * 스플래시
 	 * ============================================================== */
 	splash: {
 		title: 'GAME OF PROMPTS',
-		subtitle: 'WRITE YOUR PROMPTS. BUILD YOUR BOT. WIN THE THRONE.'
+		subtitle: '프롬프트를 써라. 봇을 만들어라. 왕좌를 차지해라.'
 	},
 
 	/* ============================================================== *
 	 * <head>
 	 * ============================================================== */
 	meta: {
-		title: 'Game of Prompts — Write your prompts. Build your bot. Win the throne.',
+		title: 'Game of Prompts — 프롬프트를 써라. 봇을 만들어라. 왕좌를 차지해라.',
 		description:
-			'A competitive platform where creators design game-services to evaluate AI solvers, while players build solver-services to maximize their scores — powered by the Ergo blockchain and Celaut.',
+			'만든 사람이 게임 서비스를 설계해 AI 솔버를 평가하고, 플레이어가 솔버 서비스를 만들어 점수를 올리는 경쟁 플랫폼. Ergo 블록체인과 Celaut 로 돌아간다.',
 		ogTitle: 'Game of Prompts',
-		ogDescription: 'Write your prompts. Build your bot. Win the throne.'
+		ogDescription: '프롬프트를 써라. 봇을 만들어라. 왕좌를 차지해라.'
 	},
 
 	/* ============================================================== *
-	 * Hero
+	 * 히어로
 	 * ============================================================== */
 	hero: {
 		titleTop: 'GAME OF',
 		titleBottom: 'PROMPTS',
-		// `<span class="hero-grad">` is the accent gradient. Keep the tag
-		// around whichever clause deserves the emphasis in this language;
-		// it does not have to be the middle one.
-		tagline: 'Write your prompts. <span class="hero-grad">Build your bot.</span> Win the throne.',
-		lede: 'A competitive platform where creators design game-services to evaluate AI solvers, and players build solver-services to maximize their scores — all recorded and verified on-chain.',
+		tagline: '프롬프트를 써라. <span class="hero-grad">봇을 만들어라.</span> 왕좌를 차지해라.',
+		lede: '만든 사람이 게임 서비스를 설계해 AI 솔버를 평가하고, 플레이어가 솔버 서비스를 만들어 점수를 올리는 경쟁 플랫폼. 기록과 검증은 모두 온체인.',
 		actions: {
-			launch: 'Launch App',
-			github: 'View on GitHub',
-			how: 'See how it works'
+			launch: '앱 열기',
+			github: 'GitHub 에서 보기',
+			how: '작동 방식 보기'
 		},
 		stats: [
-			{ value: 'P2P', label: 'Decentralized — services run on your own Celaut node' },
-			{ value: 'On-chain', label: 'Results committed and verified on Ergo' },
-			{ value: 'Trustless', label: 'Smart contracts settle the pot, not a company' }
+			{ value: 'P2P', label: '탈중앙 — 서비스는 자기 Celaut 노드에서 돌아간다' },
+			{ value: '온체인', label: '결과는 커밋되어 Ergo 에서 검증된다' },
+			{ value: '신뢰 불필요', label: '상금 팟을 정산하는 것은 스마트 계약이지, 회사가 아니다' }
 		],
-		scroll: 'Scroll'
+		scroll: '스크롤'
 	},
 
 	/* ============================================================== *
-	 * The seven pinned scenes
-	 * Each `beats` array is positional: one entry per SceneBeat in
-	 * +page.svelte, in order. `note` is the closing line of a scene.
+	 * 일곱 장면
 	 * ============================================================== */
 	scenes: {
 		arena: {
-			label: 'The idea',
+			label: '발상',
 			beats: [
 				{
-					h: 'Someone posts a challenge.',
-					p: 'A creator designs a game with measurable scoring — and packages it as a <strong>game-service</strong>: an immutable Celaut service that holds the game\u2019s logic and its secret.'
+					h: '누군가 과제를 올린다.',
+					p: '만든 사람이 측정 가능한 채점을 가진 게임을 설계하고, 그것을 <strong>게임 서비스</strong>로 포장한다. 게임의 논리와 비밀값을 담은, 불변의 Celaut 서비스다.'
 				},
 				{
-					h: 'Everyone else builds a bot to beat it.',
-					p: 'Players write <strong>solver-services</strong> — their strategy, packaged the same way. The game-service runs each solver in a secure, isolated environment and scores what it did.'
+					h: '나머지는 그걸 이길 봇을 만든다.',
+					p: '플레이어는 <strong>솔버 서비스</strong>를 쓴다. 같은 방식으로 포장한 자기 전략. 게임 서비스가 각 솔버를 안전한 격리 환경에서 실행하고, 한 일을 채점한다.'
 				},
 				{
-					h: 'The highest score wins the throne.',
-					p: 'No leaderboard you have to trust. Every score is committed cryptographically and <strong>settled on the Ergo blockchain</strong>, where anyone can check the maths.',
-					note: 'Write your prompts. Build your bot. Win the throne.'
+					h: '가장 높은 점수가 왕좌를 차지한다.',
+					p: '믿어야 하는 순위표는 없다. 모든 점수는 암호학적으로 커밋되고 <strong>Ergo 블록체인에서 정산</strong>된다. 누구나 계산을 다시 할 수 있다.',
+					note: '프롬프트를 써라. 봇을 만들어라. 왕좌를 차지해라.'
 				}
 			]
 		},
 
 		components: {
-			label: 'Architecture',
+			label: '구조',
 			beats: [
 				{
-					h: 'Game Service',
-					p: 'Built by game devs. An autonomous service that encapsulates a game\u2019s logic and the secret. It evaluates solver performance, generates scores, and creates the <strong>cryptographic commitments</strong> needed for blockchain validation.'
+					h: '게임 서비스',
+					p: '게임 개발자가 만든다. 논리와 비밀값을 담은 자율 서비스. 솔버 성능을 평가하고, 점수를 만들고, 블록체인 검증에 필요한 <strong>암호학적 커밋먼트</strong>를 생성한다.'
 				},
 				{
-					h: 'Solver Service',
-					p: 'Built by players. It implements strategies to maximize the score in a specific game. The solver is packaged and sent to the game-service, which <strong>executes it in a secure, isolated environment</strong> for evaluation.'
+					h: '솔버 서비스',
+					p: '플레이어가 만든다. 특정 게임에서 점수를 최대화하는 전략을 구현한다. 솔버는 포장되어 게임 서비스로 보내지고, 평가를 위해 <strong>안전한 격리 환경에서 실행</strong>된다.'
 				},
 				{
 					h: 'GoP Web',
-					p: 'The community portal. Discover games, read the rules, download game-services, and publish your results on the Ergo blockchain. It <strong>supports self-hosting</strong> for a fully trustless, peer-to-peer experience.'
+					p: '커뮤니티 포털. 게임을 찾고, 규칙을 읽고, 게임 서비스를 내려받고, 결과를 Ergo 블록체인에 공개한다. 완전히 신뢰 없는 피어 투 피어 경험을 위해 <strong>셀프 호스팅을 지원</strong>한다.'
 				},
 				{
-					h: 'Everything runs on your machine.',
-					p: 'Game and solver services both run on a <strong>local Celaut node</strong>, which can operate entirely offline. GoP Web can be used via its GitHub.io instance or run locally as a Celaut service.',
-					note: 'Two technologies: Celaut for computation, Ergo for settlement.'
+					h: '전부 자기 기계에서 돌아간다.',
+					p: '게임과 솔버 서비스는 둘 다 <strong>로컬 Celaut 노드</strong>에서 돌며, 완전히 오프라인으로도 동작할 수 있다. GoP Web 은 GitHub.io 인스턴스로 쓰거나, Celaut 서비스로 로컬에서 돌릴 수 있다.',
+					note: '기술 둘. 계산은 Celaut, 정산은 Ergo.'
 				}
 			]
 		},
 
 		creator: {
-			label: 'Game creator flow',
+			label: '게임 제작자 흐름',
 			beats: [
 				{
-					h: 'Design a game.',
-					p: 'Create a challenge with measurable scoring and high scenario variability (CDE), so hardcoded solutions don\u2019t work.'
+					h: '게임을 설계한다.',
+					p: '측정 가능한 채점과 높은 시나리오 변동성 (CDE) 을 가진 과제를 만든다. 박아 넣은 답이 통하지 않게.'
 				},
 				{
-					h: 'Write the Paper.',
-					p: 'Publish a document with all instructions, rules and evaluation criteria. Players must be able to understand the challenge <strong>before</strong> they participate.'
+					h: 'Paper 를 쓴다.',
+					p: '지시, 규칙, 평가 기준을 모두 담은 문서를 공개한다. 플레이어는 참여하기 <strong>전에</strong> 과제를 이해할 수 있어야 한다.'
 				},
 				{
-					h: 'Generate a secret.',
-					p: 'A unique <strong>256-bit secret</strong> underwrites the cryptographic commitments and the later score validation. Nobody can see it while the game is open.'
+					h: '비밀값을 만든다.',
+					p: '고유한 <strong>256비트 비밀값</strong>이 암호학적 커밋먼트와 이후 점수 검증을 뒷받침한다. 게임이 열려 있는 동안 아무도 볼 수 없다.'
 				},
 				{
-					h: 'Package and publish.',
-					p: 'Ship the game as a Celaut service and publish it through GoP Web with its parameters: fee, deadline, and commission.'
+					h: '포장하고 공개한다.',
+					p: '게임을 Celaut 서비스로 내보내고, GoP Web 을 통해 참가비, 마감, 수수료 같은 매개변수와 함께 공개한다.'
 				},
 				{
-					h: 'Reveal the secret.',
-					p: 'When the deadline passes, the creator <strong>reveals the secret on-chain</strong>. That resolves the game: score validation becomes possible and the smart contract can determine the winner.',
-					note: 'Commit first, reveal later. That\u2019s what makes it fair.'
+					h: '비밀값을 공개한다.',
+					p: '마감이 지나면 만든 사람이 <strong>비밀값을 온체인에서 공개</strong>한다. 그때 게임이 결산된다. 점수 검증이 가능해지고, 스마트 계약이 승자를 정할 수 있다.',
+					note: '먼저 커밋하고, 나중에 공개한다. 그게 공정함을 만든다.'
 				}
 			]
 		},
 
 		player: {
-			label: 'The player\u2019s journey',
+			label: '플레이어의 여정',
 			beats: [
 				{
-					h: 'Browse and read the Paper.',
-					p: 'Find a game on GoP Web. Read the creator\u2019s Paper to understand the challenge, the rules and the evaluation criteria before committing to anything.'
+					h: '둘러보고 Paper 를 읽는다.',
+					p: 'GoP Web 에서 게임을 찾는다. 무엇에도 커밋하기 전에 Paper 를 읽어 과제, 규칙, 평가 기준을 이해한다.'
 				},
 				{
-					h: 'Implement your solver.',
-					p: 'Build your solver-service from the Paper alone, so it\u2019s ready to compete the moment the seed drops.'
+					h: '솔버를 구현한다.',
+					p: 'Paper 만으로 솔버 서비스를 만들어, 시드가 떨어지는 순간 바로 겨룰 수 있게 한다.'
 				},
 				{
-					h: 'Register your Solver ID.',
-					p: 'Registration is free — you only cover the network gas fee. This <strong>pre-commitment</strong> is what guarantees fairness before the seed is revealed.'
+					h: 'Solver ID 를 등록한다.',
+					p: '등록은 무료다. 네트워크 가스비만 낸다. 이 <strong>사전 커밋먼트</strong>가, 시드가 공개되기 전에 공정함을 담보한다.'
 				},
 				{
-					h: 'The seed is revealed.',
-					p: 'Once the ceremony phase ends, the game seed goes public. Now — and only now — you know the exact challenge parameters you\u2019ll be evaluated against.'
+					h: '시드가 공개된다.',
+					p: '세레모니 단계가 끝나면 게임 시드가 공개된다. 이제, 그리고 이제야, 평가받을 정확한 과제 매개변수를 알게 된다.'
 				},
 				{
-					h: 'Run the game service locally.',
-					p: 'The service executes your solver in a secure environment with the revealed seed, evaluates its performance, and generates the <strong>cryptographic commitment</strong> needed for on-chain validation.'
+					h: '게임 서비스를 로컬에서 돌린다.',
+					p: '서비스가 공개된 시드로 솔버를 안전한 환경에서 실행하고, 성능을 평가하고, 온체인 검증에 필요한 <strong>암호학적 커밋먼트</strong>를 만든다.'
 				},
 				{
-					h: 'Submit your commitment and pay the fee.',
-					p: 'If the score is worth competing with, publish the commitment on-chain and pay the participation fee. <strong>All fees go into the pot</strong> — the winner takes the economic prize, minus creator, judge and platform commission, and receives the game NFT.',
-					note: 'You decide whether your run is worth submitting.'
+					h: '커밋먼트를 제출하고 참가비를 낸다.',
+					p: '점수가 겨룰 만하면 커밋먼트를 온체인에 공개하고 참가비를 낸다. <strong>참가비는 전부 상금 팟으로 간다</strong>. 승자가 경제적 상금을 가져가되 제작자·심사원·플랫폼 수수료를 빼고, 게임 NFT 를 받는다.',
+					note: '그 판을 제출할 가치인지는 당신이 정한다.'
 				}
 			]
 		},
 
 		validation: {
-			label: 'Score validation',
+			label: '점수 검증',
 			beats: [
 				{
-					h: 'Your score is a hash, not a claim.',
-					p: 'When you participate, what goes on-chain is a <strong>commitment</strong> — a digest. Nobody, including the creator, can read your score off the blockchain while the game is still open.'
+					h: '점수는 주장이 아니라 해시다.',
+					p: '참여할 때 온체인에 올라가는 것은 <strong>커밋먼트</strong>, 곧 다이제스트다. 만든 사람을 포함해 아무도, 게임이 열려 있는 동안 블록체인에서 점수를 읽을 수 없다.'
 				},
 				{
-					h: 'Then the secret comes out.',
-					p: 'After the deadline, the creator reveals the game secret in the resolution transaction. That\u2019s the missing ingredient — and it <strong>unlocks verification for everyone at once</strong>.'
+					h: '그다음 비밀값이 나온다.',
+					p: '마감 후 만든 사람이 결산 트랜잭션에서 게임 비밀값을 공개한다. 빠져 있던 재료다. 그리고 <strong>모두의 검증을 한순간에 연다</strong>.'
 				},
 				{
-					h: 'The contract recomputes it.',
-					p: 'The game contract builds a commitment for each score from the <strong>solver ID, the score value, the hashed logs and the revealed secret</strong>. No trusted party is involved; it\u2019s arithmetic.'
+					h: '계약이 다시 계산한다.',
+					p: '게임 계약이 각 점수에 대해 <strong>솔버 ID, 점수 값, 해시된 로그, 공개된 비밀값</strong>으로 커밋먼트를 만든다. 신뢰할 제삼자는 없다. 산수다.'
 				},
 				{
-					h: 'If they match, the score is real.',
-					p: 'A recomputed commitment that equals the published one proves the score is authentic and tamper-proof. Anything that doesn\u2019t match simply isn\u2019t a score.',
-					note: 'Transparent yet private: proven without being exposed.'
+					h: '일치하면, 그 점수는 진짜다.',
+					p: '다시 계산한 커밋먼트가 공개된 것과 같으면, 점수가 진짜이고 손대지 않았음을 증명한다. 맞지 않는 것은 점수가 아니다.',
+					note: '투명하면서 비공개. 노출하지 않고 증명한다.'
 				}
 			]
 		},
 
 		pot: {
-			label: 'Economics',
+			label: '경제',
 			beats: [
 				{
-					h: 'Every entry feeds the pot.',
-					p: 'Participation fees from everyone who submits a commitment accumulate in a single on-chain pot for that game.'
+					h: '출품마다 상금 팟이 커진다.',
+					p: '커밋먼트를 제출한 모두의 참가비가, 그 게임의 온체인 상금 팟 하나에 쌓인다.'
 				},
 				{
-					h: 'Commissions come off the top.',
-					p: 'The creator, the judges and the platform take their agreed commission — all of it set in the open when the game was published, and <strong>enforced by the smart contract</strong> rather than by anyone\u2019s goodwill.'
+					h: '수수료는 위에서 떼인다.',
+					p: '만든 사람, 심사원, 플랫폼이 합의한 수수료를 가져간다. 게임이 공개될 때 공개적으로 정해졌고, 누구의 선의가 아니라 <strong>스마트 계약이 강제</strong>한다.'
 				},
 				{
-					h: 'The rest goes to the winner.',
-					p: 'The highest validated score takes the remaining pot — plus the <strong>game NFT</strong>, a permanent, public, auditable proof of victory. Funds are released after a validation period that gives judges time to check the creator acted honestly.',
-					note: 'Nobody approves the payout. The contract does it.'
+					h: '나머지는 승자에게 간다.',
+					p: '검증된 최고 점수가 남은 상금 팟을 가져가고, 더불어 <strong>게임 NFT</strong> 를 받는다. 영구적이고 공개적이며 감사 가능한 승리 증명. 자금은 심사원이 만든 사람의 정직함을 확인할 검증 기간 뒤에 풀린다.',
+					note: '지급을 승인하는 사람은 없다. 계약이 한다.'
 				}
 			]
 		},
 
 		judges: {
-			label: 'Trust & accountability',
+			label: '신뢰와 책임',
 			beats: [
 				{
-					h: 'Who watches the creator?',
-					p: 'Judges are entities nominated by the creator who audit the resolution phase. They verify that the creator\u2019s game service generated <strong>valid proofs and valid scores</strong>.'
+					h: '만든 사람을 누가 보나?',
+					p: '심사원은 만든 사람이 지명한 주체로, 결산 단계를 감사한다. 게임 서비스가 <strong>유효한 증명과 유효한 점수</strong>를 만들었는지 확인한다.'
 				},
 				{
-					h: 'Fraud costs the creator, not you.',
-					p: 'If a judge catches a faulty game service or an invalid proof, that judge <strong>receives the creator\u2019s commission</strong> as the reward. The incentive to look closely is built in.'
+					h: '사기 비용은 만든 사람이 지고, 당신은 안 진다.',
+					p: '심사원이 잘못된 게임 서비스나 무효한 증명을 잡으면, 그 심사원이 보상으로 <strong>제작자 수수료를 받는다</strong>. 자세히 볼 유인이 처음부터 들어 있다.'
 				},
 				{
-					h: 'Players stay out of the blast radius.',
-					p: 'In normal operation players cannot be penalised by judges. Judges exist to <strong>protect players from dishonest creators</strong>, never the other way around.',
-					note: 'Audit the house, not the guests.'
+					h: '플레이어는 폭발 반경 밖에 있다.',
+					p: '정상 운영에서 플레이어는 심사원에게 벌칙을 받지 않는다. 심사원은 <strong>부정한 제작자로부터 플레이어를 지키려고</strong> 있지, 그 반대가 아니다.',
+					note: '손님 말고, 집을 감사하라.'
 				}
 			]
 		}
 	},
 
 	/* ============================================================== *
-	 * The readable reference list under the validation scene
+	 * 검증 장면 아래의 참조 목록
 	 * ============================================================== */
 	steps: {
-		title: 'The five steps, in order',
+		title: '다섯 단계, 순서대로',
 		items: [
 			{
-				badge: 'SUBMITTED',
-				title: 'Player Participation',
-				desc: 'Player publishes their participation on the Ergo blockchain.'
+				badge: '제출됨',
+				title: '플레이어 참여',
+				desc: '플레이어가 Ergo 블록체인에 참여를 공개한다.'
 			},
 			{
-				badge: 'REVEALED',
-				title: 'Creator Reveals Secret',
-				desc: 'After the deadline, the creator reveals the game secret in the resolution transaction — unlocking verification.'
+				badge: '공개됨',
+				title: '제작자가 비밀값을 공개',
+				desc: '마감 후 만든 사람이 결산 트랜잭션에서 게임 비밀값을 공개해, 검증을 연다.'
 			},
 			{
-				badge: 'COMPUTED',
-				title: 'Smart Contract Validation',
-				desc: 'The game contract computes a commitment for each score using the solver ID, score value, hashed logs, and revealed secret.'
+				badge: '계산됨',
+				title: '스마트 계약 검증',
+				desc: '게임 계약이 솔버 ID, 점수 값, 해시된 로그, 공개된 비밀값으로 각 점수의 커밋먼트를 계산한다.'
 			},
 			{
-				badge: 'VERIFIED',
-				title: 'Score Verification',
-				desc: 'When the score commitment matches the participation commitment, that score is validated as authentic and tamper-proof.'
+				badge: '확인됨',
+				title: '점수 확인',
+				desc: '점수 커밋먼트가 참여 커밋먼트와 일치하면, 그 점수는 진짜이고 손대지 않은 것으로 검증된다.'
 			},
 			{
-				badge: 'DISTRIBUTED',
-				title: 'Winner Takes the Pot',
-				desc: 'Highest score wins. Following a validation period to ensure the game creator acted honestly, funds are released to the winner, net of creator and judge fees.'
+				badge: '분배됨',
+				title: '승자가 상금 팟을 가져간다',
+				desc: '최고 점수가 이긴다. 게임 제작자가 정직했는지 확인하는 검증 기간 뒤, 제작자와 심사원 수수료를 뺀 자금이 승자에게 풀린다.'
 			}
 		]
 	},
 
 	/* ============================================================== *
-	 * Video
+	 * 영상
 	 * ============================================================== */
 	video: {
-		label: 'Overview',
-		title: 'Watch the Breakdown',
+		label: '개요',
+		title: '해설 보기',
 		subtitle:
-			'Get up to speed in minutes — see how Game of Prompts brings blockchain and AI competitions together.',
-		thumbAlt: 'Game of Prompts video thumbnail',
-		iframeTitle: 'Game of Prompts — Brief Breakdown'
+			'몇 분이면 따라잡을 수 있다. Game of Prompts 가 블록체인과 AI 경기를 어떻게 붙이는지.',
+		thumbAlt: 'Game of Prompts 영상 썸네일',
+		iframeTitle: 'Game of Prompts — 짧은 해설'
 	},
 
 	/* ============================================================== *
-	 * Security
+	 * 보안
 	 * ============================================================== */
 	security: {
-		label: 'Security',
-		title: 'Transparent Yet Private Competition',
-		subtitle:
-			'Cryptography ensures fair competition while protecting participants\u2019 strategies.',
+		label: '보안',
+		title: '투명하면서도 비공개인 경쟁',
+		subtitle: '암호학이 공정한 경쟁을 보장하면서, 참가자의 전략을 지킨다.',
 		cards: [
 			{
-				title: 'Code Protection',
-				desc: 'The game\u2019s intellectual property and game secret are protected through obfuscation to prevent reverse engineering.'
+				title: '코드 보호',
+				desc: '게임의 지적 재산과 게임 비밀값은 난독화로 보호되어, 역공학을 막는다.'
 			},
 			{
-				title: 'Private Results',
-				desc: 'Strategic decoys and cryptographic commitments conceal your true score, protecting your strategy until the final reveal.'
+				title: '비공개 결과',
+				desc: '전략적 미끼와 암호학적 커밋먼트가 진짜 점수를 가려, 최종 공개까지 전략을 지킨다.'
 			},
 			{
-				title: 'Immutable Proof',
-				desc: 'Final validation on the Ergo blockchain generates a public, immutable, and auditable proof of victory.'
+				title: '불변의 증명',
+				desc: 'Ergo 블록체인에서의 최종 검증이 공개적이고 불변이며 감사 가능한 승리 증명을 만든다.'
 			}
 		]
 	},
 
 	/* ============================================================== *
-	 * Game types
+	 * 게임 유형
 	 * ============================================================== */
 	gameTypes: {
-		title: 'What Can Be a Game?',
-		text: 'Game of Prompts is a versatile platform that can host a wide variety of competitions. Here are just a few examples of what\u2019s possible.',
-		// `label` is the "Game Type 01" eyebrow; {n} is the number.
-		eyebrow: 'Game Type {n}',
+		title: '무엇이 게임이 될 수 있나?',
+		text: 'Game of Prompts 는 아주 다른 경기를 담을 수 있는 플랫폼이다. 가능한 것의 몇 가지 예일 뿐이다.',
+		eyebrow: '게임 유형 {n}',
 		items: [
 			{
-				title: 'Classic Arcade',
-				desc: 'The AI solver controls the character in fast-paced, skill-based game environments. Reflexes, pattern recognition, timing.',
-				score: 'Game points · Survival time · Levels cleared'
+				title: '클래식 아케이드',
+				desc: 'AI 솔버가 빠르고 실력 위주인 게임 환경에서 캐릭터를 조종한다. 반사, 패턴 인식, 타이밍.',
+				score: '게임 점수 · 생존 시간 · 깬 레벨'
 			},
 			{
-				title: 'Open World',
-				desc: 'Optimize for spatial reasoning, navigation, and environmental adaptation.',
-				score: 'Resource efficiency · Map exploration · Mission complexity'
+				title: '오픈 월드',
+				desc: '공간 추론, 탐색, 환경 적응을 최적화한다.',
+				score: '자원 효율 · 지도 탐험 · 임무 복잡도'
 			},
 			{
-				title: 'Financial Trading',
-				desc: 'Bot vs. market. Trade virtual assets in realistic simulations using historical or synthetic data. Pure strategy, zero luck.',
-				score: 'Net profit · Sharpe ratio · Drawdown · Benchmarks'
+				title: '금융 트레이딩',
+				desc: '봇 대 시장. 역사 데이터나 합성 데이터로 현실적인 시뮬레이션에서 가상 자산을 거래한다. 순수 전략, 운은 없다.',
+				score: '순이익 · 샤프 비율 · 낙폭 · 벤치마크'
 			},
 			{
-				title: 'Protein Folding',
-				desc: 'Predict 3D protein structures from amino acid sequences. A real scientific challenge — AI solvers advancing biology.',
-				score: 'Structural stability · Folding accuracy · Efficiency'
+				title: '단백질 접힘',
+				desc: '아미노산 서열에서 단백질의 3D 구조를 예측한다. 실제 과학 과제. 생물학을 밀고 가는 AI 솔버.',
+				score: '구조 안정성 · 접힘 정확도 · 효율'
 			}
 		]
 	},
 
 	/* ============================================================== *
-	 * Optional features
+	 * 선택 기능
 	 * ============================================================== */
 	features: {
-		title: 'Optional Game Features',
-		text: 'Creators can enhance their games with powerful optional mechanics — from poker-style bluffing to resource constraints and pay-per-attempt models.',
-		// {n} is the number; {status} is one of `status` below.
-		eyebrow: 'Feature {n}',
+		title: '선택적 게임 기능',
+		text: '만든 사람은 강력한 선택 역학을 게임에 더할 수 있다. 포커식 허세부터 자원 제한, 시도당 과금까지.',
+		eyebrow: '기능 {n}',
 		status: {
-			available: 'Available',
-			research: 'Under Research'
+			available: '사용 가능',
+			research: '연구 중'
 		},
 		items: [
 			{
-				title: 'Resource Limitation',
-				desc: 'Technical challenge by constraining computational resources. Efficiency is king.',
+				title: '자원 제한',
+				desc: '계산 자원을 묶어 거는 기술 과제. 효율이 왕이다.',
 				bullets: [
-					'Game creator sets specific limits on computational resources',
-					'Constraints: maximum RAM, CPU time, or service dependencies',
-					'Forces players to develop highly efficient, optimized solutions',
-					'Adds a significant engineering challenge to the game'
+					'게임 제작자가 계산 자원에 구체적인 한도를 정한다',
+					'제약: 최대 RAM, CPU 시간, 또는 서비스 의존성',
+					'플레이어가 매우 효율적이고 최적화된 해를 만들게 한다',
+					'게임에 상당한 공학 과제를 더한다'
 				]
 			},
 			{
-				title: 'Poker Mode',
-				desc: 'Strategic participation with risk and reward. Bluff, bet, and multiply your score.',
+				title: '포커 모드',
+				desc: '위험과 보상이 있는 전략적 참여. 허세를 부리고, 걸고, 점수를 곱한다.',
 				bullets: [
-					'Participants choose how much to pay (above a set minimum)',
-					'Higher payment = higher final score multiplier (e.g. ×2, ×5)',
-					'Players can submit multiple decoy scores',
-					'Bluff strategy: pay high fee + submit fake high scores to intimidate',
-					'Game creator sets score multiplier based on fee paid'
+					'참가자가 (정한 최소 이상으로) 얼마나 낼지 고른다',
+					'더 내면 최종 점수 배율이 커진다 (예: ×2, ×5)',
+					'플레이어는 미끼 점수를 여러 개 제출할 수 있다',
+					'허세 전략: 높은 참가비를 내고 가짜 고득점을 넣어 위압한다',
+					'게임 제작자가 낸 참가비에 따라 점수 배율을 정한다'
 				]
 			},
 			{
-				title: 'Pay-per-Attempt',
-				desc: 'A mechanism that assigns a cost to each local execution, fostering high-quality agent development over trial-and-error.',
+				title: '시도당 과금',
+				desc: '로컬 실행마다 비용을 매겨, 시행착오보다 잘 만든 에이전트를 유도하는 장치.',
 				bullets: [
-					'Incremental token cost per local execution attempt',
-					'Encourages rigorous local simulation and optimization',
-					'Disincentivizes blind brute-force strategies',
-					'Difficulty scaling fully configurable by the game creator'
+					'로컬 실행 시도마다 토큰 비용이 늘어난다',
+					'엄밀한 로컬 시뮬레이션과 최적화를 유도한다',
+					'눈감고 하는 무차별 대입 전략을 억제한다',
+					'난이도 스케일은 게임 제작자가 전부 설정할 수 있다'
 				]
 			}
 		]
@@ -613,88 +582,82 @@ export default {
 
 	/* ============================================================== *
 	 * FAQ
-	 *
-	 * The live questions are fetched from the project README at
-	 * runtime and are English-only at source, so they are NOT
-	 * translated here. What IS translated is the chrome around them
-	 * and the offline fallback set, which is what a reader sees when
-	 * the fetch fails.
 	 * ============================================================== */
 	faq: {
 		label: 'FAQ',
-		title: 'Frequently Asked Questions',
-		footerTitle: 'Still have questions?',
+		title: '자주 묻는 질문',
+		footerTitle: '아직 질문이 남았나?',
 		footerDesc:
-			'Copy the prompt below and paste it into any AI assistant — it includes a link to our full documentation.',
-		copyPrompt: 'Copy prompt',
-		copied: 'Copied!',
-		orLabel: 'or open directly in:',
-		disclaimerBefore: '⚠️ AI responses may not be fully accurate. Always refer to the ',
-		disclaimerLink: 'official documentation',
-		disclaimerAfter: ' for authoritative information.',
-		telegram: 'Join Telegram Community',
+			'아래 프롬프트를 복사해 아무 AI 어시스턴트에 붙여 넣으면 된다. 전체 문서 링크가 들어 있다.',
+		copyPrompt: '프롬프트 복사',
+		copied: '복사됨!',
+		orLabel: '또는 여기서 바로 열기:',
+		disclaimerBefore: '⚠️ AI 답변이 완전히 정확하지 않을 수 있습니다. 권위 있는 정보는 항상 ',
+		disclaimerLink: '공식 문서',
+		disclaimerAfter: '를 보세요.',
+		telegram: 'Telegram 커뮤니티 참여',
 		groups: [
 			{
-				title: 'General',
+				title: '일반',
 				items: [
 					{
-						q: 'What is Game of Prompts?',
-						a: 'A bot competition audited by blockchain. Creators design game-services to evaluate AI solvers, while players build solver-services to maximize their scores — all verified on the Ergo blockchain.'
+						q: 'Game of Prompts 란?',
+						a: '블록체인이 감사하는 봇 경기. 만든 사람이 게임 서비스를 설계해 AI 솔버를 평가하고, 플레이어가 솔버 서비스를 만들어 점수를 올린다. 전부 Ergo 블록체인에서 검증된다.'
 					},
 					{
-						q: 'What is the "Ceremony Phase"?',
-						a: 'The initial period where players register their Solver IDs to add randomness to the seed. This prevents the Creator from pre-calculating solutions and ensures fair competition.'
+						q: '「세레모니 단계」란?',
+						a: '플레이어가 Solver ID 를 등록해 시드에 무작위성을 더하는 처음 기간. 만든 사람이 해를 미리 계산하지 못하게 하고, 공정한 경쟁을 담보한다.'
 					},
 					{
-						q: 'What do I need to play?',
-						a: 'An Ergo Wallet (with some ERG for participation fees) and a Celaut Node to run game and solver services locally.'
+						q: '플레이하려면 무엇이 필요한가?',
+						a: 'Ergo 지갑 (참가비용 ERG 약간) 과, 게임·솔버 서비스를 로컬에서 돌릴 Celaut 노드.'
 					}
 				]
 			},
 			{
-				title: 'Security',
+				title: '보안',
 				items: [
 					{
-						q: 'How do I know the game is fair?',
-						a: 'The game rules and hashS are registered on-chain from the start. They are immutable — no one can change them after publication.'
+						q: '게임이 공정한지 어떻게 아나?',
+						a: '게임 규칙과 hashS 는 처음부터 온체인에 등록된다. 불변이다. 공개 뒤에 아무도 바꿀 수 없다.'
 					},
 					{
-						q: 'Can the Creator steal the funds?',
-						a: 'No. Funds are locked in a Smart Contract, not the Creator\u2019s wallet. Distribution is handled atomically by the contract when the game resolves.'
+						q: '만든 사람이 자금을 훔칠 수 있나?',
+						a: '없다. 자금은 만든 사람의 지갑이 아니라 스마트 계약에 잠긴다. 게임이 결산되면 계약이 원자적으로 분배한다.'
 					},
 					{
-						q: 'What if the Creator disappears?',
-						a: 'After a Grace Period, players can trigger a Refund Action to recover their participation fees from the smart contract.'
+						q: '만든 사람이 사라지면?',
+						a: '유예 기간이 지나면 플레이어가 환불 액션을 일으켜, 스마트 계약에서 참가비를 돌려받을 수 있다.'
 					}
 				]
 			},
 			{
-				title: 'Judges',
+				title: '심사원',
 				items: [
 					{
-						q: 'Who are the Judges?',
-						a: 'Entities nominated by the Creator who audit the resolution phase. They verify that the game service generated valid proofs.'
+						q: '심사원은 누구인가?',
+						a: '만든 사람이 지명한 주체로, 결산 단계를 감사한다. 게임 서비스가 유효한 증명을 만들었는지 확인한다.'
 					},
 					{
-						q: 'Why do Judges earn money for invalidating a participation?',
-						a: 'They detect Creator fraud — their incentive is to catch faulty game services. When they find issues, they receive the Creator\u2019s commission as reward.'
+						q: '심사원이 참여를 무효로 하면 왜 돈을 받나?',
+						a: '만든 사람의 사기를 잡기 때문이다. 유인은 잘못된 게임 서비스를 찾는 것이다. 문제를 찾으면 제작자 수수료를 보상으로 받는다.'
 					},
 					{
-						q: 'Can I be penalized as a player?',
-						a: 'The system penalizes the Creator/Game Service, not honest players. Judges audit the Creator, not you.'
+						q: '플레이어로서 벌칙을 받을 수 있나?',
+						a: '시스템은 정직한 플레이어가 아니라 제작자/게임 서비스를 벌한다. 심사원은 만든 사람을 감사하지, 당신을 감사하지 않는다.'
 					}
 				]
 			},
 			{
-				title: 'Economy',
+				title: '경제',
 				items: [
 					{
-						q: 'How is the winner calculated?',
-						a: 'Highest Time-Weighted Score: Score × (TimeWeight + RemainingTime). Submit early and score high for the best result.'
+						q: '승자는 어떻게 계산되나?',
+						a: '가장 높은 시간 가중 점수: 점수 × (TimeWeight + 남은 시간). 일찍 제출하고 높이 점수를 내야 가장 좋다.'
 					},
 					{
-						q: 'When do I receive my winnings?',
-						a: 'Immediately upon the End Game action. The Smart Contract atomically distributes all funds — the winner receives all participation fees minus creator commission and judge fees.'
+						q: '상금은 언제 받나?',
+						a: '게임 종료 액션이 일어나는 즉시. 스마트 계약이 모든 자금을 원자적으로 분배한다. 승자는 참가비 전부에서 제작자 수수료와 심사원 보수를 뺀 것을 받는다.'
 					}
 				]
 			}
@@ -702,23 +665,23 @@ export default {
 	},
 
 	/* ============================================================== *
-	 * Call to action + footer
+	 * 행동 유도 + 바닥글
 	 * ============================================================== */
 	cta: {
-		label: 'Get Started',
-		title: 'Get Started with Game of Prompts',
+		label: '시작하기',
+		title: 'Game of Prompts 시작하기',
 		steps: [
-			'Install the <strong>Celaut node</strong> software to run Game and Solver Services in a secure, deterministic environment.',
-			'Set up an <strong>Ergo blockchain wallet</strong> to participate in games and receive winnings.',
-			'Browse available games on <strong>GoP Web</strong> and start developing your own solvers or create challenging games for others.'
+			'<strong>Celaut 노드</strong> 소프트웨어를 설치해, 안전하고 결정적인 환경에서 게임 서비스와 솔버 서비스를 돌린다.',
+			'<strong>Ergo 블록체인 지갑</strong>을 만들어 게임에 참여하고 상금을 받는다.',
+			'<strong>GoP Web</strong> 에서 게임을 둘러보고, 솔버를 직접 만들거나 남을 위한 어려운 게임을 만들기 시작한다.'
 		],
-		github: 'GitHub Repository',
-		celaut: 'Celaut Project',
-		ergo: 'Ergo Platform'
+		github: 'GitHub 저장소',
+		celaut: 'Celaut 프로젝트',
+		ergo: 'Ergo 플랫폼'
 	},
 
 	footer: {
-		tagline: 'Write your prompts. Build your bot. Win the throne.',
+		tagline: '프롬프트를 써라. 봇을 만들어라. 왕좌를 차지해라.',
 		github: 'GitHub',
 		ergo: 'Ergo',
 		celaut: 'Celaut'

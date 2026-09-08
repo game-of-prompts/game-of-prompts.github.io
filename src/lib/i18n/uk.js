@@ -1,611 +1,671 @@
 /*
- * src/lib/i18n/en.js
+ * src/lib/i18n/uk.js
  * ------------------------------------------------------------------
- * English — the source dictionary and the fallback for every other
- * locale. If a key is missing anywhere else, `$t` resolves it here, so
- * this file is the only one that must never have a hole in it.
+ * Українська — переклад en.js, ключ за ключем.
  *
- * HOW TO WRITE THE COPY
- * ---------------------
- * Everything here is the landing page's actual voice: short sentences,
- * concrete nouns, no marketing adjectives. `<strong>` is used for the
- * one term a sentence is really about, never for emphasis in general —
- * the scene captions lean on it heavily and it stops meaning anything
- * if every clause has one.
+ * Та сама структура, ті самі довжини масивів. `glossary.terms` має
+ * рівно 33 записи й зіставляється за позицією з GLOSSARY_IDS
+ * у src/lib/glossary/terms.js.
  *
- * HOW TO WRITE THE GLOSSARY
- * -------------------------
- * The glossary explains the JARGON, not the project. A definition that
- * says "in Game of Prompts, a commitment is…" has failed: the reader
- * clicked because they don't know what a commitment IS. Explain the
- * word in plain language with an everyday comparison, then — only in
- * `more`, and only if it earns its place — say why it matters here.
- * Never write down to the reader. They are not stupid, they just
- * haven't met this word before.
- *
- * `match` is the list of trigger words IN THIS LANGUAGE. Translators
- * choose their own; nothing assumes English word order or that a term
- * is even one word in the target language.
+ * `match` — не переклад заголовка, а список словоформ, які в ЦІЙ
+ * прозі отримують підкреслення. Відмінки й числа перелічені явно.
+ * Апострофи в українських словах записані як \u2019.
  */
 
 export default {
 	/* ============================================================== *
-	 * Chrome shared by every control in the corner cluster
+	 * Спільні контролі в кутовому кластері
 	 * ============================================================== */
 	common: {
-		languageLabel: 'Language',
-		switchLanguage: 'Change language',
-		themeToLight: 'Switch to light theme',
-		themeToDark: 'Switch to dark theme',
-		backToTop: 'Back to top',
-		scoring: 'SCORING'
+		languageLabel: 'Мова',
+		switchLanguage: 'Змінити мову',
+		themeToLight: 'Увімкнути світлу тему',
+		themeToDark: 'Увімкнути темну тему',
+		backToTop: 'Нагору',
+		scoring: 'ПІДРАХУНОК'
 	},
 
 	/* ============================================================== *
-	 * The glossary
-	 * Ids and ordering live in src/lib/glossary/terms.js, paired with
-	 * this array by position.
+	 * Глосарій
 	 * ============================================================== */
 	glossary: {
-		/* Chrome */
-		toggleOn: 'Explain technical terms',
-		toggleOff: 'Hide term explanations',
-		toggleLabel: 'Explanations',
-		close: 'Close',
-		// {term} is replaced with the marked word.
-		explain: 'What does "{term}" mean?',
-		// Shown once, on a reader's first visit, near the first mark.
-		hintTitle: 'Some words are underlined.',
+		toggleOn: 'Пояснювати технічні терміни',
+		toggleOff: 'Сховати пояснення термінів',
+		toggleLabel: 'Пояснення',
+		close: 'Закрити',
+		explain: 'Що означає «{term}»?',
+		hintTitle: 'Деякі слова підкреслені.',
 		hintBody:
-			'Tap any underlined word for a plain-language explanation. Turn them off any time with the button in the corner.',
-		hintDismiss: 'Got it',
+			'Натисніть будь-яке підкреслене слово — отримаєте пояснення простою мовою. Вимкнути можна будь-коли кнопкою в куті.',
+		hintDismiss: 'Зрозуміло',
 
 		terms: [
 			{
-				match: ['game-service', 'game service', 'game-services', 'game services'],
-				title: 'Game service',
-				body: 'The challenge itself, packaged as a sealed program anyone can download and run. It holds the rules, the scoring, and the creator\u2019s hidden secret \u2014 like a sealed exam paper that also marks itself.',
-				more: 'You run it on your own machine. It scores your bot and produces the cryptographic receipt that the blockchain later checks.'
+				match: [
+					'ігровий сервіс',
+					'ігрового сервісу',
+					'ігровим сервісом',
+					'ігровому сервісу',
+					'ігрові сервіси',
+					'ігрових сервісів',
+					'ігровими сервісами'
+				],
+				title: 'Ігровий сервіс',
+				body: 'Сам виклик, запакований як запечатана програма, яку будь-хто може завантажити й запустити. Усередині — правила, підрахунок балів і схований секрет автора: як запечатаний екзаменаційний аркуш, який ще й сам себе перевіряє.',
+				more: 'Ви запускаєте його на своїй машині. Він оцінює вашого бота й видає криптографічну квитанцію, яку блокчейн потім перевірить.'
 			},
 			{
-				match: ['solver-service', 'solver service', 'solver-services', 'solver services', 'solver', 'solvers'],
-				title: 'Solver service',
-				body: 'Your entry. The bot you build to play the game, packaged the same sealed way so it runs identically on any machine \u2014 your strategy as a single, portable box.',
-				more: 'It is handed to the game service, which runs it in isolation and scores what it did. Nobody sees your code but you.'
+				match: [
+					'солвер-сервіс',
+					'солвер-сервісу',
+					'солвер-сервіси',
+					'солвер-сервісів',
+					'солвер',
+					'солвера',
+					'солверу',
+					'солвером',
+					'солвери',
+					'солверів'
+				],
+				title: 'Солвер-сервіс',
+				body: 'Ваша заявка. Бот, якого ви збираєте, щоб грати, запакований тим самим запечатаним способом, щоб однаково працювати на будь-якій машині — стратегія в одній портативній коробці.',
+				more: 'Його передають ігровому сервісу, який запускає його в ізоляції й оцінює, що він зробив. Код бачите лише ви.'
 			},
 			{
-				match: ['GoP Web', 'GoP web portal', 'the portal'],
+				match: ['GoP Web'],
 				title: 'GoP Web',
-				body: 'The website where games are listed: read the rules, download a game, publish your result. It is a directory and a signing tool, not a referee \u2014 nothing it shows you has to be taken on trust.',
-				more: 'You can run your own copy of it. That is the point: if the public one vanished, the games would carry on.'
+				body: 'Сайт, де перелічені ігри: прочитати правила, завантажити гру, опублікувати результат. Це каталог і інструмент підпису, а не суддя — тому, що він показує, вірити не обов\u2019язково.',
+				more: 'Можна запустити власну копію. У цьому й сенс: якщо публічна зникне, ігри триватимуть.'
 			},
 			{
-				match: ['Celaut', 'Celaut node', 'Celaut nodes'],
+				match: ['Celaut', 'нода Celaut', 'ноді Celaut', 'ноду Celaut'],
 				title: 'Celaut',
-				body: 'The system that actually runs the sealed programs. You install it once, and from then on any game or solver package can be handed to your machine and executed in its own locked room.',
-				more: 'It is what makes "run it yourself" realistic rather than a slogan: the same package behaves the same way on every machine that opens it.'
+				body: 'Система, яка насправді запускає запечатані програми. Ставите один раз — і відтоді будь-який пакет гри чи солвера можна віддати своїй машині, і він виконається у власній зачиненій кімнаті.',
+				more: 'Саме це робить «запусти сам» реалістичним, а не гаслом: той самий пакет поводиться однаково на кожній машині, яка його відкриває.'
 			},
 			{
-				match: ['node', 'nodes'],
-				title: 'Node',
-				body: 'One computer taking part in a network. Your laptop, a spare desktop, a server in a rack \u2014 once it runs the software and starts talking to other machines, it is a node.',
-				more: 'Here it is simply the machine that runs the games and the solvers. Yours, not somebody\u2019s data centre.'
+				match: ['нода', 'ноди', 'ноді', 'ноду', 'нодою'],
+				title: 'Нода',
+				body: 'Один комп\u2019ютер у мережі. Ноутбук, запасний системник, сервер у стійці — щойно на ньому крутиться ПЗ і він розмовляє з іншими машинами, це нода.',
+				more: 'Тут це просто машина, яка запускає ігри й солвери. Ваша, а не чийсь дата-центр.'
 			},
 			{
-				match: ['service', 'services'],
-				title: 'Service',
-				body: 'A self-contained piece of software that does one job and can be handed to any machine to run \u2014 closer to a single appliance than to a whole program you install.',
-				more: 'Both halves of a competition here are services: the game and the bot playing it.'
+				match: ['сервіс', 'сервісу', 'сервісом', 'сервіси', 'сервісів', 'сервісами'],
+				title: 'Сервіс',
+				body: 'Самодостатній шматок ПЗ, який робить одну роботу і який можна віддати будь-якій машині на запуск — ближче до одного приладу, ніж до великої програми, яку ставлять цілком.',
+				more: 'Обидві половини змагання тут — сервіси: гра і бот, який у неї грає.'
 			},
 			{
-				match: ['blockchain', 'blockchains', 'ledger', 'ledgers'],
-				title: 'Blockchain',
-				body: 'A shared record book that thousands of computers keep copies of at once. Adding an entry requires the others to agree it is valid, and past entries cannot be rewritten \u2014 so no single participant controls the history.',
-				more: 'Used here for two narrow jobs: recording who claimed what score, and paying out the winner. Nothing more.'
+				match: ['блокчейн', 'блокчейну', 'блокчейні', 'блокчейном', 'блокчейни'],
+				title: 'Блокчейн',
+				body: 'Спільна книга записів, копії якої одразу тримають тисячі комп\u2019ютерів. Щоб додати рядок, інші мають погодитися, що він правильний, а минулі рядки переписати не можна — історію не контролює ніхто один.',
+				more: 'Тут у нього два вузькі завдання: зафіксувати, хто яку оцінку заявив, і виплатити переможцю. Більше нічого.'
 			},
 			{
 				match: ['Ergo', 'ERG'],
 				title: 'Ergo',
-				body: 'The particular blockchain this platform records results on and settles payments through. ERG is its unit of currency.',
-				more: 'It is a choice, not a foundation: the platform has no coin of its own.'
+				body: 'Конкретний блокчейн, на якому ця платформа записує результати й проводить виплати. ERG — його грошова одиниця.',
+				more: 'Це вибір, а не фундамент: у платформи немає власної монети.'
 			},
 			{
-				match: ['smart contract', 'smart contracts', 'contract', 'contracts', 'game contract'],
-				title: 'Smart contract',
-				body: 'A program that lives on the blockchain and holds money under rules written down in advance. When the conditions are met it pays out by itself \u2014 nobody signs a cheque, and nobody can decide not to.',
-				more: 'It is why the prize is safe before anyone has won it: the funds are held by the rules, not by the person who wrote them.'
+				match: [
+					'смартконтракт',
+					'смартконтракту',
+					'смартконтрактом',
+					'смартконтракті',
+					'смартконтракти',
+					'смартконтрактів',
+					'контракт гри',
+					'контракту гри'
+				],
+				title: 'Смартконтракт',
+				body: 'Програма, яка живе в блокчейні й тримає гроші за правилами, записаними заздалегідь. Коли умови виконано, вона платить сама — ніхто не підписує чек, і ніхто не може вирішити не платити.',
+				more: 'Тому приз у безпеці ще до перемоги: фонди тримають правила, а не той, хто їх написав.'
 			},
 			{
-				match: ['on-chain', 'on chain', 'onchain'],
-				title: 'On-chain',
-				body: 'Written into the blockchain itself, where everyone can see it and nobody can quietly change it later \u2014 as opposed to sitting in a company\u2019s private database.'
+				match: ['ончейн'],
+				title: 'Ончейн',
+				body: 'Записано в сам блокчейн, де це бачать усі й ніхто потім тихо не поправить — на відміну від приватної бази компанії.'
 			},
 			{
-				match: ['commitment', 'commitments', 'score commitment', 'cryptographic commitment', 'pre-commitment'],
-				title: 'Commitment',
-				body: 'A sealed envelope. You publish something that proves what you chose, without revealing what it was \u2014 and later, when the envelope is opened, everyone can check you didn\u2019t swap the contents.',
-				more: 'It is what lets a score be locked in publicly while the game is still running, without telling your rivals how well you did.'
+				match: [
+					'криптографічне зобов\u2019язання',
+					'криптографічного зобов\u2019язання',
+					'криптографічним зобов\u2019язанням',
+					'криптографічні зобов\u2019язання',
+					'криптографічних зобов\u2019язань',
+					'зобов\u2019язання',
+					'зобов\u2019язанням',
+					'зобов\u2019язань',
+					'попереднє зобов\u2019язання'
+				],
+				title: 'Зобов\u2019язання',
+				body: 'Запечатаний конверт. Ви публікуєте щось, що доводить, що саме ви обрали, не розкриваючи що — а пізніше, коли конверт розкривають, усі можуть перевірити, що вміст не підмінили.',
+				more: 'Так оцінку можна зафіксувати публічно, поки гра ще йде, не розповідаючи суперникам, як у вас вийшло.'
 			},
 			{
-				match: ['hash', 'hashes', 'hashed', 'digest', 'hashed logs'],
-				title: 'Hash',
-				body: 'A short fingerprint calculated from a piece of data. The same data always gives the same fingerprint, a single changed byte gives a completely different one, and you cannot work backwards from the fingerprint to the data.',
-				more: 'That one-way property is the whole trick: it lets you prove something matches without showing what it is.'
+				match: ['хеш', 'хешу', 'хеші', 'хешованих журналів', 'хешованих', 'хешованими', 'дайджест'],
+				title: 'Хеш',
+				body: 'Короткий відбиток, порахований із даних. Ті самі дані завжди дають той самий відбиток, зміна одного байта — зовсім інший, і від відбитка назад до даних не повернутися.',
+				more: 'Ця односторонність і є весь трюк: можна довести, що щось збігається, не показуючи, що це.'
 			},
 			{
-				match: ['secret', 'game secret', '256-bit secret'],
-				title: 'Secret',
-				body: 'A large random number the creator generates and keeps hidden while the game is open. Every score is sealed using it, so no score can be verified \u2014 or forged \u2014 until the creator publishes it.',
-				more: 'Publishing it at the end is what makes everyone\u2019s results checkable at the same moment, rather than one at a time.'
+				match: [
+					'секрет гри',
+					'секрету гри',
+					'секрет на 256 біт',
+					'секрету на 256 біт',
+					'секрет',
+					'секрету',
+					'секретом',
+					'секрети'
+				],
+				title: 'Секрет',
+				body: 'Велике випадкове число, яке автор генерує і тримає схованим, поки гра відкрита. Ним запечатується кожна оцінка, тож жодну не можна ні перевірити, ні підробити, поки автор його не опублікує.',
+				more: 'Публікація наприкінці робить результати всіх перевірюваними в один момент, а не по черзі.'
 			},
 			{
-				match: ['seed', 'game seed', 'seeds'],
-				title: 'Seed',
-				body: 'The starting number that decides exactly which version of a challenge you face \u2014 which board, which market data, which puzzle. Same seed, same challenge, for everyone.',
-				more: 'It is revealed only after entries close, so nobody can tune a bot for the specific run in advance.'
+				match: ['сід', 'сіду', 'сідом', 'сіди', 'сід гри', 'сіду гри'],
+				title: 'Сід',
+				body: 'Стартове число, яке вирішує, яка саме версія виклику вам випаде — яка дошка, які ринкові дані, яка головоломка. Один сід — той самий виклик для всіх.',
+				more: 'Його показують лише після закриття заявок, щоб ніхто заздалегідь не підігнав бота під конкретний прогін.'
 			},
 			{
-				match: ['ceremony phase', 'ceremony', 'ceremony period'],
-				title: 'Ceremony phase',
-				body: 'The window at the start of a game when players sign up and each one\u2019s registration stirs a little unpredictability into the final seed. Like everyone throwing a die into the same cup before the lid comes off.',
-				more: 'It exists so the creator cannot know the challenge in advance either \u2014 the players collectively decide it without meaning to.'
+				match: ['фаза церемонії', 'фази церемонії', 'церемонія', 'церемонії'],
+				title: 'Фаза церемонії',
+				body: 'Вікно на початку гри, коли гравці реєструються і кожна реєстрація трохи перемішує непередбачуваність у підсумковий сід. Ніби всі кинули кубик в одну чашку, поки кришку не зняли.',
+				more: 'Вона потрібна, щоб автор теж не знав виклик заздалегідь: гравці разом його визначають, самі того не бажаючи.'
 			},
 			{
-				match: ['Solver ID', 'Solver IDs', 'solver identifier'],
+				match: ['Solver ID'],
 				title: 'Solver ID',
-				body: 'The unique fingerprint of the exact bot you registered. It names one specific version of your code, so a bot cannot be quietly swapped for a different one after the seed is revealed.'
+				body: 'Унікальний відбиток того самого бота, якого ви зареєстрували. Він називає конкретну версію коду, тож бота не можна тихо підмінити іншим після розкриття сіду.'
 			},
 			{
-				match: ['Paper', 'the Paper', 'game paper'],
+				match: ['Paper'],
 				title: 'Paper',
-				body: 'The written rules: what the challenge is, how it is scored, what counts as a valid entry. Published before anyone can play, so the terms cannot change once people have committed.',
-				more: 'You are meant to be able to build your entry from this document alone.'
+				body: 'Письмові правила: у чому виклик, як рахують бали, що вважається придатною заявкою. Публікується до того, як хтось може грати, щоб умови не змінювалися після того, як люди вже вклалися.',
+				more: 'Задум у тому, що заявку можна зібрати з одного цього документа.'
 			},
 			{
-				match: ['pot', 'the pot', 'prize pool'],
-				title: 'Pot',
-				body: 'All the entry fees, pooled together and held by the contract until the game resolves. Everyone who competes pays in; the winner takes what is left after the agreed cuts.'
+				match: ['банк', 'банку', 'банку', 'банком', 'призовий банк'],
+				title: 'Банк',
+				body: 'Усі внески за участь, зібрані докупи й утримувані контрактом, поки гру не буде розв\u2019язано. Хто змагається — платить; переможець забирає те, що лишилося після обумовлених відрахувань.'
 			},
 			{
-				match: ['participation fee', 'participation fees', 'entry fee', 'entry fees'],
-				title: 'Participation fee',
-				body: 'What it costs to submit a result you want counted. It goes into the pot rather than to the organisers, so every entry makes the prize bigger.',
-				more: 'You only pay it if you decide your run was worth entering \u2014 running the game locally is free.'
+				match: ['внесок за участь', 'внеску за участь', 'внески за участь', 'внесків за участь'],
+				title: 'Внесок за участь',
+				body: 'Плата за те, щоб ваш результат урахували. Вона йде в банк, а не організаторам, тож кожна заявка збільшує приз.',
+				more: 'Платите лише якщо вирішили, що прогін варто подавати — ганяти гру локально безкоштовно.'
 			},
 			{
-				match: ['commission', 'commissions', 'creator commission', 'platform commission'],
-				title: 'Commission',
-				body: 'The agreed slice of the pot that goes to the game\u2019s creator, its judges and the platform. Set in the open when the game is published, and taken automatically \u2014 not negotiated afterwards.'
+				match: [
+					'комісія',
+					'комісії',
+					'комісію',
+					'комісією',
+					'комісій',
+					'комісія автора'
+				],
+				title: 'Комісія',
+				body: 'Обумовлена частка банку, яка йде авторові гри, її суддям і платформі. Її фіксують відкрито під час публікації гри й знімають автоматично — не торгуються потім.'
 			},
 			{
-				match: ['judge', 'judges'],
-				title: 'Judge',
-				body: 'Someone whose job is to check the creator, not the players: did the game actually score honestly, and are its receipts valid? If they catch a cheat, they are paid out of the creator\u2019s cut.',
-				more: 'Being paid for finding fraud, rather than for approving things, is what makes the role worth having.'
+				match: ['суддя', 'судді', 'суддям', 'суддів', 'суддями'],
+				title: 'Суддя',
+				body: 'Той, чия робота — перевіряти автора, а не гравців: гра чесно рахувала бали і квитанції придатні? Якщо ловлять обман, платять із частки автора.',
+				more: 'Платять за знайдене шахрайство, а не за схвалення — тому роль має сенс.'
 			},
 			{
-				match: ['NFT', 'NFTs', 'game NFT'],
+				match: ['NFT', 'NFT гри'],
 				title: 'NFT',
-				body: 'A one-of-a-kind token recorded on the blockchain, which can be owned and transferred but not duplicated. Here it is the trophy: permanent, public proof of who won a particular game.'
+				body: 'Унікальний токен, записаний у блокчейн: ним можна володіти і його можна передати, але не скопіювати. Тут це трофей: постійний публічний доказ, хто виграв конкретну гру.'
 			},
 			{
-				match: ['wallet', 'wallets', 'Ergo wallet'],
-				title: 'Wallet',
-				body: 'The app that holds the keys to your funds and signs your actions on the blockchain. Not an account with a company \u2014 nobody can freeze it, and nobody can recover it for you.'
+				match: ['гаманець', 'гаманця', 'гаманці', 'гаманцем', 'гаманець Ergo'],
+				title: 'Гаманець',
+				body: 'Програма, яка зберігає ключі до ваших грошей і підписує дії в блокчейні. Це не акаунт у компанії — його ніхто не заморозить і ніхто за вас не відновить.'
 			},
 			{
-				match: ['gas fee', 'gas fees', 'network gas fee', 'network fee'],
-				title: 'Gas fee',
-				body: 'The small charge for having the network record your transaction. It pays the computers doing the recording, not the platform \u2014 like postage rather than a ticket price.'
+				match: ['комісія мережі', 'комісію мережі', 'газ'],
+				title: 'Комісія мережі',
+				body: 'Невелика плата за те, що мережа запише вашу транзакцію. Її отримують комп\u2019ютери, які пишуть, а не платформа — більше схоже на марку, ніж на ціну квитка.'
 			},
 			{
-				match: ['deterministic', 'determinism', 'reproducible', 'reproducibility'],
-				title: 'Deterministic',
-				body: 'Same input, same output, every time \u2014 like a recipe that produces an identical cake in any kitchen, rather than one that depends on the cook. Nothing about the machine, the day or the location changes the result.',
-				more: 'It is what makes a score checkable by somebody else: they can re-run it and must get your number.'
+				match: [
+					'детермінований',
+					'детермінована',
+					'детермінованій',
+					'детермінованому',
+					'детермінізм',
+					'відтворюваний',
+					'відтворюваність'
+				],
+				title: 'Детермінований',
+				body: 'Один вхід — один вихід, щоразу: як рецепт, який на будь-якій кухні дає той самий пиріг, а не залежить від кухаря. Ні машина, ні день, ні місце результат не змінюють.',
+				more: 'Тому чужу оцінку можна перевірити: перезапустити й отримати ваше число.'
 			},
 			{
-				match: ['isolation', 'isolated', 'sealed', 'sandboxed', 'secure isolated environment', 'isolated environment'],
-				title: 'Isolation',
-				body: 'Keeping a running program inside a boundary it cannot reach past \u2014 it sees only what it was given, and nothing of the machine around it or of anything else running there.',
-				more: 'It is what lets a game run a stranger\u2019s bot safely, and lets you run a stranger\u2019s game safely.'
+				match: [
+					'ізоляція',
+					'ізоляції',
+					'ізольованому середовищі',
+					'ізольованому',
+					'ізольованій',
+					'запечатаній',
+					'запечатаний',
+					'запечатаних',
+					'запечатані'
+				],
+				title: 'Ізоляція',
+				body: 'Тримати робочу програму всередині межі, за яку вона не вийде: вона бачить лише те, що їй дали, і нічого від машини довкола й від усього іншого, що там крутиться.',
+				more: 'Тому гра може безпечно запустити чужого бота, а ви — безпечно запустити чужу гру.'
 			},
 			{
-				match: ['obfuscation', 'obfuscated', 'obfuscate'],
-				title: 'Obfuscation',
-				body: 'Deliberately scrambling a program so that it still runs perfectly but is painful to read \u2014 the software equivalent of a document printed without spaces or line breaks.',
-				more: 'Used here to keep a game\u2019s hidden secret hidden, even though everyone has a copy of the program that contains it.'
+				match: ['обфускація', 'обфускації', 'обфускацією', 'обфускований'],
+				title: 'Обфускація',
+				body: 'Навмисно заплутати програму так, щоб вона працювала ідеально, але читати її було болісно — як документ, надрукований без пробілів і перенесень.',
+				more: 'Тут так ховають секрет гри, хоча копія програми з цим секретом є в усіх.'
 			},
 			{
-				match: ['peer-to-peer', 'peer to peer', 'P2P'],
+				match: ['peer-to-peer', 'P2P'],
 				title: 'Peer-to-peer',
-				body: 'Two computers dealing with each other directly, the way two people have a phone call \u2014 instead of both sending everything through a company in the middle, the way email or a marketplace works. Each computer is a "peer": equal, no one in charge.',
-				more: 'It matters here because the company in the middle is usually the one that sets the price, takes a cut, and can remove you.'
+				body: 'Два комп\u2019ютери спілкуються напряму, як двоє людей телефоном — а не женуть усе через компанію посередині, як пошта чи маркетплейс. Кожен комп\u2019ютер — «рівний»: ніхто не головний.',
+				more: 'Це важливо, бо компанія посередині зазвичай ставить ціну, бере частку й може вас викинути.'
 			},
 			{
-				match: ['self-hosting', 'self-hosted', 'self-host', 'run locally', 'runs locally'],
-				title: 'Self-hosting',
-				body: 'Running your own copy of a service on your own machine instead of using somebody else\u2019s. The thing keeps working even if the public version is switched off, censored, or simply having a bad day.'
+				match: ['самохостинг', 'самохостингу', 'локально'],
+				title: 'Самохостинг',
+				body: 'Запускати власну копію сервісу на своїй машині, а не користуватися чужою. Річ продовжує працювати, навіть якщо публічну версію вимкнули, цензурували або в неї просто поганий день.'
 			},
 			{
-				match: ['decoy', 'decoys', 'decoy score', 'decoy scores', 'fake high scores'],
-				title: 'Decoy',
-				body: 'A deliberately misleading entry \u2014 a score you publish that isn\u2019t your real one \u2014 submitted to make rivals guess wrong about how well you actually did. Bluffing, made possible because nobody can read a sealed score.'
+				match: [
+					'приманка',
+					'приманки',
+					'приманкою',
+					'хибні високі оцінки',
+					'хибні оцінки'
+				],
+				title: 'Приманка',
+				body: 'Навмисно оманлива заявка — оцінка, яку ви публікуєте не справжньою, щоб суперники невірно вгадали, як у вас насправді. Блеф, можливий тому, що запечатану оцінку ніхто не прочитає.'
 			},
 			{
-				match: ['Time-Weighted Score', 'time-weighted score', 'time weighted score', 'TimeWeight'],
-				title: 'Time-weighted score',
-				body: 'A score adjusted for how early you submitted it. Two identical results do not tie: the one entered sooner counts for more, so sitting on a good answer until the deadline costs you.'
+				match: [
+					'оцінка з урахуванням часу',
+					'оцінки з урахуванням часу',
+					'TimeWeight'
+				],
+				title: 'Оцінка з урахуванням часу',
+				body: 'Оцінка, поправлена на те, наскільки рано ви її подали. Два однакові результати — не нічия: той, що раніше, важить більше, тож сидіти на хорошій відповіді до дедлайну собі дорожче.'
 			},
 			{
-				match: ['Grace Period', 'grace period', 'validation period', 'refund'],
-				title: 'Grace period',
-				body: 'A waiting window built into the rules before money moves \u2014 time for judges to object, and time for players to claim their fees back if the creator never resolves the game at all.',
-				more: 'It is the answer to "what if the organiser just disappears": the contract lets everyone walk away with their money.'
+				match: [
+					'пільговий період',
+					'пільгового періоду',
+					'період перевірки',
+					'періоду перевірки',
+					'повернення',
+					'повернення внесків'
+				],
+				title: 'Пільговий період',
+				body: 'Вікно очікування, вбудоване в правила до руху грошей — час суддям заперечити й гравцям забрати внески, якщо автор так і не розв\u2019язав гру.',
+				more: 'Відповідь на «а якщо організатор просто зникне»: контракт дає всім піти зі своїми грошима.'
 			},
 			{
-				match: ['CDE', 'scenario variability', 'high scenario variability'],
-				title: 'Scenario variability (CDE)',
-				body: 'How different each run of a game can be from the last. High variability means a bot has to actually play well, because there is no single fixed answer to memorise and hardcode.'
+				match: ['CDE', 'варіативність сценаріїв', 'високою варіативністю сценаріїв'],
+				title: 'Варіативність сценаріїв (CDE)',
+				body: 'Наскільки кожен прогін гри може відрізнятися від попереднього. Висока варіативність означає, що боту треба справді добре грати: запам\u2019ятати й зашити одну готову відповідь не можна.'
 			}
 		]
 	},
 
 	/* ============================================================== *
-	 * Splash screen
+	 * Заставка
 	 * ============================================================== */
 	splash: {
 		title: 'GAME OF PROMPTS',
-		subtitle: 'WRITE YOUR PROMPTS. BUILD YOUR BOT. WIN THE THRONE.'
+		subtitle: 'ПИШИ ПРОМПТИ. ЗБЕРИ БОТА. ВІЗЬМИ ТРОН.'
 	},
 
 	/* ============================================================== *
 	 * <head>
 	 * ============================================================== */
 	meta: {
-		title: 'Game of Prompts — Write your prompts. Build your bot. Win the throne.',
+		title: 'Game of Prompts — Пиши промпти. Збери бота. Візьми трон.',
 		description:
-			'A competitive platform where creators design game-services to evaluate AI solvers, while players build solver-services to maximize their scores — powered by the Ergo blockchain and Celaut.',
+			'Змагальна платформа, де автори роблять ігрові сервіси, щоб оцінювати солвери ШІ, а гравці збирають солвер-сервіси, щоб набрати максимум — на блокчейні Ergo і Celaut.',
 		ogTitle: 'Game of Prompts',
-		ogDescription: 'Write your prompts. Build your bot. Win the throne.'
+		ogDescription: 'Пиши промпти. Збери бота. Візьми трон.'
 	},
 
 	/* ============================================================== *
-	 * Hero
+	 * Герой
 	 * ============================================================== */
 	hero: {
 		titleTop: 'GAME OF',
 		titleBottom: 'PROMPTS',
-		// `<span class="hero-grad">` is the accent gradient. Keep the tag
-		// around whichever clause deserves the emphasis in this language;
-		// it does not have to be the middle one.
-		tagline: 'Write your prompts. <span class="hero-grad">Build your bot.</span> Win the throne.',
-		lede: 'A competitive platform where creators design game-services to evaluate AI solvers, and players build solver-services to maximize their scores — all recorded and verified on-chain.',
+		tagline: 'Пиши промпти. <span class="hero-grad">Збери бота.</span> Візьми трон.',
+		lede: 'Змагальна платформа, де автори роблять ігрові сервіси, щоб оцінювати солвери ШІ, а гравці збирають солвер-сервіси, щоб набрати максимум — усе записується й перевіряється ончейн.',
 		actions: {
-			launch: 'Launch App',
-			github: 'View on GitHub',
-			how: 'See how it works'
+			launch: 'Відкрити застосунок',
+			github: 'Дивитися на GitHub',
+			how: 'Як це працює'
 		},
 		stats: [
-			{ value: 'P2P', label: 'Decentralized — services run on your own Celaut node' },
-			{ value: 'On-chain', label: 'Results committed and verified on Ergo' },
-			{ value: 'Trustless', label: 'Smart contracts settle the pot, not a company' }
+			{ value: 'P2P', label: 'Децентралізовано — сервіси крутяться на вашій ноді Celaut' },
+			{ value: 'Ончейн', label: 'Результати фіксуються зобов\u2019язанням і перевіряються в Ergo' },
+			{ value: 'Без довіри', label: 'Банк ділить смартконтракт, а не компанія' }
 		],
-		scroll: 'Scroll'
+		scroll: 'Далі'
 	},
 
 	/* ============================================================== *
-	 * The seven pinned scenes
-	 * Each `beats` array is positional: one entry per SceneBeat in
-	 * +page.svelte, in order. `note` is the closing line of a scene.
+	 * Сім сцен
 	 * ============================================================== */
 	scenes: {
 		arena: {
-			label: 'The idea',
+			label: 'Ідея',
 			beats: [
 				{
-					h: 'Someone posts a challenge.',
-					p: 'A creator designs a game with measurable scoring — and packages it as a <strong>game-service</strong>: an immutable Celaut service that holds the game\u2019s logic and its secret.'
+					h: 'Хтось публікує виклик.',
+					p: 'Автор придумує гру з вимірюваною оцінкою й запаковує її як <strong>ігровий сервіс</strong>: незмінний сервіс Celaut, у якому лежать логіка гри та її секрет.'
 				},
 				{
-					h: 'Everyone else builds a bot to beat it.',
-					p: 'Players write <strong>solver-services</strong> — their strategy, packaged the same way. The game-service runs each solver in a secure, isolated environment and scores what it did.'
+					h: 'Решта збирають бота, щоб його обіграти.',
+					p: 'Гравці пишуть <strong>солвер-сервіси</strong> — свою стратегію, запаковану так само. Ігровий сервіс запускає кожен солвер у безпечному ізольованому середовищі й оцінює, що він зробив.'
 				},
 				{
-					h: 'The highest score wins the throne.',
-					p: 'No leaderboard you have to trust. Every score is committed cryptographically and <strong>settled on the Ergo blockchain</strong>, where anyone can check the maths.',
-					note: 'Write your prompts. Build your bot. Win the throne.'
+					h: 'Найвища оцінка бере трон.',
+					p: 'Жодної таблиці, якій треба вірити. Кожна оцінка оформлюється криптографічним зобов\u2019язанням і <strong>розраховується в блокчейні Ergo</strong>, де будь-хто може перевірити математику.',
+					note: 'Пиши промпти. Збери бота. Візьми трон.'
 				}
 			]
 		},
 
 		components: {
-			label: 'Architecture',
+			label: 'Будова',
 			beats: [
 				{
-					h: 'Game Service',
-					p: 'Built by game devs. An autonomous service that encapsulates a game\u2019s logic and the secret. It evaluates solver performance, generates scores, and creates the <strong>cryptographic commitments</strong> needed for blockchain validation.'
+					h: 'Ігровий сервіс',
+					p: 'Його роблять розробники ігор. Автономний сервіс, який тримає логіку гри і секрет. Він оцінює роботу солвера, рахує бали й створює <strong>криптографічні зобов\u2019язання</strong>, потрібні блокчейну для перевірки.'
 				},
 				{
-					h: 'Solver Service',
-					p: 'Built by players. It implements strategies to maximize the score in a specific game. The solver is packaged and sent to the game-service, which <strong>executes it in a secure, isolated environment</strong> for evaluation.'
+					h: 'Солвер-сервіс',
+					p: 'Його роблять гравці. Реалізує стратегії, щоб набрати максимум у конкретній грі. Солвер запаковують і надсилають ігровому сервісу, який <strong>запускає його в безпечному ізольованому середовищі</strong> для оцінки.'
 				},
 				{
 					h: 'GoP Web',
-					p: 'The community portal. Discover games, read the rules, download game-services, and publish your results on the Ergo blockchain. It <strong>supports self-hosting</strong> for a fully trustless, peer-to-peer experience.'
+					p: 'Портал спільноти. Шукати ігри, читати правила, завантажувати ігрові сервіси й публікувати результати в блокчейні Ergo. <strong>Підтримує самохостинг</strong> — повністю без довіри, у режимі peer-to-peer.'
 				},
 				{
-					h: 'Everything runs on your machine.',
-					p: 'Game and solver services both run on a <strong>local Celaut node</strong>, which can operate entirely offline. GoP Web can be used via its GitHub.io instance or run locally as a Celaut service.',
-					note: 'Two technologies: Celaut for computation, Ergo for settlement.'
+					h: 'Усе крутиться на вашій машині.',
+					p: 'І ігрові сервіси, і солвер-сервіси працюють на <strong>локальній ноді Celaut</strong>, яка може йти повністю офлайн. GoP Web можна відкрити на GitHub.io або запустити локально як сервіс Celaut.',
+					note: 'Дві технології: Celaut рахує, Ergo розраховується.'
 				}
 			]
 		},
 
 		creator: {
-			label: 'Game creator flow',
+			label: 'Шлях автора гри',
 			beats: [
 				{
-					h: 'Design a game.',
-					p: 'Create a challenge with measurable scoring and high scenario variability (CDE), so hardcoded solutions don\u2019t work.'
+					h: 'Придумайте гру.',
+					p: 'Зробіть виклик із вимірюваною оцінкою і високою варіативністю сценаріїв (CDE), щоб зашиті намертво рішення не працювали.'
 				},
 				{
-					h: 'Write the Paper.',
-					p: 'Publish a document with all instructions, rules and evaluation criteria. Players must be able to understand the challenge <strong>before</strong> they participate.'
+					h: 'Напишіть Paper.',
+					p: 'Опублікуйте документ з усіма інструкціями, правилами й критеріями оцінки. Гравці мають зрозуміти виклик <strong>до</strong> участі.'
 				},
 				{
-					h: 'Generate a secret.',
-					p: 'A unique <strong>256-bit secret</strong> underwrites the cryptographic commitments and the later score validation. Nobody can see it while the game is open.'
+					h: 'Згенеруйте секрет.',
+					p: 'Унікальний <strong>секрет на 256 біт</strong> підкріплює криптографічні зобов\u2019язання і пізнішу перевірку оцінок. Поки гра відкрита, його ніхто не бачить.'
 				},
 				{
-					h: 'Package and publish.',
-					p: 'Ship the game as a Celaut service and publish it through GoP Web with its parameters: fee, deadline, and commission.'
+					h: 'Запакуйте й опублікуйте.',
+					p: 'Відвантажте гру як сервіс Celaut і опублікуйте через GoP Web із параметрами: внесок, дедлайн і комісія.'
 				},
 				{
-					h: 'Reveal the secret.',
-					p: 'When the deadline passes, the creator <strong>reveals the secret on-chain</strong>. That resolves the game: score validation becomes possible and the smart contract can determine the winner.',
-					note: 'Commit first, reveal later. That\u2019s what makes it fair.'
+					h: 'Розкрийте секрет.',
+					p: 'Коли дедлайн минає, автор <strong>розкриває секрет ончейн</strong>. Гру розв\u2019язано: перевірка оцінок стає можливою, і смартконтракт може визначити переможця.',
+					note: 'Спочатку зобов\u2019язання, потім розкриття. У цьому й справедливість.'
 				}
 			]
 		},
 
 		player: {
-			label: 'The player\u2019s journey',
+			label: 'Шлях гравця',
 			beats: [
 				{
-					h: 'Browse and read the Paper.',
-					p: 'Find a game on GoP Web. Read the creator\u2019s Paper to understand the challenge, the rules and the evaluation criteria before committing to anything.'
+					h: 'Знайдіть гру й прочитайте Paper.',
+					p: 'Знайдіть гру на GoP Web. Прочитайте Paper автора, щоб зрозуміти виклик, правила й критерії оцінки, перш ніж на щось підписуватися.'
 				},
 				{
-					h: 'Implement your solver.',
-					p: 'Build your solver-service from the Paper alone, so it\u2019s ready to compete the moment the seed drops.'
+					h: 'Зберіть солвер.',
+					p: 'Зберіть солвер-сервіс лише за Paper, щоб він був готовий змагатися в момент, коли випаде сід.'
 				},
 				{
-					h: 'Register your Solver ID.',
-					p: 'Registration is free — you only cover the network gas fee. This <strong>pre-commitment</strong> is what guarantees fairness before the seed is revealed.'
+					h: 'Зареєструйте Solver ID.',
+					p: 'Реєстрація безкоштовна — платите лише комісію мережі. Це <strong>попереднє зобов\u2019язання</strong> і є гарантією справедливості до розкриття сіду.'
 				},
 				{
-					h: 'The seed is revealed.',
-					p: 'Once the ceremony phase ends, the game seed goes public. Now — and only now — you know the exact challenge parameters you\u2019ll be evaluated against.'
+					h: 'Сід розкривають.',
+					p: 'Коли фаза церемонії закінчується, сід гри стає публічним. Тепер — і лише тепер — ви знаєте точні параметри виклику, за якими вас оцінять.'
 				},
 				{
-					h: 'Run the game service locally.',
-					p: 'The service executes your solver in a secure environment with the revealed seed, evaluates its performance, and generates the <strong>cryptographic commitment</strong> needed for on-chain validation.'
+					h: 'Запустіть ігровий сервіс локально.',
+					p: 'Сервіс запускає ваш солвер у безпечному середовищі з розкритим сідом, оцінює роботу й створює <strong>криптографічне зобов\u2019язання</strong> для перевірки ончейн.'
 				},
 				{
-					h: 'Submit your commitment and pay the fee.',
-					p: 'If the score is worth competing with, publish the commitment on-chain and pay the participation fee. <strong>All fees go into the pot</strong> — the winner takes the economic prize, minus creator, judge and platform commission, and receives the game NFT.',
-					note: 'You decide whether your run is worth submitting.'
+					h: 'Надішліть зобов\u2019язання і сплатіть внесок.',
+					p: 'Якщо оцінка варта боротьби, опублікуйте зобов\u2019язання ончейн і сплатіть внесок за участь. <strong>Усі внески йдуть у банк</strong> — переможець забирає економічний приз за вирахуванням комісії автора, суддів і платформи та отримує NFT гри.',
+					note: 'Ви вирішуєте, чи варто подавати свій прогін.'
 				}
 			]
 		},
 
 		validation: {
-			label: 'Score validation',
+			label: 'Перевірка оцінки',
 			beats: [
 				{
-					h: 'Your score is a hash, not a claim.',
-					p: 'When you participate, what goes on-chain is a <strong>commitment</strong> — a digest. Nobody, including the creator, can read your score off the blockchain while the game is still open.'
+					h: 'Ваша оцінка — хеш, а не заява.',
+					p: 'Коли ви берете участь, ончейн іде <strong>зобов\u2019язання</strong> — дайджест. Ніхто, зокрема автор, не прочитає вашу оцінку з блокчейну, поки гра відкрита.'
 				},
 				{
-					h: 'Then the secret comes out.',
-					p: 'After the deadline, the creator reveals the game secret in the resolution transaction. That\u2019s the missing ingredient — and it <strong>unlocks verification for everyone at once</strong>.'
+					h: 'Потім з\u2019являється секрет.',
+					p: 'Після дедлайну автор розкриває секрет гри в транзакції розв\u2019язання. Це інгредієнт, якого бракувало — і він <strong>відкриває перевірку одразу для всіх</strong>.'
 				},
 				{
-					h: 'The contract recomputes it.',
-					p: 'The game contract builds a commitment for each score from the <strong>solver ID, the score value, the hashed logs and the revealed secret</strong>. No trusted party is involved; it\u2019s arithmetic.'
+					h: 'Контракт перераховує.',
+					p: 'Контракт гри будує зобов\u2019язання для кожної оцінки з <strong>Solver ID, значення оцінки, хешованих журналів і розкритого секрету</strong>. Довіреної сторони немає: це арифметика.'
 				},
 				{
-					h: 'If they match, the score is real.',
-					p: 'A recomputed commitment that equals the published one proves the score is authentic and tamper-proof. Anything that doesn\u2019t match simply isn\u2019t a score.',
-					note: 'Transparent yet private: proven without being exposed.'
+					h: 'Якщо збіглося — оцінка справжня.',
+					p: 'Перераховане зобов\u2019язання, рівне опублікованому, доводить, що оцінка автентична і її не підмінили. Що не збіглося — просто не оцінка.',
+					note: 'Прозоро й приватно: доведено, не розкрито.'
 				}
 			]
 		},
 
 		pot: {
-			label: 'Economics',
+			label: 'Економіка',
 			beats: [
 				{
-					h: 'Every entry feeds the pot.',
-					p: 'Participation fees from everyone who submits a commitment accumulate in a single on-chain pot for that game.'
+					h: 'Кожна заявка годує банк.',
+					p: 'Внески за участь усіх, хто надіслав зобов\u2019язання, копичаться в одному банку ончейн цієї гри.'
 				},
 				{
-					h: 'Commissions come off the top.',
-					p: 'The creator, the judges and the platform take their agreed commission — all of it set in the open when the game was published, and <strong>enforced by the smart contract</strong> rather than by anyone\u2019s goodwill.'
+					h: 'Комісії знімають зверху.',
+					p: 'Автор, судді й платформа беруть обумовлену комісію — усе це зафіксовано відкрито під час публікації гри й <strong>виконується смартконтрактом</strong>, а не чиєюсь доброю волею.'
 				},
 				{
-					h: 'The rest goes to the winner.',
-					p: 'The highest validated score takes the remaining pot — plus the <strong>game NFT</strong>, a permanent, public, auditable proof of victory. Funds are released after a validation period that gives judges time to check the creator acted honestly.',
-					note: 'Nobody approves the payout. The contract does it.'
+					h: 'Решта — переможцю.',
+					p: 'Найвища перевірена оцінка забирає банк, що лишився, плюс <strong>NFT гри</strong>: постійний публічний перевірюваний доказ перемоги. Фонди відпускають після періоду перевірки, щоб судді встигли переконатися, що автор діяв чесно.',
+					note: 'Виплату ніхто не схвалює. Це робить контракт.'
 				}
 			]
 		},
 
 		judges: {
-			label: 'Trust & accountability',
+			label: 'Довіра й відповідальність',
 			beats: [
 				{
-					h: 'Who watches the creator?',
-					p: 'Judges are entities nominated by the creator who audit the resolution phase. They verify that the creator\u2019s game service generated <strong>valid proofs and valid scores</strong>.'
+					h: 'Хто стежить за автором?',
+					p: 'Судді — сутності, яких призначає автор, і вони аудитують фазу розв\u2019язання. Вони перевіряють, що ігровий сервіс автора породив <strong>придатні докази і придатні оцінки</strong>.'
 				},
 				{
-					h: 'Fraud costs the creator, not you.',
-					p: 'If a judge catches a faulty game service or an invalid proof, that judge <strong>receives the creator\u2019s commission</strong> as the reward. The incentive to look closely is built in.'
+					h: 'Шахрайство коштує авторові, не вам.',
+					p: 'Якщо суддя ловить несправний ігровий сервіс або непридатний доказ, цей суддя <strong>отримує комісію автора</strong> як нагороду. Стимул дивитися уважно вже вбудовано.'
 				},
 				{
-					h: 'Players stay out of the blast radius.',
-					p: 'In normal operation players cannot be penalised by judges. Judges exist to <strong>protect players from dishonest creators</strong>, never the other way around.',
-					note: 'Audit the house, not the guests.'
+					h: 'Гравці поза радіусом вибуху.',
+					p: 'У звичайній роботі судді не можуть покарати гравців. Судді існують, щоб <strong>захищати гравців від нечесних авторів</strong>, ніколи навпаки.',
+					note: 'Аудитують дім, не гостей.'
 				}
 			]
 		}
 	},
 
 	/* ============================================================== *
-	 * The readable reference list under the validation scene
+	 * Список кроків під сценою перевірки
 	 * ============================================================== */
 	steps: {
-		title: 'The five steps, in order',
+		title: 'П\u2019ять кроків по порядку',
 		items: [
 			{
-				badge: 'SUBMITTED',
-				title: 'Player Participation',
-				desc: 'Player publishes their participation on the Ergo blockchain.'
+				badge: 'ПОДАНО',
+				title: 'Участь гравця',
+				desc: 'Гравець публікує участь у блокчейні Ergo.'
 			},
 			{
-				badge: 'REVEALED',
-				title: 'Creator Reveals Secret',
-				desc: 'After the deadline, the creator reveals the game secret in the resolution transaction — unlocking verification.'
+				badge: 'РОЗКРИТО',
+				title: 'Автор розкриває секрет',
+				desc: 'Після дедлайну автор розкриває секрет гри в транзакції розв\u2019язання — і відкриває перевірку.'
 			},
 			{
-				badge: 'COMPUTED',
-				title: 'Smart Contract Validation',
-				desc: 'The game contract computes a commitment for each score using the solver ID, score value, hashed logs, and revealed secret.'
+				badge: 'ПОРАХОВАНО',
+				title: 'Перевірка смартконтрактом',
+				desc: 'Контракт гри рахує зобов\u2019язання для кожної оцінки за Solver ID, значенням оцінки, хешованими журналами й розкритим секретом.'
 			},
 			{
-				badge: 'VERIFIED',
-				title: 'Score Verification',
-				desc: 'When the score commitment matches the participation commitment, that score is validated as authentic and tamper-proof.'
+				badge: 'ПЕРЕВІРЕНО',
+				title: 'Перевірка оцінки',
+				desc: 'Коли зобов\u2019язання оцінки збігається із зобов\u2019язанням участі, оцінку підтверджують як автентичну й непідробну.'
 			},
 			{
-				badge: 'DISTRIBUTED',
-				title: 'Winner Takes the Pot',
-				desc: 'Highest score wins. Following a validation period to ensure the game creator acted honestly, funds are released to the winner, net of creator and judge fees.'
+				badge: 'РОЗДАНО',
+				title: 'Переможець забирає банк',
+				desc: 'Виграє найвища оцінка. Після періоду перевірки, що автор діяв чесно, фонди відпускають переможцю за вирахуванням комісій автора й суддів.'
 			}
 		]
 	},
 
 	/* ============================================================== *
-	 * Video
+	 * Відео
 	 * ============================================================== */
 	video: {
-		label: 'Overview',
-		title: 'Watch the Breakdown',
+		label: 'Огляд',
+		title: 'Дивитися розбір',
 		subtitle:
-			'Get up to speed in minutes — see how Game of Prompts brings blockchain and AI competitions together.',
-		thumbAlt: 'Game of Prompts video thumbnail',
-		iframeTitle: 'Game of Prompts — Brief Breakdown'
+			'За кілька хвилин — як Game of Prompts з\u2019єднує блокчейн і змагання ШІ.',
+		thumbAlt: 'Прев\u2019ю відео Game of Prompts',
+		iframeTitle: 'Game of Prompts — короткий розбір'
 	},
 
 	/* ============================================================== *
-	 * Security
+	 * Безпека
 	 * ============================================================== */
 	security: {
-		label: 'Security',
-		title: 'Transparent Yet Private Competition',
-		subtitle:
-			'Cryptography ensures fair competition while protecting participants\u2019 strategies.',
+		label: 'Безпека',
+		title: 'Прозоре і водночас приватне змагання',
+		subtitle: 'Криптографія забезпечує чесну гру й захищає стратегії учасників.',
 		cards: [
 			{
-				title: 'Code Protection',
-				desc: 'The game\u2019s intellectual property and game secret are protected through obfuscation to prevent reverse engineering.'
+				title: 'Захист коду',
+				desc: 'Інтелектуальну власність гри і секрет гри захищено обфускацією, щоб завадити зворотному інжинірингу.'
 			},
 			{
-				title: 'Private Results',
-				desc: 'Strategic decoys and cryptographic commitments conceal your true score, protecting your strategy until the final reveal.'
+				title: 'Приватні результати',
+				desc: 'Стратегічні приманки й криптографічні зобов\u2019язання ховають справжню оцінку й бережуть стратегію до фінального розкриття.'
 			},
 			{
-				title: 'Immutable Proof',
-				desc: 'Final validation on the Ergo blockchain generates a public, immutable, and auditable proof of victory.'
+				title: 'Незмінний доказ',
+				desc: 'Фінальна перевірка в блокчейні Ergo дає публічний, незмінний і аудитований доказ перемоги.'
 			}
 		]
 	},
 
 	/* ============================================================== *
-	 * Game types
+	 * Типи ігор
 	 * ============================================================== */
 	gameTypes: {
-		title: 'What Can Be a Game?',
-		text: 'Game of Prompts is a versatile platform that can host a wide variety of competitions. Here are just a few examples of what\u2019s possible.',
-		// `label` is the "Game Type 01" eyebrow; {n} is the number.
-		eyebrow: 'Game Type {n}',
+		title: 'Чим може бути гра?',
+		text: 'Game of Prompts — гнучка платформа для найрізноманітніших змагань. Ось лише кілька прикладів можливого.',
+		eyebrow: 'Тип гри {n}',
 		items: [
 			{
-				title: 'Classic Arcade',
-				desc: 'The AI solver controls the character in fast-paced, skill-based game environments. Reflexes, pattern recognition, timing.',
-				score: 'Game points · Survival time · Levels cleared'
+				title: 'Класичний аркадний',
+				desc: 'солвер ШІ керує персонажем у швидких іграх на навичку. Реакція, розпізнавання образів, таймінг.',
+				score: 'Ігрові бали · Час виживання · Пройдені рівні'
 			},
 			{
-				title: 'Open World',
-				desc: 'Optimize for spatial reasoning, navigation, and environmental adaptation.',
-				score: 'Resource efficiency · Map exploration · Mission complexity'
+				title: 'Відкритий світ',
+				desc: 'Оптимізація просторового мислення, навігації й адаптації до середовища.',
+				score: 'Ефективність ресурсів · Дослідження мапи · Складність місій'
 			},
 			{
-				title: 'Financial Trading',
-				desc: 'Bot vs. market. Trade virtual assets in realistic simulations using historical or synthetic data. Pure strategy, zero luck.',
-				score: 'Net profit · Sharpe ratio · Drawdown · Benchmarks'
+				title: 'Фінансова торгівля',
+				desc: 'Бот проти ринку. Торгівля віртуальними активами в реалістичних симуляціях на історичних або синтетичних даних. Чиста стратегія, нуль удачі.',
+				score: 'Чистий прибуток · Коефіцієнт Шарпа · Просідання · Бенчмарки'
 			},
 			{
-				title: 'Protein Folding',
-				desc: 'Predict 3D protein structures from amino acid sequences. A real scientific challenge — AI solvers advancing biology.',
-				score: 'Structural stability · Folding accuracy · Efficiency'
+				title: 'Згортання білків',
+				desc: 'Передбачати 3D-структури білків за амінокислотними послідовностями. Справжній науковий виклик — солвери ШІ рухають біологію.',
+				score: 'Структурна стійкість · Точність згортання · Ефективність'
 			}
 		]
 	},
 
 	/* ============================================================== *
-	 * Optional features
+	 * Необов\u2019язкові механіки
 	 * ============================================================== */
 	features: {
-		title: 'Optional Game Features',
-		text: 'Creators can enhance their games with powerful optional mechanics — from poker-style bluffing to resource constraints and pay-per-attempt models.',
-		// {n} is the number; {status} is one of `status` below.
-		eyebrow: 'Feature {n}',
+		title: 'Необов\u2019язкові механіки гри',
+		text: 'Автор може підсилити гру необов\u2019язковими механіками — від покерного блефу до лімітів ресурсів і оплати за спробу.',
+		eyebrow: 'Механіка {n}',
 		status: {
-			available: 'Available',
-			research: 'Under Research'
+			available: 'Доступно',
+			research: 'У дослідженні'
 		},
 		items: [
 			{
-				title: 'Resource Limitation',
-				desc: 'Technical challenge by constraining computational resources. Efficiency is king.',
+				title: 'Ліміт ресурсів',
+				desc: 'Технічний виклик через обмеження обчислювальних ресурсів. Король — ефективність.',
 				bullets: [
-					'Game creator sets specific limits on computational resources',
-					'Constraints: maximum RAM, CPU time, or service dependencies',
-					'Forces players to develop highly efficient, optimized solutions',
-					'Adds a significant engineering challenge to the game'
+					'Автор гри задає конкретні ліміти обчислювальних ресурсів',
+					'Обмеження: максимум RAM, час CPU або залежності сервісів',
+					'Гравців це змушує робити дуже ефективні, оптимізовані рішення',
+					'Додає грі серйозний інженерний виклик'
 				]
 			},
 			{
-				title: 'Poker Mode',
-				desc: 'Strategic participation with risk and reward. Bluff, bet, and multiply your score.',
+				title: 'Покерний режим',
+				desc: 'Стратегічна участь із ризиком і нагородою. Блефуйте, ставте, множте оцінку.',
 				bullets: [
-					'Participants choose how much to pay (above a set minimum)',
-					'Higher payment = higher final score multiplier (e.g. ×2, ×5)',
-					'Players can submit multiple decoy scores',
-					'Bluff strategy: pay high fee + submit fake high scores to intimidate',
-					'Game creator sets score multiplier based on fee paid'
+					'Учасник сам обирає, скільки платити (вище заданого мінімуму)',
+					'Більша плата = більший множник підсумкової оцінки (напр. ×2, ×5)',
+					'Гравці можуть подати кілька оцінок-приманок',
+					'Стратегія блефу: високий внесок плюс хибні високі оцінки, щоб залякати',
+					'Автор гри задає множник оцінки за сплаченим внеском'
 				]
 			},
 			{
-				title: 'Pay-per-Attempt',
-				desc: 'A mechanism that assigns a cost to each local execution, fostering high-quality agent development over trial-and-error.',
+				title: 'Оплата за спробу',
+				desc: 'Механіка, яка ставить ціну кожній локальній спробі й заохочує якісних агентів замість тикання наосліп.',
 				bullets: [
-					'Incremental token cost per local execution attempt',
-					'Encourages rigorous local simulation and optimization',
-					'Disincentivizes blind brute-force strategies',
-					'Difficulty scaling fully configurable by the game creator'
+					'Наростальна вартість у токенах за кожну локальну спробу запуску',
+					'Заохочує сувору локальну симуляцію й оптимізацію',
+					'Відбиває охоту до сліпого перебору',
+					'Масштаб складності повністю налаштовує автор гри'
 				]
 			}
 		]
@@ -613,88 +673,82 @@ export default {
 
 	/* ============================================================== *
 	 * FAQ
-	 *
-	 * The live questions are fetched from the project README at
-	 * runtime and are English-only at source, so they are NOT
-	 * translated here. What IS translated is the chrome around them
-	 * and the offline fallback set, which is what a reader sees when
-	 * the fetch fails.
 	 * ============================================================== */
 	faq: {
 		label: 'FAQ',
-		title: 'Frequently Asked Questions',
-		footerTitle: 'Still have questions?',
+		title: 'Часті запитання',
+		footerTitle: 'Ще лишилися запитання?',
 		footerDesc:
-			'Copy the prompt below and paste it into any AI assistant — it includes a link to our full documentation.',
-		copyPrompt: 'Copy prompt',
-		copied: 'Copied!',
-		orLabel: 'or open directly in:',
-		disclaimerBefore: '⚠️ AI responses may not be fully accurate. Always refer to the ',
-		disclaimerLink: 'official documentation',
-		disclaimerAfter: ' for authoritative information.',
-		telegram: 'Join Telegram Community',
+			'Скопіюйте промпт нижче й вставте в будь-якого ШІ-помічника — усередині посилання на повну документацію.',
+		copyPrompt: 'Скопіювати промпт',
+		copied: 'Скопійовано!',
+		orLabel: 'або відкрити одразу в:',
+		disclaimerBefore: '⚠️ Відповіді ШІ можуть бути неточними. Завжди звіряйтеся з ',
+		disclaimerLink: 'офіційною документацією',
+		disclaimerAfter: ' як із джерелом.',
+		telegram: 'Спільнота в Telegram',
 		groups: [
 			{
-				title: 'General',
+				title: 'Загальне',
 				items: [
 					{
-						q: 'What is Game of Prompts?',
-						a: 'A bot competition audited by blockchain. Creators design game-services to evaluate AI solvers, while players build solver-services to maximize their scores — all verified on the Ergo blockchain.'
+						q: 'Що таке Game of Prompts?',
+						a: 'Змагання ботів, яке аудитує блокчейн. Автори роблять ігрові сервіси, щоб оцінювати солвери ШІ, гравці збирають солвер-сервіси, щоб набрати максимум — усе перевіряється в блокчейні Ergo.'
 					},
 					{
-						q: 'What is the "Ceremony Phase"?',
-						a: 'The initial period where players register their Solver IDs to add randomness to the seed. This prevents the Creator from pre-calculating solutions and ensures fair competition.'
+						q: 'Що таке «фаза церемонії»?',
+						a: 'Початковий період, коли гравці реєструють Solver ID і тим самим додають випадковість у сід. Автор не може заздалегідь прорахувати рішення, змагання лишається чесним.'
 					},
 					{
-						q: 'What do I need to play?',
-						a: 'An Ergo Wallet (with some ERG for participation fees) and a Celaut Node to run game and solver services locally.'
+						q: 'Що потрібно, щоб грати?',
+						a: 'Гаманець Ergo (з невеликим запасом ERG на внески за участь) і нода Celaut, щоб локально запускати ігрові сервіси й солвер-сервіси.'
 					}
 				]
 			},
 			{
-				title: 'Security',
+				title: 'Безпека',
 				items: [
 					{
-						q: 'How do I know the game is fair?',
-						a: 'The game rules and hashS are registered on-chain from the start. They are immutable — no one can change them after publication.'
+						q: 'Як зрозуміти, що гра чесна?',
+						a: 'Правила гри і hashS реєструються ончейн із самого початку. Вони незмінні — після публікації їх ніхто не змінить.'
 					},
 					{
-						q: 'Can the Creator steal the funds?',
-						a: 'No. Funds are locked in a Smart Contract, not the Creator\u2019s wallet. Distribution is handled atomically by the contract when the game resolves.'
+						q: 'Чи може автор украсти фонди?',
+						a: 'Ні. Фонди заблоковано в смартконтракті, не в гаманці автора. Роздачу атомарно робить контракт, коли гру розв\u2019язано.'
 					},
 					{
-						q: 'What if the Creator disappears?',
-						a: 'After a Grace Period, players can trigger a Refund Action to recover their participation fees from the smart contract.'
+						q: 'А якщо автор зникне?',
+						a: 'Після пільгового періоду гравці можуть запустити дію повернення й забрати внески за участь зі смартконтракту.'
 					}
 				]
 			},
 			{
-				title: 'Judges',
+				title: 'Судді',
 				items: [
 					{
-						q: 'Who are the Judges?',
-						a: 'Entities nominated by the Creator who audit the resolution phase. They verify that the game service generated valid proofs.'
+						q: 'Хто такі судді?',
+						a: 'Сутності, яких призначає автор, аудитують фазу розв\u2019язання. Вони перевіряють, що ігровий сервіс породив придатні докази.'
 					},
 					{
-						q: 'Why do Judges earn money for invalidating a participation?',
-						a: 'They detect Creator fraud — their incentive is to catch faulty game services. When they find issues, they receive the Creator\u2019s commission as reward.'
+						q: 'Чому суддям платять за те, що вони відхиляють участь?',
+						a: 'Вони ловлять шахрайство автора — їхній стимул знаходити несправні ігрові сервіси. Коли знаходять проблеми, отримують комісію автора як нагороду.'
 					},
 					{
-						q: 'Can I be penalized as a player?',
-						a: 'The system penalizes the Creator/Game Service, not honest players. Judges audit the Creator, not you.'
+						q: 'Чи можуть мене покарати як гравця?',
+						a: 'Система карає автора й ігровий сервіс, не чесних гравців. Судді аудитують автора, не вас.'
 					}
 				]
 			},
 			{
-				title: 'Economy',
+				title: 'Економіка',
 				items: [
 					{
-						q: 'How is the winner calculated?',
-						a: 'Highest Time-Weighted Score: Score × (TimeWeight + RemainingTime). Submit early and score high for the best result.'
+						q: 'Як рахують переможця?',
+						a: 'За найвищою оцінкою з урахуванням часу: оцінка × (TimeWeight + час, що лишився). Подавайте рано і набирайте багато — так найкращий результат.'
 					},
 					{
-						q: 'When do I receive my winnings?',
-						a: 'Immediately upon the End Game action. The Smart Contract atomically distributes all funds — the winner receives all participation fees minus creator commission and judge fees.'
+						q: 'Коли я отримаю виграш?',
+						a: 'Одразу під час дії закінчення гри. Смартконтракт атомарно роздає всі фонди: переможець отримує всі внески за участь мінус комісія автора й суддів.'
 					}
 				]
 			}
@@ -702,23 +756,23 @@ export default {
 	},
 
 	/* ============================================================== *
-	 * Call to action + footer
+	 * Заклик до дії + підвал
 	 * ============================================================== */
 	cta: {
-		label: 'Get Started',
-		title: 'Get Started with Game of Prompts',
+		label: 'Почати',
+		title: 'Почніть із Game of Prompts',
 		steps: [
-			'Install the <strong>Celaut node</strong> software to run Game and Solver Services in a secure, deterministic environment.',
-			'Set up an <strong>Ergo blockchain wallet</strong> to participate in games and receive winnings.',
-			'Browse available games on <strong>GoP Web</strong> and start developing your own solvers or create challenging games for others.'
+			'Встановіть ПЗ <strong>ноди Celaut</strong>, щоб запускати ігрові сервіси й солвер-сервіси в безпечному детермінованому середовищі.',
+			'Налаштуйте <strong>гаманець блокчейну Ergo</strong>, щоб брати участь в іграх і отримувати виграш.',
+			'Дивіться доступні ігри на <strong>GoP Web</strong> і починайте робити своїх солверів або складні ігри для інших.'
 		],
-		github: 'GitHub Repository',
-		celaut: 'Celaut Project',
-		ergo: 'Ergo Platform'
+		github: 'Репозиторій GitHub',
+		celaut: 'Проєкт Celaut',
+		ergo: 'Платформа Ergo'
 	},
 
 	footer: {
-		tagline: 'Write your prompts. Build your bot. Win the throne.',
+		tagline: 'Пиши промпти. Збери бота. Візьми трон.',
 		github: 'GitHub',
 		ergo: 'Ergo',
 		celaut: 'Celaut'

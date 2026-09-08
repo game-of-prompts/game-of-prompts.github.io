@@ -1,273 +1,267 @@
 /*
- * src/lib/i18n/en.js
+ * src/lib/i18n/vi.js
  * ------------------------------------------------------------------
- * English — the source dictionary and the fallback for every other
- * locale. If a key is missing anywhere else, `$t` resolves it here, so
- * this file is the only one that must never have a hole in it.
+ * Tiếng Việt — dịch en.js, từng khóa một.
  *
- * HOW TO WRITE THE COPY
- * ---------------------
- * Everything here is the landing page's actual voice: short sentences,
- * concrete nouns, no marketing adjectives. `<strong>` is used for the
- * one term a sentence is really about, never for emphasis in general —
- * the scene captions lean on it heavily and it stops meaning anything
- * if every clause has one.
+ * Cùng cấu trúc, cùng độ dài mảng. glossary.terms có đúng 33 mục,
+ * ghép theo vị trí với GLOSSARY_IDS trong glossary/terms.js.
  *
- * HOW TO WRITE THE GLOSSARY
- * -------------------------
- * The glossary explains the JARGON, not the project. A definition that
- * says "in Game of Prompts, a commitment is…" has failed: the reader
- * clicked because they don't know what a commitment IS. Explain the
- * word in plain language with an everyday comparison, then — only in
- * `more`, and only if it earns its place — say why it matters here.
- * Never write down to the reader. They are not stupid, they just
- * haven't met this word before.
- *
- * `match` is the list of trigger words IN THIS LANGUAGE. Translators
- * choose their own; nothing assumes English word order or that a term
- * is even one word in the target language.
+ * `match` không phải bản dịch tiêu đề: là các từ thật sự xuất hiện
+ * TRONG BẢN NÀY, được gạch chân và mở định nghĩa. Tiếng Việt hầu như
+ * không biến hình, nên chỉ liệt kê đúng cụm đã dùng. Tránh biệt danh
+ * quá ngắn nuốt câu khác (không dùng «ví» trần — sẽ dính «ví dụ»).
  */
 
 export default {
 	/* ============================================================== *
-	 * Chrome shared by every control in the corner cluster
+	 * Nhóm điều khiển góc
 	 * ============================================================== */
 	common: {
-		languageLabel: 'Language',
-		switchLanguage: 'Change language',
-		themeToLight: 'Switch to light theme',
-		themeToDark: 'Switch to dark theme',
-		backToTop: 'Back to top',
-		scoring: 'SCORING'
+		languageLabel: 'Ngôn ngữ',
+		switchLanguage: 'Đổi ngôn ngữ',
+		themeToLight: 'Chuyển sang giao diện sáng',
+		themeToDark: 'Chuyển sang giao diện tối',
+		backToTop: 'Lên đầu trang',
+		scoring: 'CHẤM ĐIỂM'
 	},
 
 	/* ============================================================== *
-	 * The glossary
-	 * Ids and ordering live in src/lib/glossary/terms.js, paired with
-	 * this array by position.
+	 * Thuật ngữ
 	 * ============================================================== */
 	glossary: {
-		/* Chrome */
-		toggleOn: 'Explain technical terms',
-		toggleOff: 'Hide term explanations',
-		toggleLabel: 'Explanations',
-		close: 'Close',
-		// {term} is replaced with the marked word.
-		explain: 'What does "{term}" mean?',
-		// Shown once, on a reader's first visit, near the first mark.
-		hintTitle: 'Some words are underlined.',
+		toggleOn: 'Giải thích thuật ngữ kỹ thuật',
+		toggleOff: 'Ẩn giải thích thuật ngữ',
+		toggleLabel: 'Giải thích',
+		close: 'Đóng',
+		explain: '«{term}» nghĩa là gì?',
+		hintTitle: 'Một số từ bị gạch chân.',
 		hintBody:
-			'Tap any underlined word for a plain-language explanation. Turn them off any time with the button in the corner.',
-		hintDismiss: 'Got it',
+			'Chạm bất kỳ từ gạch chân nào để đọc lời giải thích bằng tiếng thường. Tắt bất cứ lúc nào bằng nút ở góc.',
+		hintDismiss: 'Đã hiểu',
 
 		terms: [
 			{
-				match: ['game-service', 'game service', 'game-services', 'game services'],
-				title: 'Game service',
-				body: 'The challenge itself, packaged as a sealed program anyone can download and run. It holds the rules, the scoring, and the creator\u2019s hidden secret \u2014 like a sealed exam paper that also marks itself.',
-				more: 'You run it on your own machine. It scores your bot and produces the cryptographic receipt that the blockchain later checks.'
+				match: ['dịch vụ trò chơi', 'game-service', 'game service'],
+				title: 'Dịch vụ trò chơi',
+				body: 'Bản thân thử thách, đóng gói thành một chương trình niêm phong mà ai cũng tải về và chạy được. Bên trong là luật, cách chấm, và bí mật người tạo giấu đi — như đề thi đã dán kín mà còn tự chấm lấy.',
+				more: 'Bạn chạy nó trên máy của mình. Nó chấm bot và tạo biên lai mật mã để blockchain đối chiếu sau.'
 			},
 			{
-				match: ['solver-service', 'solver service', 'solver-services', 'solver services', 'solver', 'solvers'],
-				title: 'Solver service',
-				body: 'Your entry. The bot you build to play the game, packaged the same sealed way so it runs identically on any machine \u2014 your strategy as a single, portable box.',
-				more: 'It is handed to the game service, which runs it in isolation and scores what it did. Nobody sees your code but you.'
+				match: ['dịch vụ solver', 'solver', 'solvers'],
+				title: 'Dịch vụ solver',
+				body: 'Bài dự thi của bạn. Bot bạn dựng để chơi, đóng gói cùng cách niêm phong để chạy giống hệt trên mọi máy — chiến lược nhét trong một hộp mang đi được.',
+				more: 'Nó được giao cho dịch vụ trò chơi, chạy trong cô lập rồi chấm những gì nó làm. Không ai thấy mã của bạn ngoài bạn.'
 			},
 			{
-				match: ['GoP Web', 'GoP web portal', 'the portal'],
+				match: ['GoP Web', 'cổng cộng đồng'],
 				title: 'GoP Web',
-				body: 'The website where games are listed: read the rules, download a game, publish your result. It is a directory and a signing tool, not a referee \u2014 nothing it shows you has to be taken on trust.',
-				more: 'You can run your own copy of it. That is the point: if the public one vanished, the games would carry on.'
+				body: 'Trang web liệt kê các trò: đọc luật, tải trò, công bố kết quả. Đó là danh mục và công cụ ký, không phải trọng tài — không cần tin những gì nó hiện ra.',
+				more: 'Bạn có thể chạy bản sao của riêng mình. Đó là ý: nếu bản công cộng biến mất, các trò vẫn tiếp tục.'
 			},
 			{
-				match: ['Celaut', 'Celaut node', 'Celaut nodes'],
+				match: ['Celaut', 'nút Celaut'],
 				title: 'Celaut',
-				body: 'The system that actually runs the sealed programs. You install it once, and from then on any game or solver package can be handed to your machine and executed in its own locked room.',
-				more: 'It is what makes "run it yourself" realistic rather than a slogan: the same package behaves the same way on every machine that opens it.'
+				body: 'Hệ thống thật sự chạy các chương trình niêm phong. Cài một lần, rồi mọi gói trò hay solver đều có thể giao cho máy bạn và chạy trong phòng khóa riêng.',
+				more: 'Nó biến «tự chạy» thành chuyện thật chứ không phải khẩu hiệu: cùng một gói cư xử giống nhau trên mọi máy mở nó.'
 			},
 			{
-				match: ['node', 'nodes'],
-				title: 'Node',
-				body: 'One computer taking part in a network. Your laptop, a spare desktop, a server in a rack \u2014 once it runs the software and starts talking to other machines, it is a node.',
-				more: 'Here it is simply the machine that runs the games and the solvers. Yours, not somebody\u2019s data centre.'
+				match: ['nút mạng', 'các nút mạng'],
+				title: 'Nút mạng',
+				body: 'Một máy tính tham gia mạng. Laptop, máy bàn để dành, máy chủ trong tủ rack — khi đã chạy phần mềm và nói chuyện với máy khác, nó là một nút mạng.',
+				more: 'Ở đây đó chỉ là máy chạy trò và solver. Máy của bạn, không phải trung tâm dữ liệu của ai.'
 			},
 			{
-				match: ['service', 'services'],
-				title: 'Service',
-				body: 'A self-contained piece of software that does one job and can be handed to any machine to run \u2014 closer to a single appliance than to a whole program you install.',
-				more: 'Both halves of a competition here are services: the game and the bot playing it.'
+				match: ['dịch vụ'],
+				title: 'Dịch vụ',
+				body: 'Một mảnh phần mềm tự đủ, làm đúng một việc, giao cho máy nào cũng chạy được — gần một thiết bị gia dụng hơn là cả một chương trình phải cài.',
+				more: 'Hai nửa cuộc thi ở đây đều là dịch vụ: trò chơi và bot chơi nó.'
 			},
 			{
-				match: ['blockchain', 'blockchains', 'ledger', 'ledgers'],
+				match: ['blockchain'],
 				title: 'Blockchain',
-				body: 'A shared record book that thousands of computers keep copies of at once. Adding an entry requires the others to agree it is valid, and past entries cannot be rewritten \u2014 so no single participant controls the history.',
-				more: 'Used here for two narrow jobs: recording who claimed what score, and paying out the winner. Nothing more.'
+				body: 'Sổ ghi chép dùng chung mà hàng nghìn máy tính giữ bản sao cùng lúc. Thêm một dòng thì những máy kia phải đồng ý là hợp lệ, và dòng cũ không viết lại được — không ai một mình nắm lịch sử.',
+				more: 'Ở đây chỉ dùng cho hai việc hẹp: ghi ai tuyên bố điểm nào, và trả tiền người thắng. Không hơn.'
 			},
 			{
 				match: ['Ergo', 'ERG'],
 				title: 'Ergo',
-				body: 'The particular blockchain this platform records results on and settles payments through. ERG is its unit of currency.',
-				more: 'It is a choice, not a foundation: the platform has no coin of its own.'
+				body: 'Blockchain cụ thể mà nền tảng này ghi kết quả và thanh toán. ERG là đơn vị tiền của nó.',
+				more: 'Đó là một lựa chọn, không phải móng nhà: nền tảng không có coin riêng.'
 			},
 			{
-				match: ['smart contract', 'smart contracts', 'contract', 'contracts', 'game contract'],
-				title: 'Smart contract',
-				body: 'A program that lives on the blockchain and holds money under rules written down in advance. When the conditions are met it pays out by itself \u2014 nobody signs a cheque, and nobody can decide not to.',
-				more: 'It is why the prize is safe before anyone has won it: the funds are held by the rules, not by the person who wrote them.'
+				match: [
+					'hợp đồng thông minh',
+					'hợp đồng của trò',
+					'hợp đồng'
+				],
+				title: 'Hợp đồng thông minh',
+				body: 'Chương trình sống trên blockchain, giữ tiền theo luật viết sẵn. Điều kiện đủ thì nó tự trả — không ai ký séc, cũng không ai được quyết định không trả.',
+				more: 'Vì thế giải thưởng an toàn trước khi ai thắng: tiền do luật giữ, không phải người viết luật.'
 			},
 			{
-				match: ['on-chain', 'on chain', 'onchain'],
+				match: ['on-chain', 'trên chuỗi'],
 				title: 'On-chain',
-				body: 'Written into the blockchain itself, where everyone can see it and nobody can quietly change it later \u2014 as opposed to sitting in a company\u2019s private database.'
+				body: 'Được viết vào chính blockchain, nơi ai cũng thấy và không ai lặng lẽ sửa sau — khác với nằm trong cơ sở dữ liệu riêng của một công ty.'
 			},
 			{
-				match: ['commitment', 'commitments', 'score commitment', 'cryptographic commitment', 'pre-commitment'],
-				title: 'Commitment',
-				body: 'A sealed envelope. You publish something that proves what you chose, without revealing what it was \u2014 and later, when the envelope is opened, everyone can check you didn\u2019t swap the contents.',
-				more: 'It is what lets a score be locked in publicly while the game is still running, without telling your rivals how well you did.'
+				match: [
+					'cam kết mật mã',
+					'cam kết điểm',
+					'cam kết trước',
+					'cam kết'
+				],
+				title: 'Cam kết',
+				body: 'Phong bì niêm phong. Bạn công bố thứ chứng minh mình đã chọn gì, mà không tiết lộ đó là gì — sau này mở phong bì, ai cũng kiểm được là bạn không đổi ruột.',
+				more: 'Nó khóa một điểm số trước công chúng khi trò vẫn đang mở, mà không nói cho đối thủ biết bạn làm được tới đâu.'
 			},
 			{
-				match: ['hash', 'hashes', 'hashed', 'digest', 'hashed logs'],
+				match: ['nhật ký đã hash', 'hash', 'digest'],
 				title: 'Hash',
-				body: 'A short fingerprint calculated from a piece of data. The same data always gives the same fingerprint, a single changed byte gives a completely different one, and you cannot work backwards from the fingerprint to the data.',
-				more: 'That one-way property is the whole trick: it lets you prove something matches without showing what it is.'
+				body: 'Vân tay ngắn tính từ một khối dữ liệu. Cùng dữ liệu luôn ra cùng vân tay, đổi một byte là ra vân tay khác hẳn, và không đi ngược từ vân tay về dữ liệu được.',
+				more: 'Tính một chiều đó là cả mánh: chứng minh cái gì đó khớp mà không phải đưa ra cái đó.'
 			},
 			{
-				match: ['secret', 'game secret', '256-bit secret'],
-				title: 'Secret',
-				body: 'A large random number the creator generates and keeps hidden while the game is open. Every score is sealed using it, so no score can be verified \u2014 or forged \u2014 until the creator publishes it.',
-				more: 'Publishing it at the end is what makes everyone\u2019s results checkable at the same moment, rather than one at a time.'
+				match: ['bí mật 256-bit', 'bí mật của trò', 'bí mật'],
+				title: 'Bí mật',
+				body: 'Một số ngẫu nhiên lớn mà người tạo sinh ra và giấu khi trò còn mở. Mọi điểm đều được niêm bằng nó, nên không điểm nào kiểm được — hay giả được — cho tới khi người tạo công bố.',
+				more: 'Công bố lúc cuối khiến kết quả của mọi người kiểm được cùng một lúc, chứ không từng người một.'
 			},
 			{
-				match: ['seed', 'game seed', 'seeds'],
+				match: ['seed của trò', 'seed'],
 				title: 'Seed',
-				body: 'The starting number that decides exactly which version of a challenge you face \u2014 which board, which market data, which puzzle. Same seed, same challenge, for everyone.',
-				more: 'It is revealed only after entries close, so nobody can tune a bot for the specific run in advance.'
+				body: 'Số khởi đầu quyết định đúng phiên bản thử thách bạn gặp — bàn nào, dữ liệu thị trường nào, câu đố nào. Cùng seed, cùng thử thách, với mọi người.',
+				more: 'Chỉ lộ sau khi hết nhận bài, để không ai tinh chỉnh bot sẵn cho đúng lần chạy đó.'
 			},
 			{
-				match: ['ceremony phase', 'ceremony', 'ceremony period'],
-				title: 'Ceremony phase',
-				body: 'The window at the start of a game when players sign up and each one\u2019s registration stirs a little unpredictability into the final seed. Like everyone throwing a die into the same cup before the lid comes off.',
-				more: 'It exists so the creator cannot know the challenge in advance either \u2014 the players collectively decide it without meaning to.'
+				match: ['giai đoạn lễ', 'lễ khai mạc'],
+				title: 'Giai đoạn lễ',
+				body: 'Cửa sổ đầu trò, khi người chơi đăng ký và mỗi lượt đăng ký khuấy thêm một chút bất định vào seed cuối. Như mọi người cùng bỏ xúc xắc vào một cốc trước khi mở nắp.',
+				more: 'Có mặt để chính người tạo cũng không biết thử thách trước — người chơi cùng quyết định mà không chủ ý.'
 			},
 			{
-				match: ['Solver ID', 'Solver IDs', 'solver identifier'],
+				match: ['Solver ID', 'định danh solver'],
 				title: 'Solver ID',
-				body: 'The unique fingerprint of the exact bot you registered. It names one specific version of your code, so a bot cannot be quietly swapped for a different one after the seed is revealed.'
+				body: 'Vân tay duy nhất của đúng bot bạn đăng ký. Nó đặt tên một phiên bản cụ thể của mã, nên không thể lặng lẽ đổi bot khác sau khi seed lộ.'
 			},
 			{
-				match: ['Paper', 'the Paper', 'game paper'],
+				match: ['Paper', 'Paper của trò'],
 				title: 'Paper',
-				body: 'The written rules: what the challenge is, how it is scored, what counts as a valid entry. Published before anyone can play, so the terms cannot change once people have committed.',
-				more: 'You are meant to be able to build your entry from this document alone.'
+				body: 'Luật viết ra: thử thách là gì, chấm thế nào, cái gì tính là bài hợp lệ. Công bố trước khi ai chơi được, nên điều khoản không đổi sau khi người ta đã cam kết.',
+				more: 'Ý là bạn dựng được bài chỉ từ đúng tài liệu đó.'
 			},
 			{
-				match: ['pot', 'the pot', 'prize pool'],
-				title: 'Pot',
-				body: 'All the entry fees, pooled together and held by the contract until the game resolves. Everyone who competes pays in; the winner takes what is left after the agreed cuts.'
+				match: ['hũ thưởng', 'hũ'],
+				title: 'Hũ thưởng',
+				body: 'Mọi phí tham gia, gom lại và do hợp đồng giữ cho tới khi trò kết. Ai thi thì đóng; người thắng lấy phần còn lại sau các khoản đã thỏa thuận.'
 			},
 			{
-				match: ['participation fee', 'participation fees', 'entry fee', 'entry fees'],
-				title: 'Participation fee',
-				body: 'What it costs to submit a result you want counted. It goes into the pot rather than to the organisers, so every entry makes the prize bigger.',
-				more: 'You only pay it if you decide your run was worth entering \u2014 running the game locally is free.'
+				match: ['phí tham gia', 'lệ phí vào cửa'],
+				title: 'Phí tham gia',
+				body: 'Cái giá để nộp một kết quả muốn được tính. Nó vào hũ thưởng chứ không vào ban tổ chức, nên mỗi bài làm giải lớn hơn.',
+				more: 'Chỉ trả nếu bạn thấy lần chạy đáng nộp — chạy trò trên máy mình thì miễn phí.'
 			},
 			{
-				match: ['commission', 'commissions', 'creator commission', 'platform commission'],
-				title: 'Commission',
-				body: 'The agreed slice of the pot that goes to the game\u2019s creator, its judges and the platform. Set in the open when the game is published, and taken automatically \u2014 not negotiated afterwards.'
+				match: ['hoa hồng người tạo', 'hoa hồng'],
+				title: 'Hoa hồng',
+				body: 'Phần đã thỏa của hũ thưởng dành cho người tạo trò, giám khảo và nền tảng. Đặt công khai lúc trò được đăng, rồi tự trừ — không mặc cả sau.'
 			},
 			{
-				match: ['judge', 'judges'],
-				title: 'Judge',
-				body: 'Someone whose job is to check the creator, not the players: did the game actually score honestly, and are its receipts valid? If they catch a cheat, they are paid out of the creator\u2019s cut.',
-				more: 'Being paid for finding fraud, rather than for approving things, is what makes the role worth having.'
+				match: ['giám khảo'],
+				title: 'Giám khảo',
+				body: 'Việc của họ là kiểm người tạo, không phải người chơi: trò có thật sự chấm trung thực, biên lai có hợp lệ? Bắt được gian thì họ được trả từ phần của người tạo.',
+				more: 'Được trả vì tìm gian lận, chứ không vì phê duyệt, mới khiến vai này đáng có.'
 			},
 			{
-				match: ['NFT', 'NFTs', 'game NFT'],
+				match: ['NFT', 'NFT của trò'],
 				title: 'NFT',
-				body: 'A one-of-a-kind token recorded on the blockchain, which can be owned and transferred but not duplicated. Here it is the trophy: permanent, public proof of who won a particular game.'
+				body: 'Token một-của-một ghi trên blockchain, sở hữu và chuyển được nhưng không sao chép được. Ở đây là cúp: bằng chứng công khai, vĩnh viễn về ai thắng một trò cụ thể.'
 			},
 			{
-				match: ['wallet', 'wallets', 'Ergo wallet'],
-				title: 'Wallet',
-				body: 'The app that holds the keys to your funds and signs your actions on the blockchain. Not an account with a company \u2014 nobody can freeze it, and nobody can recover it for you.'
+				match: ['ví Ergo', 'ví tiền'],
+				title: 'Ví tiền',
+				body: 'Ứng dụng giữ khóa quỹ của bạn và ký hành động trên blockchain. Không phải tài khoản ở một công ty — không ai đóng băng được, và không ai lấy lại hộ bạn được.'
 			},
 			{
-				match: ['gas fee', 'gas fees', 'network gas fee', 'network fee'],
-				title: 'Gas fee',
-				body: 'The small charge for having the network record your transaction. It pays the computers doing the recording, not the platform \u2014 like postage rather than a ticket price.'
+				match: ['phí gas mạng', 'phí gas', 'phí mạng'],
+				title: 'Phí gas',
+				body: 'Khoản nhỏ để mạng ghi giao dịch của bạn. Trả cho máy đang ghi, không phải nền tảng — giống tem thư hơn giá vé.'
 			},
 			{
-				match: ['deterministic', 'determinism', 'reproducible', 'reproducibility'],
-				title: 'Deterministic',
-				body: 'Same input, same output, every time \u2014 like a recipe that produces an identical cake in any kitchen, rather than one that depends on the cook. Nothing about the machine, the day or the location changes the result.',
-				more: 'It is what makes a score checkable by somebody else: they can re-run it and must get your number.'
+				match: ['tất định', 'tính tất định', 'tái lập được', 'tính tái lập'],
+				title: 'Tất định',
+				body: 'Cùng đầu vào, cùng đầu ra, mọi lần — như công thức ra đúng một chiếc bánh ở bất kỳ bếp nào, chứ không phụ thuộc người nấu. Máy, ngày, chỗ đều không đổi kết quả.',
+				more: 'Đó là thứ khiến người khác kiểm được điểm: họ chạy lại và phải ra đúng số của bạn.'
 			},
 			{
-				match: ['isolation', 'isolated', 'sealed', 'sandboxed', 'secure isolated environment', 'isolated environment'],
-				title: 'Isolation',
-				body: 'Keeping a running program inside a boundary it cannot reach past \u2014 it sees only what it was given, and nothing of the machine around it or of anything else running there.',
-				more: 'It is what lets a game run a stranger\u2019s bot safely, and lets you run a stranger\u2019s game safely.'
+				match: [
+					'môi trường cô lập an toàn',
+					'môi trường cô lập',
+					'cô lập',
+					'niêm phong',
+					'sandbox'
+				],
+				title: 'Cô lập',
+				body: 'Giữ chương trình đang chạy trong một ranh giới nó không vượt qua được — chỉ thấy những gì được đưa, không thấy máy xung quanh hay thứ khác đang chạy ở đó.',
+				more: 'Nhờ thế một trò chạy bot của người lạ an toàn, và bạn chạy trò của người lạ cũng an toàn.'
 			},
 			{
-				match: ['obfuscation', 'obfuscated', 'obfuscate'],
-				title: 'Obfuscation',
-				body: 'Deliberately scrambling a program so that it still runs perfectly but is painful to read \u2014 the software equivalent of a document printed without spaces or line breaks.',
-				more: 'Used here to keep a game\u2019s hidden secret hidden, even though everyone has a copy of the program that contains it.'
+				match: ['làm rối mã', 'mã bị làm rối'],
+				title: 'Làm rối mã',
+				body: 'Cố ý xáo chương trình để nó vẫn chạy hoàn hảo nhưng đọc thì đau — bản phần mềm của một văn bản in không khoảng trắng, không xuống dòng.',
+				more: 'Dùng ở đây để bí mật giấu trong trò vẫn giấu, dù ai cũng có bản sao chương trình chứa nó.'
 			},
 			{
-				match: ['peer-to-peer', 'peer to peer', 'P2P'],
-				title: 'Peer-to-peer',
-				body: 'Two computers dealing with each other directly, the way two people have a phone call \u2014 instead of both sending everything through a company in the middle, the way email or a marketplace works. Each computer is a "peer": equal, no one in charge.',
-				more: 'It matters here because the company in the middle is usually the one that sets the price, takes a cut, and can remove you.'
+				match: ['ngang hàng', 'peer-to-peer', 'P2P'],
+				title: 'Ngang hàng',
+				body: 'Hai máy tính giao tiếp trực tiếp, như hai người gọi điện — chứ không gửi hết qua một công ty ở giữa, kiểu thư điện tử hay chợ. Mỗi máy là một «ngang hàng»: bình đẳng, không ai cầm quyền.',
+				more: 'Quan trọng ở đây vì công ty ở giữa thường là bên đặt giá, cắt phần, và đuổi bạn được.'
 			},
 			{
-				match: ['self-hosting', 'self-hosted', 'self-host', 'run locally', 'runs locally'],
-				title: 'Self-hosting',
-				body: 'Running your own copy of a service on your own machine instead of using somebody else\u2019s. The thing keeps working even if the public version is switched off, censored, or simply having a bad day.'
+				match: ['tự lưu trữ', 'tự chạy', 'chạy cục bộ'],
+				title: 'Tự lưu trữ',
+				body: 'Chạy bản sao dịch vụ trên máy mình thay vì dùng của người khác. Thứ đó vẫn chạy dù bản công cộng tắt, bị kiểm duyệt, hay chỉ đang ngày xấu.'
 			},
 			{
-				match: ['decoy', 'decoys', 'decoy score', 'decoy scores', 'fake high scores'],
-				title: 'Decoy',
-				body: 'A deliberately misleading entry \u2014 a score you publish that isn\u2019t your real one \u2014 submitted to make rivals guess wrong about how well you actually did. Bluffing, made possible because nobody can read a sealed score.'
+				match: ['điểm mồi', 'điểm cao giả', 'mồi nhử'],
+				title: 'Mồi nhử',
+				body: 'Bài cố ý đánh lạc hướng — một điểm bạn công bố không phải điểm thật — nộp để đối thủ đoán sai về thành tích. Bluff, làm được vì không ai đọc được điểm đã niêm.'
 			},
 			{
-				match: ['Time-Weighted Score', 'time-weighted score', 'time weighted score', 'TimeWeight'],
-				title: 'Time-weighted score',
-				body: 'A score adjusted for how early you submitted it. Two identical results do not tie: the one entered sooner counts for more, so sitting on a good answer until the deadline costs you.'
+				match: ['điểm trọng số thời gian', 'TimeWeight'],
+				title: 'Điểm trọng số thời gian',
+				body: 'Điểm chỉnh theo mức bạn nộp sớm. Hai kết quả giống nhau không hòa: cái vào trước nặng hơn, nên ngồi ôm đáp án hay tới hạn chót là thiệt.'
 			},
 			{
-				match: ['Grace Period', 'grace period', 'validation period', 'refund'],
-				title: 'Grace period',
-				body: 'A waiting window built into the rules before money moves \u2014 time for judges to object, and time for players to claim their fees back if the creator never resolves the game at all.',
-				more: 'It is the answer to "what if the organiser just disappears": the contract lets everyone walk away with their money.'
+				match: ['thời gian ân hạn', 'thời gian xác thực', 'hoàn phí'],
+				title: 'Thời gian ân hạn',
+				body: 'Cửa sổ chờ gắn trong luật trước khi tiền chuyển — giờ cho giám khảo phản đối, và giờ cho người chơi lấy lại phí nếu người tạo không bao giờ kết trò.',
+				more: 'Đó là câu trả lời cho «nếu ban tổ chức biến mất»: hợp đồng cho mọi người ra về với tiền của mình.'
 			},
 			{
-				match: ['CDE', 'scenario variability', 'high scenario variability'],
-				title: 'Scenario variability (CDE)',
-				body: 'How different each run of a game can be from the last. High variability means a bot has to actually play well, because there is no single fixed answer to memorise and hardcode.'
+				match: ['CDE', 'biến thiên kịch bản', 'biến thiên kịch bản cao'],
+				title: 'Biến thiên kịch bản (CDE)',
+				body: 'Mỗi lần chạy trò khác lần trước tới mức nào. Biến thiên cao nghĩa là bot phải chơi thật sự giỏi, vì không có một đáp án cố định để thuộc rồi cứng hóa.'
 			}
 		]
 	},
 
 	/* ============================================================== *
-	 * Splash screen
+	 * Màn hình mở
 	 * ============================================================== */
 	splash: {
 		title: 'GAME OF PROMPTS',
-		subtitle: 'WRITE YOUR PROMPTS. BUILD YOUR BOT. WIN THE THRONE.'
+		subtitle: 'VIẾT PROMPT. DỰNG BOT. CHIẾM NGAI.'
 	},
 
 	/* ============================================================== *
 	 * <head>
 	 * ============================================================== */
 	meta: {
-		title: 'Game of Prompts — Write your prompts. Build your bot. Win the throne.',
+		title: 'Game of Prompts — Viết prompt. Dựng bot. Chiếm ngai.',
 		description:
-			'A competitive platform where creators design game-services to evaluate AI solvers, while players build solver-services to maximize their scores — powered by the Ergo blockchain and Celaut.',
+			'Nền tảng thi đấu: người tạo thiết kế dịch vụ trò chơi để đánh giá solver AI, người chơi dựng dịch vụ solver để đẩy điểm — chạy trên blockchain Ergo và Celaut.',
 		ogTitle: 'Game of Prompts',
-		ogDescription: 'Write your prompts. Build your bot. Win the throne.'
+		ogDescription: 'Viết prompt. Dựng bot. Chiếm ngai.'
 	},
 
 	/* ============================================================== *
@@ -276,222 +270,217 @@ export default {
 	hero: {
 		titleTop: 'GAME OF',
 		titleBottom: 'PROMPTS',
-		// `<span class="hero-grad">` is the accent gradient. Keep the tag
-		// around whichever clause deserves the emphasis in this language;
-		// it does not have to be the middle one.
-		tagline: 'Write your prompts. <span class="hero-grad">Build your bot.</span> Win the throne.',
-		lede: 'A competitive platform where creators design game-services to evaluate AI solvers, and players build solver-services to maximize their scores — all recorded and verified on-chain.',
+		tagline: 'Viết prompt. <span class="hero-grad">Dựng bot.</span> Chiếm ngai.',
+		lede: 'Nền tảng thi đấu nơi người tạo thiết kế dịch vụ trò chơi để đánh giá solver AI, và người chơi dựng dịch vụ solver để đẩy điểm — mọi thứ ghi và xác thực on-chain.',
 		actions: {
-			launch: 'Launch App',
-			github: 'View on GitHub',
-			how: 'See how it works'
+			launch: 'Mở ứng dụng',
+			github: 'Xem trên GitHub',
+			how: 'Xem cách hoạt động'
 		},
 		stats: [
-			{ value: 'P2P', label: 'Decentralized — services run on your own Celaut node' },
-			{ value: 'On-chain', label: 'Results committed and verified on Ergo' },
-			{ value: 'Trustless', label: 'Smart contracts settle the pot, not a company' }
+			{ value: 'P2P', label: 'Phi tập trung — dịch vụ chạy trên nút Celaut của bạn' },
+			{ value: 'On-chain', label: 'Kết quả được cam kết và xác thực trên Ergo' },
+			{ value: 'Không cần tin', label: 'Hợp đồng thông minh chia hũ, không phải một công ty' }
 		],
-		scroll: 'Scroll'
+		scroll: 'Cuộn'
 	},
 
 	/* ============================================================== *
-	 * The seven pinned scenes
-	 * Each `beats` array is positional: one entry per SceneBeat in
-	 * +page.svelte, in order. `note` is the closing line of a scene.
+	 * Bảy cảnh
 	 * ============================================================== */
 	scenes: {
 		arena: {
-			label: 'The idea',
+			label: 'Ý tưởng',
 			beats: [
 				{
-					h: 'Someone posts a challenge.',
-					p: 'A creator designs a game with measurable scoring — and packages it as a <strong>game-service</strong>: an immutable Celaut service that holds the game\u2019s logic and its secret.'
+					h: 'Ai đó đăng một thử thách.',
+					p: 'Người tạo thiết kế trò có điểm đo được — rồi đóng gói thành <strong>dịch vụ trò chơi</strong>: một dịch vụ Celaut bất biến, giữ logic của trò và bí mật của nó.'
 				},
 				{
-					h: 'Everyone else builds a bot to beat it.',
-					p: 'Players write <strong>solver-services</strong> — their strategy, packaged the same way. The game-service runs each solver in a secure, isolated environment and scores what it did.'
+					h: 'Những người kia dựng bot để thắng nó.',
+					p: 'Người chơi viết <strong>dịch vụ solver</strong> — chiến lược của họ, đóng gói cùng cách. Dịch vụ trò chơi chạy mỗi solver trong môi trường cô lập an toàn rồi chấm những gì nó làm.'
 				},
 				{
-					h: 'The highest score wins the throne.',
-					p: 'No leaderboard you have to trust. Every score is committed cryptographically and <strong>settled on the Ergo blockchain</strong>, where anyone can check the maths.',
-					note: 'Write your prompts. Build your bot. Win the throne.'
+					h: 'Điểm cao nhất chiếm ngai.',
+					p: 'Không có bảng xếp hạng phải tin. Mỗi điểm được cam kết mật mã và <strong>thanh toán trên blockchain Ergo</strong>, nơi ai cũng kiểm được phép tính.',
+					note: 'Viết prompt. Dựng bot. Chiếm ngai.'
 				}
 			]
 		},
 
 		components: {
-			label: 'Architecture',
+			label: 'Kiến trúc',
 			beats: [
 				{
-					h: 'Game Service',
-					p: 'Built by game devs. An autonomous service that encapsulates a game\u2019s logic and the secret. It evaluates solver performance, generates scores, and creates the <strong>cryptographic commitments</strong> needed for blockchain validation.'
+					h: 'Dịch vụ trò chơi',
+					p: 'Do người làm game dựng. Một dịch vụ tự trị gói logic và bí mật. Nó đánh giá solver, sinh điểm, và tạo <strong>cam kết mật mã</strong> cần cho việc xác thực trên blockchain.'
 				},
 				{
-					h: 'Solver Service',
-					p: 'Built by players. It implements strategies to maximize the score in a specific game. The solver is packaged and sent to the game-service, which <strong>executes it in a secure, isolated environment</strong> for evaluation.'
+					h: 'Dịch vụ solver',
+					p: 'Do người chơi dựng. Nó hiện thực chiến lược để đẩy điểm trong một trò cụ thể. Solver được đóng gói và gửi tới dịch vụ trò chơi, vốn <strong>chạy nó trong môi trường cô lập an toàn</strong> để đánh giá.'
 				},
 				{
 					h: 'GoP Web',
-					p: 'The community portal. Discover games, read the rules, download game-services, and publish your results on the Ergo blockchain. It <strong>supports self-hosting</strong> for a fully trustless, peer-to-peer experience.'
+					p: 'Cổng cộng đồng. Tìm trò, đọc luật, tải dịch vụ trò chơi, công bố kết quả trên blockchain Ergo. Nó <strong>hỗ trợ tự lưu trữ</strong> cho trải nghiệm ngang hàng, không cần tin ai.'
 				},
 				{
-					h: 'Everything runs on your machine.',
-					p: 'Game and solver services both run on a <strong>local Celaut node</strong>, which can operate entirely offline. GoP Web can be used via its GitHub.io instance or run locally as a Celaut service.',
-					note: 'Two technologies: Celaut for computation, Ergo for settlement.'
+					h: 'Mọi thứ chạy trên máy bạn.',
+					p: 'Dịch vụ trò và solver đều chạy trên <strong>nút Celaut cục bộ</strong>, có thể hoạt động hoàn toàn ngoại tuyến. GoP Web dùng bản GitHub.io hoặc chạy cục bộ như một dịch vụ Celaut.',
+					note: 'Hai công nghệ: Celaut để tính, Ergo để thanh toán.'
 				}
 			]
 		},
 
 		creator: {
-			label: 'Game creator flow',
+			label: 'Luồng người tạo trò',
 			beats: [
 				{
-					h: 'Design a game.',
-					p: 'Create a challenge with measurable scoring and high scenario variability (CDE), so hardcoded solutions don\u2019t work.'
+					h: 'Thiết kế một trò.',
+					p: 'Tạo thử thách có điểm đo được và biến thiên kịch bản cao (CDE), để lời giải cứng hóa không chạy.'
 				},
 				{
-					h: 'Write the Paper.',
-					p: 'Publish a document with all instructions, rules and evaluation criteria. Players must be able to understand the challenge <strong>before</strong> they participate.'
+					h: 'Viết Paper.',
+					p: 'Công bố tài liệu gồm mọi hướng dẫn, luật và tiêu chí đánh giá. Người chơi phải hiểu thử thách <strong>trước khi</strong> tham gia.'
 				},
 				{
-					h: 'Generate a secret.',
-					p: 'A unique <strong>256-bit secret</strong> underwrites the cryptographic commitments and the later score validation. Nobody can see it while the game is open.'
+					h: 'Sinh một bí mật.',
+					p: 'Một <strong>bí mật 256-bit</strong> duy nhất chống đỡ các cam kết mật mã và việc xác thực điểm sau này. Không ai thấy khi trò còn mở.'
 				},
 				{
-					h: 'Package and publish.',
-					p: 'Ship the game as a Celaut service and publish it through GoP Web with its parameters: fee, deadline, and commission.'
+					h: 'Đóng gói và đăng.',
+					p: 'Đưa trò ra như dịch vụ Celaut và đăng qua GoP Web với tham số: phí, hạn, hoa hồng.'
 				},
 				{
-					h: 'Reveal the secret.',
-					p: 'When the deadline passes, the creator <strong>reveals the secret on-chain</strong>. That resolves the game: score validation becomes possible and the smart contract can determine the winner.',
-					note: 'Commit first, reveal later. That\u2019s what makes it fair.'
+					h: 'Lộ bí mật.',
+					p: 'Hết hạn, người tạo <strong>lộ bí mật on-chain</strong>. Thế là trò kết: xác thực điểm trở nên khả thi và hợp đồng thông minh chọn được người thắng.',
+					note: 'Cam kết trước, lộ sau. Đó mới công bằng.'
 				}
 			]
 		},
 
 		player: {
-			label: 'The player\u2019s journey',
+			label: 'Hành trình người chơi',
 			beats: [
 				{
-					h: 'Browse and read the Paper.',
-					p: 'Find a game on GoP Web. Read the creator\u2019s Paper to understand the challenge, the rules and the evaluation criteria before committing to anything.'
+					h: 'Duyệt và đọc Paper.',
+					p: 'Tìm trò trên GoP Web. Đọc Paper để hiểu thử thách, luật và tiêu chí đánh giá trước khi cam kết bất cứ điều gì.'
 				},
 				{
-					h: 'Implement your solver.',
-					p: 'Build your solver-service from the Paper alone, so it\u2019s ready to compete the moment the seed drops.'
+					h: 'Hiện thực solver.',
+					p: 'Dựng dịch vụ solver chỉ từ Paper, để sẵn sàng thi ngay lúc seed rơi.'
 				},
 				{
-					h: 'Register your Solver ID.',
-					p: 'Registration is free — you only cover the network gas fee. This <strong>pre-commitment</strong> is what guarantees fairness before the seed is revealed.'
+					h: 'Đăng ký Solver ID.',
+					p: 'Đăng ký miễn phí — bạn chỉ trả phí gas mạng. <strong>Cam kết trước</strong> này bảo đảm công bằng trước khi seed lộ.'
 				},
 				{
-					h: 'The seed is revealed.',
-					p: 'Once the ceremony phase ends, the game seed goes public. Now — and only now — you know the exact challenge parameters you\u2019ll be evaluated against.'
+					h: 'Seed được lộ.',
+					p: 'Giai đoạn lễ kết thúc, seed của trò ra công cộng. Bây giờ — và chỉ bây giờ — bạn biết đúng tham số thử thách sẽ bị chấm.'
 				},
 				{
-					h: 'Run the game service locally.',
-					p: 'The service executes your solver in a secure environment with the revealed seed, evaluates its performance, and generates the <strong>cryptographic commitment</strong> needed for on-chain validation.'
+					h: 'Chạy dịch vụ trò chơi cục bộ.',
+					p: 'Dịch vụ chạy solver trong môi trường an toàn với seed đã lộ, đánh giá hiệu năng, và sinh <strong>cam kết mật mã</strong> cần cho xác thực on-chain.'
 				},
 				{
-					h: 'Submit your commitment and pay the fee.',
-					p: 'If the score is worth competing with, publish the commitment on-chain and pay the participation fee. <strong>All fees go into the pot</strong> — the winner takes the economic prize, minus creator, judge and platform commission, and receives the game NFT.',
-					note: 'You decide whether your run is worth submitting.'
+					h: 'Nộp cam kết và trả phí.',
+					p: 'Nếu điểm đáng thi, công bố cam kết on-chain và trả phí tham gia. <strong>Mọi phí vào hũ thưởng</strong> — người thắng lấy giải kinh tế, trừ hoa hồng người tạo, giám khảo và nền tảng, rồi nhận NFT của trò.',
+					note: 'Bạn quyết lần chạy có đáng nộp hay không.'
 				}
 			]
 		},
 
 		validation: {
-			label: 'Score validation',
+			label: 'Xác thực điểm',
 			beats: [
 				{
-					h: 'Your score is a hash, not a claim.',
-					p: 'When you participate, what goes on-chain is a <strong>commitment</strong> — a digest. Nobody, including the creator, can read your score off the blockchain while the game is still open.'
+					h: 'Điểm của bạn là hash, không phải lời tuyên.',
+					p: 'Khi tham gia, thứ lên on-chain là một <strong>cam kết</strong> — một digest. Không ai, kể cả người tạo, đọc được điểm từ blockchain khi trò còn mở.'
 				},
 				{
-					h: 'Then the secret comes out.',
-					p: 'After the deadline, the creator reveals the game secret in the resolution transaction. That\u2019s the missing ingredient — and it <strong>unlocks verification for everyone at once</strong>.'
+					h: 'Rồi bí mật được đưa ra.',
+					p: 'Sau hạn, người tạo lộ bí mật của trò trong giao dịch kết. Đó là nguyên liệu còn thiếu — và nó <strong>mở xác thực cho mọi người cùng lúc</strong>.'
 				},
 				{
-					h: 'The contract recomputes it.',
-					p: 'The game contract builds a commitment for each score from the <strong>solver ID, the score value, the hashed logs and the revealed secret</strong>. No trusted party is involved; it\u2019s arithmetic.'
+					h: 'Hợp đồng tính lại.',
+					p: 'Hợp đồng của trò dựng một cam kết cho mỗi điểm từ <strong>Solver ID, giá trị điểm, nhật ký đã hash và bí mật đã lộ</strong>. Không bên tin cậy nào xen vào; đó là số học.'
 				},
 				{
-					h: 'If they match, the score is real.',
-					p: 'A recomputed commitment that equals the published one proves the score is authentic and tamper-proof. Anything that doesn\u2019t match simply isn\u2019t a score.',
-					note: 'Transparent yet private: proven without being exposed.'
+					h: 'Khớp thì điểm là thật.',
+					p: 'Cam kết tính lại trùng cam kết đã công bố chứng minh điểm xác thực và không bị sửa. Cái không khớp đơn giản không phải một điểm.',
+					note: 'Trong suốt mà vẫn riêng: chứng minh mà không phơi ra.'
 				}
 			]
 		},
 
 		pot: {
-			label: 'Economics',
+			label: 'Kinh tế',
 			beats: [
 				{
-					h: 'Every entry feeds the pot.',
-					p: 'Participation fees from everyone who submits a commitment accumulate in a single on-chain pot for that game.'
+					h: 'Mỗi bài nuôi hũ.',
+					p: 'Phí tham gia của ai nộp cam kết cộng dồn vào một hũ thưởng on-chain cho trò đó.'
 				},
 				{
-					h: 'Commissions come off the top.',
-					p: 'The creator, the judges and the platform take their agreed commission — all of it set in the open when the game was published, and <strong>enforced by the smart contract</strong> rather than by anyone\u2019s goodwill.'
+					h: 'Hoa hồng lấy từ trên.',
+					p: 'Người tạo, giám khảo và nền tảng lấy hoa hồng đã thỏa — đặt công khai lúc trò đăng, và <strong>do hợp đồng thông minh thi hành</strong> chứ không phải thiện chí ai.'
 				},
 				{
-					h: 'The rest goes to the winner.',
-					p: 'The highest validated score takes the remaining pot — plus the <strong>game NFT</strong>, a permanent, public, auditable proof of victory. Funds are released after a validation period that gives judges time to check the creator acted honestly.',
-					note: 'Nobody approves the payout. The contract does it.'
+					h: 'Phần còn lại cho người thắng.',
+					p: 'Điểm đã xác thực cao nhất lấy phần hũ còn lại — cộng <strong>NFT của trò</strong>, bằng chứng chiến thắng vĩnh viễn, công khai, kiểm toán được. Tiền giải phóng sau thời gian xác thực để giám khảo kịp kiểm người tạo có trung thực.',
+					note: 'Không ai phê duyệt khoản trả. Hợp đồng làm việc đó.'
 				}
 			]
 		},
 
 		judges: {
-			label: 'Trust & accountability',
+			label: 'Tin cậy và trách nhiệm',
 			beats: [
 				{
-					h: 'Who watches the creator?',
-					p: 'Judges are entities nominated by the creator who audit the resolution phase. They verify that the creator\u2019s game service generated <strong>valid proofs and valid scores</strong>.'
+					h: 'Ai canh người tạo?',
+					p: 'Giám khảo là thực thể do người tạo chỉ định, kiểm toán giai đoạn kết. Họ xác nhận dịch vụ trò chơi đã sinh <strong>bằng chứng hợp lệ và điểm hợp lệ</strong>.'
 				},
 				{
-					h: 'Fraud costs the creator, not you.',
-					p: 'If a judge catches a faulty game service or an invalid proof, that judge <strong>receives the creator\u2019s commission</strong> as the reward. The incentive to look closely is built in.'
+					h: 'Gian lận tốn người tạo, không tốn bạn.',
+					p: 'Nếu giám khảo bắt được dịch vụ trò lỗi hoặc bằng chứng không hợp lệ, giám khảo đó <strong>nhận hoa hồng người tạo</strong> làm thưởng. Động cơ nhìn kỹ đã gắn sẵn.'
 				},
 				{
-					h: 'Players stay out of the blast radius.',
-					p: 'In normal operation players cannot be penalised by judges. Judges exist to <strong>protect players from dishonest creators</strong>, never the other way around.',
-					note: 'Audit the house, not the guests.'
+					h: 'Người chơi đứng ngoài bán kính nổ.',
+					p: 'Vận hành bình thường, giám khảo không phạt người chơi. Giám khảo tồn tại để <strong>bảo vệ người chơi khỏi người tạo bất lương</strong>, không bao giờ ngược lại.',
+					note: 'Kiểm nhà, không kiểm khách.'
 				}
 			]
 		}
 	},
 
 	/* ============================================================== *
-	 * The readable reference list under the validation scene
+	 * Danh sách tham chiếu dưới cảnh xác thực
 	 * ============================================================== */
 	steps: {
-		title: 'The five steps, in order',
+		title: 'Năm bước, theo thứ tự',
 		items: [
 			{
-				badge: 'SUBMITTED',
-				title: 'Player Participation',
-				desc: 'Player publishes their participation on the Ergo blockchain.'
+				badge: 'ĐÃ NỘP',
+				title: 'Người chơi tham gia',
+				desc: 'Người chơi công bố phần tham gia trên blockchain Ergo.'
 			},
 			{
-				badge: 'REVEALED',
-				title: 'Creator Reveals Secret',
-				desc: 'After the deadline, the creator reveals the game secret in the resolution transaction — unlocking verification.'
+				badge: 'ĐÃ LỘ',
+				title: 'Người tạo lộ bí mật',
+				desc: 'Sau hạn, người tạo lộ bí mật của trò trong giao dịch kết — mở khóa xác thực.'
 			},
 			{
-				badge: 'COMPUTED',
-				title: 'Smart Contract Validation',
-				desc: 'The game contract computes a commitment for each score using the solver ID, score value, hashed logs, and revealed secret.'
+				badge: 'ĐÃ TÍNH',
+				title: 'Hợp đồng thông minh xác thực',
+				desc: 'Hợp đồng của trò tính một cam kết cho mỗi điểm bằng Solver ID, giá trị điểm, nhật ký đã hash, và bí mật đã lộ.'
 			},
 			{
-				badge: 'VERIFIED',
-				title: 'Score Verification',
-				desc: 'When the score commitment matches the participation commitment, that score is validated as authentic and tamper-proof.'
+				badge: 'ĐÃ XÁC NHẬN',
+				title: 'Xác nhận điểm',
+				desc: 'Khi cam kết điểm khớp cam kết tham gia, điểm đó được xác thực là thật và không bị sửa.'
 			},
 			{
-				badge: 'DISTRIBUTED',
-				title: 'Winner Takes the Pot',
-				desc: 'Highest score wins. Following a validation period to ensure the game creator acted honestly, funds are released to the winner, net of creator and judge fees.'
+				badge: 'ĐÃ CHIA',
+				title: 'Người thắng lấy hũ',
+				desc: 'Điểm cao nhất thắng. Sau thời gian xác thực để bảo đảm người tạo trung thực, tiền được giải phóng cho người thắng, đã trừ phí người tạo và giám khảo.'
 			}
 		]
 	},
@@ -500,112 +489,109 @@ export default {
 	 * Video
 	 * ============================================================== */
 	video: {
-		label: 'Overview',
-		title: 'Watch the Breakdown',
+		label: 'Tổng quan',
+		title: 'Xem phần giải',
 		subtitle:
-			'Get up to speed in minutes — see how Game of Prompts brings blockchain and AI competitions together.',
-		thumbAlt: 'Game of Prompts video thumbnail',
-		iframeTitle: 'Game of Prompts — Brief Breakdown'
+			'Bắt kịp trong vài phút — Game of Prompts gắn blockchain với các cuộc thi AI thế nào.',
+		thumbAlt: 'Ảnh thu nhỏ video Game of Prompts',
+		iframeTitle: 'Game of Prompts — Giải ngắn'
 	},
 
 	/* ============================================================== *
-	 * Security
+	 * Bảo mật
 	 * ============================================================== */
 	security: {
-		label: 'Security',
-		title: 'Transparent Yet Private Competition',
-		subtitle:
-			'Cryptography ensures fair competition while protecting participants\u2019 strategies.',
+		label: 'Bảo mật',
+		title: 'Thi đấu trong suốt mà vẫn riêng tư',
+		subtitle: 'Mật mã bảo đảm thi công bằng, đồng thời bảo vệ chiến lược người tham gia.',
 		cards: [
 			{
-				title: 'Code Protection',
-				desc: 'The game\u2019s intellectual property and game secret are protected through obfuscation to prevent reverse engineering.'
+				title: 'Bảo vệ mã',
+				desc: 'Tài sản trí tuệ của trò và bí mật của trò được bảo vệ bằng làm rối mã để chặn kỹ thuật đảo ngược.'
 			},
 			{
-				title: 'Private Results',
-				desc: 'Strategic decoys and cryptographic commitments conceal your true score, protecting your strategy until the final reveal.'
+				title: 'Kết quả riêng',
+				desc: 'Mồi nhử chiến lược và cam kết mật mã che điểm thật, bảo vệ chiến lược tới lúc lộ cuối.'
 			},
 			{
-				title: 'Immutable Proof',
-				desc: 'Final validation on the Ergo blockchain generates a public, immutable, and auditable proof of victory.'
+				title: 'Bằng chứng bất biến',
+				desc: 'Xác thực cuối trên blockchain Ergo sinh bằng chứng chiến thắng công khai, bất biến, kiểm toán được.'
 			}
 		]
 	},
 
 	/* ============================================================== *
-	 * Game types
+	 * Loại trò
 	 * ============================================================== */
 	gameTypes: {
-		title: 'What Can Be a Game?',
-		text: 'Game of Prompts is a versatile platform that can host a wide variety of competitions. Here are just a few examples of what\u2019s possible.',
-		// `label` is the "Game Type 01" eyebrow; {n} is the number.
-		eyebrow: 'Game Type {n}',
+		title: 'Cái gì có thể là một trò?',
+		text: 'Game of Prompts là nền tảng linh hoạt, chứa được nhiều kiểu thi. Đây chỉ là vài ví dụ những gì làm được.',
+		eyebrow: 'Loại trò {n}',
 		items: [
 			{
-				title: 'Classic Arcade',
-				desc: 'The AI solver controls the character in fast-paced, skill-based game environments. Reflexes, pattern recognition, timing.',
-				score: 'Game points · Survival time · Levels cleared'
+				title: 'Arcade cổ điển',
+				desc: 'Solver AI điều khiển nhân vật trong môi trường nhanh, dựa trên kỹ năng. Phản xạ, nhận dạng mẫu, nhịp.',
+				score: 'Điểm trò · Thời gian sống sót · Màn đã phá'
 			},
 			{
-				title: 'Open World',
-				desc: 'Optimize for spatial reasoning, navigation, and environmental adaptation.',
-				score: 'Resource efficiency · Map exploration · Mission complexity'
+				title: 'Thế giới mở',
+				desc: 'Tối ưu suy luận không gian, điều hướng, thích nghi môi trường.',
+				score: 'Hiệu quả tài nguyên · Khám phá bản đồ · Độ phức tạp nhiệm vụ'
 			},
 			{
-				title: 'Financial Trading',
-				desc: 'Bot vs. market. Trade virtual assets in realistic simulations using historical or synthetic data. Pure strategy, zero luck.',
-				score: 'Net profit · Sharpe ratio · Drawdown · Benchmarks'
+				title: 'Giao dịch tài chính',
+				desc: 'Bot đấu thị trường. Giao dịch tài sản ảo trong mô phỏng thực, dữ liệu lịch sử hoặc tổng hợp. Thuần chiến lược, không may rủi.',
+				score: 'Lãi ròng · Tỷ lệ Sharpe · Drawdown · Chuẩn so sánh'
 			},
 			{
-				title: 'Protein Folding',
-				desc: 'Predict 3D protein structures from amino acid sequences. A real scientific challenge — AI solvers advancing biology.',
-				score: 'Structural stability · Folding accuracy · Efficiency'
+				title: 'Gấp protein',
+				desc: 'Dự đoán cấu trúc 3D protein từ chuỗi amino acid. Thử thách khoa học thật — solver AI đẩy sinh học.',
+				score: 'Ổn định cấu trúc · Độ chính xác gấp · Hiệu quả'
 			}
 		]
 	},
 
 	/* ============================================================== *
-	 * Optional features
+	 * Tính năng tùy chọn
 	 * ============================================================== */
 	features: {
-		title: 'Optional Game Features',
-		text: 'Creators can enhance their games with powerful optional mechanics — from poker-style bluffing to resource constraints and pay-per-attempt models.',
-		// {n} is the number; {status} is one of `status` below.
-		eyebrow: 'Feature {n}',
+		title: 'Tính năng trò tùy chọn',
+		text: 'Người tạo có thể thêm cơ chế tùy chọn mạnh — từ bluff kiểu poker tới hạn tài nguyên và trả-theo-lần-thử.',
+		eyebrow: 'Tính năng {n}',
 		status: {
-			available: 'Available',
-			research: 'Under Research'
+			available: 'Sẵn sàng',
+			research: 'Đang nghiên cứu'
 		},
 		items: [
 			{
-				title: 'Resource Limitation',
-				desc: 'Technical challenge by constraining computational resources. Efficiency is king.',
+				title: 'Hạn tài nguyên',
+				desc: 'Thử thách kỹ thuật bằng cách siết tài nguyên tính toán. Hiệu quả là vua.',
 				bullets: [
-					'Game creator sets specific limits on computational resources',
-					'Constraints: maximum RAM, CPU time, or service dependencies',
-					'Forces players to develop highly efficient, optimized solutions',
-					'Adds a significant engineering challenge to the game'
+					'Người tạo trò đặt hạn cụ thể lên tài nguyên tính toán',
+					'Ràng buộc: RAM tối đa, thời gian CPU, hoặc phụ thuộc dịch vụ',
+					'Ép người chơi dựng lời giải rất hiệu quả, đã tối ưu',
+					'Thêm một thử thách kỹ thuật đáng kể vào trò'
 				]
 			},
 			{
-				title: 'Poker Mode',
-				desc: 'Strategic participation with risk and reward. Bluff, bet, and multiply your score.',
+				title: 'Chế độ poker',
+				desc: 'Tham gia chiến lược với rủi ro và phần thưởng. Bluff, cược, nhân điểm.',
 				bullets: [
-					'Participants choose how much to pay (above a set minimum)',
-					'Higher payment = higher final score multiplier (e.g. ×2, ×5)',
-					'Players can submit multiple decoy scores',
-					'Bluff strategy: pay high fee + submit fake high scores to intimidate',
-					'Game creator sets score multiplier based on fee paid'
+					'Người tham gia chọn trả bao nhiêu (trên một mức tối thiểu)',
+					'Trả cao hơn = hệ số điểm cuối cao hơn (chẳng hạn ×2, ×5)',
+					'Người chơi có thể nộp nhiều điểm mồi',
+					'Chiến lược bluff: trả phí cao + nộp điểm cao giả để dọa',
+					'Người tạo trò đặt hệ số điểm theo phí đã trả'
 				]
 			},
 			{
-				title: 'Pay-per-Attempt',
-				desc: 'A mechanism that assigns a cost to each local execution, fostering high-quality agent development over trial-and-error.',
+				title: 'Trả theo lần thử',
+				desc: 'Cơ chế gán chi phí cho mỗi lần chạy cục bộ, khuyến khích dựng agent chất lượng hơn thử-sai mù.',
 				bullets: [
-					'Incremental token cost per local execution attempt',
-					'Encourages rigorous local simulation and optimization',
-					'Disincentivizes blind brute-force strategies',
-					'Difficulty scaling fully configurable by the game creator'
+					'Chi phí token tăng dần mỗi lần thử chạy cục bộ',
+					'Khuyến khích mô phỏng và tối ưu cục bộ kỹ',
+					'Làm nản chiến lược vét cạn mù',
+					'Độ khó tăng giảm do người tạo trò cấu hình hết'
 				]
 			}
 		]
@@ -613,88 +599,82 @@ export default {
 
 	/* ============================================================== *
 	 * FAQ
-	 *
-	 * The live questions are fetched from the project README at
-	 * runtime and are English-only at source, so they are NOT
-	 * translated here. What IS translated is the chrome around them
-	 * and the offline fallback set, which is what a reader sees when
-	 * the fetch fails.
 	 * ============================================================== */
 	faq: {
 		label: 'FAQ',
-		title: 'Frequently Asked Questions',
-		footerTitle: 'Still have questions?',
+		title: 'Câu hỏi thường gặp',
+		footerTitle: 'Vẫn còn hỏi?',
 		footerDesc:
-			'Copy the prompt below and paste it into any AI assistant — it includes a link to our full documentation.',
-		copyPrompt: 'Copy prompt',
-		copied: 'Copied!',
-		orLabel: 'or open directly in:',
-		disclaimerBefore: '⚠️ AI responses may not be fully accurate. Always refer to the ',
-		disclaimerLink: 'official documentation',
-		disclaimerAfter: ' for authoritative information.',
-		telegram: 'Join Telegram Community',
+			'Chép prompt bên dưới và dán vào bất kỳ trợ lý AI nào — đã gồm liên kết tới toàn bộ tài liệu.',
+		copyPrompt: 'Chép prompt',
+		copied: 'Đã chép!',
+		orLabel: 'hoặc mở trực tiếp trong:',
+		disclaimerBefore: '⚠️ Câu trả lời AI có thể chưa hoàn toàn đúng. Luôn xem ',
+		disclaimerLink: 'tài liệu chính thức',
+		disclaimerAfter: ' để có thông tin có thẩm quyền.',
+		telegram: 'Tham gia cộng đồng Telegram',
 		groups: [
 			{
-				title: 'General',
+				title: 'Chung',
 				items: [
 					{
-						q: 'What is Game of Prompts?',
-						a: 'A bot competition audited by blockchain. Creators design game-services to evaluate AI solvers, while players build solver-services to maximize their scores — all verified on the Ergo blockchain.'
+						q: 'Game of Prompts là gì?',
+						a: 'Cuộc thi bot do blockchain kiểm. Người tạo thiết kế dịch vụ trò chơi để đánh giá solver AI, người chơi dựng dịch vụ solver để đẩy điểm — tất cả xác thực trên blockchain Ergo.'
 					},
 					{
-						q: 'What is the "Ceremony Phase"?',
-						a: 'The initial period where players register their Solver IDs to add randomness to the seed. This prevents the Creator from pre-calculating solutions and ensures fair competition.'
+						q: '«Giai đoạn lễ» là gì?',
+						a: 'Khoảng đầu, người chơi đăng Solver ID để thêm ngẫu nhiên vào seed. Ngăn người tạo tính sẵn lời giải và bảo đảm thi công bằng.'
 					},
 					{
-						q: 'What do I need to play?',
-						a: 'An Ergo Wallet (with some ERG for participation fees) and a Celaut Node to run game and solver services locally.'
+						q: 'Cần gì để chơi?',
+						a: 'Một ví Ergo (với ít ERG cho phí tham gia) và một nút Celaut để chạy dịch vụ trò và solver cục bộ.'
 					}
 				]
 			},
 			{
-				title: 'Security',
+				title: 'Bảo mật',
 				items: [
 					{
-						q: 'How do I know the game is fair?',
-						a: 'The game rules and hashS are registered on-chain from the start. They are immutable — no one can change them after publication.'
+						q: 'Làm sao biết trò công bằng?',
+						a: 'Luật trò và hashS được ghi on-chain từ đầu. Chúng bất biến — không ai đổi sau khi đăng.'
 					},
 					{
-						q: 'Can the Creator steal the funds?',
-						a: 'No. Funds are locked in a Smart Contract, not the Creator\u2019s wallet. Distribution is handled atomically by the contract when the game resolves.'
+						q: 'Người tạo có lấy trộm tiền được không?',
+						a: 'Không. Tiền khóa trong hợp đồng thông minh, không phải ví tiền của người tạo. Việc chia do hợp đồng làm nguyên tử khi trò kết.'
 					},
 					{
-						q: 'What if the Creator disappears?',
-						a: 'After a Grace Period, players can trigger a Refund Action to recover their participation fees from the smart contract.'
+						q: 'Nếu người tạo biến mất?',
+						a: 'Sau thời gian ân hạn, người chơi kích hoạt hành động hoàn phí để lấy lại phí tham gia từ hợp đồng thông minh.'
 					}
 				]
 			},
 			{
-				title: 'Judges',
+				title: 'Giám khảo',
 				items: [
 					{
-						q: 'Who are the Judges?',
-						a: 'Entities nominated by the Creator who audit the resolution phase. They verify that the game service generated valid proofs.'
+						q: 'Giám khảo là ai?',
+						a: 'Thực thể do người tạo chỉ định, kiểm toán giai đoạn kết. Họ xác nhận dịch vụ trò chơi sinh bằng chứng hợp lệ.'
 					},
 					{
-						q: 'Why do Judges earn money for invalidating a participation?',
-						a: 'They detect Creator fraud — their incentive is to catch faulty game services. When they find issues, they receive the Creator\u2019s commission as reward.'
+						q: 'Vì sao giám khảo được tiền khi vô hiệu một bài?',
+						a: 'Họ bắt gian của người tạo — động cơ là tìm dịch vụ trò lỗi. Khi thấy vấn đề, họ nhận hoa hồng người tạo làm thưởng.'
 					},
 					{
-						q: 'Can I be penalized as a player?',
-						a: 'The system penalizes the Creator/Game Service, not honest players. Judges audit the Creator, not you.'
+						q: 'Tôi có bị phạt với tư cách người chơi?',
+						a: 'Hệ thống phạt người tạo/dịch vụ trò, không phạt người chơi trung thực. Giám khảo kiểm người tạo, không kiểm bạn.'
 					}
 				]
 			},
 			{
-				title: 'Economy',
+				title: 'Kinh tế',
 				items: [
 					{
-						q: 'How is the winner calculated?',
-						a: 'Highest Time-Weighted Score: Score × (TimeWeight + RemainingTime). Submit early and score high for the best result.'
+						q: 'Người thắng được tính thế nào?',
+						a: 'Điểm trọng số thời gian cao nhất: Điểm × (TimeWeight + Thời gian còn). Nộp sớm và điểm cao thì kết quả tốt nhất.'
 					},
 					{
-						q: 'When do I receive my winnings?',
-						a: 'Immediately upon the End Game action. The Smart Contract atomically distributes all funds — the winner receives all participation fees minus creator commission and judge fees.'
+						q: 'Khi nào nhận tiền thắng?',
+						a: 'Ngay khi hành động Kết trò chạy. Hợp đồng thông minh chia mọi quỹ nguyên tử — người thắng nhận toàn bộ phí tham gia trừ hoa hồng người tạo và phí giám khảo.'
 					}
 				]
 			}
@@ -702,23 +682,23 @@ export default {
 	},
 
 	/* ============================================================== *
-	 * Call to action + footer
+	 * Kêu gọi hành động + chân trang
 	 * ============================================================== */
 	cta: {
-		label: 'Get Started',
-		title: 'Get Started with Game of Prompts',
+		label: 'Bắt đầu',
+		title: 'Bắt đầu với Game of Prompts',
 		steps: [
-			'Install the <strong>Celaut node</strong> software to run Game and Solver Services in a secure, deterministic environment.',
-			'Set up an <strong>Ergo blockchain wallet</strong> to participate in games and receive winnings.',
-			'Browse available games on <strong>GoP Web</strong> and start developing your own solvers or create challenging games for others.'
+			'Cài phần mềm <strong>nút Celaut</strong> để chạy dịch vụ trò và solver trong môi trường an toàn, tất định.',
+			'Lập <strong>ví tiền blockchain Ergo</strong> để tham gia trò và nhận tiền thắng.',
+			'Duyệt trò trên <strong>GoP Web</strong> rồi bắt đầu dựng solver của mình, hoặc tạo trò khó cho người khác.'
 		],
-		github: 'GitHub Repository',
-		celaut: 'Celaut Project',
-		ergo: 'Ergo Platform'
+		github: 'Kho GitHub',
+		celaut: 'Dự án Celaut',
+		ergo: 'Nền tảng Ergo'
 	},
 
 	footer: {
-		tagline: 'Write your prompts. Build your bot. Win the throne.',
+		tagline: 'Viết prompt. Dựng bot. Chiếm ngai.',
 		github: 'GitHub',
 		ergo: 'Ergo',
 		celaut: 'Celaut'

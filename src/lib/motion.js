@@ -188,7 +188,7 @@ export function onThemeChange(callback) {
 	const observer = new MutationObserver(() => callback());
 	observer.observe(document.documentElement, {
 		attributes: true,
-		attributeFilter: ['data-theme']
+		attributeFilter: ['data-theme', 'lang']
 	});
 	return () => observer.disconnect();
 }

@@ -1,700 +1,668 @@
 /*
- * src/lib/i18n/en.js
+ * src/lib/i18n/zh.js
  * ------------------------------------------------------------------
- * English — the source dictionary and the fallback for every other
- * locale. If a key is missing anywhere else, `$t` resolves it here, so
- * this file is the only one that must never have a hole in it.
+ * 简体中文。结构与 en.js 完全一致：同样的键、同样的嵌套顺序、同样的
+ * 数组长度。glossary.terms 必须是 33 条，顺序与 glossary/terms.js 的
+ * GLOSSARY_IDS 一一对应。
  *
- * HOW TO WRITE THE COPY
- * ---------------------
- * Everything here is the landing page's actual voice: short sentences,
- * concrete nouns, no marketing adjectives. `<strong>` is used for the
- * one term a sentence is really about, never for emphasis in general —
- * the scene captions lean on it heavily and it stops meaning anything
- * if every clause has one.
- *
- * HOW TO WRITE THE GLOSSARY
- * -------------------------
- * The glossary explains the JARGON, not the project. A definition that
- * says "in Game of Prompts, a commitment is…" has failed: the reader
- * clicked because they don't know what a commitment IS. Explain the
- * word in plain language with an everyday comparison, then — only in
- * `more`, and only if it earns its place — say why it matters here.
- * Never write down to the reader. They are not stupid, they just
- * haven't met this word before.
- *
- * `match` is the list of trigger words IN THIS LANGUAGE. Translators
- * choose their own; nothing assumes English word order or that a term
- * is even one word in the target language.
+ * 关于 `match`：那不是要翻译的文案，而是「在中文译文里真正出现过、
+ * 需要加虚线下划线的词」。annotate.js 对中日韩文本按子串匹配，但左右
+ * 两侧仍要求非字母边界 —— 所以中文术语通常只在 <strong> 标签内部、
+ * 或紧挨着标点（。、：「」等）时才会被标注。写句子时已经据此安排。
  */
 
 export default {
 	/* ============================================================== *
-	 * Chrome shared by every control in the corner cluster
+	 * 角落控件共用的界面文字
 	 * ============================================================== */
 	common: {
-		languageLabel: 'Language',
-		switchLanguage: 'Change language',
-		themeToLight: 'Switch to light theme',
-		themeToDark: 'Switch to dark theme',
-		backToTop: 'Back to top',
-		scoring: 'SCORING'
+		languageLabel: '语言',
+		switchLanguage: '切换语言',
+		themeToLight: '切换到浅色主题',
+		themeToDark: '切换到深色主题',
+		backToTop: '回到顶部',
+		scoring: '评分中'
 	},
 
 	/* ============================================================== *
-	 * The glossary
-	 * Ids and ordering live in src/lib/glossary/terms.js, paired with
-	 * this array by position.
+	 * 术语表
 	 * ============================================================== */
 	glossary: {
-		/* Chrome */
-		toggleOn: 'Explain technical terms',
-		toggleOff: 'Hide term explanations',
-		toggleLabel: 'Explanations',
-		close: 'Close',
-		// {term} is replaced with the marked word.
-		explain: 'What does "{term}" mean?',
-		// Shown once, on a reader's first visit, near the first mark.
-		hintTitle: 'Some words are underlined.',
+		/* 界面 */
+		toggleOn: '解释技术术语',
+		toggleOff: '隐藏术语解释',
+		toggleLabel: '术语解释',
+		close: '关闭',
+		// {term} 会被替换成被标注的那个词。
+		explain: '“{term}”是什么意思？',
+		// 只在读者第一次到访时、靠近第一个标注处显示一次。
+		hintTitle: '有些词带着虚线下划线。',
 		hintBody:
-			'Tap any underlined word for a plain-language explanation. Turn them off any time with the button in the corner.',
-		hintDismiss: 'Got it',
+			'点一下任何带下划线的词，就能看到一句大白话解释。随时可以用角落里的按钮把它们关掉。',
+		hintDismiss: '知道了',
 
 		terms: [
 			{
-				match: ['game-service', 'game service', 'game-services', 'game services'],
-				title: 'Game service',
-				body: 'The challenge itself, packaged as a sealed program anyone can download and run. It holds the rules, the scoring, and the creator\u2019s hidden secret \u2014 like a sealed exam paper that also marks itself.',
-				more: 'You run it on your own machine. It scores your bot and produces the cryptographic receipt that the blockchain later checks.'
+				match: ['游戏服务', 'game-service', 'game service'],
+				title: '游戏服务',
+				body: '挑战本身，被打包成一个密封的程序，谁都可以下载来跑。里面装着规则、评分逻辑，还有创建者藏起来的秘密值 —— 像一份会自己批改自己的密封试卷。',
+				more: '你在自己的机器上运行它。它给你的机器人打分，并生成之后由区块链核对的密码学凭据。'
 			},
 			{
-				match: ['solver-service', 'solver service', 'solver-services', 'solver services', 'solver', 'solvers'],
-				title: 'Solver service',
-				body: 'Your entry. The bot you build to play the game, packaged the same sealed way so it runs identically on any machine \u2014 your strategy as a single, portable box.',
-				more: 'It is handed to the game service, which runs it in isolation and scores what it did. Nobody sees your code but you.'
+				match: ['求解服务', '求解器', 'solver-service', 'solver service'],
+				title: '求解服务',
+				body: '你的参赛作品。你为这场比赛写的机器人，用同样的密封方式打包，因此在任何机器上跑出来的结果都一样 —— 你的策略，装在一个可以随身带走的盒子里。',
+				more: '它会被交给游戏服务，在隔离环境里运行并被打分。除了你，没人看得到你的代码。'
 			},
 			{
-				match: ['GoP Web', 'GoP web portal', 'the portal'],
+				match: ['GoP Web', '社区门户'],
 				title: 'GoP Web',
-				body: 'The website where games are listed: read the rules, download a game, publish your result. It is a directory and a signing tool, not a referee \u2014 nothing it shows you has to be taken on trust.',
-				more: 'You can run your own copy of it. That is the point: if the public one vanished, the games would carry on.'
+				body: '列出所有比赛的那个网站：读规则、下载比赛、发布你的成绩。它是一份目录加一个签名工具，不是裁判 —— 它显示给你的任何东西，都不需要你去相信。',
+				more: '你可以自己跑一份。这正是重点：就算公开的那一份消失了，比赛照样进行。'
 			},
 			{
-				match: ['Celaut', 'Celaut node', 'Celaut nodes'],
+				match: ['Celaut', 'Celaut 节点'],
 				title: 'Celaut',
-				body: 'The system that actually runs the sealed programs. You install it once, and from then on any game or solver package can be handed to your machine and executed in its own locked room.',
-				more: 'It is what makes "run it yourself" realistic rather than a slogan: the same package behaves the same way on every machine that opens it.'
+				body: '真正负责运行这些密封程序的系统。装一次之后，任何比赛或求解器的包都可以交给你的机器，在各自上锁的房间里执行。',
+				more: '它让“自己动手跑”从口号变成现实：同一个包在任何机器上打开，表现都一样。'
 			},
 			{
-				match: ['node', 'nodes'],
-				title: 'Node',
-				body: 'One computer taking part in a network. Your laptop, a spare desktop, a server in a rack \u2014 once it runs the software and starts talking to other machines, it is a node.',
-				more: 'Here it is simply the machine that runs the games and the solvers. Yours, not somebody\u2019s data centre.'
+				match: ['节点'],
+				title: '节点',
+				body: '参与某个网络的一台计算机。你的笔记本、一台闲置台式机、机架上的一台服务器 —— 只要它跑起软件、开始和别的机器对话，它就是一个节点。',
+				more: '在这里，它就是运行比赛和求解器的那台机器。你的机器，不是别人的数据中心。'
 			},
 			{
-				match: ['service', 'services'],
-				title: 'Service',
-				body: 'A self-contained piece of software that does one job and can be handed to any machine to run \u2014 closer to a single appliance than to a whole program you install.',
-				more: 'Both halves of a competition here are services: the game and the bot playing it.'
+				match: ['服务'],
+				title: '服务',
+				body: '一段自成一体的软件，只干一件事，可以交给任何机器去跑 —— 与其说是你要安装的整套程序，不如说是一台单一用途的电器。',
+				more: '这里一场比赛的两半都是服务：比赛本身，和玩这场比赛的机器人。'
 			},
 			{
-				match: ['blockchain', 'blockchains', 'ledger', 'ledgers'],
-				title: 'Blockchain',
-				body: 'A shared record book that thousands of computers keep copies of at once. Adding an entry requires the others to agree it is valid, and past entries cannot be rewritten \u2014 so no single participant controls the history.',
-				more: 'Used here for two narrow jobs: recording who claimed what score, and paying out the winner. Nothing more.'
+				match: ['区块链', '账本'],
+				title: '区块链',
+				body: '一本共享的账本，成千上万台计算机同时各存一份。要新增一条记录，得让其他人一起认可它有效；已经写下的也改不掉 —— 所以没有任何一方能单独掌控这段历史。',
+				more: '这里只用它做两件很窄的事：记录谁报了多少分，以及给赢家付钱。仅此而已。'
 			},
 			{
 				match: ['Ergo', 'ERG'],
 				title: 'Ergo',
-				body: 'The particular blockchain this platform records results on and settles payments through. ERG is its unit of currency.',
-				more: 'It is a choice, not a foundation: the platform has no coin of its own.'
+				body: '这个平台用来记录成绩、结算款项的那条区块链。ERG 是它的货币单位。',
+				more: '这是一个选择，不是地基：平台自己并没有发币。'
 			},
 			{
-				match: ['smart contract', 'smart contracts', 'contract', 'contracts', 'game contract'],
-				title: 'Smart contract',
-				body: 'A program that lives on the blockchain and holds money under rules written down in advance. When the conditions are met it pays out by itself \u2014 nobody signs a cheque, and nobody can decide not to.',
-				more: 'It is why the prize is safe before anyone has won it: the funds are held by the rules, not by the person who wrote them.'
+				match: ['智能合约', '合约'],
+				title: '智能合约',
+				body: '一段住在区块链上的程序，按事先写好的规则替人保管钱。条件一旦满足，它自己就把钱付出去 —— 没人需要签支票，也没人能决定不付。',
+				more: '这就是为什么还没人获胜、奖金就已经是安全的：钱由规则保管，不由写规则的人保管。'
 			},
 			{
-				match: ['on-chain', 'on chain', 'onchain'],
-				title: 'On-chain',
-				body: 'Written into the blockchain itself, where everyone can see it and nobody can quietly change it later \u2014 as opposed to sitting in a company\u2019s private database.'
+				match: ['链上'],
+				title: '链上',
+				body: '写进区块链本身，所有人都看得到，事后谁也没法悄悄改掉 —— 与放在某家公司的私有数据库里，正好相反。'
 			},
 			{
-				match: ['commitment', 'commitments', 'score commitment', 'cryptographic commitment', 'pre-commitment'],
-				title: 'Commitment',
-				body: 'A sealed envelope. You publish something that proves what you chose, without revealing what it was \u2014 and later, when the envelope is opened, everyone can check you didn\u2019t swap the contents.',
-				more: 'It is what lets a score be locked in publicly while the game is still running, without telling your rivals how well you did.'
+				match: ['承诺值', '密码学承诺', '分数承诺', '提前承诺'],
+				title: '承诺值',
+				body: '一个封好的信封。你公开一样东西，它能证明你当初选了什么，却不透露那到底是什么 —— 等信封拆开时，所有人都能验证你没有掉包。',
+				more: '正是它让一个分数能在比赛还没结束时就公开锁定，同时又不告诉对手你考得怎么样。'
 			},
 			{
-				match: ['hash', 'hashes', 'hashed', 'digest', 'hashed logs'],
-				title: 'Hash',
-				body: 'A short fingerprint calculated from a piece of data. The same data always gives the same fingerprint, a single changed byte gives a completely different one, and you cannot work backwards from the fingerprint to the data.',
-				more: 'That one-way property is the whole trick: it lets you prove something matches without showing what it is.'
+				match: ['哈希值', '哈希', '摘要'],
+				title: '哈希',
+				body: '从一段数据算出来的一小段指纹。同样的数据永远得到同样的指纹，改动一个字节就完全不同，而且没法从指纹倒推回数据。',
+				more: '这个单向的性质就是全部诀窍：它让你能证明某样东西对得上，却不必把它拿出来。'
 			},
 			{
-				match: ['secret', 'game secret', '256-bit secret'],
-				title: 'Secret',
-				body: 'A large random number the creator generates and keeps hidden while the game is open. Every score is sealed using it, so no score can be verified \u2014 or forged \u2014 until the creator publishes it.',
-				more: 'Publishing it at the end is what makes everyone\u2019s results checkable at the same moment, rather than one at a time.'
+				match: ['秘密值', '256 位秘密值'],
+				title: '秘密值',
+				body: '创建者生成、并在比赛开放期间一直藏着的一个大随机数。每个分数都用它封起来，所以在创建者公布它之前，任何分数都无法被验证 —— 也无法被伪造。',
+				more: '最后把它公布出来，是为了让所有人的成绩在同一刻变得可核对，而不是一个一个来。'
 			},
 			{
-				match: ['seed', 'game seed', 'seeds'],
-				title: 'Seed',
-				body: 'The starting number that decides exactly which version of a challenge you face \u2014 which board, which market data, which puzzle. Same seed, same challenge, for everyone.',
-				more: 'It is revealed only after entries close, so nobody can tune a bot for the specific run in advance.'
+				match: ['种子', '游戏种子'],
+				title: '种子',
+				body: '决定你面对的挑战究竟是哪一版的那个起始数字 —— 哪张棋盘、哪段行情、哪道题。同样的种子，对所有人就是同样的挑战。',
+				more: '它只在报名截止之后才公布，所以谁也没法提前针对这一局去调机器人。'
 			},
 			{
-				match: ['ceremony phase', 'ceremony', 'ceremony period'],
-				title: 'Ceremony phase',
-				body: 'The window at the start of a game when players sign up and each one\u2019s registration stirs a little unpredictability into the final seed. Like everyone throwing a die into the same cup before the lid comes off.',
-				more: 'It exists so the creator cannot know the challenge in advance either \u2014 the players collectively decide it without meaning to.'
+				match: ['仪式阶段'],
+				title: '仪式阶段',
+				body: '比赛开始时的那段报名窗口，每个人的报名都会往最终的种子里搅进一点不可预测。像所有人先把骰子扔进同一个杯子，然后才揭盖。',
+				more: '它的存在是为了让创建者自己也无法提前知道挑战长什么样 —— 玩家们在不经意间共同决定了它。'
 			},
 			{
-				match: ['Solver ID', 'Solver IDs', 'solver identifier'],
-				title: 'Solver ID',
-				body: 'The unique fingerprint of the exact bot you registered. It names one specific version of your code, so a bot cannot be quietly swapped for a different one after the seed is revealed.'
+				match: ['求解器 ID', 'Solver ID'],
+				title: '求解器 ID',
+				body: '你注册的那个机器人的唯一指纹。它指名道姓地指向你代码的某一个版本，所以种子公布之后，机器人没法被悄悄换成另一个。'
 			},
 			{
-				match: ['Paper', 'the Paper', 'game paper'],
-				title: 'Paper',
-				body: 'The written rules: what the challenge is, how it is scored, what counts as a valid entry. Published before anyone can play, so the terms cannot change once people have committed.',
-				more: 'You are meant to be able to build your entry from this document alone.'
+				match: ['规则书', 'Paper'],
+				title: '规则书',
+				body: '写下来的规则：挑战是什么、怎么算分、什么样的作品才算数。在任何人能参赛之前就公布，所以一旦有人投入，条款就不能再改。',
+				more: '你应该能只凭这一份文档，就把自己的参赛作品做出来。'
 			},
 			{
-				match: ['pot', 'the pot', 'prize pool'],
-				title: 'Pot',
-				body: 'All the entry fees, pooled together and held by the contract until the game resolves. Everyone who competes pays in; the winner takes what is left after the agreed cuts.'
+				match: ['奖池'],
+				title: '奖池',
+				body: '所有参与费汇到一起，由合约保管到比赛结束。每个参赛的人都往里付钱；赢家拿走扣掉约定抽成之后剩下的部分。'
 			},
 			{
-				match: ['participation fee', 'participation fees', 'entry fee', 'entry fees'],
-				title: 'Participation fee',
-				body: 'What it costs to submit a result you want counted. It goes into the pot rather than to the organisers, so every entry makes the prize bigger.',
-				more: 'You only pay it if you decide your run was worth entering \u2014 running the game locally is free.'
+				match: ['参与费', '报名费'],
+				title: '参与费',
+				body: '你想让一份成绩被计入，要付的那笔钱。它进的是奖池，而不是主办方的口袋，所以每一份参赛都把奖金变得更大。',
+				more: '只有当你觉得这一局跑得值得提交时才付 —— 在本地运行比赛是免费的。'
 			},
 			{
-				match: ['commission', 'commissions', 'creator commission', 'platform commission'],
-				title: 'Commission',
-				body: 'The agreed slice of the pot that goes to the game\u2019s creator, its judges and the platform. Set in the open when the game is published, and taken automatically \u2014 not negotiated afterwards.'
+				match: ['抽成', '佣金'],
+				title: '抽成',
+				body: '奖池里约定分给比赛创建者、裁判和平台的那一块。比赛发布时就公开写定，之后自动扣除 —— 不是事后再谈。'
 			},
 			{
-				match: ['judge', 'judges'],
-				title: 'Judge',
-				body: 'Someone whose job is to check the creator, not the players: did the game actually score honestly, and are its receipts valid? If they catch a cheat, they are paid out of the creator\u2019s cut.',
-				more: 'Being paid for finding fraud, rather than for approving things, is what makes the role worth having.'
+				match: ['裁判'],
+				title: '裁判',
+				body: '职责是查创建者、而不是查玩家的人：这场比赛真的诚实打分了吗？它出的凭据有效吗？如果抓到作弊，他们的报酬从创建者那一份里出。',
+				more: '因为找出欺诈才有钱拿，而不是因为放行才有钱拿，这个角色才值得存在。'
 			},
 			{
-				match: ['NFT', 'NFTs', 'game NFT'],
+				match: ['NFT'],
 				title: 'NFT',
-				body: 'A one-of-a-kind token recorded on the blockchain, which can be owned and transferred but not duplicated. Here it is the trophy: permanent, public proof of who won a particular game.'
+				body: '记录在区块链上的独一无二的通证，可以拥有、可以转让，但没法复制。在这里它就是奖杯：永久、公开地证明谁赢下了某一场比赛。'
 			},
 			{
-				match: ['wallet', 'wallets', 'Ergo wallet'],
-				title: 'Wallet',
-				body: 'The app that holds the keys to your funds and signs your actions on the blockchain. Not an account with a company \u2014 nobody can freeze it, and nobody can recover it for you.'
+				match: ['钱包', 'Ergo 钱包'],
+				title: '钱包',
+				body: '替你保管资金密钥、并替你在区块链上签名的那个应用。它不是某家公司给你开的账户 —— 没人能冻结它，也没人能替你找回来。'
 			},
 			{
-				match: ['gas fee', 'gas fees', 'network gas fee', 'network fee'],
-				title: 'Gas fee',
-				body: 'The small charge for having the network record your transaction. It pays the computers doing the recording, not the platform \u2014 like postage rather than a ticket price.'
+				match: ['网络手续费', '手续费'],
+				title: '网络手续费',
+				body: '让网络把你的交易记录下来所付的一小笔钱。它付给做记录的那些计算机，而不是平台 —— 更像邮费，而不是门票。'
 			},
 			{
-				match: ['deterministic', 'determinism', 'reproducible', 'reproducibility'],
-				title: 'Deterministic',
-				body: 'Same input, same output, every time \u2014 like a recipe that produces an identical cake in any kitchen, rather than one that depends on the cook. Nothing about the machine, the day or the location changes the result.',
-				more: 'It is what makes a score checkable by somebody else: they can re-run it and must get your number.'
+				match: ['确定性', '可复现'],
+				title: '确定性',
+				body: '同样的输入，永远得到同样的输出 —— 像一份在任何厨房都能烤出一模一样蛋糕的食谱，而不是看厨师手艺。机器、日子、地点，都不改变结果。',
+				more: '这才让一个分数能被别人核对：他们重跑一遍，就必须得到你那个数。'
 			},
 			{
-				match: ['isolation', 'isolated', 'sealed', 'sandboxed', 'secure isolated environment', 'isolated environment'],
-				title: 'Isolation',
-				body: 'Keeping a running program inside a boundary it cannot reach past \u2014 it sees only what it was given, and nothing of the machine around it or of anything else running there.',
-				more: 'It is what lets a game run a stranger\u2019s bot safely, and lets you run a stranger\u2019s game safely.'
+				match: ['隔离环境', '隔离', '沙箱'],
+				title: '隔离',
+				body: '把运行中的程序关在一道它跨不出去的边界里 —— 它只看得到别人交给它的东西，看不到周围这台机器，也看不到同时在跑的其他任何东西。',
+				more: '正因为如此，比赛才敢运行陌生人的机器人，你也才敢运行陌生人的比赛。'
 			},
 			{
-				match: ['obfuscation', 'obfuscated', 'obfuscate'],
-				title: 'Obfuscation',
-				body: 'Deliberately scrambling a program so that it still runs perfectly but is painful to read \u2014 the software equivalent of a document printed without spaces or line breaks.',
-				more: 'Used here to keep a game\u2019s hidden secret hidden, even though everyone has a copy of the program that contains it.'
+				match: ['混淆'],
+				title: '混淆',
+				body: '故意把程序打乱，让它照常运行、却读起来非常费劲 —— 相当于一份不带空格也不换行印出来的文件。',
+				more: '这里用它来把比赛藏着的秘密值继续藏住，哪怕每个人手上都有那个装着它的程序。'
 			},
 			{
-				match: ['peer-to-peer', 'peer to peer', 'P2P'],
-				title: 'Peer-to-peer',
-				body: 'Two computers dealing with each other directly, the way two people have a phone call \u2014 instead of both sending everything through a company in the middle, the way email or a marketplace works. Each computer is a "peer": equal, no one in charge.',
-				more: 'It matters here because the company in the middle is usually the one that sets the price, takes a cut, and can remove you.'
+				match: ['点对点', 'P2P'],
+				title: '点对点',
+				body: '两台计算机直接打交道，就像两个人通电话 —— 而不是像电子邮件或电商平台那样，什么都要经过中间那家公司。每台计算机都是一个“对等点”：平起平坐，没有谁说了算。',
+				more: '这里之所以重要，是因为中间那家公司通常就是定价的、抽成的、并且能把你踢出去的那一个。'
 			},
 			{
-				match: ['self-hosting', 'self-hosted', 'self-host', 'run locally', 'runs locally'],
-				title: 'Self-hosting',
-				body: 'Running your own copy of a service on your own machine instead of using somebody else\u2019s. The thing keeps working even if the public version is switched off, censored, or simply having a bad day.'
+				match: ['自托管', '本地运行'],
+				title: '自托管',
+				body: '在自己的机器上跑一份自己的服务，而不是用别人的。就算公开的那一份被关掉、被封锁，或者单纯那天不太行，东西照样能用。'
 			},
 			{
-				match: ['decoy', 'decoys', 'decoy score', 'decoy scores', 'fake high scores'],
-				title: 'Decoy',
-				body: 'A deliberately misleading entry \u2014 a score you publish that isn\u2019t your real one \u2014 submitted to make rivals guess wrong about how well you actually did. Bluffing, made possible because nobody can read a sealed score.'
+				match: ['诱饵分数', '诱饵'],
+				title: '诱饵分数',
+				body: '一份故意误导人的成绩 —— 你公布的一个并不是真实的分数 —— 提交出去，好让对手猜错你到底考得怎么样。这是虚张声势，之所以成立，是因为没人读得了一个封起来的分数。'
 			},
 			{
-				match: ['Time-Weighted Score', 'time-weighted score', 'time weighted score', 'TimeWeight'],
-				title: 'Time-weighted score',
-				body: 'A score adjusted for how early you submitted it. Two identical results do not tie: the one entered sooner counts for more, so sitting on a good answer until the deadline costs you.'
+				match: ['时间加权分数', 'TimeWeight'],
+				title: '时间加权分数',
+				body: '按你提交得多早来调整过的分数。两份一模一样的成绩不会打平：先交的那份算得更多，所以捂着一个好答案等到截止日，是要付代价的。'
 			},
 			{
-				match: ['Grace Period', 'grace period', 'validation period', 'refund'],
-				title: 'Grace period',
-				body: 'A waiting window built into the rules before money moves \u2014 time for judges to object, and time for players to claim their fees back if the creator never resolves the game at all.',
-				more: 'It is the answer to "what if the organiser just disappears": the contract lets everyone walk away with their money.'
+				match: ['宽限期', '验证期', '退款'],
+				title: '宽限期',
+				body: '规则里内置的一段等待窗口，钱在这之前不动 —— 留给裁判提出异议，也留给玩家在创建者始终不结算时，把自己的费用要回来。',
+				more: '它回答的是“主办方要是人间蒸发了怎么办”：合约让所有人都能带着自己的钱离开。'
 			},
 			{
-				match: ['CDE', 'scenario variability', 'high scenario variability'],
-				title: 'Scenario variability (CDE)',
-				body: 'How different each run of a game can be from the last. High variability means a bot has to actually play well, because there is no single fixed answer to memorise and hardcode.'
+				match: ['CDE', '场景变化度'],
+				title: '场景变化度（CDE）',
+				body: '一场比赛的每一局之间能有多不一样。变化度高，意味着机器人必须真的会玩，因为没有一个固定答案可以背下来写死。'
 			}
 		]
 	},
 
 	/* ============================================================== *
-	 * Splash screen
+	 * 开场页
 	 * ============================================================== */
 	splash: {
 		title: 'GAME OF PROMPTS',
-		subtitle: 'WRITE YOUR PROMPTS. BUILD YOUR BOT. WIN THE THRONE.'
+		subtitle: '写下你的提示词。造出你的机器人。赢下王座。'
 	},
 
 	/* ============================================================== *
 	 * <head>
 	 * ============================================================== */
 	meta: {
-		title: 'Game of Prompts — Write your prompts. Build your bot. Win the throne.',
+		title: 'Game of Prompts —— 写下你的提示词。造出你的机器人。赢下王座。',
 		description:
-			'A competitive platform where creators design game-services to evaluate AI solvers, while players build solver-services to maximize their scores — powered by the Ergo blockchain and Celaut.',
+			'一个竞技平台：创建者设计游戏服务来评测 AI 求解器，玩家构建求解服务把自己的分数拉到最高 —— 由 Ergo 区块链与 Celaut 驱动。',
 		ogTitle: 'Game of Prompts',
-		ogDescription: 'Write your prompts. Build your bot. Win the throne.'
+		ogDescription: '写下你的提示词。造出你的机器人。赢下王座。'
 	},
 
 	/* ============================================================== *
-	 * Hero
+	 * 主视觉
 	 * ============================================================== */
 	hero: {
 		titleTop: 'GAME OF',
 		titleBottom: 'PROMPTS',
-		// `<span class="hero-grad">` is the accent gradient. Keep the tag
-		// around whichever clause deserves the emphasis in this language;
-		// it does not have to be the middle one.
-		tagline: 'Write your prompts. <span class="hero-grad">Build your bot.</span> Win the throne.',
-		lede: 'A competitive platform where creators design game-services to evaluate AI solvers, and players build solver-services to maximize their scores — all recorded and verified on-chain.',
+		// `<span class="hero-grad">` 是渐变强调色，保留且只保留一个。
+		tagline: '写下你的提示词。<span class="hero-grad">造出你的机器人。</span>赢下王座。',
+		lede: '一个竞技平台：创建者设计游戏服务来评测 AI 求解器，玩家构建求解服务把自己的分数拉到最高 —— 所有结果都在 Ergo 区块链上记录并验证。',
 		actions: {
-			launch: 'Launch App',
-			github: 'View on GitHub',
-			how: 'See how it works'
+			launch: '启动应用',
+			github: '在 GitHub 上查看',
+			how: '看看它怎么运作'
 		},
 		stats: [
-			{ value: 'P2P', label: 'Decentralized — services run on your own Celaut node' },
-			{ value: 'On-chain', label: 'Results committed and verified on Ergo' },
-			{ value: 'Trustless', label: 'Smart contracts settle the pot, not a company' }
+			{ value: 'P2P', label: '去中心化 —— 服务运行在你自己的 Celaut 节点' },
+			{ value: '链上', label: '成绩以承诺值锁定，由 Ergo 验证' },
+			{ value: '无需信任', label: '结算奖池的是智能合约，不是某家公司' }
 		],
-		scroll: 'Scroll'
+		scroll: '向下滚动'
 	},
 
 	/* ============================================================== *
-	 * The seven pinned scenes
-	 * Each `beats` array is positional: one entry per SceneBeat in
-	 * +page.svelte, in order. `note` is the closing line of a scene.
+	 * 七个固定场景
 	 * ============================================================== */
 	scenes: {
 		arena: {
-			label: 'The idea',
+			label: '理念',
 			beats: [
 				{
-					h: 'Someone posts a challenge.',
-					p: 'A creator designs a game with measurable scoring — and packages it as a <strong>game-service</strong>: an immutable Celaut service that holds the game\u2019s logic and its secret.'
+					h: '有人出了一道题。',
+					p: '创建者设计一场可以量化打分的比赛，并把它打包成 <strong>游戏服务</strong>：一个不可更改的 Celaut 服务，装着这场比赛的逻辑和它的秘密值。'
 				},
 				{
-					h: 'Everyone else builds a bot to beat it.',
-					p: 'Players write <strong>solver-services</strong> — their strategy, packaged the same way. The game-service runs each solver in a secure, isolated environment and scores what it did.'
+					h: '其他人都造一个机器人去打败它。',
+					p: '玩家写 <strong>求解服务</strong> —— 把自己的策略用同样的方式打包。游戏服务在安全的隔离环境里运行每一个求解器，并为它的表现打分。'
 				},
 				{
-					h: 'The highest score wins the throne.',
-					p: 'No leaderboard you have to trust. Every score is committed cryptographically and <strong>settled on the Ergo blockchain</strong>, where anyone can check the maths.',
-					note: 'Write your prompts. Build your bot. Win the throne.'
+					h: '分数最高的人赢下王座。',
+					p: '没有需要你去相信的排行榜。每个分数都以密码学方式锁定，并 <strong>在 Ergo 区块链上结算</strong>，任何人都能核对这笔算术。',
+					note: '写下你的提示词。造出你的机器人。赢下王座。'
 				}
 			]
 		},
 
 		components: {
-			label: 'Architecture',
+			label: '架构',
 			beats: [
 				{
-					h: 'Game Service',
-					p: 'Built by game devs. An autonomous service that encapsulates a game\u2019s logic and the secret. It evaluates solver performance, generates scores, and creates the <strong>cryptographic commitments</strong> needed for blockchain validation.'
+					h: '游戏服务',
+					p: '由比赛开发者构建。一个自主运行的服务，把一场比赛的逻辑和秘密值封装在一起。它评测求解器的表现、产出分数，并生成区块链验证所需的<strong>密码学承诺</strong>。'
 				},
 				{
-					h: 'Solver Service',
-					p: 'Built by players. It implements strategies to maximize the score in a specific game. The solver is packaged and sent to the game-service, which <strong>executes it in a secure, isolated environment</strong> for evaluation.'
+					h: '求解服务',
+					p: '由玩家构建。它实现各种策略，把某一场比赛里的分数拉到最高。求解器打包之后交给游戏服务，由它在安全的<strong>隔离环境</strong>里运行并评测。'
 				},
 				{
 					h: 'GoP Web',
-					p: 'The community portal. Discover games, read the rules, download game-services, and publish your results on the Ergo blockchain. It <strong>supports self-hosting</strong> for a fully trustless, peer-to-peer experience.'
+					p: '社区门户。发现比赛、阅读规则、下载游戏服务，并把你的成绩发布到 Ergo 区块链上。它支持<strong>自托管</strong>，让整个体验完全无需信任、点对点。'
 				},
 				{
-					h: 'Everything runs on your machine.',
-					p: 'Game and solver services both run on a <strong>local Celaut node</strong>, which can operate entirely offline. GoP Web can be used via its GitHub.io instance or run locally as a Celaut service.',
-					note: 'Two technologies: Celaut for computation, Ergo for settlement.'
+					h: '一切都在你自己的机器上运行。',
+					p: '游戏服务和求解服务都跑在<strong>本地 Celaut 节点</strong>上，而这台节点完全可以离线工作。GoP Web 可以用它的 GitHub.io 实例，也可以作为 Celaut 服务在本地运行。',
+					note: '两项技术：Celaut 负责计算，Ergo 负责结算。'
 				}
 			]
 		},
 
 		creator: {
-			label: 'Game creator flow',
+			label: '创建者的流程',
 			beats: [
 				{
-					h: 'Design a game.',
-					p: 'Create a challenge with measurable scoring and high scenario variability (CDE), so hardcoded solutions don\u2019t work.'
+					h: '设计一场比赛。',
+					p: '设计一个可以量化打分、而且场景变化度（CDE）很高的挑战，让写死的答案根本不管用。'
 				},
 				{
-					h: 'Write the Paper.',
-					p: 'Publish a document with all instructions, rules and evaluation criteria. Players must be able to understand the challenge <strong>before</strong> they participate.'
+					h: '写规则书。',
+					p: '发布一份文档，写清所有说明、规则和评测标准。玩家必须能在参赛<strong>之前</strong>就理解这场挑战。'
 				},
 				{
-					h: 'Generate a secret.',
-					p: 'A unique <strong>256-bit secret</strong> underwrites the cryptographic commitments and the later score validation. Nobody can see it while the game is open.'
+					h: '生成秘密值。',
+					p: '一个唯一的 <strong>256 位秘密值</strong> 为密码学承诺和之后的分数验证背书。比赛开放期间，谁也看不到它。'
 				},
 				{
-					h: 'Package and publish.',
-					p: 'Ship the game as a Celaut service and publish it through GoP Web with its parameters: fee, deadline, and commission.'
+					h: '打包并发布。',
+					p: '把比赛作为 Celaut 服务打包，通过 GoP Web 连同它的参数一起公布：参与费、截止时间和抽成。'
 				},
 				{
-					h: 'Reveal the secret.',
-					p: 'When the deadline passes, the creator <strong>reveals the secret on-chain</strong>. That resolves the game: score validation becomes possible and the smart contract can determine the winner.',
-					note: 'Commit first, reveal later. That\u2019s what makes it fair.'
+					h: '公布秘密值。',
+					p: '截止时间一到，创建者就<strong>公布秘密值</strong>，写进链上。比赛由此结算：分数验证成为可能，智能合约也就能定出赢家。',
+					note: '先承诺，后揭晓。公平就是这么来的。'
 				}
 			]
 		},
 
 		player: {
-			label: 'The player\u2019s journey',
+			label: '玩家的旅程',
 			beats: [
 				{
-					h: 'Browse and read the Paper.',
-					p: 'Find a game on GoP Web. Read the creator\u2019s Paper to understand the challenge, the rules and the evaluation criteria before committing to anything.'
+					h: '逛一逛，读规则书。',
+					p: '在 GoP Web 上找一场比赛。在投入任何东西之前，先读创建者的规则书，弄懂挑战、规则和评测标准。'
 				},
 				{
-					h: 'Implement your solver.',
-					p: 'Build your solver-service from the Paper alone, so it\u2019s ready to compete the moment the seed drops.'
+					h: '写你的求解器。',
+					p: '只凭规则书就把你的求解服务做出来，这样种子一公布，你就已经可以开打。'
 				},
 				{
-					h: 'Register your Solver ID.',
-					p: 'Registration is free — you only cover the network gas fee. This <strong>pre-commitment</strong> is what guarantees fairness before the seed is revealed.'
+					h: '注册你的求解器 ID。',
+					p: '注册是免费的 —— 你只承担网络手续费。正是这一步<strong>提前承诺</strong>，保证了种子公布之前的公平。'
 				},
 				{
-					h: 'The seed is revealed.',
-					p: 'Once the ceremony phase ends, the game seed goes public. Now — and only now — you know the exact challenge parameters you\u2019ll be evaluated against.'
+					h: '种子公布。',
+					p: '仪式阶段一结束，游戏种子就公开。到这时 —— 也只有到这时 —— 你才知道自己将被拿去评测的确切挑战参数。'
 				},
 				{
-					h: 'Run the game service locally.',
-					p: 'The service executes your solver in a secure environment with the revealed seed, evaluates its performance, and generates the <strong>cryptographic commitment</strong> needed for on-chain validation.'
+					h: '在本地运行游戏服务。',
+					p: '服务用公布出来的种子，在安全环境里运行你的求解器，评测它的表现，并生成链上验证所需的<strong>密码学承诺</strong>。'
 				},
 				{
-					h: 'Submit your commitment and pay the fee.',
-					p: 'If the score is worth competing with, publish the commitment on-chain and pay the participation fee. <strong>All fees go into the pot</strong> — the winner takes the economic prize, minus creator, judge and platform commission, and receives the game NFT.',
-					note: 'You decide whether your run is worth submitting.'
+					h: '提交承诺值，付参与费。',
+					p: '如果这个分数值得拿去比，就把承诺值发布到链上，并付参与费。<strong>所有费用都进奖池</strong> —— 赢家拿走扣掉创建者、裁判和平台抽成之后的奖金，并得到这场比赛的 NFT 。',
+					note: '这一局值不值得提交，由你自己决定。'
 				}
 			]
 		},
 
 		validation: {
-			label: 'Score validation',
+			label: '分数验证',
 			beats: [
 				{
-					h: 'Your score is a hash, not a claim.',
-					p: 'When you participate, what goes on-chain is a <strong>commitment</strong> — a digest. Nobody, including the creator, can read your score off the blockchain while the game is still open.'
+					h: '你的分数是一段哈希，不是一句声明。',
+					p: '你参赛时，写到链上的是一个<strong>承诺值</strong> —— 一段摘要。比赛还开着的时候，包括创建者在内，没有人能从区块链上读出你的分数。'
 				},
 				{
-					h: 'Then the secret comes out.',
-					p: 'After the deadline, the creator reveals the game secret in the resolution transaction. That\u2019s the missing ingredient — and it <strong>unlocks verification for everyone at once</strong>.'
+					h: '然后秘密值出来了。',
+					p: '截止之后，创建者在结算交易里公布游戏秘密值。那正是缺的那一味 —— 它<strong>让所有人同时具备验证能力</strong>。'
 				},
 				{
-					h: 'The contract recomputes it.',
-					p: 'The game contract builds a commitment for each score from the <strong>solver ID, the score value, the hashed logs and the revealed secret</strong>. No trusted party is involved; it\u2019s arithmetic.'
+					h: '合约把它重新算一遍。',
+					p: '游戏合约用<strong>求解器 ID、分数数值、日志哈希和公布出来的秘密值</strong>，为每个分数重新构造一个承诺值。这里不涉及任何需要信任的第三方；它就是算术。'
 				},
 				{
-					h: 'If they match, the score is real.',
-					p: 'A recomputed commitment that equals the published one proves the score is authentic and tamper-proof. Anything that doesn\u2019t match simply isn\u2019t a score.',
-					note: 'Transparent yet private: proven without being exposed.'
+					h: '对得上，分数就是真的。',
+					p: '重新算出来的承诺值和已公布的那个相等，就证明这个分数真实、未被篡改。对不上的，根本就不算分数。',
+					note: '公开而又私密：被证明，却没有被曝光。'
 				}
 			]
 		},
 
 		pot: {
-			label: 'Economics',
+			label: '经济模型',
 			beats: [
 				{
-					h: 'Every entry feeds the pot.',
-					p: 'Participation fees from everyone who submits a commitment accumulate in a single on-chain pot for that game.'
+					h: '每一份参赛都喂大奖池。',
+					p: '每个提交了承诺值的人所付的参与费，都累积进这场比赛在链上的同一个奖池。'
 				},
 				{
-					h: 'Commissions come off the top.',
-					p: 'The creator, the judges and the platform take their agreed commission — all of it set in the open when the game was published, and <strong>enforced by the smart contract</strong> rather than by anyone\u2019s goodwill.'
+					h: '抽成先从上面切走。',
+					p: '创建者、裁判和平台拿走各自约定的抽成 —— 这些在比赛发布时就公开写定，并且<strong>由智能合约强制执行</strong>，而不是靠谁的好心。'
 				},
 				{
-					h: 'The rest goes to the winner.',
-					p: 'The highest validated score takes the remaining pot — plus the <strong>game NFT</strong>, a permanent, public, auditable proof of victory. Funds are released after a validation period that gives judges time to check the creator acted honestly.',
-					note: 'Nobody approves the payout. The contract does it.'
+					h: '剩下的归赢家。',
+					p: '验证通过的最高分拿走剩余奖池 —— 外加这场比赛的 <strong>NFT</strong>，一份永久、公开、可审计的胜利凭证。资金会在一段验证期之后才释放，好给裁判时间去查创建者有没有老实办事。',
+					note: '没有人去批准这笔付款。是合约自己付的。'
 				}
 			]
 		},
 
 		judges: {
-			label: 'Trust & accountability',
+			label: '信任与问责',
 			beats: [
 				{
-					h: 'Who watches the creator?',
-					p: 'Judges are entities nominated by the creator who audit the resolution phase. They verify that the creator\u2019s game service generated <strong>valid proofs and valid scores</strong>.'
+					h: '谁来盯着创建者？',
+					p: '裁判是由创建者提名、负责审计结算阶段的实体。他们核实创建者的游戏服务是否生成了<strong>有效的凭据和有效的分数</strong>。'
 				},
 				{
-					h: 'Fraud costs the creator, not you.',
-					p: 'If a judge catches a faulty game service or an invalid proof, that judge <strong>receives the creator\u2019s commission</strong> as the reward. The incentive to look closely is built in.'
+					h: '作弊的代价由创建者承担，不由你承担。',
+					p: '如果裁判抓到有问题的游戏服务或无效的凭据，那位裁判就<strong>拿走创建者的抽成</strong>作为报酬。仔细看的动力，是写进制度里的。'
 				},
 				{
-					h: 'Players stay out of the blast radius.',
-					p: 'In normal operation players cannot be penalised by judges. Judges exist to <strong>protect players from dishonest creators</strong>, never the other way around.',
-					note: 'Audit the house, not the guests.'
+					h: '玩家不在波及范围内。',
+					p: '正常运行时，玩家不会被裁判处罚。裁判存在的意义是<strong>保护玩家不被不老实的创建者坑</strong>，从来不是反过来。',
+					note: '查的是庄家，不是客人。'
 				}
 			]
 		}
 	},
 
 	/* ============================================================== *
-	 * The readable reference list under the validation scene
+	 * 验证场景下方的参考清单
 	 * ============================================================== */
 	steps: {
-		title: 'The five steps, in order',
+		title: '五个步骤，依次进行',
 		items: [
 			{
-				badge: 'SUBMITTED',
-				title: 'Player Participation',
-				desc: 'Player publishes their participation on the Ergo blockchain.'
+				badge: '已提交',
+				title: '玩家参赛',
+				desc: '玩家把自己的参赛记录发布到 Ergo 区块链上。'
 			},
 			{
-				badge: 'REVEALED',
-				title: 'Creator Reveals Secret',
-				desc: 'After the deadline, the creator reveals the game secret in the resolution transaction — unlocking verification.'
+				badge: '已公布',
+				title: '创建者公布秘密值',
+				desc: '截止之后，创建者在结算交易里公布游戏秘密值 —— 验证由此解锁。'
 			},
 			{
-				badge: 'COMPUTED',
-				title: 'Smart Contract Validation',
-				desc: 'The game contract computes a commitment for each score using the solver ID, score value, hashed logs, and revealed secret.'
+				badge: '已计算',
+				title: '智能合约验证',
+				desc: '游戏合约用求解器 ID、分数数值、日志哈希和公布出来的秘密值，为每个分数算出一个承诺值。'
 			},
 			{
-				badge: 'VERIFIED',
-				title: 'Score Verification',
-				desc: 'When the score commitment matches the participation commitment, that score is validated as authentic and tamper-proof.'
+				badge: '已核实',
+				title: '分数核实',
+				desc: '当分数承诺与参赛时提交的承诺一致，这个分数就被判定为真实且未被篡改。'
 			},
 			{
-				badge: 'DISTRIBUTED',
-				title: 'Winner Takes the Pot',
-				desc: 'Highest score wins. Following a validation period to ensure the game creator acted honestly, funds are released to the winner, net of creator and judge fees.'
+				badge: '已分配',
+				title: '赢家拿走奖池',
+				desc: '最高分获胜。经过一段验证期、确认创建者老实办事之后，资金扣除创建者与裁判的费用，发放给赢家。'
 			}
 		]
 	},
 
 	/* ============================================================== *
-	 * Video
+	 * 视频
 	 * ============================================================== */
 	video: {
-		label: 'Overview',
-		title: 'Watch the Breakdown',
-		subtitle:
-			'Get up to speed in minutes — see how Game of Prompts brings blockchain and AI competitions together.',
-		thumbAlt: 'Game of Prompts video thumbnail',
-		iframeTitle: 'Game of Prompts — Brief Breakdown'
+		label: '概览',
+		title: '看一遍拆解',
+		subtitle: '几分钟就跟上进度 —— 看看 Game of Prompts 怎么把区块链和 AI 竞赛接在一起。',
+		thumbAlt: 'Game of Prompts 视频缩略图',
+		iframeTitle: 'Game of Prompts —— 简要拆解'
 	},
 
 	/* ============================================================== *
-	 * Security
+	 * 安全
 	 * ============================================================== */
 	security: {
-		label: 'Security',
-		title: 'Transparent Yet Private Competition',
-		subtitle:
-			'Cryptography ensures fair competition while protecting participants\u2019 strategies.',
+		label: '安全',
+		title: '公开，同时私密',
+		subtitle: '密码学保证比赛公平，同时保护参与者的策略。',
 		cards: [
 			{
-				title: 'Code Protection',
-				desc: 'The game\u2019s intellectual property and game secret are protected through obfuscation to prevent reverse engineering.'
+				title: '代码保护',
+				desc: '比赛的知识产权和游戏秘密值通过混淆加以保护，防止被逆向工程。'
 			},
 			{
-				title: 'Private Results',
-				desc: 'Strategic decoys and cryptographic commitments conceal your true score, protecting your strategy until the final reveal.'
+				title: '成绩不外泄',
+				desc: '策略性的诱饵分数加上密码学承诺，把你的真实分数藏起来，一直保护你的策略到最终揭晓那一刻。'
 			},
 			{
-				title: 'Immutable Proof',
-				desc: 'Final validation on the Ergo blockchain generates a public, immutable, and auditable proof of victory.'
+				title: '不可篡改的凭证',
+				desc: '在 Ergo 区块链上完成的最终验证，会生成一份公开、不可篡改、可审计的胜利凭证。'
 			}
 		]
 	},
 
 	/* ============================================================== *
-	 * Game types
+	 * 比赛类型
 	 * ============================================================== */
 	gameTypes: {
-		title: 'What Can Be a Game?',
-		text: 'Game of Prompts is a versatile platform that can host a wide variety of competitions. Here are just a few examples of what\u2019s possible.',
-		// `label` is the "Game Type 01" eyebrow; {n} is the number.
-		eyebrow: 'Game Type {n}',
+		title: '什么可以拿来当比赛？',
+		text: 'Game of Prompts 是个通用平台，能容纳各式各样的比赛。下面只是其中几个例子。',
+		// {n} 是编号。
+		eyebrow: '比赛类型 {n}',
 		items: [
 			{
-				title: 'Classic Arcade',
-				desc: 'The AI solver controls the character in fast-paced, skill-based game environments. Reflexes, pattern recognition, timing.',
-				score: 'Game points · Survival time · Levels cleared'
+				title: '经典街机',
+				desc: 'AI 求解器直接操控角色，在节奏快、看操作的游戏环境里比拼。反应、找规律、掐时机。',
+				score: '游戏得分 · 存活时间 · 通关层数'
 			},
 			{
-				title: 'Open World',
-				desc: 'Optimize for spatial reasoning, navigation, and environmental adaptation.',
-				score: 'Resource efficiency · Map exploration · Mission complexity'
+				title: '开放世界',
+				desc: '比的是空间推理、路径规划和对环境的适应。',
+				score: '资源利用率 · 地图探索度 · 任务复杂度'
 			},
 			{
-				title: 'Financial Trading',
-				desc: 'Bot vs. market. Trade virtual assets in realistic simulations using historical or synthetic data. Pure strategy, zero luck.',
-				score: 'Net profit · Sharpe ratio · Drawdown · Benchmarks'
+				title: '金融交易',
+				desc: '机器人对市场。用历史数据或合成数据，在贴近真实的模拟里交易虚拟资产。纯策略，零运气。',
+				score: '净收益 · 夏普比率 · 最大回撤 · 基准对比'
 			},
 			{
-				title: 'Protein Folding',
-				desc: 'Predict 3D protein structures from amino acid sequences. A real scientific challenge — AI solvers advancing biology.',
-				score: 'Structural stability · Folding accuracy · Efficiency'
+				title: '蛋白质折叠',
+				desc: '从氨基酸序列预测三维蛋白质结构。一道真正的科学难题 —— 让 AI 求解器去推进生物学。',
+				score: '结构稳定性 · 折叠准确度 · 计算效率'
 			}
 		]
 	},
 
 	/* ============================================================== *
-	 * Optional features
+	 * 可选玩法
 	 * ============================================================== */
 	features: {
-		title: 'Optional Game Features',
-		text: 'Creators can enhance their games with powerful optional mechanics — from poker-style bluffing to resource constraints and pay-per-attempt models.',
-		// {n} is the number; {status} is one of `status` below.
-		eyebrow: 'Feature {n}',
+		title: '可选的比赛玩法',
+		text: '创建者可以给自己的比赛加上一些有力的可选机制 —— 从扑克式的虚张声势，到资源限制，再到按次收费。',
+		// {n} 是编号；{status} 取自下面的 status。
+		eyebrow: '玩法 {n}',
 		status: {
-			available: 'Available',
-			research: 'Under Research'
+			available: '已可用',
+			research: '研究中'
 		},
 		items: [
 			{
-				title: 'Resource Limitation',
-				desc: 'Technical challenge by constraining computational resources. Efficiency is king.',
+				title: '资源限制',
+				desc: '通过限制算力资源来提高技术难度。效率为王。',
 				bullets: [
-					'Game creator sets specific limits on computational resources',
-					'Constraints: maximum RAM, CPU time, or service dependencies',
-					'Forces players to develop highly efficient, optimized solutions',
-					'Adds a significant engineering challenge to the game'
+					'比赛创建者对算力资源设定具体上限',
+					'限制项：最大内存、CPU 时间，或可依赖的服务',
+					'迫使玩家写出高效、经过优化的方案',
+					'给比赛加上一层实打实的工程挑战'
 				]
 			},
 			{
-				title: 'Poker Mode',
-				desc: 'Strategic participation with risk and reward. Bluff, bet, and multiply your score.',
+				title: '扑克模式',
+				desc: '带风险也带回报的策略性参与。虚张声势、下注，把你的分数翻倍。',
 				bullets: [
-					'Participants choose how much to pay (above a set minimum)',
-					'Higher payment = higher final score multiplier (e.g. ×2, ×5)',
-					'Players can submit multiple decoy scores',
-					'Bluff strategy: pay high fee + submit fake high scores to intimidate',
-					'Game creator sets score multiplier based on fee paid'
+					'参与者自己决定付多少（在设定的下限之上）',
+					'付得越多，最终分数的倍率越高（例如 ×2、×5）',
+					'玩家可以提交多份诱饵分数',
+					'唬人打法：付高额费用 + 提交假的高分来吓退对手',
+					'比赛创建者按付费额度设定分数倍率'
 				]
 			},
 			{
-				title: 'Pay-per-Attempt',
-				desc: 'A mechanism that assigns a cost to each local execution, fostering high-quality agent development over trial-and-error.',
+				title: '按次计费',
+				desc: '给每一次本地执行都定个成本，鼓励把智能体做扎实，而不是靠碰运气反复试。',
 				bullets: [
-					'Incremental token cost per local execution attempt',
-					'Encourages rigorous local simulation and optimization',
-					'Disincentivizes blind brute-force strategies',
-					'Difficulty scaling fully configurable by the game creator'
+					'每次本地执行都要付一笔递增的通证成本',
+					'鼓励认真做本地仿真和优化',
+					'打消盲目暴力穷举的念头',
+					'难度曲线完全由比赛创建者配置'
 				]
 			}
 		]
 	},
 
 	/* ============================================================== *
-	 * FAQ
-	 *
-	 * The live questions are fetched from the project README at
-	 * runtime and are English-only at source, so they are NOT
-	 * translated here. What IS translated is the chrome around them
-	 * and the offline fallback set, which is what a reader sees when
-	 * the fetch fails.
+	 * 常见问题
 	 * ============================================================== */
 	faq: {
-		label: 'FAQ',
-		title: 'Frequently Asked Questions',
-		footerTitle: 'Still have questions?',
-		footerDesc:
-			'Copy the prompt below and paste it into any AI assistant — it includes a link to our full documentation.',
-		copyPrompt: 'Copy prompt',
-		copied: 'Copied!',
-		orLabel: 'or open directly in:',
-		disclaimerBefore: '⚠️ AI responses may not be fully accurate. Always refer to the ',
-		disclaimerLink: 'official documentation',
-		disclaimerAfter: ' for authoritative information.',
-		telegram: 'Join Telegram Community',
+		label: '常见问题',
+		title: '常见问题',
+		footerTitle: '还有疑问？',
+		footerDesc: '复制下面这段提示词，粘贴到任意 AI 助手里 —— 里面附了我们完整文档的链接。',
+		copyPrompt: '复制提示词',
+		copied: '已复制！',
+		orLabel: '或者直接打开：',
+		disclaimerBefore: '⚠️ AI 的回答未必完全准确。请始终以',
+		disclaimerLink: '官方文档',
+		disclaimerAfter: '为准。',
+		telegram: '加入 Telegram 社区',
 		groups: [
 			{
-				title: 'General',
+				title: '总览',
 				items: [
 					{
-						q: 'What is Game of Prompts?',
-						a: 'A bot competition audited by blockchain. Creators design game-services to evaluate AI solvers, while players build solver-services to maximize their scores — all verified on the Ergo blockchain.'
+						q: 'Game of Prompts 是什么？',
+						a: '一场由区块链审计的机器人竞赛。创建者设计游戏服务来评测 AI 求解器，玩家构建求解服务把分数拉到最高 —— 全部在 Ergo 区块链上验证。'
 					},
 					{
-						q: 'What is the "Ceremony Phase"?',
-						a: 'The initial period where players register their Solver IDs to add randomness to the seed. This prevents the Creator from pre-calculating solutions and ensures fair competition.'
+						q: '“仪式阶段”是什么？',
+						a: '开赛之初的一段时间，玩家在这时注册自己的求解器 ID，为种子加进随机性。这样创建者就无法提前算出答案，比赛才谈得上公平。'
 					},
 					{
-						q: 'What do I need to play?',
-						a: 'An Ergo Wallet (with some ERG for participation fees) and a Celaut Node to run game and solver services locally.'
+						q: '我需要准备什么才能玩？',
+						a: '一个 Ergo 钱包（里面备一些 ERG 用来付参与费），加上一个 Celaut 节点，用来在本地运行游戏服务和求解服务。'
 					}
 				]
 			},
 			{
-				title: 'Security',
+				title: '安全',
 				items: [
 					{
-						q: 'How do I know the game is fair?',
-						a: 'The game rules and hashS are registered on-chain from the start. They are immutable — no one can change them after publication.'
+						q: '我怎么知道这场比赛是公平的？',
+						a: '比赛规则和 hashS 从一开始就登记在链上。它们不可更改 —— 发布之后谁也改不了。'
 					},
 					{
-						q: 'Can the Creator steal the funds?',
-						a: 'No. Funds are locked in a Smart Contract, not the Creator\u2019s wallet. Distribution is handled atomically by the contract when the game resolves.'
+						q: '创建者会不会把钱卷走？',
+						a: '不会。资金锁在智能合约里，不在创建者的钱包里。比赛结算时，由合约原子性地完成分配。'
 					},
 					{
-						q: 'What if the Creator disappears?',
-						a: 'After a Grace Period, players can trigger a Refund Action to recover their participation fees from the smart contract.'
+						q: '万一创建者消失了怎么办？',
+						a: '过了宽限期，玩家可以发起退款操作，从智能合约里取回自己的参与费。'
 					}
 				]
 			},
 			{
-				title: 'Judges',
+				title: '裁判',
 				items: [
 					{
-						q: 'Who are the Judges?',
-						a: 'Entities nominated by the Creator who audit the resolution phase. They verify that the game service generated valid proofs.'
+						q: '裁判是谁？',
+						a: '由创建者提名、负责审计结算阶段的实体。他们核实游戏服务是否生成了有效的凭据。'
 					},
 					{
-						q: 'Why do Judges earn money for invalidating a participation?',
-						a: 'They detect Creator fraud — their incentive is to catch faulty game services. When they find issues, they receive the Creator\u2019s commission as reward.'
+						q: '为什么裁判判定一份参赛无效，反而能赚钱？',
+						a: '因为他们查的是创建者的舞弊 —— 他们的动力就是揪出有问题的游戏服务。一旦查出问题，创建者的抽成就归他们作为报酬。'
 					},
 					{
-						q: 'Can I be penalized as a player?',
-						a: 'The system penalizes the Creator/Game Service, not honest players. Judges audit the Creator, not you.'
+						q: '我作为玩家会被处罚吗？',
+						a: '系统处罚的是创建者和游戏服务，不是老实的玩家。裁判审计的是创建者，不是你。'
 					}
 				]
 			},
 			{
-				title: 'Economy',
+				title: '经济',
 				items: [
 					{
-						q: 'How is the winner calculated?',
-						a: 'Highest Time-Weighted Score: Score × (TimeWeight + RemainingTime). Submit early and score high for the best result.'
+						q: '赢家是怎么算出来的？',
+						a: '看时间加权分数谁最高：分数 ×（TimeWeight + 剩余时间）。早点交、分数高，结果最好。'
 					},
 					{
-						q: 'When do I receive my winnings?',
-						a: 'Immediately upon the End Game action. The Smart Contract atomically distributes all funds — the winner receives all participation fees minus creator commission and judge fees.'
+						q: '我什么时候能拿到奖金？',
+						a: '结束比赛的操作一执行就到手。智能合约会原子性地分配所有资金 —— 赢家拿到全部参与费，减去创建者抽成和裁判费用。'
 					}
 				]
 			}
@@ -702,23 +670,23 @@ export default {
 	},
 
 	/* ============================================================== *
-	 * Call to action + footer
+	 * 行动号召 + 页脚
 	 * ============================================================== */
 	cta: {
-		label: 'Get Started',
-		title: 'Get Started with Game of Prompts',
+		label: '开始上手',
+		title: '开始玩 Game of Prompts',
 		steps: [
-			'Install the <strong>Celaut node</strong> software to run Game and Solver Services in a secure, deterministic environment.',
-			'Set up an <strong>Ergo blockchain wallet</strong> to participate in games and receive winnings.',
-			'Browse available games on <strong>GoP Web</strong> and start developing your own solvers or create challenging games for others.'
+			'安装 <strong>Celaut 节点</strong> 软件，在安全、确定性的环境里运行游戏服务和求解服务。',
+			'准备一个 <strong>Ergo 区块链钱包</strong>，用来参赛和收取奖金。',
+			'在 <strong>GoP Web</strong> 上逛逛现有的比赛，开始写自己的求解器，或者给别人出一道够难的题。'
 		],
-		github: 'GitHub Repository',
-		celaut: 'Celaut Project',
-		ergo: 'Ergo Platform'
+		github: 'GitHub 仓库',
+		celaut: 'Celaut 项目',
+		ergo: 'Ergo 平台'
 	},
 
 	footer: {
-		tagline: 'Write your prompts. Build your bot. Win the throne.',
+		tagline: '写下你的提示词。造出你的机器人。赢下王座。',
 		github: 'GitHub',
 		ergo: 'Ergo',
 		celaut: 'Celaut'

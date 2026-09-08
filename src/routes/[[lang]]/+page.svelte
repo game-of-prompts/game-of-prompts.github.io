@@ -514,7 +514,7 @@
 	<section class="game-type-fullscreen {gt.cls}">
 		<div class="gt-bg-glow"></div>
 		<div class="gt-animation-canvas">
-			<GameAnimation type={gt.kind} />
+			<GameAnimation type={gt.kind as 'arcade' | 'openworld' | 'trading' | 'protein'} />
 		</div>
 		<div class="gt-content">
 			<span class="gt-icon" aria-hidden="true">{gt.icon}</span>
@@ -549,7 +549,7 @@
 	<section class="game-type-fullscreen {f.cls}" id={f.id}>
 		<div class="gt-bg-glow"></div>
 		<div class="gt-animation-canvas">
-			<GameAnimation type={f.kind} />
+			<GameAnimation type={f.kind as 'resource' | 'poker' | 'payattempt'} />
 		</div>
 		<div class="gt-content">
 			<span class="gt-icon" aria-hidden="true">{f.icon}</span>
