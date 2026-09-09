@@ -1,27 +1,12 @@
 <script>
-	/*
-	 * ImmersiveHero — the opener for the Game of Prompts landing page.
-	 *
-	 * Keeps the beloved GoP wordmark treatment (mono caps, "PROMPTS" in
-	 * the green gradient) but replaces the old three.js particle network
-	 * behind it with a 2D cursor-reactive competitor field. That removes
-	 * a WebGL context from a page that now runs seven canvas scenes, and
-	 * the field re-themes with the toggle for free.
-	 *
-	 * Two motion layers, both optional:
-	 *   1. The canvas field (drawHeroField) — always running while the
-	 *      hero is on screen; first signal that the page responds to you.
-	 *   2. A GSAP scroll timeline that parallaxes the wordmark, sub-copy
-	 *      and stat row at different rates as you leave the hero, so the
-	 *      handoff into the first pinned scene feels continuous.
-	 *
-	 * Under prefers-reduced-motion neither layer runs: the canvas is
-	 * painted once and the copy sits still. The DOM is identical either
-	 * way, so no content sits behind a motion gate.
+	/* A steady, balanced wordmark over a slowly turning astral sigil.
+	 * Motion belongs to the backdrop, never to the title. Reduced motion
+	 * paints a static sigil; existing viewport gating pauses offscreen work.
 	 */
 
 	import { onMount } from 'svelte';
-	import { drawHeroField } from './scene-kit.js';
+	import { base } from '$app/paths';
+	import { createSigilField } from './sigil-field.js';
 	import {
 		loadGsap,
 		prefersReducedMotion,
@@ -31,9 +16,9 @@
 		scrollTo
 	} from '$lib/motion.js';
 
-	/** First line of the wordmark. */
+	/** First words of the wordmark. */
 	export let titleTop = 'GAME OF';
-	/** Second line, rendered in the accent gradient. */
+	/** Final word, rendered in the accent colour. */
 	export let titleBottom = 'PROMPTS';
 	/** One-line promise under the wordmark (HTML allowed). */
 	export let tagline = '';
@@ -55,7 +40,6 @@
 
 	let root;
 	let canvasEl;
-	let layerTitle;
 	let layerSub;
 	let layerStats;
 	let layerScroll;
@@ -73,8 +57,7 @@
 		let height = 0;
 		let raf = 0;
 		let onScreen = true;
-		const mouse = { x: 0.5, y: 0.5, tx: 0.5, ty: 0.5, active: false };
-		const start = performance.now();
+		const field = createSigilField();
 
 		let palette = readPalette();
 		function readPalette() {
@@ -93,14 +76,7 @@
 		function render() {
 			if (!ctx) return;
 			ctx.clearRect(0, 0, width, height);
-			drawHeroField(ctx, {
-				width,
-				height,
-				progress: 1,
-				palette,
-				mouse: { x: mouse.x, y: mouse.y, active: mouse.active },
-				time: reduced ? 0 : (performance.now() - start) / 1000
-			});
+			field.draw(ctx, width, height, palette.accent, reduced ? 0 : performance.now());
 		}
 
 		function resize() {
@@ -127,21 +103,7 @@
 			};
 		}
 
-		function onPointerMove(event) {
-			const rect = canvasEl.getBoundingClientRect();
-			mouse.tx = (event.clientX - rect.left) / Math.max(1, rect.width);
-			mouse.ty = (event.clientY - rect.top) / Math.max(1, rect.height);
-			mouse.active = true;
-		}
-		function onPointerLeave() {
-			mouse.active = false;
-		}
-		window.addEventListener('pointermove', onPointerMove, { passive: true });
-		root.addEventListener('pointerleave', onPointerLeave);
-
 		function loop() {
-			mouse.x += (mouse.tx - mouse.x) * 0.07;
-			mouse.y += (mouse.ty - mouse.y) * 0.07;
 			render();
 			raf = requestAnimationFrame(loop);
 		}
@@ -178,18 +140,6 @@
 			if (!bits || cancelled || !root) return;
 			const { gsap } = bits;
 			const scope = gsap.context(() => {
-				// Entrance. `stats` is optional, so filter out missing layers
-				// rather than handing GSAP an undefined target.
-				gsap.from([layerTitle, layerSub, layerStats].filter(Boolean), {
-					y: 34,
-					opacity: 0,
-					duration: 0.9,
-					ease: 'power3.out',
-					stagger: 0.13,
-					// The splash screen holds the viewport for ~5s; starting the
-					// entrance behind it would waste it.
-					delay: 0.2
-				});
 
 				// Depth-ordered parallax on exit.
 				gsap
@@ -201,22 +151,47 @@
 							scrub: 0.6
 						}
 					})
-					.to(layerTitle, { y: -140, opacity: 0.15, ease: 'none' }, 0)
 					.to(layerSub, { y: -90, opacity: 0.1, ease: 'none' }, 0)
 					.to(canvasEl, { y: 90, opacity: 0.35, ease: 'none' }, 0);
 
 				if (layerStats) {
-					gsap.to(layerStats, {
-						y: -50,
-						opacity: 0,
-						ease: 'none',
-						scrollTrigger: {
-							trigger: root,
-							start: 'top top',
-							end: 'bottom top',
-							scrub: 0.6
+					/*
+					 * Exit fade for the stat row. Two things this must NOT do,
+					 * because both shipped once and made the row vanish on the
+					 * first scroll:
+					 *
+					 *  1. Be a standalone scrubbed `gsap.to`. ScrollTrigger
+					 *     immediately renders those, so it captured the row's
+					 *     "from" state (opacity 0, y 34 — the entrance above
+					 *     had not started yet), then tweened from 0 to 0.
+					 *     Later tween wins, so the row was invisible for good
+					 *     the moment the reader scrolled. `fromTo` with explicit
+					 *     values + `immediateRender: false` makes the start
+					 *     state independent of whatever the entrance is doing.
+					 *
+					 *  2. Key off the hero's own height. The row sits at the
+					 *     bottom of a ~940px hero; on a short viewport it is
+					 *     below the fold, so fading it across the hero's scroll
+					 *     meant it was already gone by the time it came into
+					 *     view. It now fades only once it has reached the top
+					 *     quarter of the viewport, i.e. after it has been read.
+					 */
+					gsap.fromTo(
+						layerStats,
+						{ y: 0, opacity: 1 },
+						{
+							y: -50,
+							opacity: 0.1,
+							ease: 'none',
+							immediateRender: false,
+							scrollTrigger: {
+								trigger: layerStats,
+								start: 'top 25%',
+								end: 'bottom top',
+								scrub: 0.6
+							}
 						}
-					});
+					);
 				}
 
 				if (layerScroll) {
@@ -235,9 +210,7 @@
 		return () => {
 			cancelled = true;
 			stopLoop();
-			window.removeEventListener('pointermove', onPointerMove);
 			document.removeEventListener('visibilitychange', onVisibility);
-			root.removeEventListener('pointerleave', onPointerLeave);
 			io.disconnect();
 			ro.disconnect();
 			stopThemeWatch();
@@ -246,15 +219,18 @@
 	});
 </script>
 
+<svelte:head>
+	<link rel="preload" href={`${base}/fonts/game-of-thrones.woff2`} as="font" type="font/woff2" crossorigin="anonymous" />
+</svelte:head>
+
 <header class="hero" bind:this={root}>
 	<canvas class="hero-canvas" bind:this={canvasEl} aria-hidden="true"></canvas>
 	<div class="hero-glow" aria-hidden="true"></div>
 
 	<div class="hero-inner">
-		<div bind:this={layerTitle}>
-			<h1 class="hero-wordmark">
-				<span class="wordmark-line">{titleTop}</span>
-				<span class="wordmark-line wordmark-accent">{titleBottom}</span>
+		<div>
+			<h1 class="hero-wordmark" dir="ltr">
+				<span>{titleTop}</span> <span class="wordmark-accent">{titleBottom}</span>
 			</h1>
 			{#if tagline}
 				<!-- eslint-disable-next-line svelte/no-at-html-tags -->
@@ -325,6 +301,14 @@
 </header>
 
 <style>
+	@font-face {
+		font-family: 'Game of Thrones Hero';
+		src: url('/fonts/game-of-thrones.woff2') format('woff2');
+		font-style: normal;
+		font-weight: 400;
+		font-display: swap;
+	}
+
 	.hero {
 		position: relative;
 		min-height: 100vh;
@@ -342,6 +326,8 @@
 		width: 100%;
 		height: 100%;
 		display: block;
+		pointer-events: none;
+		mask-image: linear-gradient(to bottom, black 15%, transparent 85%);
 		z-index: 0;
 	}
 
@@ -372,32 +358,21 @@
 
 	.hero-wordmark {
 		margin: 0;
-		font-family: var(--font-mono);
-		font-size: clamp(2.6rem, 9.5vw, 7rem);
-		font-weight: 800;
-		letter-spacing: 0.06em;
-		line-height: 1.03;
+		font-family: 'Game of Thrones Hero', Georgia, serif;
+		font-size: clamp(1.8rem, 5.2vw, 4.2rem);
+		font-weight: 400;
+		line-height: 1.18;
+		letter-spacing: 0.025em;
+		color: var(--on-surface);
+		text-shadow: 0 2px 18px var(--surface-deep);
 	}
 
-	.wordmark-line {
-		display: block;
-		color: var(--on-surface);
+	.hero-wordmark span {
+		display: inline-block;
 	}
 
 	.wordmark-accent {
-		background: linear-gradient(135deg, #4ade80, #22c55e, #86efac);
-		-webkit-background-clip: text;
-		background-clip: text;
-		-webkit-text-fill-color: transparent;
-		filter: drop-shadow(0 0 30px rgba(74, 222, 128, 0.4));
-	}
-
-	:global([data-theme='light']) .wordmark-accent {
-		background: linear-gradient(135deg, #15803d, #16a34a, #22c55e);
-		-webkit-background-clip: text;
-		background-clip: text;
-		-webkit-text-fill-color: transparent;
-		filter: none;
+		color: var(--accent-text, var(--accent));
 	}
 
 	.tagline {

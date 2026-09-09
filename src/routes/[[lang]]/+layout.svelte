@@ -2,7 +2,6 @@
 	import '../../app.css';
 	import { browser } from '$app/environment';
 	import CustomCursor from '$lib/CustomCursor.svelte';
-	import SplashScreen from '$lib/SplashScreen.svelte';
 	import FloatingControls from '$lib/components/FloatingControls.svelte';
 	import GlossaryLayer from '$lib/components/glossary/GlossaryLayer.svelte';
 	import { locale, applyLocale, commitLocale, detectLocale, setLocale } from '$lib/i18n/index.js';
@@ -41,7 +40,6 @@
 	});
 </script>
 
-<SplashScreen />
 <CustomCursor />
 <FloatingControls />
 
