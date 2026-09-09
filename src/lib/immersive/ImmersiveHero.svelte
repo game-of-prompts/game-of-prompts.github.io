@@ -1,27 +1,11 @@
 <script>
-	/*
-	 * ImmersiveHero — the opener for the Game of Prompts landing page.
-	 *
-	 * Keeps the beloved GoP wordmark treatment (mono caps, "PROMPTS" in
-	 * the green gradient) but replaces the old three.js particle network
-	 * behind it with a 2D cursor-reactive competitor field. That removes
-	 * a WebGL context from a page that now runs seven canvas scenes, and
-	 * the field re-themes with the toggle for free.
-	 *
-	 * Two motion layers, both optional:
-	 *   1. The canvas field (drawHeroField) — always running while the
-	 *      hero is on screen; first signal that the page responds to you.
-	 *   2. A GSAP scroll timeline that parallaxes the wordmark, sub-copy
-	 *      and stat row at different rates as you leave the hero, so the
-	 *      handoff into the first pinned scene feels continuous.
-	 *
-	 * Under prefers-reduced-motion neither layer runs: the canvas is
-	 * painted once and the copy sits still. The DOM is identical either
-	 * way, so no content sits behind a motion gate.
+	/* A steady, balanced wordmark over an evolving cellular field.
+	 * Motion belongs to the backdrop, never to the title. Reduced motion
+	 * paints one generation; existing viewport gating pauses offscreen work.
 	 */
 
 	import { onMount } from 'svelte';
-	import { drawHeroField } from './scene-kit.js';
+	import { createCellularField } from './cellular-field.js';
 	import {
 		loadGsap,
 		prefersReducedMotion,
@@ -55,7 +39,6 @@
 
 	let root;
 	let canvasEl;
-	let layerTitle;
 	let layerSub;
 	let layerStats;
 	let layerScroll;
@@ -73,8 +56,7 @@
 		let height = 0;
 		let raf = 0;
 		let onScreen = true;
-		const mouse = { x: 0.5, y: 0.5, tx: 0.5, ty: 0.5, active: false };
-		const start = performance.now();
+		const field = createCellularField();
 
 		let palette = readPalette();
 		function readPalette() {
@@ -93,14 +75,7 @@
 		function render() {
 			if (!ctx) return;
 			ctx.clearRect(0, 0, width, height);
-			drawHeroField(ctx, {
-				width,
-				height,
-				progress: 1,
-				palette,
-				mouse: { x: mouse.x, y: mouse.y, active: mouse.active },
-				time: reduced ? 0 : (performance.now() - start) / 1000
-			});
+			field.draw(ctx, width, height, palette.accent, reduced ? 0 : performance.now());
 		}
 
 		function resize() {
@@ -127,21 +102,7 @@
 			};
 		}
 
-		function onPointerMove(event) {
-			const rect = canvasEl.getBoundingClientRect();
-			mouse.tx = (event.clientX - rect.left) / Math.max(1, rect.width);
-			mouse.ty = (event.clientY - rect.top) / Math.max(1, rect.height);
-			mouse.active = true;
-		}
-		function onPointerLeave() {
-			mouse.active = false;
-		}
-		window.addEventListener('pointermove', onPointerMove, { passive: true });
-		root.addEventListener('pointerleave', onPointerLeave);
-
 		function loop() {
-			mouse.x += (mouse.tx - mouse.x) * 0.07;
-			mouse.y += (mouse.ty - mouse.y) * 0.07;
 			render();
 			raf = requestAnimationFrame(loop);
 		}
@@ -173,45 +134,11 @@
 
 		let cleanupGsap = () => {};
 		let cancelled = false;
-		/** @type {MutationObserver | undefined} */
-		let splashObserver;
 
 		loadGsap().then((bits) => {
 			if (!bits || cancelled || !root) return;
 			const { gsap } = bits;
 			const scope = gsap.context(() => {
-				// Animate inner title elements only: the outer layer belongs to
-				// scroll parallax. Separate ownership prevents entrance/exit races.
-				const entrance = gsap.timeline({ paused: true });
-				entrance
-					.from('.wordmark-top', { y: 18, opacity: 0, duration: 0.65, ease: 'power3.out' }, 0)
-					.from('.wordmark-glyph', {
-						yPercent: 115, rotationX: -75, opacity: 0,
-						transformOrigin: '50% 100%', duration: 1.05,
-						stagger: 0.065, ease: 'power4.out'
-					}, 0.12)
-					.from('.wordmark-rule', { scaleX: 0, duration: 1.1, ease: 'expo.out' }, 0.45)
-					.from('.tagline', { y: 14, opacity: 0, duration: 0.7 }, 0.65)
-					.fromTo('.wordmark-accent', { '--sheen': '120%' }, {
-						'--sheen': '-20%', duration: 1.2, ease: 'power2.inOut'
-					}, 0.75);
-
-				// The splash owns its duration. Observe its actual dismissal,
-				// rather than guessing a delay and wasting the reveal behind it.
-				const splash = document.getElementById('gop-splash');
-				const reveal = () => {
-					if (splash && getComputedStyle(splash).display !== 'none') return;
-					splashObserver?.disconnect();
-					// Restored/deep-link scroll positions should not replay an
-					// offscreen entrance when the visitor returns to the top.
-					if (window.scrollY > 80) entrance.progress(1);
-					else entrance.play();
-				};
-				if (splash && getComputedStyle(splash).display !== 'none') {
-					splashObserver = new MutationObserver(reveal);
-					splashObserver.observe(splash, { attributes: true, attributeFilter: ['style'] });
-				}
-				reveal();
 
 				// Depth-ordered parallax on exit.
 				gsap
@@ -223,7 +150,6 @@
 							scrub: 0.6
 						}
 					})
-					.to(layerTitle, { y: -140, opacity: 0.15, ease: 'none' }, 0)
 					.to(layerSub, { y: -90, opacity: 0.1, ease: 'none' }, 0)
 					.to(canvasEl, { y: 90, opacity: 0.35, ease: 'none' }, 0);
 
@@ -282,11 +208,8 @@
 
 		return () => {
 			cancelled = true;
-			splashObserver?.disconnect();
 			stopLoop();
-			window.removeEventListener('pointermove', onPointerMove);
 			document.removeEventListener('visibilitychange', onVisibility);
-			root.removeEventListener('pointerleave', onPointerLeave);
 			io.disconnect();
 			ro.disconnect();
 			stopThemeWatch();
@@ -300,13 +223,9 @@
 	<div class="hero-glow" aria-hidden="true"></div>
 
 	<div class="hero-inner">
-		<div bind:this={layerTitle}>
-			<h1 class="hero-wordmark" aria-label={`${titleTop} ${titleBottom}`} dir="ltr">
-				<span class="wordmark-top" aria-hidden="true"><span class="wordmark-marker">&gt;_</span>{titleTop}</span>
-				<span class="wordmark-line wordmark-accent" aria-hidden="true">
-					{#each Array.from(titleBottom) as letter}<span class="wordmark-glyph">{letter}</span>{/each}
-				</span>
-				<span class="wordmark-rule" aria-hidden="true"></span>
+		<div>
+			<h1 class="hero-wordmark" dir="ltr">
+				<span>{titleTop}</span> <span class="wordmark-accent">{titleBottom}</span>
 			</h1>
 			{#if tagline}
 				<!-- eslint-disable-next-line svelte/no-at-html-tags -->
@@ -394,6 +313,8 @@
 		width: 100%;
 		height: 100%;
 		display: block;
+		pointer-events: none;
+		mask-image: linear-gradient(to bottom, black 15%, transparent 85%);
 		z-index: 0;
 	}
 
@@ -423,77 +344,22 @@
 	}
 
 	.hero-wordmark {
-		--wordmark-start: #d5ffe6;
-		--wordmark-end: #35d875;
-		--wordmark-glint: #ffffff;
-		position: relative;
-		width: fit-content;
-		max-width: 100%;
 		margin: 0;
 		font-family: var(--font-mono);
+		font-size: clamp(2rem, 5.8vw, 4.5rem);
 		font-weight: 800;
-		line-height: 1;
-	}
-
-	.wordmark-top {
-		display: flex;
-		align-items: center;
-		gap: 0.9em;
-		margin-bottom: 18px;
-		font-size: clamp(1rem, 2.3vw, 1.65rem);
-		font-weight: 500;
-		letter-spacing: 0.32em;
+		line-height: 1.18;
+		letter-spacing: -0.045em;
 		color: var(--on-surface);
+		text-shadow: 0 2px 18px var(--surface-deep);
 	}
 
-	.wordmark-marker {
-		color: var(--accent);
-		font-size: 0.8em;
-		letter-spacing: -0.12em;
-	}
-
-	.wordmark-line {
-		display: flex;
-		font-size: clamp(2.6rem, 12.3vw, 11.6rem);
-		letter-spacing: -0.065em;
-		perspective: 700px;
-		padding: 0.06em 0.08em 0.12em 0;
+	.hero-wordmark span {
+		display: inline-block;
 	}
 
 	.wordmark-accent {
-		--sheen: -20%;
-		filter: drop-shadow(0 8px 26px rgb(34 197 94 / 0.16));
-	}
-
-	.wordmark-glyph {
-		display: inline-block;
-		background: linear-gradient(115deg,
-			transparent calc(var(--sheen) - 14%),
-			var(--wordmark-glint) var(--sheen),
-			transparent calc(var(--sheen) + 14%)),
-			linear-gradient(175deg, var(--wordmark-start) 8%, var(--wordmark-end) 85%);
-		-webkit-background-clip: text;
-		background-clip: text;
-		color: var(--wordmark-end);
-		-webkit-text-fill-color: transparent;
-	}
-
-	.wordmark-rule {
-		display: block;
-		height: 2px;
-		margin-top: 12px;
-		background: linear-gradient(90deg, var(--accent), var(--accent) 16%, transparent 85%);
-		transform-origin: left;
-	}
-
-	:global([data-theme='light']) .hero-wordmark {
-		--wordmark-start: #166534;
-		--wordmark-end: #15803d;
-		--wordmark-glint: #3ca567;
-	}
-
-	:global([data-theme='light']) .wordmark-accent {
-		filter: none;
+		color: var(--accent-text, var(--accent));
 	}
 
 	.tagline {
@@ -578,10 +444,6 @@
 	}
 
 	@media (max-width: 820px) {
-		.wordmark-line {
-			font-size: clamp(3rem, 22vw, 7.4rem);
-		}
-
 		.hero-inner {
 			padding: 104px clamp(18px, 6vw, 28px) 120px;
 		}
