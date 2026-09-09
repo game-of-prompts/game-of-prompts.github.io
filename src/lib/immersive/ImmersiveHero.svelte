@@ -220,7 +220,7 @@
 </script>
 
 <svelte:head>
-	<link rel="preload" href={`${base}/fonts/cinzel-latin-600.ttf`} as="font" type="font/ttf" crossorigin="anonymous" />
+	<link rel="preload" href={`${base}/fonts/game-of-thrones.woff2`} as="font" type="font/woff2" crossorigin="anonymous" />
 </svelte:head>
 
 <header class="hero" bind:this={root}>
@@ -302,10 +302,10 @@
 
 <style>
 	@font-face {
-		font-family: 'Cinzel Hero';
-		src: url('/fonts/cinzel-latin-600.ttf') format('truetype');
+		font-family: 'Game of Thrones Hero';
+		src: url('/fonts/game-of-thrones.woff2') format('woff2');
 		font-style: normal;
-		font-weight: 600;
+		font-weight: 400;
 		font-display: swap;
 	}
 
@@ -358,9 +358,9 @@
 
 	.hero-wordmark {
 		margin: 0;
-		font-family: 'Cinzel Hero', Georgia, serif;
+		font-family: 'Game of Thrones Hero', Georgia, serif;
 		font-size: clamp(1.8rem, 5.2vw, 4.2rem);
-		font-weight: 600;
+		font-weight: 400;
 		line-height: 1.18;
 		letter-spacing: 0.025em;
 		color: var(--on-surface);
