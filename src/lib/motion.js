@@ -10,7 +10,7 @@
  * `window` may run at module top level. Everything here is behind an
  * async loader that is only ever called from `onMount`, which keeps
  * the SSR/prerender pass clean and also code-splits GSAP out of the
- * initial bundle (the splash screen still paints instantly).
+ * initial bundle (the landing page paints immediately).
  *
  * ACCESSIBILITY
  * -------------
