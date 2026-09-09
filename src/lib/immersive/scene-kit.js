@@ -109,20 +109,97 @@ export function packet(ctx, ax, ay, bx, by, k, colour, alpha = 1, radius = 3.2) 
 }
 
 /**
+ * Wrap `text` into at most `maxLines` lines that each fit `maxWidth`,
+ * measured in the font already set on `ctx`. Words that are themselves
+ * too long are left whole — shrinking handles those — because breaking
+ * mid-word in a term like "autoalojamiento" makes it unreadable.
+ */
+function wrapLines(ctx, text, maxWidth, maxLines) {
+	if (ctx.measureText(text).width <= maxWidth) return [text];
+	const words = String(text).split(/\s+/).filter(Boolean);
+	const lines = [];
+	let current = '';
+	for (let i = 0; i < words.length; i++) {
+		const word = words[i];
+		const candidate = current ? `${current} ${word}` : word;
+		if (current && ctx.measureText(candidate).width > maxWidth) {
+			lines.push(current);
+			if (lines.length === maxLines - 1) {
+				// Last line allowed: everything still unplaced goes on it,
+				// even if it overruns. The caller shrinks until it does not.
+				current = words.slice(i).join(' ');
+				break;
+			}
+			current = word;
+		} else {
+			current = candidate;
+		}
+	}
+	lines.push(current);
+	return lines.slice(0, maxLines);
+}
+
+/**
  * Draw a label pinned to a point in the scene. Canvas text is the one
  * place a scene can state a term ("SOLVER", "COMMITMENT") that the
  * caption beside it is talking about.
+ *
+ * `maxWidth` is the box the label has to live inside, and honouring it
+ * is not cosmetic: these strings are translated, and a translation is
+ * routinely half again as long as its English source ("GAME SERVICE"
+ * -> "Servicio de juego", "player" -> "El recorrido del jugador").
+ * Canvas' own `fillText` max-width argument only *condenses* the
+ * glyphs, which at these sizes turns a long translation into a smear,
+ * so the text is wrapped and then shrunk instead — down to `minScale`
+ * of the requested size, which is where the mono face stops being
+ * legible. Returns the block's height so a caller can space what sits
+ * under it.
  */
-export function label(ctx, text, x, y, palette, alpha = 1, size = 12, weight = 700) {
-	if (alpha <= 0.01) return;
+export function label(
+	ctx,
+	text,
+	x,
+	y,
+	palette,
+	alpha = 1,
+	size = 12,
+	weight = 700,
+	{ maxWidth = 0, maxLines = 2, minScale = 0.62, align = 'center' } = {}
+) {
+	if (alpha <= 0.01) return 0;
+	const content = localizedLabel(text);
+	const limit = maxWidth > 0 ? maxWidth : Math.min(200, ctx.canvas.clientWidth * 0.34);
+
 	ctx.save();
 	ctx.globalAlpha = alpha;
-	ctx.font = `${weight} ${size}px 'JetBrains Mono', ui-monospace, monospace`;
-	ctx.textAlign = 'center';
+	ctx.textAlign = align;
 	ctx.textBaseline = 'middle';
 	ctx.fillStyle = rgba(palette.onSurfaceRgb, 0.8);
-	ctx.fillText(localizedLabel(text), x, y, Math.min(200, ctx.canvas.clientWidth * 0.34));
+
+	// Shrink until the longest wrapped line fits, then stop: one pass per
+	// step rather than a solve, because the step is small and this runs
+	// inside a requestAnimationFrame loop.
+	let fontSize = size;
+	let lines = [content];
+	const floor = size * minScale;
+	for (;;) {
+		ctx.font = `${weight} ${fontSize}px 'JetBrains Mono', ui-monospace, monospace`;
+		lines = wrapLines(ctx, content, limit, maxLines);
+		const widest = Math.max(...lines.map((line) => ctx.measureText(line).width));
+		if (widest <= limit || fontSize <= floor) break;
+		fontSize = Math.max(floor, fontSize - 0.5);
+	}
+
+	const lineHeight = fontSize * 1.25;
+	const top = y - ((lines.length - 1) * lineHeight) / 2;
+	lines.forEach((line, i) => {
+		// The last resort when even the floor size overruns — a single
+		// unbreakable word — is canvas' own condensing, which is ugly but
+		// bounded, and never spills over the glyph it is labelling.
+		ctx.fillText(line, x, top + i * lineHeight, limit);
+	});
 	ctx.restore();
+	return lines.length * lineHeight;
 }
 
 /**

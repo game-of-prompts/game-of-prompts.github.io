@@ -41,6 +41,14 @@ export default {
 		scoring: 'SCORING'
 	},
 
+	/* Short canvas captions. The scenes pin these inside glyphs sized
+	   for English; mapping them at the full scene heading ("The creator's
+	   flow") made every translation overflow the box it named. */
+	canvas: {
+		creator: 'creator',
+		player: 'player'
+	},
+
 	/* ============================================================== *
 	 * The glossary
 	 * Ids and ordering live in src/lib/glossary/terms.js, paired with
