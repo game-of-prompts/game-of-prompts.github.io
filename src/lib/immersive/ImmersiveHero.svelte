@@ -1,11 +1,12 @@
 <script>
-	/* A steady, balanced wordmark over an evolving cellular field.
+	/* A steady, balanced wordmark over a slowly turning astral sigil.
 	 * Motion belongs to the backdrop, never to the title. Reduced motion
-	 * paints one generation; existing viewport gating pauses offscreen work.
+	 * paints a static sigil; existing viewport gating pauses offscreen work.
 	 */
 
 	import { onMount } from 'svelte';
-	import { createCellularField } from './cellular-field.js';
+	import { base } from '$app/paths';
+	import { createSigilField } from './sigil-field.js';
 	import {
 		loadGsap,
 		prefersReducedMotion,
@@ -15,9 +16,9 @@
 		scrollTo
 	} from '$lib/motion.js';
 
-	/** First line of the wordmark. */
+	/** First words of the wordmark. */
 	export let titleTop = 'GAME OF';
-	/** Second line, rendered in the accent gradient. */
+	/** Final word, rendered in the accent colour. */
 	export let titleBottom = 'PROMPTS';
 	/** One-line promise under the wordmark (HTML allowed). */
 	export let tagline = '';
@@ -56,7 +57,7 @@
 		let height = 0;
 		let raf = 0;
 		let onScreen = true;
-		const field = createCellularField();
+		const field = createSigilField();
 
 		let palette = readPalette();
 		function readPalette() {
@@ -218,6 +219,10 @@
 	});
 </script>
 
+<svelte:head>
+	<link rel="preload" href={`${base}/fonts/cinzel-latin-600.ttf`} as="font" type="font/ttf" crossorigin="anonymous" />
+</svelte:head>
+
 <header class="hero" bind:this={root}>
 	<canvas class="hero-canvas" bind:this={canvasEl} aria-hidden="true"></canvas>
 	<div class="hero-glow" aria-hidden="true"></div>
@@ -296,6 +301,14 @@
 </header>
 
 <style>
+	@font-face {
+		font-family: 'Cinzel Hero';
+		src: url('/fonts/cinzel-latin-600.ttf') format('truetype');
+		font-style: normal;
+		font-weight: 600;
+		font-display: swap;
+	}
+
 	.hero {
 		position: relative;
 		min-height: 100vh;
@@ -345,11 +358,11 @@
 
 	.hero-wordmark {
 		margin: 0;
-		font-family: var(--font-mono);
-		font-size: clamp(2rem, 5.8vw, 4.5rem);
-		font-weight: 800;
+		font-family: 'Cinzel Hero', Georgia, serif;
+		font-size: clamp(1.8rem, 5.2vw, 4.2rem);
+		font-weight: 600;
 		line-height: 1.18;
-		letter-spacing: -0.045em;
+		letter-spacing: 0.025em;
 		color: var(--on-surface);
 		text-shadow: 0 2px 18px var(--surface-deep);
 	}
