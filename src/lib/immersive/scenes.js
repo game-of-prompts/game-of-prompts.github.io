@@ -61,7 +61,9 @@ export function drawArenaScene(ctx, { width, height, progress, palette, mouse, t
 	sealedBox(ctx, cx - cw / 2, cy - ch / 2, cw, ch, post, palette, {
 		scan: run > 0 ? time : 0
 	});
-	label(ctx, 'GAME', cx, cy - ch * 0.12, palette, smoothstep(post), 12 * Math.max(0.85, scale));
+	label(ctx, 'GAME', cx, cy - ch * 0.12, palette, smoothstep(post), 12 * Math.max(0.85, scale), 700, {
+		maxWidth: cw * 0.86
+	});
 	label(
 		ctx,
 		'SERVICE',
@@ -69,7 +71,9 @@ export function drawArenaScene(ctx, { width, height, progress, palette, mouse, t
 		cy + ch * 0.16,
 		palette,
 		smoothstep(post) * 0.7,
-		10 * Math.max(0.85, scale)
+		10 * Math.max(0.85, scale),
+		700,
+		{ maxWidth: cw * 0.86 }
 	);
 
 	// --- Solvers converging on it ---
@@ -190,9 +194,12 @@ export function drawComponentsScene(ctx, { width, height, progress, palette, mou
 	const three = range(progress, 0.46, 0.72);
 	const wire = range(progress, 0.66, 1.0);
 
-	const bw = Math.min(compact ? width * 0.44 : 118 * scale, 150);
-	const bh = bw * 0.72;
-	const gap = bw * 0.5;
+	// Sized for the longest translated title, not for English. "GAME
+	// SERVICE" is 12 characters; "Servicio de juego" is 17, and the
+	// previous 150px cap drew the stroke through the letters.
+	const bw = Math.min(compact ? width * 0.5 : 148 * scale, 188);
+	const bh = Math.max(bw * 0.78, 92 * Math.max(0.85, scale));
+	const gap = bw * 0.42;
 
 	// Triangle layout: game + solver on top, GoP Web below between them.
 	const nodes = [
@@ -235,8 +242,35 @@ export function drawComponentsScene(ctx, { width, height, progress, palette, mou
 		const x = n.x - bw / 2;
 		const y = n.y - bh / 2 + bob;
 		sealedBox(ctx, x, y, bw, bh, t, palette, { scan: i === 0 ? time : 0 });
-		label(ctx, n.name, n.x, n.y - 6 + bob, palette, smoothstep(t), 11 * Math.max(0.8, scale));
-		label(ctx, n.sub, n.x, n.y + 12 + bob, palette, smoothstep(t) * 0.55, 9 * Math.max(0.8, scale));
+		// Both labels live INSIDE the box, so the box is their width budget.
+		// Without it a translation overruns the glyph it names: "GAME
+		// SERVICE" is 12 characters, "Servicio de juego" is 17, and the
+		// stroke ends up drawn through the letters.
+		const inner = bw * 0.86;
+		const nameH = label(
+			ctx,
+			n.name,
+			n.x,
+			n.y - 6 + bob,
+			palette,
+			smoothstep(t),
+			11 * Math.max(0.8, scale),
+			700,
+			{ maxWidth: inner }
+		);
+		// Pushed down by however tall the name turned out, so a two-line
+		// name does not sit on top of the subtitle.
+		label(
+			ctx,
+			n.sub,
+			n.x,
+			n.y + 12 + bob + Math.max(0, nameH - 14),
+			palette,
+			smoothstep(t) * 0.55,
+			9 * Math.max(0.8, scale),
+			700,
+			{ maxWidth: inner }
+		);
 	});
 }
 
@@ -298,7 +332,9 @@ export function drawCreatorScene(ctx, { width, height, progress, palette, mouse,
 		ctx.stroke();
 		ctx.restore();
 
-		label(ctx, name, x + (compact ? 0 : 78 * scale), y, palette, t, 11 * Math.max(0.85, scale));
+		label(ctx, name, x + (compact ? 0 : 78 * scale), y, palette, t, 11 * Math.max(0.85, scale), 700, {
+			maxWidth: compact ? width * 0.5 : 132 * scale
+		});
 
 		// Station 3 (SECRET) shows a 256-bit digest settling into place.
 		if (i === 2) {
@@ -344,7 +380,9 @@ export function drawCreatorScene(ctx, { width, height, progress, palette, mouse,
 		sealedBox(ctx, bx - bwid / 2, by - bhei / 2, bwid, bhei, commit, palette, {
 			colour: palette.warm
 		});
-		label(ctx, 'COMMITMENT', bx, by, palette, smoothstep(commit), 9 * Math.max(0.85, scale));
+		label(ctx, 'COMMITMENT', bx, by, palette, smoothstep(commit), 9 * Math.max(0.85, scale), 700, {
+			maxWidth: 120 * scale
+		});
 	}
 }
 
@@ -390,7 +428,9 @@ export function drawPlayerScene(ctx, { width, height, progress, palette, mouse, 
 			ctx.fillRect(px + 9, py + 14 + i * (ph - 24) / 6, (pw - 18) * (0.6 + rand(i) * 0.4) * lt, 2.5);
 		}
 		ctx.restore();
-		label(ctx, 'PAPER', px + pw / 2, py - 12, palette, t * 0.8, 9 * Math.max(0.85, scale));
+		label(ctx, 'PAPER', px + pw / 2, py - 12, palette, t * 0.8, 9 * Math.max(0.85, scale), 700, {
+			maxWidth: pw * 1.5
+		});
 	}
 
 	// --- The solver being built (centre) ---
@@ -399,7 +439,9 @@ export function drawPlayerScene(ctx, { width, height, progress, palette, mouse, 
 	const sx = cx - sw / 2;
 	const sy = cy - sh / 2 - unit * 0.15;
 	sealedBox(ctx, sx, sy, sw, sh, build, palette, { scan: run > 0 ? time : 0 });
-	label(ctx, 'SOLVER', cx, cy - unit * 0.15, palette, smoothstep(build), 10 * Math.max(0.85, scale));
+	label(ctx, 'SOLVER', cx, cy - unit * 0.15, palette, smoothstep(build), 10 * Math.max(0.85, scale), 700, {
+		maxWidth: sw * 0.86
+	});
 
 	// --- Registering the solver ID: a hash locks in, gas only ---
 	if (register > 0) {
@@ -451,7 +493,9 @@ export function drawPlayerScene(ctx, { width, height, progress, palette, mouse, 
 		ctx.arc(seedX, seedY, 8 * Math.max(0.85, scale), 0, Math.PI * 2);
 		ctx.fill();
 		ctx.restore();
-		label(ctx, 'SEED', seedX, seedY + 24 * scale, palette, t, 10 * Math.max(0.85, scale));
+		label(ctx, 'SEED', seedX, seedY + 24 * scale, palette, t, 10 * Math.max(0.85, scale), 700, {
+			maxWidth: 110 * scale
+		});
 	}
 
 	// --- Running: the solver executes inside the game service ---
@@ -475,7 +519,9 @@ export function drawPlayerScene(ctx, { width, height, progress, palette, mouse, 
 		ctx.fillStyle = palette.node;
 		ctx.fillRect(cx - bw / 2, sy - 16 * scale, bw * t, 4);
 		ctx.restore();
-		label(ctx, 'SCORE', cx, sy - 28 * scale, palette, t * 0.75, 9 * Math.max(0.85, scale));
+		label(ctx, 'SCORE', cx, sy - 28 * scale, palette, t * 0.75, 9 * Math.max(0.85, scale), 700, {
+			maxWidth: 120 * scale
+		});
 	}
 
 	// --- Submitting the commitment + fee to the chain ---
@@ -487,13 +533,19 @@ export function drawPlayerScene(ctx, { width, height, progress, palette, mouse, 
 		ctx.globalAlpha = t;
 		ctx.strokeStyle = palette.warm;
 		ctx.lineWidth = 1.6;
-		roundRect(ctx, cx - w / 2, by - 16 * scale, w, 32 * scale, 5);
+		roundRect(ctx, cx - w / 2, by - 22 * scale, w, 44 * scale, 5);
 		ctx.stroke();
 		ctx.fillStyle = rgba(palette.onSurfaceRgb, 0.05);
 		ctx.fill();
 		ctx.restore();
-		hashStrip(ctx, cx - w * 0.42, by, w * 0.6, 12, 57, 1, palette, t, 10);
-		label(ctx, '+ FEE', cx + w * 0.36, by, palette, t * 0.85, 10 * Math.max(0.85, scale));
+		// Hash on the left ~58%, fee caption in the remaining column.
+		// English is "+ FEE"; Spanish is "Cuota de participación" — the
+		// previous shared-row layout drew the second line through the box.
+		const feeCol = w * 0.36;
+		hashStrip(ctx, cx - w * 0.46, by, w * 0.52, 12, 57, 1, palette, t, 10);
+		label(ctx, '+ FEE', cx + w * 0.28, by, palette, t * 0.85, 9 * Math.max(0.85, scale), 700, {
+			maxWidth: feeCol
+		});
 
 		// Falling into the chain.
 		const k = (time * 0.4) % 1;
@@ -529,7 +581,9 @@ export function drawValidationScene(ctx, { width, height, progress, palette, mou
 	// --- Top: the commitment the player published at submission time ---
 	if (published > 0) {
 		const t = smoothstep(published);
-		label(ctx, 'PUBLISHED COMMITMENT', cx, cy - gapY - 26 * scale, palette, t * 0.65, 9);
+		label(ctx, 'PUBLISHED COMMITMENT', cx, cy - gapY - 26 * scale, palette, t * 0.65, 9, 700, {
+			maxWidth: w
+		});
 		hashStrip(ctx, cx - w / 2, cy - gapY, w, 14, 91, 1, palette, t, 12);
 	}
 
@@ -567,7 +621,9 @@ export function drawValidationScene(ctx, { width, height, progress, palette, mou
 			iy - 16 * Math.max(0.85, scale),
 			palette,
 			t * 0.7,
-			compact ? 7 : 8 * Math.max(0.85, scale)
+			compact ? 7 : 8 * Math.max(0.85, scale),
+			700,
+			{ maxWidth: colW * 0.92 }
 		);
 	});
 
@@ -586,12 +642,16 @@ export function drawValidationScene(ctx, { width, height, progress, palette, mou
 		ctx.fillStyle = rgba(palette.onSurfaceRgb, 0.05);
 		ctx.fill();
 		ctx.restore();
-		label(ctx, 'blake2b', cx, hy, palette, t * 0.85, 10 * Math.max(0.85, scale));
+		label(ctx, 'blake2b', cx, hy, palette, t * 0.85, 10 * Math.max(0.85, scale), 700, {
+			maxWidth: w * 0.8
+		});
 
 		// Recomputed digest below. Give the caption enough clearance from
 		// the hasher box that the two never sit on the same baseline.
 		const ry = hy + 48 * Math.max(0.85, scale);
-		label(ctx, 'RECOMPUTED', cx, ry - 20 * Math.max(0.85, scale), palette, t * 0.6, 9);
+		label(ctx, 'RECOMPUTED', cx, ry - 20 * Math.max(0.85, scale), palette, t * 0.6, 9, 700, {
+			maxWidth: w
+		});
 		hashStrip(ctx, cx - w / 2, ry, w, 14, 91, t, palette, t, 12);
 
 		// --- The match: both strips flash and a tick lands ---
@@ -712,7 +772,9 @@ export function drawPotScene(ctx, { width, height, progress, palette, mouse, tim
 		ctx.fill();
 	}
 	ctx.restore();
-	label(ctx, 'THE POT', cx, py - 18 * scale, palette, smoothstep(fill), 10 * Math.max(0.85, scale));
+	label(ctx, 'THE POT', cx, py - 18 * scale, palette, smoothstep(fill), 10 * Math.max(0.85, scale), 700, {
+		maxWidth: 140 * scale
+	});
 
 	// --- Commission slices peeling off to the sides ---
 	if (split > 0) {
@@ -738,7 +800,9 @@ export function drawPotScene(ctx, { width, height, progress, palette, mouse, tim
 			ctx.lineTo(ex, ey);
 			ctx.stroke();
 			ctx.restore();
-			label(ctx, name, ex, ey - 14 * Math.max(0.85, scale), palette, t * 0.6, 8.5);
+			label(ctx, name, ex, ey - 14 * Math.max(0.85, scale), palette, t * 0.6, 8.5, 700, {
+				maxWidth: 120 * Math.max(0.85, scale)
+			});
 		});
 	}
 
@@ -784,7 +848,9 @@ export function drawPotScene(ctx, { width, height, progress, palette, mouse, tim
 		ctx.fillStyle = rgba(palette.onSurfaceRgb, 0.06);
 		ctx.fill();
 		ctx.restore();
-		label(ctx, 'NFT', nx, ny, palette, t * 0.9, 9 * Math.max(0.85, scale));
+		label(ctx, 'NFT', nx, ny, palette, t * 0.9, 9 * Math.max(0.85, scale), 700, {
+			maxWidth: 90 * scale
+		});
 	}
 }
 
@@ -905,8 +971,12 @@ export function drawJudgesScene(ctx, { width, height, progress, palette, mouse, 
 		ctx.arc(fromX + (toX - fromX) * travel, vy, 6 * Math.max(0.85, scale), 0, Math.PI * 2);
 		ctx.fill();
 		ctx.restore();
-		label(ctx, 'CREATOR FEE', fromX, vy - 18 * Math.max(0.85, scale), palette, t * 0.6, 8.5);
-		label(ctx, 'HONEST JUDGE', toX, vy - 18 * Math.max(0.85, scale), palette, t * travel * 0.85, 8.5);
+		label(ctx, 'CREATOR FEE', fromX, vy - 18 * Math.max(0.85, scale), palette, t * 0.6, 8.5, 700, {
+			maxWidth: Math.abs(toX - fromX) * 0.62
+		});
+		label(ctx, 'HONEST JUDGE', toX, vy - 18 * Math.max(0.85, scale), palette, t * travel * 0.85, 8.5, 700, {
+			maxWidth: Math.abs(toX - fromX) * 0.62
+		});
 
 		// Players, explicitly untouched, sitting outside the exchange.
 		const pyv = vy + 34 * Math.max(0.85, scale);
