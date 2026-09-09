@@ -206,17 +206,43 @@
 					.to(canvasEl, { y: 90, opacity: 0.35, ease: 'none' }, 0);
 
 				if (layerStats) {
-					gsap.to(layerStats, {
-						y: -50,
-						opacity: 0,
-						ease: 'none',
-						scrollTrigger: {
-							trigger: root,
-							start: 'top top',
-							end: 'bottom top',
-							scrub: 0.6
+					/*
+					 * Exit fade for the stat row. Two things this must NOT do,
+					 * because both shipped once and made the row vanish on the
+					 * first scroll:
+					 *
+					 *  1. Be a standalone scrubbed `gsap.to`. ScrollTrigger
+					 *     immediately renders those, so it captured the row's
+					 *     "from" state (opacity 0, y 34 — the entrance above
+					 *     had not started yet), then tweened from 0 to 0.
+					 *     Later tween wins, so the row was invisible for good
+					 *     the moment the reader scrolled. `fromTo` with explicit
+					 *     values + `immediateRender: false` makes the start
+					 *     state independent of whatever the entrance is doing.
+					 *
+					 *  2. Key off the hero's own height. The row sits at the
+					 *     bottom of a ~940px hero; on a short viewport it is
+					 *     below the fold, so fading it across the hero's scroll
+					 *     meant it was already gone by the time it came into
+					 *     view. It now fades only once it has reached the top
+					 *     quarter of the viewport, i.e. after it has been read.
+					 */
+					gsap.fromTo(
+						layerStats,
+						{ y: 0, opacity: 1 },
+						{
+							y: -50,
+							opacity: 0.1,
+							ease: 'none',
+							immediateRender: false,
+							scrollTrigger: {
+								trigger: layerStats,
+								start: 'top 25%',
+								end: 'bottom top',
+								scrub: 0.6
+							}
 						}
-					});
+					);
 				}
 
 				if (layerScroll) {
