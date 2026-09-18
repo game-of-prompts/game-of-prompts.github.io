@@ -664,7 +664,7 @@
 					<a href="https://celaut-project.github.io" class="btn btn-secondary" target="_blank" rel="noopener" use:hoverCorners>
 						{$t('cta.celaut')}
 					</a>
-					<a href="https://ergoblockchain.org" class="btn btn-secondary" target="_blank" rel="noopener" use:hoverCorners>
+					<a href="https://ergo-basics.github.io" class="btn btn-secondary" target="_blank" rel="noopener" use:hoverCorners>
 						{$t('cta.ergo')}
 					</a>
 				</div>
@@ -683,7 +683,7 @@
 			<p>{$t('footer.tagline')}</p>
 			<p class="footer-links">
 				<a href="https://github.com/game-of-prompts" target="_blank" rel="noopener">{$t('footer.github')}</a>
-				· <a href="https://ergoblockchain.org" target="_blank" rel="noopener">{$t('footer.ergo')}</a>
+				· <a href="https://ergo-basics.github.io" target="_blank" rel="noopener">{$t('footer.ergo')}</a>
 				· <a href="https://celaut-project.github.io" target="_blank" rel="noopener">{$t('footer.celaut')}</a>
 			</p>
 		</div>
